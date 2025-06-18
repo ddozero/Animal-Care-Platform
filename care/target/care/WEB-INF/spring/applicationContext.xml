@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://mybatis.org/schema/mybatis-spring  
+        http://mybatis.org/schema/mybatis-spring.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- AOP 설정: @Aspect 애노테이션 기반 AOP 활성화 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- ✅ DB 접속 정보를 담고 있는 properties 파일 로드 -->
+	<context:property-placeholder
+		location="classpath:db.properties" />
+
+	<!-- ✅ DB 연결 및 커넥션 풀 설정 (DBCP2) -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+
+		<!-- 커넥션 풀 설정 -->
+		<property name="initialSize" value="5" />         <!-- 시작 시 커넥션 5개 생성 -->
+		<property name="maxTotal" value="30" />           <!-- 최대 커넥션 30개까지 허용 -->
+		<property name="maxIdle" value="15" />            <!-- 최대 유휴 커넥션 15개까지 유지 -->
+		<property name="minIdle" value="5" />             <!-- 최소 유휴 커넥션 5개까지 유지 -->
+
+		<!-- 커넥션 대기 설정 -->
+		<property name="maxWaitMillis" value="5000" />    <!-- 커넥션 없을 경우 최대 5초 대기 -->
+
+		<!-- 유효성 검사 -->
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testOnBorrow" value="false" />     <!-- 요청 시 검사 X -->
+		<property name="testWhileIdle" value="true" />     <!-- 유휴 검사 O -->
+		<property name="timeBetweenEvictionRunsMillis" value="30000" /> <!-- 30초마다 검사 -->
+	</bean>
+
+	<!-- ✅ MyBatis 설정 SqlSessionFactory -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation"
+			value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations"
+			value="classpath:sql-mapper/**/*.xml" />
+	</bean>
+
+	<!-- ✅ MyBatis Mapper 자동 등록 (XML + 인터페이스 연결) -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.animal.api" />
+	</bean>
+
+	<!-- ✅ 트랜잭션 매니저: DB 트랜잭션 처리용 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- ✅ 트랜잭션 애노테이션 활성화 (@Transactional) -->
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
+	<!-- ✅ 컴포넌트 스캔 (서비스, DAO, 보안 관련 클래스 자동 등록) -->
+	<context:component-scan
+		base-package="com.animal.api" />
+
+	<!-- Spring Security 비밀번호 암호화기 -->
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+	<!-- ✅ 메시지 컨버터 설정: 문자열 & JSON 응답을 UTF-8로 처리 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!-- 문자열 결과를 UTF-8로 응답 -->
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- JSON 응답을 UTF-8로 직렬화 -->
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+</beans>
