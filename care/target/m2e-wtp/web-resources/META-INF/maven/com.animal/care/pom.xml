@@ -1,0 +1,222 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+							 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.animal</groupId>
+	<artifactId>care</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<!-- JSP 기반 WAR 배포 방식 사용 -->
+	<packaging>war</packaging>
+
+
+	<properties>
+		<!-- 배포 시 WAR 이름 일관성 보장 -->
+		<finalName>animal</finalName>
+
+		<!-- 필수: JAVA VERSION -->
+		<java.version>11</java.version>
+		<spring.version>5.3.33</spring.version>
+		<!-- 필수: Build 시 Encoding(한글 깨짐 방지) -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- maven-compiler-plugin 에서 사용할 JAVA source, target -->
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+
+		<!-- 기본 로케일 설정 -->
+		<!-- Maven 리포트 출력 인코딩 -->
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- 시스템 로케일 설정 -->
+		<user.language>ko</user.language>
+		<user.region>KR</user.region>
+
+	</properties>
+
+	<dependencies>
+
+		<!-- ✅ 기본 프로젝트 구조 및 프레임워크 -->
+		<!-- Spring 핵심 기능 : 웹 MVC, DI, AOP, 트랜잭션 처리 등을 위한 의존성 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- AspectJ -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.9.21</version>
+		</dependency>
+		
+		<!-- ✅ 보안 -->
+		<!-- Spring Security: BCrypt 비밀번호 암호화 -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>5.8.5</version>
+		</dependency>
+
+		<!--✅ ORM & DB 연동 (회원가입, 게시판, 댓글 등 DB 기반 CRUD 구현 가능) -->
+		<!-- JDBC 사용 시 필요한 Spring 지원 라이브러리 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- MyBatis ORM 프레임워크 + Spring 연동 라이브러리 -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.5.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>2.0.7</version>
+		</dependency>
+		<!-- MySQL DB 접속용 드라이버 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
+		</dependency>
+		<!-- DB 커넥션 풀 라이브러리 (DB 연결 효율적으로 관리) -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
+		<!--✅ 웹 서블릿 / JSP / MVC 구조지원 (JSP 기반 View 렌더링 + 파일 업로드 기능 구현 가능) -->
+		<!-- 로그 출력과 파일 입출력 관련 유틸리티 -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+		<!-- 서블릿 API (Tomcat 등에서 JSP/Controller 등 처리 가능하게 함) -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope> <!-- 톰캣이 제공하므로 provided 설정 -->
+		</dependency>
+
+
+		<!-- ✅ 테스트 환경 -->
+		<!-- JUnit 5: 테스트 기본 프레임워크 -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.10.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- JUnit 5 테스트 실행용 엔진 -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.10.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Spring 관련 기능 테스트 지원 (MockMvc, 통합 테스트 등) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Mockito: 객체 모킹(mocking) 테스트 용도 -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>5.10.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Hamcrest: MockMvc 테스트 시 assertThat 등 더 직관적 사용 가능 -->
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<version>2.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- ✅ 유틸 / 기타 -->
+		<!-- Jackson: Java 객체 ↔ JSON 직렬화/역직렬화 도와주는 라이브러리 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.15.2</version>
+		</dependency>
+
+		<!-- Lombok: Getter/Setter 등 자동 생성 → 코드 간결하게 해줌 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- SLF4J: 로깅 인터페이스 / Logback: 실제 로그 출력 엔진 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.36</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.11</version>
+		</dependency>
+
+		<!-- Validation (JSR-303 기반: @Valid, @NotNull 등 DTO 유효성 검증용) -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.2.5.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<!-- 배포를 위한 빌드 -->
+	<build>
+		<finalName>care</finalName>
+		<plugins>
+			<!-- WAR 플러그인 / WAR 패키징을 위한 플러그인 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.2</version>
+			</plugin>
+
+			<!-- Java 컴파일러 설정 / Java 버전 및 인코딩 설정 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
