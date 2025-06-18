@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.common.model.ErrorResponseDTO;
@@ -28,27 +29,28 @@ public class UserSupportController {
 	@Autowired
 	private UserSupportService supportService;
 
+	/**
+	 * 
+	 * @param 현재 페이지 번호
+	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
+	 */
 	@GetMapping("/getAllNotice")
-	public ResponseEntity<?> getAllNotice() {
-		try {
-			List<UserNoticeResponseDTO> lists = supportService.getAllNotice();
+	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp) {
+		int listSize = 5;
 
-			if (lists != null) {
-				if (lists.isEmpty()) {
-					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "등록 게시물 없음"));
-				} else {
-					return ResponseEntity.ok(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "게시물 조회 성공", lists));
-				}
-			} else {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(500, "서버 오류"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(500, "서버 내부 오류 발생"));
+		if (cp == 1) {
+			cp = 0;
+		} else {
+			cp = (cp - 1) * listSize;
 		}
+
+		List<UserNoticeResponseDTO> lists = supportService.getAllNotice(listSize, cp);
+
+		if (lists.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "등록 게시물 없음"));
+		}
+
+		return ResponseEntity.ok(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "게시물 조회 성공", lists));
+
 	}
-	
-	
-	
-	
 }

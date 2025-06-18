@@ -5,7 +5,8 @@
 
 <mapper namespace="com.animal.api.support.dao.UserSupportMapper">
 
-	<select id="getAllNotice" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+	<select id="getAllNotice"
+		resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
 		SELECT
 			IDX,
 			USER_IDX,
@@ -17,12 +18,10 @@
 			REF,
 			LEV,
 			TURN
-		FROM BOARDS
-
-
-
+			FROM BOARDS
+		WHERE BOARD_TYPE_IDX = 1
+		ORDER BY CREATED_AT DESC
+		LIMIT #{listSize} OFFSET #{cp}
 	</select>
-
-
 
 </mapper>
