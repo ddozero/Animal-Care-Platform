@@ -1,0 +1,13 @@
+package com.animal.api.support.dao;
+
+import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
+import com.animal.api.support.model.response.*;
+
+@Mapper
+public interface UserSupportMapper {
+	
+	public List<UserNoticeResponseDTO> getAllNotice() throws Exception;
+	
+	
+}
