@@ -15,6 +15,11 @@ import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.service.UserDonationsService;
 
+/**
+ * @author consgary
+ * @since 2025.06.18
+ * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
+ */
 @RestController
 @RequestMapping("/api/donations")
 public class UserDonationsController {
@@ -22,6 +27,10 @@ public class UserDonationsController {
 	@Autowired
 	private UserDonationsService service;
 
+	/**
+	 * @param cp 현재 페이지
+	 * @return 기부 전체 리스트
+	 */
 	@GetMapping
 	public ResponseEntity<?> getAllDonationsLists(@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
