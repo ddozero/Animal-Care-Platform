@@ -1,6 +1,8 @@
 package com.animal.api.support.model.response;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +16,8 @@ public class UserNoticeResponseDTO {
 	private int board_type_idx;
 	private String title;
 	private String content;
-	private Date created_at;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private Timestamp created_at;
 	private int views;
 	private int ref;
 	private int lev;
