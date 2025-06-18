@@ -20,6 +20,12 @@ public class UserAnimalServiceImple implements UserAnimalService {
 
 	@Override
 	public List<AllAnimalListResponseDTO> getAllAnimals(int listSize, int cp) {
+		// 현재 페이지를 페이징 쿼리에 맞게 가공
+		if (cp == 0) {
+			cp = 1;
+		}
+		cp = (cp - 1) * listSize;
+
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
