@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.animal.dao.UserAnimalMapper">
+<select id="getAllAnimals" parameterType="Map" resultType="com.animal.api.animal.model.response.AllAnimalListResponseDTO">
+SELECT
+	A.IDX,
+	A.NAME,
+	A.GENDER,
+	A.AGE,
+	A.`SIZE`,
+	A.NEUTER,
+	A.CREATED_AT,
+	AB2.NAME AS 'BREED',
+	AB2.ANIMAL_TYPE AS 'TYPE',
+	AP.NAME AS 'PERSONALITY',
+	AS2.NAME AS 'ADOPTION_STATUS'
+FROM
+	ANIMALS A
+JOIN (
+	SELECT
+		AB.IDX,
+		AB.NAME,
+		AT2.NAME AS 'ANIMAL_TYPE'
+	FROM
+		ANIMAL_BREEDS AB
+	JOIN ANIMAL_TYPES AT2
+	ON
+		AB.ANIMAL_TYPE_IDX = AT2.IDX) AB2
+	ON
+	A.ANIMAL_BREED_IDX = AB2.IDX
+JOIN ANIMAL_PERSONALITIES AP
+	ON
+	A.ANIMAL_PERSONALITY_IDX = AP.IDX
+JOIN ADOPTION_STATUS AS2
+	ON
+	A.ADOPTION_STATUS_IDX = AS2.IDX
+ORDER BY IDX DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
+</mapper>
