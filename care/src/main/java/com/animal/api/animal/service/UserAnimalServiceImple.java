@@ -35,14 +35,13 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	}
 
 	@Override
-	public List<AllAnimalListResponseDTO> searchAnimals(int listSize, int cp, String type, String breed, int neuter,
-			int age, String adoptionStatus, String personality, int size, String name) {
+	public List<AllAnimalListResponseDTO> searchAnimals(int listSize, int cp, String type, String breed, String gender,
+			int neuter, int age, String adoptionStatus, String personality, int size, String name) {
 
 		cp = changeCurrentPage(cp, listSize);
 
-		SearchConditionsRequestDTO dto = new SearchConditionsRequestDTO(listSize, cp, type, breed, neuter, age,
+		SearchConditionsRequestDTO dto = new SearchConditionsRequestDTO(listSize, cp, type, breed, gender, neuter, age,
 				adoptionStatus, personality, size, name);
-
 		List<AllAnimalListResponseDTO> animalList = mapper.searchAnimals(dto);
 
 		return animalList;

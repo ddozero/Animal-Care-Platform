@@ -40,7 +40,7 @@ JOIN ADOPTION_STATUS AS2
 ORDER BY A.IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
-<select id="searchAnimals" parameterType="com.animal.api.animal.model.request.SearchConditionsReqeustDTO" resultType="com.animal.api.animal.model.response.AllAnimalListResponseDTO">
+<select id="searchAnimals" parameterType="com.animal.api.animal.model.request.SearchConditionsRequestDTO" resultType="com.animal.api.animal.model.response.AllAnimalListResponseDTO">
 SELECT
 	A.IDX,
 	A.NAME,
@@ -75,31 +75,31 @@ JOIN ADOPTION_STATUS AS2
 	A.ADOPTION_STATUS_IDX = AS2.IDX
 <where>
 	<if test="type != null and type != ''">
-		AB2.ANIMAL_TYPE = #{type}
+		AND AB2.ANIMAL_TYPE = #{type}
 	</if>
 	<if test="breed != null and breed != ''">
-		AB2.NAME = #{breed}
+		AND AB2.NAME = #{breed}
 	</if>
 	<if test="gender != null and gender != ''">
-		A.GENDER = #{gender}
+		AND A.GENDER = #{gender}
 	</if>
-	<if test="neuter != null and neuter != ''">
-		A.NEUTER = #{neuter}
+	<if test="neuter != 0">
+		AND A.NEUTER = #{neuter}
 	</if>
-	<if test="age != null and age != ''">
-		A.AGE = #{age}
+	<if test="age != 0">
+		AND A.AGE = #{age}
 	</if>
 	<if test="adoptionStatus != null and adoptionStatus != ''">
-		AS2.NAME = #{adoptionStatus}
+		AND AS2.NAME = #{adoptionStatus}
 	</if>
 	<if test="personality != null and personality != ''">
-		AP.NAME = #{personality}
+		AND AP.NAME = #{personality}
 	</if>
-	<if test="size != null and size != ''">
-		A.SIZE = #{size}
+	<if test="size != 0">
+		AND A.`SIZE` = #{size}
 	</if>
 	<if test="name != null and name != ''">
-		A.NAME = #{name}
+		AND A.NAME = #{name}
 	</if>
 </where>
 ORDER BY A.IDX DESC

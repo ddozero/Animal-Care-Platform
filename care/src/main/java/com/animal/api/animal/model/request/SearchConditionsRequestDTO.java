@@ -10,6 +10,7 @@ public class SearchConditionsRequestDTO {
 	private int cp;
 	private String type;
 	private String breed;
+	private String gender;
 	private int neuter;
 	private int age;
 	private String adoptionStatus;
