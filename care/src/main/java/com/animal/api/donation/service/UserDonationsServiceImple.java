@@ -34,13 +34,12 @@ public class UserDonationsServiceImple implements UserDonationsService {
 
 		return donationList;
 	}
-	
-	
+
 	@Override
 	public DonationDetailResponseDTO getDonationDetail(int idx) {
 
-		DonationDetailResponseDTO donationDetail=mapper.getDonationDetail(idx);
-		
+		DonationDetailResponseDTO donationDetail = mapper.getDonationDetail(idx);
+
 		return donationDetail;
 	}
 }
