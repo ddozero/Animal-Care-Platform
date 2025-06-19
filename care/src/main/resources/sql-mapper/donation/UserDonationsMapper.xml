@@ -51,6 +51,7 @@ FROM
 JOIN USERS U ON
 	U.IDX = DC.USER_IDX
 WHERE DC.DONATION_IDX=${idx}
+ORDER BY DC.IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
 </mapper>
