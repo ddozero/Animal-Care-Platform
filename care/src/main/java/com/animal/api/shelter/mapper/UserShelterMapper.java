@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
+import com.animal.api.shelter.model.response.ShelterAnimalsDTO;
 import com.animal.api.shelter.model.response.ShelterDetailDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
 
@@ -20,4 +21,6 @@ public interface UserShelterMapper {
 	public ShelterDetailDTO getShelterDetail(int idx);
 
 	public List<ShelterVolunteersDTO> getShelterVolunteers(Map map);
+
+	public List<ShelterAnimalsDTO> getAllShelterAnimals(Map map);
 }
