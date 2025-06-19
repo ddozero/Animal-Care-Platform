@@ -1,0 +1,15 @@
+package com.animal.api.donation.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.animal.api.donation.model.response.AllDonationListResponseDTO;
+import com.animal.api.donation.model.response.DonationDetailResponseDTO;
+
+@Mapper
+public interface UserDonationsMapper {
+	public List<AllDonationListResponseDTO> getAllDonations(Map map);
+	public DonationDetailResponseDTO getDonationDetail(int idx);
+}

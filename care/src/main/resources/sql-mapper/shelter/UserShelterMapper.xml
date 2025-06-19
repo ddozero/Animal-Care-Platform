@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.shelter.mapper.UserShelterMapper">
+<select id="getAllShelters" parameterType="Map" resultType="com.animal.api.shelter.model.response.AllShelterListDTO">
+SELECT
+	S.USER_IDX AS 'IDX',
+	S.SHELTER_NAME,
+	S.SHELTER_ADDRESS,
+	ST.NAME AS 'SHELTER_TYPE'
+FROM
+	SHELTERS S
+JOIN SHELTER_TYPES ST
+	ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+ORDER BY
+	S.USER_IDX DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
+<select id="searchShelters" parameterType="com.animal.api.shelter.model.request.SearchShelterRequestDTO" resultType="com.animal.api.shelter.model.response.AllShelterListDTO">
+SELECT
+	S.USER_IDX AS 'IDX',
+	S.SHELTER_NAME,
+	S.SHELTER_ADDRESS,
+	ST.NAME AS 'SHELTER_TYPE'
+FROM
+	SHELTERS S
+JOIN SHELTER_TYPES ST
+	ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+<where>
+	<if test="shelterAddress != null and shelterAddress != ''">
+		AND S.SHELTER_ADDRESS LIKE '%${shelterAddress}%'
+	</if>
+	<if test="shelterType != null and shelterType != ''">
+		AND ST.NAME = #{shelterType}
+	</if>
+	<if test="shelterName != null and shelterName != ''">
+		AND S.SHELTER_NAME LIKE '%${shelterName}%'
+	</if>
+</where>	
+ORDER BY
+	S.USER_IDX DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
+</mapper>

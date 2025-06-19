@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.animal.mapper.UserAnimalMapper">
+<select id="getAllAnimals" parameterType="Map" resultType="com.animal.api.animal.model.response.AllAnimalListResponseDTO">
+SELECT
+	A.IDX,
+	A.NAME,
+	A.GENDER,
+	A.AGE,
+	A.`SIZE`,
+	A.NEUTER,
+	A.CREATED_AT,
+	AB2.NAME AS 'BREED',
+	AB2.ANIMAL_TYPE AS 'TYPE',
+	AP.NAME AS 'PERSONALITY',
+	AS2.NAME AS 'ADOPTION_STATUS'
+FROM
+	ANIMALS A
+JOIN (
+	SELECT
+		AB.IDX,
+		AB.NAME,
+		AT2.NAME AS 'ANIMAL_TYPE'
+	FROM
+		ANIMAL_BREEDS AB
+	JOIN ANIMAL_TYPES AT2
+	ON
+		AB.ANIMAL_TYPE_IDX = AT2.IDX) AB2
+	ON
+	A.ANIMAL_BREED_IDX = AB2.IDX
+JOIN ANIMAL_PERSONALITIES AP
+	ON
+	A.ANIMAL_PERSONALITY_IDX = AP.IDX
+JOIN ADOPTION_STATUS AS2
+	ON
+	A.ADOPTION_STATUS_IDX = AS2.IDX
+ORDER BY A.IDX DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
+<select id="searchAnimals" parameterType="com.animal.api.animal.model.request.SearchConditionsRequestDTO" resultType="com.animal.api.animal.model.response.AllAnimalListResponseDTO">
+SELECT
+	A.IDX,
+	A.NAME,
+	A.GENDER,
+	A.AGE,
+	A.`SIZE`,
+	A.NEUTER,
+	A.CREATED_AT,
+	AB2.NAME AS 'BREED',
+	AB2.ANIMAL_TYPE AS 'TYPE',
+	AP.NAME AS 'PERSONALITY',
+	AS2.NAME AS 'ADOPTION_STATUS'
+FROM
+	ANIMALS A
+JOIN (
+	SELECT
+		AB.IDX,
+		AB.NAME,
+		AT2.NAME AS 'ANIMAL_TYPE'
+	FROM
+		ANIMAL_BREEDS AB
+	JOIN ANIMAL_TYPES AT2
+	ON
+		AB.ANIMAL_TYPE_IDX = AT2.IDX) AB2
+	ON
+	A.ANIMAL_BREED_IDX = AB2.IDX
+JOIN ANIMAL_PERSONALITIES AP
+	ON
+	A.ANIMAL_PERSONALITY_IDX = AP.IDX
+JOIN ADOPTION_STATUS AS2
+	ON
+	A.ADOPTION_STATUS_IDX = AS2.IDX
+<where>
+	<if test="type != null and type != ''">
+		AND AB2.ANIMAL_TYPE = #{type}
+	</if>
+	<if test="breed != null and breed != ''">
+		AND AB2.NAME = #{breed}
+	</if>
+	<if test="gender != null and gender != ''">
+		AND A.GENDER = #{gender}
+	</if>
+	<if test="neuter != 0">
+		AND A.NEUTER = #{neuter}
+	</if>
+	<if test="age != 0">
+		AND A.AGE = #{age}
+	</if>
+	<if test="adoptionStatus != null and adoptionStatus != ''">
+		AND AS2.NAME = #{adoptionStatus}
+	</if>
+	<if test="personality != null and personality != ''">
+		AND AP.NAME = #{personality}
+	</if>
+	<if test="size != 0">
+		AND A.`SIZE` = #{size}
+	</if>
+	<if test="name != null and name != ''">
+		AND A.NAME LIKE '%${name}%'
+	</if>
+</where>
+ORDER BY A.IDX DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
+<select id="getAnimalDetail" parameterType="int" resultType="com.animal.api.animal.model.response.AnimalDetailResponseDTO">
+SELECT
+	A.IDX,
+	A.NAME,
+	A.GENDER,
+	A.AGE,
+	A.`SIZE`,
+	A.NEUTER,
+	A.CREATED_AT,
+	A.DESCRIPTION,
+	AB2.NAME AS 'BREED',
+	AB2.ANIMAL_TYPE AS 'TYPE',
+	AP.NAME AS 'PERSONALITY',
+	AS2.NAME AS 'ADOPTION_STATUS',
+	S.SHELTER_NAME,
+	S.SHELTER_PERSON_NAME,
+	S.SHELTER_TEL,
+	S.SHELTER_ZIP_CODE,
+	S.SHELTER_ADDRESS,
+	S.SHELTER_ADDRESS_DETAIL
+FROM
+	ANIMALS A
+JOIN (
+	SELECT
+		AB.IDX,
+		AB.NAME,
+		AT2.NAME AS 'ANIMAL_TYPE'
+	FROM
+		ANIMAL_BREEDS AB
+	JOIN ANIMAL_TYPES AT2
+	ON
+		AB.ANIMAL_TYPE_IDX = AT2.IDX) AB2
+	ON
+	A.ANIMAL_BREED_IDX = AB2.IDX
+JOIN ANIMAL_PERSONALITIES AP
+	ON
+	A.ANIMAL_PERSONALITY_IDX = AP.IDX
+JOIN ADOPTION_STATUS AS2
+	ON
+	A.ADOPTION_STATUS_IDX = AS2.IDX
+JOIN SHELTERS S 
+	ON
+	A.USER_IDX = S.USER_IDX
+WHERE
+	A.IDX = ${idx}
+</select>
+</mapper>
