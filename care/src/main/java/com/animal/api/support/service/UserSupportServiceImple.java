@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import com.animal.api.support.dao.UserSupportMapper;
+import com.animal.api.support.mapper.UserSupportMapper;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
 
 @Service

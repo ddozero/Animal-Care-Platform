@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.animal.api.support.dao.UserSupportMapper">
+<mapper namespace="com.animal.api.support.mapper.UserSupportMapper">
 
 	<select id="getAllNotice"
 		resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">

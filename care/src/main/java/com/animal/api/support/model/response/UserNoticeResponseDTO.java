@@ -12,12 +12,12 @@ import lombok.Data;
 public class UserNoticeResponseDTO {
 
 	private int idx;
-	private int user_idx;
-	private int board_type_idx;
+	private int userIdx;
+	private int boardTypeIdx;
 	private String title;
 	private String content;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Timestamp created_at;
+	private Timestamp createdAt;
 	private int views;
 	private int ref;
 	private int lev;

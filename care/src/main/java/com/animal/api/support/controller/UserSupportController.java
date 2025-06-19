@@ -30,7 +30,6 @@ public class UserSupportController {
 	private UserSupportService supportService;
 
 	/**
-	 * 
 	 * @param 현재 페이지 번호
 	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
 	 */
@@ -38,8 +37,8 @@ public class UserSupportController {
 	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 5;
 
-		if (cp == 1) {
-			cp = 0;
+		if (cp == 0) {
+			cp = 1;
 		} else {
 			cp = (cp - 1) * listSize;
 		}
