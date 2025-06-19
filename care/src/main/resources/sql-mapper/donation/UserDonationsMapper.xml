@@ -20,7 +20,7 @@ ORDER BY D.IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
 
-<select id=getDonationDetail " parameterType="int" resultType="com.animal.api.donation.model.response.DonationDetailResponseDTO">
+<select id="getDonationDetail" parameterType="int" resultType="com.animal.api.donation.model.response.DonationDetailResponseDTO">
 SELECT
 	D.IDX,
 	D.NAME,
@@ -32,7 +32,7 @@ SELECT
 	D.SPONSOR,
 	D.SPONSOR_DETAIL,
 	D.CONTENT,
-	DS.NAME
+	DS.NAME AS 'STATUS'
 FROM
 	DONATIONS D
 JOIN DONATION_STATUS DS ON
