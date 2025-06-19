@@ -53,7 +53,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		cp = (cp - 1) * listSize;
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("donationIdx", idx);
+		map.put("idx", idx);
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		List<AllDonationCommentsResponseDTO> commentList = mapper.getDonationComments(map);
