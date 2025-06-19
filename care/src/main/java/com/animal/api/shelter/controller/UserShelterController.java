@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
+import com.animal.api.shelter.model.response.ShelterDetailDTO;
 import com.animal.api.shelter.service.UserShelterService;
 
 /**
@@ -32,10 +34,10 @@ public class UserShelterController {
 	/**
 	 * 보호시설 조회 메서드
 	 * 
-	 * @param cp 현재 페이지
-	 * @param shelterName 검색된 보호소 이름
+	 * @param cp             현재 페이지
+	 * @param shelterName    검색된 보호소 이름
 	 * @param shelterAddress 선택된 보호소 주소
-	 * @param shelterType 선택된 보호소 타입
+	 * @param shelterType    선택된 보호소 타입
 	 * 
 	 * @return 조회된 보호소의 리스트
 	 */
@@ -60,6 +62,16 @@ public class UserShelterController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<AllShelterListDTO>>(200, "조회 성공", shelterList));
+		}
+	}
+
+	@GetMapping("/{idx}")
+	public ResponseEntity<?> getShelterDetail(@PathVariable int idx) {
+		ShelterDetailDTO dto = service.getShelterDetail(idx);
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 보호시설이 존재하지 않습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<ShelterDetailDTO>(200, "조회 성공", dto));
 		}
 	}
 
