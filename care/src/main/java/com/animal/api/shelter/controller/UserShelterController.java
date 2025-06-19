@@ -33,13 +33,25 @@ public class UserShelterController {
 	 * 보호시설 조회 메서드
 	 * 
 	 * @param cp 현재 페이지
+	 * @param shelterName 검색된 보호소 이름
+	 * @param shelterAddress 선택된 보호소 주소
+	 * @param shelterType 선택된 보호소 타입
+	 * 
 	 * @return 조회된 보호소의 리스트
 	 */
 	@GetMapping
-	public ResponseEntity<?> getShelters(@RequestParam(value = "cp", defaultValue = "0") int cp) {
+	public ResponseEntity<?> getShelters(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			@RequestParam(value = "shelterName", required = false) String shelterName,
+			@RequestParam(value = "shelterAddress", required = false) String shelterAddress,
+			@RequestParam(value = "shelterType", required = false) String shelterType) {
 		int listSize = 3;
+		List<AllShelterListDTO> shelterList = null;
 
-		List<AllShelterListDTO> shelterList = service.getAllShelters(listSize, cp);
+		if (shelterName != null || shelterAddress != null || shelterType != null) {
+			shelterList = service.searchShelters(listSize, cp, shelterName, shelterAddress, shelterType);
+		} else {
+			shelterList = service.getAllShelters(listSize, cp);
+		}
 
 		if (shelterList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));

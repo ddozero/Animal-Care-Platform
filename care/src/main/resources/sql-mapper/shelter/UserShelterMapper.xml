@@ -19,4 +19,30 @@ ORDER BY
 	S.USER_IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
+<select id="searchShelters" parameterType="com.animal.api.shelter.model.request.SearchShelterRequestDTO" resultType="com.animal.api.shelter.model.response.AllShelterListDTO">
+SELECT
+	S.USER_IDX AS 'IDX',
+	S.SHELTER_NAME,
+	S.SHELTER_ADDRESS,
+	ST.NAME AS 'SHELTER_TYPE'
+FROM
+	SHELTERS S
+JOIN SHELTER_TYPES ST
+	ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+<where>
+	<if test="shelterAddress != null and shelterAddress != ''">
+		AND S.SHELTER_ADDRESS LIKE '%${shelterAddress}%'
+	</if>
+	<if test="shelterType != null and shelterType != ''">
+		AND ST.NAME = #{shelterType}
+	</if>
+	<if test="shelterName != null and shelterName != ''">
+		AND S.SHELTER_NAME LIKE '%${shelterName}%'
+	</if>
+</where>	
+ORDER BY
+	S.USER_IDX DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
 </mapper>

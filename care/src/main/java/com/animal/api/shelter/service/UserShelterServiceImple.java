@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.shelter.mapper.UserShelterMapper;
+import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
 
 @Service
@@ -27,6 +28,18 @@ public class UserShelterServiceImple implements UserShelterService {
 		map.put("cp", cp);
 
 		List<AllShelterListDTO> shelterList = mapper.getAllShelters(map);
+
+		return shelterList;
+	}
+
+	@Override
+	public List<AllShelterListDTO> searchShelters(int listSize, int cp, String shelterName, String shelterAddress,
+			String shelterType) {
+		cp = changeCurrentPage(cp, listSize);
+		SearchShelterRequestDTO dto = new SearchShelterRequestDTO(listSize, cp, shelterName, shelterAddress,
+				shelterType);
+
+		List<AllShelterListDTO> shelterList = mapper.searchShelters(dto);
 
 		return shelterList;
 	}
