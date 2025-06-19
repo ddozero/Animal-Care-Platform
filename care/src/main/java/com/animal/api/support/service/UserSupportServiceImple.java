@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.support.mapper.UserSupportMapper;
-import com.animal.api.support.model.response.SearchNoticeResponseDTO;
+import com.animal.api.support.model.request.SearchNoticeRequestDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
 
 @Service
@@ -18,38 +18,33 @@ public class UserSupportServiceImple implements UserSupportService {
 	private UserSupportMapper mapper;
 
 	@Override
-	public List<UserNoticeResponseDTO> getAllNotice(int listSize, int cp){
+	public List<UserNoticeResponseDTO> getAllNotice(int listSize, int cp) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 
 		List<UserNoticeResponseDTO> noticeLists = mapper.getAllNotice(map);
-		
+
 		return noticeLists;
 	}
-	
+
 	@Override
 	public UserNoticeResponseDTO getNoticeDetail(int idx) {
 		UserNoticeResponseDTO dto = mapper.getNoticeDetail(idx);
-		if(dto!=null&&dto.getContent()!=null){
+		if (dto != null && dto.getContent() != null) {
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		}
-		
 		return dto;
 	}
-	
+
 	@Override
 	public List<UserNoticeResponseDTO> searchAllNotice(int listSize, int cp, String title, String content) {
-		
-		SearchNoticeResponseDTO dto = new SearchNoticeResponseDTO(cp, listSize, title, content);
-		
+
+		SearchNoticeRequestDTO dto = new SearchNoticeRequestDTO(cp, listSize, title, content);
 		List<UserNoticeResponseDTO> searchNoticeList = mapper.searchAllNotice(dto);
+		
 		return searchNoticeList;
 	}
 
-	
-	
-	
-	
 }

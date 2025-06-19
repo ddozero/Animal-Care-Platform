@@ -1,11 +1,11 @@
-package com.animal.api.support.model.response;
+package com.animal.api.support.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SearchNoticeResponseDTO {
+public class SearchNoticeRequestDTO {
 	
 	private int cp;
 	private int listSize;

@@ -33,14 +33,12 @@ public class UserSupportController {
 	/**
 	 * @param 현재 페이지 번호
 	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
-	 * @param 검색시  키워드
-	 * @param 사용자가 입력한 키워드 값
+	 * @param 사용자가 검색시 입력한 제목
+	 * @param 사용자가 검색시 입력한 내용
 	 * @return 사용자에게 보여줄 키워드 검색 목록 조회
 	 */
 	@GetMapping()
 	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp,
-			@RequestParam(value = "fkey", required = false) String fkey,
-			@RequestParam(value = "fvalue", required = false) String fvalue,
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "content", required = false) String content) {
 
@@ -53,7 +51,7 @@ public class UserSupportController {
 
 		List<UserNoticeResponseDTO> noticeAllList = null;
 
-		if (title != null || content != null || fkey != null || fvalue != null) {
+		if (title != null || content != null) {
 			noticeAllList = supportService.searchAllNotice(listSize, cp, title, content);
 		} else {
 			noticeAllList = supportService.getAllNotice(listSize, cp);

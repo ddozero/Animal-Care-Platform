@@ -6,25 +6,28 @@
 <mapper
 	namespace="com.animal.api.support.mapper.UserSupportMapper">
 
-	<select id="getAllNotice" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+	<select id="getAllNotice"
+		resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
 		SELECT
-			IDX,
-			USER_IDX,
-			BOARD_TYPE_IDX,
-			TITLE,
-			CONTENT,
-			CREATED_AT,
-			VIEWS,
-			REF,
-			LEV,
-			TURN
+		IDX,
+		USER_IDX,
+		BOARD_TYPE_IDX,
+		TITLE,
+		CONTENT,
+		CREATED_AT,
+		VIEWS,
+		REF,
+		LEV,
+		TURN
 		FROM BOARDS
 		WHERE BOARD_TYPE_IDX = 1
 		ORDER BY IDX DESC
-		LIMIT #{listSize} OFFSET #{cp}
+		LIMIT #{listSize}
+		OFFSET #{cp}
 	</select>
 
-	<select id="getNoticeDetail" parameterType="int" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+	<select id="getNoticeDetail" parameterType="int"
+		resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
 		SELECT
 			IDX,
 			USER_IDX,
@@ -41,7 +44,8 @@
 		AND IDX = ${idx}
 	</select>
 
-	<select id="searchAllNotice" parameterType="map" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+	<select id="searchAllNotice" parameterType="map"
+		resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
 		SELECT
 			IDX,
 			USER_IDX,
@@ -54,25 +58,22 @@
 			LEV,
 			TURN
 		FROM BOARDS
+		
 		<where>
-			<if test ="fkey != null and fvalue !=null">
-				${fkey} = #{fvalue}
-			</if>
-			<if test="type != null and type!= ''">
+			<if test="title != null and title!= ''">
 				AND TITLE LIKE '%${title}%'
 			</if>
-			<if test="type != null and type!= ''">
+			<if test="content != null and content!= ''">
 				AND CONTENT LIKE '%${content}%'
 			</if>
 			<if test="true">
-				BOARD_TYPE_IDX = 1
+				AND BOARD_TYPE_IDX = 1
 			</if>
-		</where> 
-		
-		
+		</where>
+
 		ORDER BY IDX DESC
 		LIMIT #{listSize} OFFSET #{cp}
-		
+
 	</select>
 
 
