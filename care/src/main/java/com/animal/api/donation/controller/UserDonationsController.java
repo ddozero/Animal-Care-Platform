@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.DonationDetailResponseDTO;
 import com.animal.api.donation.service.UserDonationsService;
@@ -69,4 +70,22 @@ public class UserDonationsController {
 		}
 
 	}
+
+	@GetMapping("/{idx}/comments")
+	public ResponseEntity<?> getDonationComments(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp) {
+		int listSize = 3;
+		List<AllDonationCommentsResponseDTO> commentList = service.getDonationComments(idx, listSize, cp);
+
+		if (commentList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		} else if (commentList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "응원 댓글 데이터가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<AllDonationCommentsResponseDTO>>(200, "응원 댓글 전체 조회 성공", commentList));
+		}
+
+	}
+
 }
