@@ -36,7 +36,7 @@
 			LEV,
 			TURN
 		FROM BOARDS
-		WHERE BOARD_TYPE_IDX = #{boardTypeIdx}
+		WHERE BOARD_TYPE_IDX = 1
 		AND IDX = ${idx}
 	</select>
 	

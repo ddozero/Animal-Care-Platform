@@ -27,5 +27,15 @@ public class UserSupportServiceImple implements UserSupportService {
 		
 		return noticeLists;
 	}
+	
+	@Override
+	public UserNoticeResponseDTO getNoticeDetail(int idx) {
+		UserNoticeResponseDTO dto = mapper.getNoticeDetail(idx);
+		if(dto!=null&&dto.getContent()!=null){
+			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		}
+		
+		return dto;
+	}
 
 }

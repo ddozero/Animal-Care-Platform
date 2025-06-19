@@ -6,6 +6,6 @@ import com.animal.api.support.model.response.UserNoticeResponseDTO;
 public interface UserSupportService {
 	
 	public List<UserNoticeResponseDTO> getAllNotice(int listSize, int cp);
-	
+	public UserNoticeResponseDTO getNoticeDetail(int idx);
 	
 }
