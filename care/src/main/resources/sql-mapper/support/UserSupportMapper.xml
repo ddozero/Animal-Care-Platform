@@ -41,7 +41,7 @@
 		AND IDX = ${idx}
 	</select>
 
-	<select id="searchAllNotice" parameterMap="Map" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+	<select id="searchAllNotice" parameterType="map" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
 		SELECT
 			IDX,
 			USER_IDX,
