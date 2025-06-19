@@ -15,6 +15,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
 import com.animal.api.shelter.model.response.ShelterDetailDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
 import com.animal.api.shelter.service.UserShelterService;
 
 /**
@@ -78,6 +79,22 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 보호시설이 존재하지 않습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<ShelterDetailDTO>(200, "조회 성공", dto));
+		}
+	}
+
+	@GetMapping("/{idx}/volunteers")
+	public ResponseEntity<?> getShelterVolunteers(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp) {
+		int listSize = 3;
+		List<ShelterVolunteersDTO> volunteerList = service.getShelterVolunteers(listSize, cp, idx);
+
+		if (volunteerList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+		} else if (volunteerList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterVolunteersDTO>>(200, "조회 성공", volunteerList));
 		}
 	}
 
