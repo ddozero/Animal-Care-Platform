@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import com.animal.api.donation.dao.UserDonationsMapper;
+import com.animal.api.donation.mapper.UserDonationsMapper;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 
 @Service

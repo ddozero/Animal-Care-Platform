@@ -1,4 +1,4 @@
-package com.animal.api.animal.dao;
+package com.animal.api.animal.mapper;
 
 import java.util.List;
 import java.util.Map;

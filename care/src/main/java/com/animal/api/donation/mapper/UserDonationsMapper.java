@@ -1,4 +1,4 @@
-package com.animal.api.donation.dao;
+package com.animal.api.donation.mapper;
 
 import java.util.List;
 import java.util.Map;
