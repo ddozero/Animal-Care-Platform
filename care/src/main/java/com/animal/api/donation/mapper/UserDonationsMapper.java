@@ -15,5 +15,5 @@ public interface UserDonationsMapper {
 
 	public DonationDetailResponseDTO getDonationDetail(int idx);
 
-	public AllDonationCommentsResponseDTO getDonationComments(Map map);
+	public List<AllDonationCommentsResponseDTO> getDonationComments(Map map);
 }
