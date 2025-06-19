@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ public class UserSupportController {
 	 * @param 현재 페이지 번호
 	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
 	 */
-	@GetMapping("/getAllNotice")
+	@GetMapping
 	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 5;
 
@@ -54,8 +55,8 @@ public class UserSupportController {
 
 	}
 	
-	@GetMapping("/getNoticeDetail")
-	public ResponseEntity<?> getNoticeDetail(@RequestParam(value = "idx", defaultValue = "0") int idx) {
+	@GetMapping("/{idx}")
+	public ResponseEntity<?> getNoticeDetail(@PathVariable int idx) {
 		UserNoticeResponseDTO dto = supportService.getNoticeDetail(idx);
 
 		if (dto == null) {
@@ -63,6 +64,5 @@ public class UserSupportController {
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<UserNoticeResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}
-
 	}
 }
