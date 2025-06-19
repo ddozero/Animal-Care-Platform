@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.animal.api.shelter.mapper.UserShelterMapper;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
+import com.animal.api.shelter.model.response.ShelterDetailDTO;
 
 @Service
 @Primary
@@ -42,6 +43,12 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<AllShelterListDTO> shelterList = mapper.searchShelters(dto);
 
 		return shelterList;
+	}
+
+	@Override
+	public ShelterDetailDTO getShelterDetail(int idx) {
+		ShelterDetailDTO dto = mapper.getShelterDetail(idx);
+		return dto;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드

@@ -3,6 +3,7 @@ package com.animal.api.shelter.service;
 import java.util.List;
 
 import com.animal.api.shelter.model.response.AllShelterListDTO;
+import com.animal.api.shelter.model.response.ShelterDetailDTO;
 
 public interface UserShelterService {
 
@@ -10,4 +11,6 @@ public interface UserShelterService {
 
 	public List<AllShelterListDTO> searchShelters(int listSize, int cp, String shelterName, String shelterAddress,
 			String shelterType);
+
+	public ShelterDetailDTO getShelterDetail(int idx);
 }
