@@ -46,5 +46,11 @@ public class UserSupportServiceImple implements UserSupportService {
 		
 		return searchNoticeList;
 	}
+	
+	@Override
+	public int addNoticeViewCount(int idx) {
+		int count = mapper.updateNoticeViews(idx);
+		return count;
+	}
 
 }
