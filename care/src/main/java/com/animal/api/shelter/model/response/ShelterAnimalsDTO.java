@@ -4,6 +4,11 @@ import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class ShelterAnimalsDTO {
 	private int idx;
 	private int userIdx;
