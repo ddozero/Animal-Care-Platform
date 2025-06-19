@@ -1,5 +1,41 @@
 package com.animal.api.auth.model.vo;
 
-public class UserVO {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import lombok.Data;
+
+@Data
+public class UserVO {
+	
+    private int userIdx;
+    private int userTypeIdx;
+    private String userTypeName;
+
+    private String id;
+    private String email;
+    private String password;
+    private String name;
+    private String nickname;
+
+    private LocalDate birthDate;
+    private String gender;
+    private int tel;
+
+    private int zipCode;
+    private String address;
+    private String addressDetail;
+
+    private int point;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime lastLoginAt;
+    private LocalDateTime withdrawnAt;
+
+    private int status;
+    private int locked;
+    private int lockCount;
+    private LocalDateTime lockedAt;
+    
 }
