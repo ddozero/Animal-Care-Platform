@@ -56,15 +56,13 @@
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation"
-			value="classpath:mybatis-config.xml" />
-		<property name="mapperLocations"
-			value="classpath:sql-mapper/**/*.xml" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath:sql-mapper/**/*.xml" />
 	</bean>
 
 	<!-- ✅ MyBatis Mapper 자동 등록 (XML + 인터페이스 연결) -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.animal.api" />
+		<property name="basePackage" value="com.animal.api.**" />
 	</bean>
 
 	<!-- ✅ 트랜잭션 매니저: DB 트랜잭션 처리용 -->
