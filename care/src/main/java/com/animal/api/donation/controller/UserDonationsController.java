@@ -19,7 +19,7 @@ import com.animal.api.donation.service.UserDonationsService;
 
 /**
  * @author consgary
- * @since 2025.06.18
+ * @since 2025.06.19
  * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
  */
 @RestController
@@ -30,6 +30,8 @@ public class UserDonationsController {
 	private UserDonationsService service;
 
 	/**
+	 * 봉사 전체 조회
+	 * 
 	 * @param cp 현재 페이지
 	 * @return 기부 전체 리스트
 	 */
@@ -48,13 +50,19 @@ public class UserDonationsController {
 		}
 	}
 
+	/**
+	 * 봉사 상세 정보 조회
+	 * 
+	 * @param idx
+	 * @return 봉사 상세 정보
+	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getDonationDetail(@PathVariable int idx) {
 
 		DonationDetailResponseDTO donationDetail = service.getDonationDetail(idx);
 
 		if (donationDetail == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "기부 상세 데이터가 존재하지않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<DonationDetailResponseDTO>(200, "기부 상세 조회 성공", donationDetail));
