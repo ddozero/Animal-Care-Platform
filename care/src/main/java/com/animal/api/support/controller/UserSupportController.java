@@ -69,6 +69,8 @@ public class UserSupportController {
 
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getNoticeDetail(@PathVariable int idx) {
+		
+		int result = supportService.addNoticeViewCount(idx);
 		UserNoticeResponseDTO dto = supportService.getNoticeDetail(idx);
 
 		if (dto == null) {

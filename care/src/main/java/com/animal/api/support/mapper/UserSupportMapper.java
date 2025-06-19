@@ -14,6 +14,7 @@ public interface UserSupportMapper {
 	public List<UserNoticeResponseDTO> getAllNotice(Map map);
 	public UserNoticeResponseDTO getNoticeDetail(int idx);
 	public List<UserNoticeResponseDTO> searchAllNotice(SearchNoticeRequestDTO dto);
+	public int updateNoticeViews(int idx);
 	
 	
 }

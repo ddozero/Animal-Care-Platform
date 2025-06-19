@@ -77,7 +77,7 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
-<update id="upDateViews" parameterType="int">
+<update id="updateNoticeViews" parameterType="int">
 UPDATE
 	BOARDS
 SET
