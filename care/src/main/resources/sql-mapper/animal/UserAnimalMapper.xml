@@ -99,7 +99,7 @@ JOIN ADOPTION_STATUS AS2
 		AND A.`SIZE` = #{size}
 	</if>
 	<if test="name != null and name != ''">
-		AND A.NAME = #{name}
+		AND A.NAME LIKE '%${name}%'
 	</if>
 </where>
 ORDER BY A.IDX DESC

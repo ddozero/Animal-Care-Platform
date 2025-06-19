@@ -19,7 +19,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사용자 기준 유기동물 관련 컨트롤러 클래스
  * 
  * @author Rege-97
- * @since 2025-06-18
+ * @since 2025-06-19
  * @see com.animal.api.animal.model.response.AllAnimalListResponseDTO
  */
 @RestController
@@ -33,6 +33,16 @@ public class UserAnimalController {
 	 * 사용자의 유기동물 조회 메서드
 	 * 
 	 * @param cp 현재 보고있는 페이지 번호
+	 * @param type 동물 유형
+	 * @param breed 동물 품종
+	 * @param gender 동물 성별
+	 * @param neuter 중성화 여부
+	 * @param age 동물 나이
+	 * @param adoptionStatus 입양 상태
+	 * @param personality 동물 성격
+	 * @param size 동물 크기
+	 * @param name 동물 이름
+	 * 
 	 * @return 사용자에게 보여줄 유기동물 리스트
 	 */
 	@GetMapping
