@@ -36,6 +36,9 @@ public class UserSupportController {
 	/**
 	 * @param 현재 페이지 번호
 	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
+	 * @param 검색 시 키워드
+	 * @param 사용자가 입력한 키워드 값
+	 * @return 사용자에게 보여줄 키워드 검색 목록 조회
 	 */
 	@GetMapping()
 	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp,
@@ -43,12 +46,6 @@ public class UserSupportController {
 			@RequestParam(value = "fvalue", required = false) String fvalue) {
 
 		int listSize = 5;
-
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
-		}
 
 		if (fkey != null && fvalue != null) {
 			List<UserNoticeResponseDTO> searchLists = supportService.searchAllNotice(fkey, fvalue);
@@ -59,6 +56,13 @@ public class UserSupportController {
 		}
 
 		List<UserNoticeResponseDTO> allLists = supportService.getAllNotice(listSize, cp);
+
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
+
 		if (allLists.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "등록 게시물 없음"));
 		}
@@ -75,7 +79,5 @@ public class UserSupportController {
 			return ResponseEntity.ok(new OkResponseDTO<UserNoticeResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}
 	}
-
-
 
 }
