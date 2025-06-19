@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.animal.api.auth.mapper.AuthMapper">
+	<select id="login"
+		parameterType="com.animal.api.auth.model.request.LoginRequestDTO"
+		resultType="com.animal.api.auth.model.response.LoginResponseDTO">
+		SELECT * 
+		FROM USERS 
+		WHERE ID = #{userId}
+			  
+	</select>
+<!-- 유저정보 전체 조회 -->
+<select id="findUserById" resultType="com.animal.api.auth.model.vo.UserVO">
+    SELECT 
+        U.USER_IDX            AS userIdx,
+        U.USER_TYPE_IDX       AS userTypeIdx,
+        UT.NAME               AS userTypeName,
+        U.ID                  AS id,
+        U.EMAIL               AS email,
+        U.PASSWORD            AS password,
+        U.NAME                AS name,
+        U.NICKNAME            AS nickname,
+        U.BIRTH_DATE          AS birthDate,
+        U.GENDER              AS gender,
+        U.TEL                 AS tel,
+        U.ZIP_CODE            AS zipCode,
+        U.ADDRESS             AS address,
+        U.ADDRESS_DETAIL      AS addressDetail,
+        U.POINT               AS point,
+        U.CREATED_AT          AS createdAt,
+        U.UPDATED_AT          AS updatedAt,
+        U.LAST_LOGIN_AT       AS lastLoginAt,
+        U.WITHDRAWN_AT        AS withdrawnAt,
+        U.STATUS              AS status,
+        U.LOCKED              AS locked,
+        U.LOCK_COUNT          AS lockCount,
+        U.LOCKED_AT           AS lockedAt
+    FROM USERS U
+    JOIN USER_TYPES UT ON U.USER_TYPE_IDX = UT.IDX
+    WHERE U.ID = #{id}
+</select>
+
+<!-- 보호소 추가 조회 쿼리 -->
+<select id="findShelterByUserIdx" resultType="com.animal.api.auth.model.vo.ShelterVO">
+    SELECT 
+        S.SHELTER_TYPE_IDX        AS shelterTypeIdx,
+        ST.NAME                   AS shelterTypeName,
+        S.SHELTER_TEL             AS shelterTel,
+        S.SHELTER_NAME            AS shelterName,
+        S.SHELTER_PERSON_NAME     AS shelterPersonName,
+        S.SHELTER_ZIP_CODE        AS shelterZipCode,
+        S.SHELTER_ADDRESS         AS shelterAddress,
+        S.SHELTER_ADDRESS_DETAIL  AS shelterAddressDetail,
+        S.SHELTER_EMAIL           AS shelterEmail,
+        S.SHELTER_DESCRIPTION     AS shelterDescription,
+        S.SHELTER_BUSINESS_NUMBER AS shelterBusinessNumber,
+        S.SHELTER_BUSINESS_FILE   AS shelterBusinessFile
+    FROM SHELTERS S
+    LEFT JOIN SHELTER_TYPES ST ON S.SHELTER_TYPE_IDX = ST.IDX
+    WHERE S.USER_IDX = #{userIdx}
+</select>
+	
+<!-- 로그인 업데이트 -->
+<update id="updateLastLoginAt">
+    UPDATE USERS
+    SET LAST_LOGIN_AT = NOW()
+    WHERE USER_IDX = #{userIdx}
+</update>
+
+</mapper>
