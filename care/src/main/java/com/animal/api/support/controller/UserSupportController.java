@@ -1,14 +1,12 @@
 package com.animal.api.support.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,13 +15,12 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
 import com.animal.api.support.service.UserSupportService;
-import com.mysql.cj.result.DefaultValueFactory;
 
 /**
  * 사용자의 고객지원 페이지 공지사항 관련 컨트롤러 클래스
  * 
  * @author ddozero
- * @since 2025-06-18
+ * @since 2025-06-19
  * @see com.animal.api.support.model.response.UserNoticeResponseDTO;
  */
 @RestController
@@ -36,7 +33,7 @@ public class UserSupportController {
 	/**
 	 * @param 현재 페이지 번호
 	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
-	 * @param 검색 시 키워드
+	 * @param 검색시 키워드
 	 * @param 사용자가 입력한 키워드 값
 	 * @return 사용자에게 보여줄 키워드 검색 목록 조회
 	 */
