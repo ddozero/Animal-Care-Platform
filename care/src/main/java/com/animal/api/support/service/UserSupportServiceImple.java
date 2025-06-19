@@ -37,5 +37,16 @@ public class UserSupportServiceImple implements UserSupportService {
 		
 		return dto;
 	}
+	
+	@Override
+	public List<UserNoticeResponseDTO> searchAllNotice(String fkey, String fvalue) {
+		Map<String, String> map = new HashMap<String, String>();
+		
+		map.put("fkey", fkey);
+		map.put("fvalue", fvalue);
+		
+		List<UserNoticeResponseDTO> searchNotice = mapper.searchAllNotice(map);
+		return searchNotice;
+	}
 
 }
