@@ -71,6 +71,14 @@ public class UserDonationsController {
 
 	}
 
+	/**
+	 * 응원 댓글 전체 조회
+	 * 
+	 * @param idx 기부번호
+	 * @param cp  페이지 번호
+	 * @return 응원 댓글 전체 조회
+	 */
+
 	@GetMapping("/{idx}/comments")
 	public ResponseEntity<?> getDonationComments(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
