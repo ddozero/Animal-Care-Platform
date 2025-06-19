@@ -50,7 +50,7 @@ FROM
 	DONATION_COMMENTS DC
 JOIN USERS U ON
 	U.IDX = DC.USER_IDX
-WHERE DC.DONATION_IDX=${donationIdx}
+WHERE DC.DONATION_IDX=${idx}
 LIMIT ${listSize} OFFSET ${cp}
 </select>
 </mapper>
