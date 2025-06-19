@@ -23,6 +23,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @author Rege-97
  * @since 2025-06-19
  * @see com.animal.api.animal.model.response.AllAnimalListResponseDTO
+ * @see com.animal.api.animal.model.response.AnimalDetailResponseDTO
  */
 @RestController
 @RequestMapping("/api/animals")
@@ -78,6 +79,11 @@ public class UserAnimalController {
 		}
 	}
 
+	/**
+	 * 유기동물의 상세 정보를 조회하는 메서드
+	 * @param idx 유기동물 관리번호
+	 * @return 사용자에게 보여줄 유기동물과 보호소 정보
+	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getAnimalDetail(@PathVariable int idx) {
 		AnimalDetailResponseDTO dto = service.getAnimalDetail(idx);

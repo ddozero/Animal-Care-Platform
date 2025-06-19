@@ -105,7 +105,7 @@ JOIN ADOPTION_STATUS AS2
 ORDER BY A.IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
-<select id="getAnimalDetail" parameterType="int" resultType="com.animal.api.animal.model.request.AnimalDetailResponseDTO">
+<select id="getAnimalDetail" parameterType="int" resultType="com.animal.api.animal.model.response.AnimalDetailResponseDTO">
 SELECT
 	A.IDX,
 	A.NAME,
