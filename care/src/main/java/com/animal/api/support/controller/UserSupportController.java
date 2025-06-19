@@ -33,37 +33,40 @@ public class UserSupportController {
 	/**
 	 * @param 현재 페이지 번호
 	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
-	 * @param 검색시 키워드
+	 * @param 검색시  키워드
 	 * @param 사용자가 입력한 키워드 값
 	 * @return 사용자에게 보여줄 키워드 검색 목록 조회
 	 */
 	@GetMapping()
 	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			@RequestParam(value = "fkey", required = false) String fkey,
-			@RequestParam(value = "fvalue", required = false) String fvalue) {
+			@RequestParam(value = "fvalue", required = false) String fvalue,
+			@RequestParam(value = "title", required = false) String title,
+			@RequestParam(value = "content", required = false) String content) {
 
 		int listSize = 5;
-
-		if (fkey != null && fvalue != null) {
-			List<UserNoticeResponseDTO> searchLists = supportService.searchAllNotice(fkey, fvalue);
-			if (searchLists.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "검색 결과 없음"));
-			}
-			return ResponseEntity.ok(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "게시물 조회 성공", searchLists));
-		}
-
-		List<UserNoticeResponseDTO> allLists = supportService.getAllNotice(listSize, cp);
-
 		if (cp == 0) {
 			cp = 1;
 		} else {
 			cp = (cp - 1) * listSize;
 		}
 
-		if (allLists.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "등록 게시물 없음"));
+		List<UserNoticeResponseDTO> noticeAllList = null;
+
+		if (title != null || content != null || fkey != null || fvalue != null) {
+			noticeAllList = supportService.searchAllNotice(listSize, cp, title, content);
+		} else {
+			noticeAllList = supportService.getAllNotice(listSize, cp);
 		}
-		return ResponseEntity.ok(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "게시물 조회 성공", allLists));
+
+		if (noticeAllList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+		} else if (noticeAllList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList));
+		}
 	}
 
 	@GetMapping("/{idx}")

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+
 import com.animal.api.support.model.response.*;
 
 @Mapper
@@ -11,7 +12,7 @@ public interface UserSupportMapper {
 	
 	public List<UserNoticeResponseDTO> getAllNotice(Map map);
 	public UserNoticeResponseDTO getNoticeDetail(int idx);
-	public List<UserNoticeResponseDTO> searchAllNotice(Map map);
+	public List<UserNoticeResponseDTO> searchAllNotice(SearchNoticeResponseDTO dto);
 	
 	
 }

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.support.mapper.UserSupportMapper;
+import com.animal.api.support.model.response.SearchNoticeResponseDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
 
 @Service
@@ -39,14 +40,16 @@ public class UserSupportServiceImple implements UserSupportService {
 	}
 	
 	@Override
-	public List<UserNoticeResponseDTO> searchAllNotice(String fkey, String fvalue) {
-		Map<String, String> map = new HashMap<String, String>();
+	public List<UserNoticeResponseDTO> searchAllNotice(int listSize, int cp, String title, String content) {
 		
-		map.put("fkey", fkey);
-		map.put("fvalue", fvalue);
+		SearchNoticeResponseDTO dto = new SearchNoticeResponseDTO(cp, listSize, title, content);
 		
-		List<UserNoticeResponseDTO> searchNotice = mapper.searchAllNotice(map);
-		return searchNotice;
+		List<UserNoticeResponseDTO> searchNoticeList = mapper.searchAllNotice(dto);
+		return searchNoticeList;
 	}
 
+	
+	
+	
+	
 }

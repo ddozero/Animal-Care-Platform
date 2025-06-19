@@ -20,7 +20,7 @@
 			TURN
 		FROM BOARDS
 		WHERE BOARD_TYPE_IDX = 1
-		ORDER BY CREATED_AT DESC
+		ORDER BY IDX DESC
 		LIMIT #{listSize} OFFSET #{cp}
 	</select>
 
@@ -54,7 +54,25 @@
 			LEV,
 			TURN
 		FROM BOARDS
-		WHERE ${fkey}=#{fvalue}
+		<where>
+			<if test ="fkey != null and fvalue !=null">
+				${fkey} = #{fvalue}
+			</if>
+			<if test="type != null and type!= ''">
+				AND TITLE LIKE '%${title}%'
+			</if>
+			<if test="type != null and type!= ''">
+				AND CONTENT LIKE '%${content}%'
+			</if>
+			<if test="true">
+				BOARD_TYPE_IDX = 1
+			</if>
+		</where> 
+		
+		
+		ORDER BY IDX DESC
+		LIMIT #{listSize} OFFSET #{cp}
+		
 	</select>
 
 
