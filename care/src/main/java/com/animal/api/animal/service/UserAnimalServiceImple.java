@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.animal.api.animal.mapper.UserAnimalMapper;
 import com.animal.api.animal.model.request.SearchConditionsRequestDTO;
+
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 

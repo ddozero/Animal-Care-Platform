@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.animal.api.donation.dao.UserDonationsMapper">
 
+<mapper	namespace="com.animal.api.donation.mapper.UserDonationsMapper">
 <select id="getAllDonations" parameterType="Map" resultType="com.animal.api.donation.model.response.AllDonationListResponseDTO">
 SELECT
 	D.IDX,
@@ -17,9 +17,26 @@ FROM
 JOIN DONATION_STATUS DS ON
 	D.IDX = DS.IDX
 ORDER BY D.IDX DESC
-LIMIT ${listSize} OFFSET ${cp} 
-
+LIMIT ${listSize} OFFSET ${cp}
 </select>
 
-
+<select id="getDonationDetail" parameterType="int" resultType="com.animal.api.donation.model.response.DonationDetailResponseDTO">
+SELECT
+	D.IDX,
+	D.NAME,
+	D.START_DATE,
+	D.END_DATE,
+	D.AMOUNT,
+	D.COMPLETION_AMOUNT,
+	D.COMPLETION_RATE,
+	D.SPONSOR,
+	D.SPONSOR_DETAIL,
+	D.CONTENT,
+	DS.NAME AS 'STATUS'
+FROM
+	DONATIONS D
+JOIN DONATION_STATUS DS ON
+	D.DONATION_STATUS_IDX = DS.IDX
+WHERE D.IDX=${idx}
+</select>
 </mapper>
