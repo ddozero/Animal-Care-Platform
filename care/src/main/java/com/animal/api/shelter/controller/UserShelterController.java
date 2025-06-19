@@ -25,6 +25,9 @@ import com.animal.api.shelter.service.UserShelterService;
  * @author Rege-97
  * @since 2025-06-19
  * @see com.animal.api.shelter.model.response.AllShelterListDTO
+ * @see com.animal.api.shelter.model.response.ShelterAnimalsDTO
+ * @see com.animal.api.shelter.model.response.ShelterDetailDTO
+ * @see com.animal.api.shelter.model.response.ShelterVolunteersDTO
  */
 @RestController
 @RequestMapping("/api/shelters")
@@ -106,6 +109,12 @@ public class UserShelterController {
 		}
 	}
 
+	/**
+	 * 보호시설의 상세정보에서 해당 보호시설의 유기동물들을 조회
+	 * @param idx 보호시설의 idx
+	 * @param cp  봉사 컨텐츠의 현재 페이지
+	 * @return 해당 보호시설의 유기동물 리스트
+	 */
 	@GetMapping("/{idx}/animals")
 	public ResponseEntity<?> getAllShelterAnimals(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
