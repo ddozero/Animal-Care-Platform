@@ -5,19 +5,17 @@ import lombok.Data;
 @Data
 public class ShelterVO {
 	
-    private int userIdx;
-    private int shelterTypeIdx;
-    private String shelterTypeName;
-
-    private int shelterTel;
-    private String shelterName;
-    private String shelterPersonName;
-    private int shelterZipCode;
-    private String shelterAddress;
-    private String shelterAddressDetail;
-    private String shelterEmail;
-    private String shelterDescription;
-
-    private String shelterBusinessNumber;
-    private Integer shelterBusinessFile;
+	private Integer shelterTypeIdx;
+	private String shelterTypeName;
+	private Integer shelterTel;
+	private String shelterName;
+	private String shelterPersonName;
+	private Integer shelterZipCode;
+	private String shelterAddress;
+	private String shelterAddressDetail;
+	private String shelterEmail;
+	private String shelterDescription;
+	private String shelterBusinessNumber;
+	private Integer shelterBusinessFile;
+	
 }

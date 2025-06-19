@@ -80,7 +80,11 @@ public class AuthServiceImple implements AuthService {
 	        res.setShelterBusinessNumber(shelter.getShelterBusinessNumber());
 	        res.setShelterBusinessFile(shelter.getShelterBusinessFile());
 	    }
-
+	    
+	    System.out.println("user: " + user);
+	    ShelterVO shelter = authMapper.findShelterByUserIdx(user.getUserIdx());
+	    System.out.println("shelter: " + shelter);
+	    
 	    return res;
     }
 }

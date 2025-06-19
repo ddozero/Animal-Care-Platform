@@ -1,5 +1,7 @@
 package com.animal.api.auth.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,9 +31,13 @@ public class AuthController {
 
 	private final AuthService authService;
 
+	/**
+	 * 일반 , 보호시설 사용자의 통합 로그인 메서드
+	 */
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto) {
+	public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto, HttpSession session) {
 		LoginResponseDTO response = authService.login(dto);
+		session.setAttribute("loginUser", response);
 		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<LoginResponseDTO>(200, "로그인 성공", response));
 	}
 
