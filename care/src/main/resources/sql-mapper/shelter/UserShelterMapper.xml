@@ -86,7 +86,7 @@ JOIN SHELTER_TYPES ST
 WHERE
 	S.USER_IDX = ${idx}
 </select>
-<select id="getShelterVolunteers" parameterType="int" resultType="com.animal.api.shelter.model.response.ShelterVolunteersDTO">
+<select id="getShelterVolunteers" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterVolunteersDTO">
 SELECT
 	V.IDX,
 	V.TITLE,
@@ -105,5 +105,8 @@ ON
 	V.USER_IDX = s.USER_IDX
 WHERE
 	V.USER_IDX = ${idx}
+ORDER BY
+	V.IDX DESC
+LIMIT ${listSize} OFFSET ${cp}	
 </select>
 </mapper>

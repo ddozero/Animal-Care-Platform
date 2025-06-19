@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.animal.api.shelter.model.response.AllShelterListDTO;
 import com.animal.api.shelter.model.response.ShelterDetailDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
 
 public interface UserShelterService {
 
@@ -13,4 +14,6 @@ public interface UserShelterService {
 			String shelterType);
 
 	public ShelterDetailDTO getShelterDetail(int idx);
+
+	public List<ShelterVolunteersDTO> getShelterVolunteers(int listSize, int cp, int idx);
 }

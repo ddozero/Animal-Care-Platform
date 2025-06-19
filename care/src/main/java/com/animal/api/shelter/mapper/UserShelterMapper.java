@@ -19,5 +19,5 @@ public interface UserShelterMapper {
 
 	public ShelterDetailDTO getShelterDetail(int idx);
 
-	public List<ShelterVolunteersDTO> getShelterVolunteers(int idx);
+	public List<ShelterVolunteersDTO> getShelterVolunteers(Map map);
 }

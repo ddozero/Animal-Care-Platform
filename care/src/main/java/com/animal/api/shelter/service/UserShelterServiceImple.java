@@ -12,6 +12,7 @@ import com.animal.api.shelter.mapper.UserShelterMapper;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
 import com.animal.api.shelter.model.response.ShelterDetailDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
 
 @Service
 @Primary
@@ -49,6 +50,20 @@ public class UserShelterServiceImple implements UserShelterService {
 	public ShelterDetailDTO getShelterDetail(int idx) {
 		ShelterDetailDTO dto = mapper.getShelterDetail(idx);
 		return dto;
+	}
+
+	@Override
+	public List<ShelterVolunteersDTO> getShelterVolunteers(int listSize, int cp, int idx) {
+		cp = changeCurrentPage(cp, listSize);
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		map.put("idx", idx);
+
+		List<ShelterVolunteersDTO> volunteerList = mapper.getShelterVolunteers(map);
+
+		return volunteerList;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드
