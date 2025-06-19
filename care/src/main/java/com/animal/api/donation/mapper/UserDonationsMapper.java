@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
+import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
 import com.animal.api.donation.model.response.DonationDetailResponseDTO;
 
 @Mapper
@@ -16,4 +17,6 @@ public interface UserDonationsMapper {
 	public DonationDetailResponseDTO getDonationDetail(int idx);
 
 	public List<AllDonationCommentsResponseDTO> getDonationComments(Map map);
+
+	public List<AllDonationUserListResponseDTO> getDonationUserLists(Map map);
 }

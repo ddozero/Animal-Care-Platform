@@ -15,6 +15,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
+import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
 import com.animal.api.donation.model.response.DonationDetailResponseDTO;
 import com.animal.api.donation.service.UserDonationsService;
 
@@ -22,6 +23,9 @@ import com.animal.api.donation.service.UserDonationsService;
  * @author consgary
  * @since 2025.06.19
  * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
+ * @see com.animal.api.donation.model.response.DonationDetailResponseDTO
+ * @see com.animal.api.donation.model.response.AllDonationCommentsResponseDTO
+ * @see com.animal.api.donation.model.response.AllDonationUserListResponseDTO
  */
 @RestController
 @RequestMapping("/api/donations")
@@ -76,7 +80,7 @@ public class UserDonationsController {
 	 * 
 	 * @param idx 기부번호
 	 * @param cp  페이지 번호
-	 * @return 응원 댓글 전체 조회
+	 * @return 응원 댓글 전체 리스트
 	 */
 	@GetMapping("/{idx}/comments")
 	public ResponseEntity<?> getDonationComments(@PathVariable int idx,
@@ -93,6 +97,29 @@ public class UserDonationsController {
 					.body(new OkResponseDTO<List<AllDonationCommentsResponseDTO>>(200, "응원 댓글 전체 조회 성공", commentList));
 		}
 
+	}
+
+	/**
+	 * 기부 내역 전체 조회
+	 * 
+	 * @param idx 기부 번호
+	 * @param cp  페이지 번호
+	 * @return 기부 내역 전체 리스트
+	 */
+	@GetMapping("/{idx}/userLists")
+	public ResponseEntity<?> getDonationUserLists(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp) {
+		int listSize = 3;
+		List<AllDonationUserListResponseDTO> userList = service.getDonationUserLists(idx, listSize, cp);
+
+		if (userList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		} else if (userList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "기부내역 데이터가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<AllDonationUserListResponseDTO>>(200, "기부내역 전체 조회 성공", userList));
+		}
 	}
 
 }

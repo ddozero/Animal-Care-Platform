@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.animal.api.donation.mapper.UserDonationsMapper;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
+import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
 import com.animal.api.donation.model.response.DonationDetailResponseDTO;
 
 @Service
@@ -59,5 +60,20 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		List<AllDonationCommentsResponseDTO> commentList = mapper.getDonationComments(map);
 
 		return commentList;
+	}
+
+	@Override
+	public List<AllDonationUserListResponseDTO> getDonationUserLists(int idx, int listSize, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		cp = (cp - 1) * listSize;
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("idx", idx);
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		List<AllDonationUserListResponseDTO> userList = mapper.getDonationUserLists(map);
+
+		return userList;
 	}
 }
