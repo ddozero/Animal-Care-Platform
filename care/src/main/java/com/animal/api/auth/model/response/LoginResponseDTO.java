@@ -13,57 +13,56 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponseDTO {
-	
+
 	// USERS 테이블 공통
-    private int userIdx;
-    private int userTypeIdx;
-    private String userTypeName;
+	private int userIdx;
+	private int userTypeIdx;
+	private String userTypeName;
 
-    private String id;
-    private String email;
-    private String name;
-    private String nickname;
+	private String id;
+	private String email;
+	private String name;
+	private String nickname;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate birthDate;
-    
-    private String gender;
-    private int tel;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private LocalDate birthDate;
 
-    private int zipCode;
-    private String address;
-    private String addressDetail;
+	private String gender;
+	private int tel;
 
-    private int point;
+	private int zipCode;
+	private String address;
+	private String addressDetail;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime updatedAt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime lastLoginAt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime withdrawnAt;
+	private int point;
 
-    private int status;
-    private int locked;
-    private int lockCount;
-    private LocalDateTime lockedAt;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime createdAt;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime updatedAt;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime lastLoginAt;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime withdrawnAt;
 
-    // 보호소 전용 (SHELTERS + SHELTER_TYPES)
-    private Integer shelterTypeIdx;
-    private String shelterTypeName;
+	private int status;
+	private int locked;
+	private int lockCount;
+	private LocalDateTime lockedAt;
 
-    private Integer shelterTel;
-    private String shelterName;
-    private String shelterPersonName;
-    private Integer shelterZipCode;
-    private String shelterAddress;
-    private String shelterAddressDetail;
-    private String shelterEmail;
-    private String shelterDescription;
-    private String shelterBusinessNumber;
-    private Integer shelterBusinessFile;
+	// 보호소들 전용
+	private Integer shelterTypeIdx;
+	private String shelterTypeName;
 
-	
+	private Integer shelterTel;
+	private String shelterName;
+	private String shelterPersonName;
+	private Integer shelterZipCode;
+	private String shelterAddress;
+	private String shelterAddressDetail;
+	private String shelterEmail;
+	private String shelterDescription;
+	private String shelterBusinessNumber;
+	private Integer shelterBusinessFile;
+
 }
