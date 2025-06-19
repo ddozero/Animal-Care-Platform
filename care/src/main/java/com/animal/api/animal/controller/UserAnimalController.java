@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
+import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
@@ -32,16 +34,16 @@ public class UserAnimalController {
 	/**
 	 * 사용자의 유기동물 조회 메서드
 	 * 
-	 * @param cp 현재 보고있는 페이지 번호
-	 * @param type 동물 유형
-	 * @param breed 동물 품종
-	 * @param gender 동물 성별
-	 * @param neuter 중성화 여부
-	 * @param age 동물 나이
+	 * @param cp             현재 보고있는 페이지 번호
+	 * @param type           동물 유형
+	 * @param breed          동물 품종
+	 * @param gender         동물 성별
+	 * @param neuter         중성화 여부
+	 * @param age            동물 나이
 	 * @param adoptionStatus 입양 상태
-	 * @param personality 동물 성격
-	 * @param size 동물 크기
-	 * @param name 동물 이름
+	 * @param personality    동물 성격
+	 * @param size           동물 크기
+	 * @param name           동물 이름
 	 * 
 	 * @return 사용자에게 보여줄 유기동물 리스트
 	 */
@@ -74,6 +76,19 @@ public class UserAnimalController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<AllAnimalListResponseDTO>>(200, "조회 성공", animalList));
 		}
+	}
+
+	@GetMapping("/{idx}")
+	public ResponseEntity<?> getAnimalDetail(@PathVariable int idx) {
+		AnimalDetailResponseDTO dto = service.getAnimalDetail(idx);
+		
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 동물이 존재하지 않습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<AnimalDetailResponseDTO>(200, "조회 성공", dto));
+		}
+
 	}
 
 }

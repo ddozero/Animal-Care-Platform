@@ -12,6 +12,8 @@ import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 @Mapper
 public interface UserAnimalMapper {
 	public List<AllAnimalListResponseDTO> getAllAnimals(Map map);
+
 	public List<AllAnimalListResponseDTO> searchAnimals(SearchConditionsRequestDTO dto);
+
 	public AnimalDetailResponseDTO getAnimalDetail(int idx);
 }
