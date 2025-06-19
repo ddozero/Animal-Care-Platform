@@ -15,6 +15,13 @@ import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
 import com.animal.api.shelter.service.UserShelterService;
 
+/**
+ * 사용자 기준 보호시설 관련 컨트롤러 클래스
+ * 
+ * @author Rege-97
+ * @since 2025-06-19
+ * @see com.animal.api.shelter.model.response.AllShelterListDTO
+ */
 @RestController
 @RequestMapping("/api/shelters")
 public class UserShelterController {
@@ -22,6 +29,12 @@ public class UserShelterController {
 	@Autowired
 	private UserShelterService service;
 
+	/**
+	 * 보호시설 조회 메서드
+	 * 
+	 * @param cp 현재 페이지
+	 * @return 조회된 보호소의 리스트
+	 */
 	@GetMapping
 	public ResponseEntity<?> getShelters(@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
