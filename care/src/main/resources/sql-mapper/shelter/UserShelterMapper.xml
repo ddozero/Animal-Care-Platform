@@ -86,4 +86,24 @@ JOIN SHELTER_TYPES ST
 WHERE
 	S.USER_IDX = ${idx}
 </select>
+<select id="getShelterVolunteers" parameterType="int" resultType="com.animal.api.shelter.model.response.ShelterVolunteersDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	s.SHELTER_NAME,
+	V.LOCATION,
+	VS.NAME AS 'VOLUNTEER_STATUS',
+	V.`TIME` AS 'VOLUNTEER_TIME',
+	V.CREATED_AT
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_STATUS VS
+ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+JOIN SHELTERS s 
+ON
+	V.USER_IDX = s.USER_IDX
+WHERE
+	V.USER_IDX = ${idx}
+</select>
 </mapper>
