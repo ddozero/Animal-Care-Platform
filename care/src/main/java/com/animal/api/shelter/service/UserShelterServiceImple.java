@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.animal.api.shelter.mapper.UserShelterMapper;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
+import com.animal.api.shelter.model.response.ShelterAnimalsDTO;
 import com.animal.api.shelter.model.response.ShelterDetailDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
 
@@ -64,6 +65,20 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<ShelterVolunteersDTO> volunteerList = mapper.getShelterVolunteers(map);
 
 		return volunteerList;
+	}
+	
+	@Override
+	public List<ShelterAnimalsDTO> getAllShelterAnimals(int listSize, int cp, int idx) {
+		cp = changeCurrentPage(cp, listSize);
+		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		map.put("idx", idx);
+		
+		List<ShelterAnimalsDTO> animalList = mapper.getAllShelterAnimals(map);
+		
+		return animalList;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드

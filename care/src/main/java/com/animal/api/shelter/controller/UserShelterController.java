@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
+import com.animal.api.shelter.model.response.ShelterAnimalsDTO;
 import com.animal.api.shelter.model.response.ShelterDetailDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
 import com.animal.api.shelter.service.UserShelterService;
@@ -24,6 +25,9 @@ import com.animal.api.shelter.service.UserShelterService;
  * @author Rege-97
  * @since 2025-06-19
  * @see com.animal.api.shelter.model.response.AllShelterListDTO
+ * @see com.animal.api.shelter.model.response.ShelterAnimalsDTO
+ * @see com.animal.api.shelter.model.response.ShelterDetailDTO
+ * @see com.animal.api.shelter.model.response.ShelterVolunteersDTO
  */
 @RestController
 @RequestMapping("/api/shelters")
@@ -102,6 +106,28 @@ public class UserShelterController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<ShelterVolunteersDTO>>(200, "조회 성공", volunteerList));
+		}
+	}
+
+	/**
+	 * 보호시설의 상세정보에서 해당 보호시설의 유기동물들을 조회
+	 * @param idx 보호시설의 idx
+	 * @param cp  봉사 컨텐츠의 현재 페이지
+	 * @return 해당 보호시설의 유기동물 리스트
+	 */
+	@GetMapping("/{idx}/animals")
+	public ResponseEntity<?> getAllShelterAnimals(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp) {
+		int listSize = 3;
+		List<ShelterAnimalsDTO> animalList = service.getAllShelterAnimals(listSize, cp, idx);
+
+		if (animalList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+		} else if (animalList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterAnimalsDTO>>(200, "조회 성공", animalList));
 		}
 	}
 
