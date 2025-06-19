@@ -1,1 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.animal.api.support.mapper.UserVolunteersMapper">
+	
+<select id="getAllVolunteers" parameterType="com.animal.api.volunteers.model.response.VolunteersListResponseDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	V.VOLUNTEER_DATE,
+	V.TIME,
+	V.LOCATION,
+	V.CAPACITY,
+	V.APPLICANTS,
+	V.CONTENT,
+	V.AGE_TARGET,
+	V.CREATED_AT,
+	VT.NAME AS TYPE,
+	VS.NAME AS STATUS,
+	S.SHELTER_NAME AS SHEELTER
+FROM
+	VOLUNTEERS V
+JOIN USERS U ON
+	V.USER_IDX = U.IDX
+JOIN SHELTERS S ON
+	U.IDX = S.USER_IDX
+JOIN VOLUNTEER_TYPES VT ON
+	V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX	
+</select>
+
+</mapper>
