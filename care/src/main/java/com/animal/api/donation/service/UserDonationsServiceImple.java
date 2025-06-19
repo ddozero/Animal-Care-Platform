@@ -45,7 +45,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	}
 
 	@Override
-	public List<AllDonationCommentsResponseDTO> getDonationComments(int donationIdx, int listSize, int cp) {
+	public List<AllDonationCommentsResponseDTO> getDonationComments(int idx, int listSize, int cp) {
 
 		if (cp == 0) {
 			cp = 1;
@@ -53,7 +53,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		cp = (cp - 1) * listSize;
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("donationIdx", donationIdx);
+		map.put("donationIdx", idx);
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		List<AllDonationCommentsResponseDTO> commentList = mapper.getDonationComments(map);

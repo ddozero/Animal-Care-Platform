@@ -8,6 +8,8 @@ import com.animal.api.donation.model.response.DonationDetailResponseDTO;
 
 public interface UserDonationsService {
 	public List<AllDonationListResponseDTO> getAllDonations(int listSize, int cp);
+
 	public DonationDetailResponseDTO getDonationDetail(int idx);
-	public List<AllDonationCommentsResponseDTO> getDonationComments(int donationIdx,int listSize,int cp);
+
+	public List<AllDonationCommentsResponseDTO> getDonationComments(int idx, int listSize, int cp);
 }
