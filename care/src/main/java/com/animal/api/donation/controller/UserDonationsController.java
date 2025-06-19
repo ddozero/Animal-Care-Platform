@@ -53,7 +53,7 @@ public class UserDonationsController {
 	/**
 	 * 봉사 상세 정보 조회
 	 * 
-	 * @param idx
+	 * @param idx 기부번호
 	 * @return 봉사 상세 정보
 	 */
 	@GetMapping("/{idx}")
