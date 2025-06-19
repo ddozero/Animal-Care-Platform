@@ -47,6 +47,7 @@ public class UserDonationsController {
 					.body(new OkResponseDTO<List<AllDonationListResponseDTO>>(200, "기부 전체 조회 성공", donationList));
 		}
 	}
+
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getDonationDetail(@PathVariable int idx) {
 
