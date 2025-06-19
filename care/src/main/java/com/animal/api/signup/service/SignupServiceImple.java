@@ -1,4 +1,4 @@
-package com.animal.api.singup.service;
+package com.animal.api.signup.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.animal.api.auth.exception.CustomException;
 import com.animal.api.auth.model.vo.UserVO;
-import com.animal.api.singup.mapper.SignupMapper;
-import com.animal.api.singup.model.request.UserSignupRequestDTO;
+import com.animal.api.signup.mapper.SignupMapper;
+import com.animal.api.signup.model.request.UserSignupRequestDTO;
 
 @Service
 @Primary
@@ -25,15 +25,15 @@ public class SignupServiceImple implements SignupService {
 
 		// 1. 중복 검사
 		if (signupMapper.isDuplicateId(dto.getId()) > 0) {
-			throw new CustomException(0, "이미 사용 중인 아이디입니다.");
+			throw new CustomException(409, "이미 사용 중인 아이디입니다.");
 		}
 
 		if (signupMapper.isDuplicateEmail(dto.getEmail()) > 0) {
-			throw new CustomException(0, "이미 가입된 이메일 입니다.");
+			throw new CustomException(409, "이미 가입된 이메일 입니다.");
 		}
 
 		if (signupMapper.isDuplicateNickname(dto.getNickname()) > 0) {
-			throw new CustomException(0, "이미 사용 중인 닉네임입니다.");
+			throw new CustomException(409, "이미 사용 중인 닉네임입니다.");
 		}
 
 		// 2. DTO -> VO 매핑

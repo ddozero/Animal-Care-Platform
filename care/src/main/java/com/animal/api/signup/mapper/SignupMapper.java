@@ -1,4 +1,4 @@
-package com.animal.api.singup.mapper;
+package com.animal.api.signup.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

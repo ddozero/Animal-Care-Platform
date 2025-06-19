@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class LoginResponseDTO {
 
 	// USERS 테이블 공통
-	private int userIdx;
+	private int idx;
 	private int userTypeIdx;
 	private String userTypeName;
 

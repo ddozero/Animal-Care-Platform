@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class UserVO {
 	
-    private int userIdx;
+    private int idx;
     private int userTypeIdx;
     private String userTypeName;
 

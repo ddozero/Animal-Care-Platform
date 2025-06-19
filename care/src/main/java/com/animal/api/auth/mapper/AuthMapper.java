@@ -12,8 +12,8 @@ public interface AuthMapper {
 	UserVO findUserById(String id);
 
     // 보호소 상세 정보 조회 (보호소 전용)
-	ShelterVO findShelterByUserIdx(int userIdx);
+	ShelterVO findShelterByUserIdx(int idx);
 
 	// 로그인 성공 시 마지막 로그인 시간 갱신
-	void updateLastLoginAt(int userIdx);
+	void updateLastLoginAt(int idx);
 }

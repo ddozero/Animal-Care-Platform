@@ -1,4 +1,4 @@
-package com.animal.api.singup.model.request;
+package com.animal.api.signup.model.request;
 
 import java.time.LocalDate;
 

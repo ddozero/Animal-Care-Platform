@@ -34,12 +34,12 @@ public class AuthServiceImple implements AuthService {
 			throw new CustomException(401, "비밀번호가 일치하지 않습니다");
 		}
 
-		authMapper.updateLastLoginAt(user.getUserIdx());
+		authMapper.updateLastLoginAt(user.getIdx());
 
 		LoginResponseDTO res = new LoginResponseDTO();
 
 		// USERS 테이블 기본 정보 포함
-		res.setUserIdx(user.getUserIdx());
+		res.setIdx(user.getIdx());
 		res.setUserTypeIdx(user.getUserTypeIdx());
 		res.setUserTypeName(user.getUserTypeName());
 
@@ -65,7 +65,7 @@ public class AuthServiceImple implements AuthService {
 
 		// 보호소 회원인 경우 추가 정보 조회
 		if (user.getUserTypeIdx() == 2) {
-			ShelterVO shelter = authMapper.findShelterByUserIdx(user.getUserIdx());
+			ShelterVO shelter = authMapper.findShelterByUserIdx(user.getIdx());
 
 			res.setShelterTypeIdx(shelter.getShelterTypeIdx());
 			res.setShelterTypeName(shelter.getShelterTypeName());
@@ -80,10 +80,6 @@ public class AuthServiceImple implements AuthService {
 			res.setShelterBusinessNumber(shelter.getShelterBusinessNumber());
 			res.setShelterBusinessFile(shelter.getShelterBusinessFile());
 		}
-
-		System.out.println("user: " + user);
-		ShelterVO shelter = authMapper.findShelterByUserIdx(user.getUserIdx());
-		System.out.println("shelter: " + shelter);
 
 		return res;
 	}
