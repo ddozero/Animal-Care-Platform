@@ -35,6 +35,7 @@ public class UserShelterServiceImple implements UserShelterService {
 	@Override
 	public List<AllShelterListDTO> searchShelters(int listSize, int cp, String shelterName, String shelterAddress,
 			String shelterType) {
+		cp = changeCurrentPage(cp, listSize);
 		SearchShelterRequestDTO dto = new SearchShelterRequestDTO(listSize, cp, shelterName, shelterAddress,
 				shelterType);
 
