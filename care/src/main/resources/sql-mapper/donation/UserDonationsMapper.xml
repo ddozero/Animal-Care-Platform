@@ -54,4 +54,19 @@ WHERE DC.DONATION_IDX=${idx}
 ORDER BY DC.IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
+
+<select id="getDonationUserLists" parameterType="Map" resultType="com.animal.api.donation.model.response.AllDonationUserListResponseDTO">
+SELECT
+	DD.IDX,
+	DD.DONATED_AMOUNT,
+	DD.CREATED_AT,
+	U.NICKNAME
+FROM
+	DONATION_DETAILS DD
+JOIN USERS U  ON
+	U.IDX=DD.USER_IDX
+WHERE DD.DONATION_IDX=${idx}
+ORDER BY DD.IDX DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
 </mapper>
