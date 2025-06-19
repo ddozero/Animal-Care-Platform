@@ -68,10 +68,11 @@
     WHERE S.USER_IDX = #{userIdx}
 </select>
 	
-	
+<!-- 로그인 업데이트 -->
 <update id="updateLastLoginAt">
     UPDATE USERS
     SET LAST_LOGIN_AT = NOW()
     WHERE USER_IDX = #{userIdx}
 </update>
+
 </mapper>
