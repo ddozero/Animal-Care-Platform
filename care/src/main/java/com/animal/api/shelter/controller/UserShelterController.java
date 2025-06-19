@@ -65,6 +65,12 @@ public class UserShelterController {
 		}
 	}
 
+	/**
+	 * 보호시설의 상세 정보를 확인하는 메서드
+	 * 
+	 * @param idx 보호시설의 idx
+	 * @return 해당 보호시설의 상세정보
+	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getShelterDetail(@PathVariable int idx) {
 		ShelterDetailDTO dto = service.getShelterDetail(idx);
