@@ -32,13 +32,13 @@ JOIN SHELTER_TYPES ST
 	S.SHELTER_TYPE_IDX = ST.IDX
 <where>
 	<if test="shelterAddress != null and shelterAddress != ''">
-		AND S.SHELTER_ADDRESS = #{shelterAddress}
+		AND S.SHELTER_ADDRESS LIKE '%${shelterAddress}%'
 	</if>
 	<if test="shelterType != null and shelterType != ''">
 		AND ST.NAME = #{shelterType}
 	</if>
 	<if test="shelterName != null and shelterName != ''">
-		AND S.SHELTER_NAME = #{shelterName}
+		AND S.SHELTER_NAME LIKE '%${shelterName}%'
 	</if>
 </where>	
 ORDER BY

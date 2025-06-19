@@ -33,6 +33,10 @@ public class UserShelterController {
 	 * 보호시설 조회 메서드
 	 * 
 	 * @param cp 현재 페이지
+	 * @param shelterName 검색된 보호소 이름
+	 * @param shelterAddress 선택된 보호소 주소
+	 * @param shelterType 선택된 보호소 타입
+	 * 
 	 * @return 조회된 보호소의 리스트
 	 */
 	@GetMapping
