@@ -10,5 +10,7 @@ import com.animal.api.support.model.response.*;
 public interface UserSupportMapper {
 	
 	public List<UserNoticeResponseDTO> getAllNotice(Map map);
+	public UserNoticeResponseDTO getNoticeDetail(int idx);
+	
 	
 }

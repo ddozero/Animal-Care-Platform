@@ -7,4 +7,5 @@ public interface UserSupportService {
 	
 	public List<UserNoticeResponseDTO> getAllNotice(int listSize, int cp);
 	
+	
 }

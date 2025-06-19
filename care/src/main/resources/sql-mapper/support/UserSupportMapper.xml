@@ -5,8 +5,7 @@
 
 <mapper namespace="com.animal.api.support.mapper.UserSupportMapper">
 
-	<select id="getAllNotice"
-		resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+	<select id="getAllNotice" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
 		SELECT
 			IDX,
 			USER_IDX,
@@ -23,5 +22,23 @@
 		ORDER BY CREATED_AT DESC
 		LIMIT #{listSize} OFFSET #{cp}
 	</select>
+	
+	<select id ="getNoticeDetail" parameterType="int" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+		SELECT 
+			IDX,
+			USER_IDX,
+			BOARD_TYPE_IDX,
+			TITLE,
+			CONTENT,
+			CREATED_AT,
+			VIEWS,
+			REF,
+			LEV,
+			TURN
+		FROM BOARDS
+		WHERE BOARD_TYPE_IDX = #{boardTypeIdx}
+		AND IDX = ${idx}
+	</select>
+	
 
 </mapper>
