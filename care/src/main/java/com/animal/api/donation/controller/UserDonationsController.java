@@ -23,6 +23,9 @@ import com.animal.api.donation.service.UserDonationsService;
  * @author consgary
  * @since 2025.06.19
  * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
+ * @see com.animal.api.donation.model.response.DonationDetailResponseDTO
+ * @see com.animal.api.donation.model.response.AllDonationCommentsResponseDTO
+ * @see com.animal.api.donation.model.response.AllDonationUserListResponseDTO
  */
 @RestController
 @RequestMapping("/api/donations")
@@ -77,7 +80,7 @@ public class UserDonationsController {
 	 * 
 	 * @param idx 기부번호
 	 * @param cp  페이지 번호
-	 * @return 응원 댓글 전체 조회
+	 * @return 응원 댓글 전체 리스트
 	 */
 	@GetMapping("/{idx}/comments")
 	public ResponseEntity<?> getDonationComments(@PathVariable int idx,
@@ -96,6 +99,13 @@ public class UserDonationsController {
 
 	}
 
+	/**
+	 * 기부 내역 전체 조회
+	 * 
+	 * @param idx 기부 번호
+	 * @param cp  페이지 번호
+	 * @return 기부 내역 전체 리스트
+	 */
 	@GetMapping("/{idx}/userLists")
 	public ResponseEntity<?> getDonationUserLists(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
