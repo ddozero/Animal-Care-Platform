@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AllAnimalListResponseDTO {
+public class AnimalDetailResponseDTO {
 	private int idx;
 	private String name;
 	private char gender;
@@ -18,8 +18,15 @@ public class AllAnimalListResponseDTO {
 	private int neuter;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Timestamp createAt;
+	private String description;
 	private String breed;
 	private String type;
 	private String personality;
 	private String adoptionStatus;
+	private String shelterName;
+	private String shelterPersonName;
+	private String shelterTel;
+	private int shelterZipCode;
+	private String shelterAddress;
+	private String shelterAddressDetail;
 }

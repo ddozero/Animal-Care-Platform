@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.animal.api.animal.mapper.UserAnimalMapper;
 import com.animal.api.animal.model.request.SearchConditionsRequestDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
+import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 
 @Service
 @Primary
@@ -45,6 +46,12 @@ public class UserAnimalServiceImple implements UserAnimalService {
 		List<AllAnimalListResponseDTO> animalList = mapper.searchAnimals(dto);
 
 		return animalList;
+	}
+
+	@Override
+	public AnimalDetailResponseDTO getAnimalDetail(int idx) {
+		AnimalDetailResponseDTO dto = mapper.getAnimalDetail(idx);
+		return dto;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드
