@@ -82,6 +82,13 @@ public class UserShelterController {
 		}
 	}
 
+	/**
+	 * 보호시설의 상세정보에서 해당 보호시설의 봉사 컨텐츠를 조회
+	 * 
+	 * @param idx 보호시설의 idx
+	 * @param cp  봉사 컨텐츠의 현재 페이지
+	 * @return 해당 보호시설의 봉사 컨텐츠
+	 */
 	@GetMapping("/{idx}/volunteers")
 	public ResponseEntity<?> getShelterVolunteers(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
