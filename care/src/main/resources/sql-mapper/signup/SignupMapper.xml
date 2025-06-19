@@ -20,8 +20,8 @@
 	</select>
 
 	<!-- 4. 일반 사용자 회원가입 -->
-	<insert id="insertUser"
-		parameterType="com.animal.api.auth.model.vo.UserVO">
+	<insert id="insertUser" parameterType="com.animal.api.auth.model.vo.UserVO"
+		useGeneratedKeys="true" keyProperty="idx">
 		INSERT INTO USERS (
 		USER_TYPE_IDX, ID, EMAIL, PASSWORD,
 		NAME, NICKNAME, BIRTH_DATE, GENDER, TEL,
@@ -33,4 +33,35 @@
 		)
 	</insert>
 
+
+	<insert id="insertShelter" parameterType="com.animal.api.auth.model.vo.ShelterVO">
+	    INSERT INTO SHELTERS (
+	        USER_IDX,
+	        SHELTER_TYPE_IDX,
+	        SHELTER_TEL,
+	        SHELTER_NAME,
+	        SHELTER_PERSON_NAME,
+	        SHELTER_ZIP_CODE,
+	        SHELTER_ADDRESS,
+	        SHELTER_ADDRESS_DETAIL,
+	        SHELTER_DESCRIPTION,
+	        SHELTER_EMAIL,
+	        SHELTER_BUSINESS_NUMBER,
+	        SHELTER_BUSINESS_FILE
+	    )
+	    VALUES (
+	        #{userIdx},
+	        #{shelterTypeIdx},
+	        #{shelterTel},
+	        #{shelterName},
+	        #{shelterPersonName},
+	        #{shelterZipCode},
+	        #{shelterAddress},
+	        #{shelterAddressDetail},
+	        #{shelterDescription},
+	        #{shelterEmail},
+	        #{shelterBusinessNumber},
+	        #{shelterBusinessFile}
+	    )
+	</insert>
 </mapper>
