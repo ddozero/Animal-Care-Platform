@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
  * 
  * @author Whistler95
  * @since 2025-06-16
- * @see
+ * @see com.animal.api.model.response.LoginResponseDTO
  */
 
 @RequiredArgsConstructor
