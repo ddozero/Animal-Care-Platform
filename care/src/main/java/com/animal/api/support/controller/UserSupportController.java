@@ -54,7 +54,7 @@ public class UserSupportController {
 		return ResponseEntity.ok(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "게시물 조회 성공", lists));
 
 	}
-	
+
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getNoticeDetail(@PathVariable int idx) {
 		UserNoticeResponseDTO dto = supportService.getNoticeDetail(idx);

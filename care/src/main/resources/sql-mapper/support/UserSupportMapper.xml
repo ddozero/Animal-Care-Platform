@@ -3,7 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.animal.api.support.mapper.UserSupportMapper">
+<mapper
+	namespace="com.animal.api.support.mapper.UserSupportMapper">
 
 	<select id="getAllNotice" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
 		SELECT
@@ -17,14 +18,14 @@
 			REF,
 			LEV,
 			TURN
-			FROM BOARDS
+		FROM BOARDS
 		WHERE BOARD_TYPE_IDX = 1
 		ORDER BY CREATED_AT DESC
 		LIMIT #{listSize} OFFSET #{cp}
 	</select>
-	
-	<select id ="getNoticeDetail" parameterType="int" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
-		SELECT 
+
+	<select id="getNoticeDetail" parameterType="int" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+		SELECT
 			IDX,
 			USER_IDX,
 			BOARD_TYPE_IDX,
@@ -39,6 +40,24 @@
 		WHERE BOARD_TYPE_IDX = 1
 		AND IDX = ${idx}
 	</select>
-	
+
+	<select id="searchAllNotice" parameterMap="Map" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
+		SELECT
+			IDX,
+			USER_IDX,
+			BOARD_TYPE_IDX,
+			TITLE,
+			CONTENT,
+			CREATED_AT,
+			VIEWS,
+			REF,
+			LEV,
+			TURN
+		FROM BOARDS
+		WHERE ${fkey}=#{fvalue}
+	</select>
+
+
+
 
 </mapper>
