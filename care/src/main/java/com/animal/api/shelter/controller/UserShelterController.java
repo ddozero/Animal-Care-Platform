@@ -23,7 +23,7 @@ import com.animal.api.shelter.service.UserShelterService;
  * 사용자 기준 보호시설 관련 컨트롤러 클래스
  * 
  * @author Rege-97
- * @since 2025-06-19
+ * @since 2025-06-20
  * @see com.animal.api.shelter.model.response.AllShelterListDTO
  * @see com.animal.api.shelter.model.response.ShelterAnimalsDTO
  * @see com.animal.api.shelter.model.response.ShelterDetailDTO
@@ -113,7 +113,16 @@ public class UserShelterController {
 	 * 보호시설의 상세정보에서 해당 보호시설의 유기동물들을 조회
 	 * 
 	 * @param idx 보호시설의 idx
-	 * @param cp  봉사 컨텐츠의 현재 페이지
+	 * @param cp 봉사 컨텐츠의 현재 페이지
+	 * @param type 동물 유형
+	 * @param breed 동물 품종
+	 * @param gender 동물 성별
+	 * @param neuter 중성화 여부
+	 * @param age 동물 나이
+	 * @param adoptionStatus 입양 상태
+	 * @param personality 동물 성격
+	 * @param size 동물 크기
+	 * @param name 동물 이름
 	 * @return 해당 보호시설의 유기동물 리스트
 	 */
 	@GetMapping("/{idx}/animals")
