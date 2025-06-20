@@ -8,7 +8,7 @@ import lombok.Data;
 public class ShelterDetailDTO {
 	private int idx;
 	private String shelterName;
-	private int shelterTel;
+	private String shelterTel;
 	private String shelterPersonName;
 	private String shelterAddress;
 	private String shelterAddressDetail;

@@ -173,4 +173,32 @@ JOIN SHELTERS S
 WHERE
 	A.IDX = ${idx}
 </select>
+<select id="checkAdoptionStatus" parameterType="int" resultType="String">
+SELECT
+	ADOPTION_STATUS_IDX
+FROM
+	ANIMALS
+WHERE
+	IDX = ${idx}
+</select>
+<insert id="submitAdoption" parameterType="com.animal.api.animal.model.request.AdoptionSubmitReqestDTO">
+INSERT
+	INTO
+	ADOPTION_CONSULTS (
+		USER_IDX,
+		ANIMAL_IDX,
+		NAME,
+		EMAIL,
+		TEL,
+		ZIP_CODE,
+		ADDRESS,
+		ADDRESS_DETAIL,
+		HAS_PET,
+		CONSULTED_AT,
+		DESCRIPTION
+	)
+VALUES (
+	#{userIdx}, #{animalIdx}, #{name}, #{email}, #{tel}, #{zipCode}, #{address}, #{addressDetail}, #{hasPet}, #{consultedAt}, #{description}
+)
+</insert>
 </mapper>

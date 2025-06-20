@@ -9,10 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.animal.model.request.AdoptionSubmitReqestDTO;
 import com.animal.api.animal.model.response.AdoptionAnimalResponseDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
@@ -111,7 +114,6 @@ public class UserAnimalController {
 	 */
 	@GetMapping("/{idx}/adoption")
 	public ResponseEntity<?> getAdoptionInfo(@PathVariable int idx, HttpSession session) {
-
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
 		if (loginUser == null) {
@@ -130,6 +132,34 @@ public class UserAnimalController {
 				return ResponseEntity.status(HttpStatus.OK)
 						.body(new OkResponseDTO<AdoptionAnimalResponseDTO>(200, "조회 성공", dto));
 			}
+		}
+	}
+
+	/**
+	 * 유기동물의 입양 폼 페이지에서 입양을 신청하는 메서드
+	 * 
+	 * @param dto     상담 신청 폼의 내용
+	 * @param idx     유기동물 관리번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 신청 성공 메세지
+	 */
+	@PostMapping("/{idx}/adoption")
+	public ResponseEntity<?> submitAdoption(@RequestBody AdoptionSubmitReqestDTO dto, @PathVariable int idx,
+			HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		int result = service.submitAdoption(dto);
+
+		if (result == service.RESERVATION_COMPLETED) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "입양 상담 신청 성공", null));
+		} else if (result == service.RESERVATION_UNAVAILABLE) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "입양 상담 신청 가능 상태가 아닙니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
 		}
 	}
 

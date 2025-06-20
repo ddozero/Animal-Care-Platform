@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.animal.api.animal.model.request.AdoptionSubmitReqestDTO;
 import com.animal.api.animal.model.request.SearchConditionsRequestDTO;
 import com.animal.api.animal.model.response.AdoptionAnimalResponseDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
@@ -19,5 +20,9 @@ public interface UserAnimalMapper {
 	public AnimalDetailResponseDTO getAnimalDetail(int idx);
 
 	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx);
+
+	public String checkAdoptionStatus(int idx);
+
+	public int submitAdoption(AdoptionSubmitReqestDTO dto);
 
 }
