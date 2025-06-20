@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.shelter.mapper.UserShelterMapper;
+import com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsDTO;
@@ -66,18 +67,31 @@ public class UserShelterServiceImple implements UserShelterService {
 
 		return volunteerList;
 	}
-	
+
 	@Override
 	public List<ShelterAnimalsDTO> getAllShelterAnimals(int listSize, int cp, int idx) {
 		cp = changeCurrentPage(cp, listSize);
-		
+
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		map.put("idx", idx);
-		
+
 		List<ShelterAnimalsDTO> animalList = mapper.getAllShelterAnimals(map);
-		
+
+		return animalList;
+	}
+
+	@Override
+	public List<ShelterAnimalsDTO> searchShelterAnimals(int idx, int listSize, int cp, String type, String breed,
+			String gender, int neuter, int age, String adoptionStatus, String personality, int size, String name) {
+		cp = changeCurrentPage(cp, listSize);
+
+		SearchShelterAnimalRequestDTO dto = new SearchShelterAnimalRequestDTO(idx, listSize, cp, type, breed, gender,
+				neuter, age, adoptionStatus, personality, size, name);
+
+		List<ShelterAnimalsDTO> animalList = mapper.searchShelterAnimals(dto);
+
 		return animalList;
 	}
 
