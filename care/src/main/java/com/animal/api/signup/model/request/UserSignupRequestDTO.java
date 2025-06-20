@@ -42,8 +42,8 @@ public class UserSignupRequestDTO {
     private String gender; // 'M' or 'F'
     
     @NotNull(message = "전화번호는 필수 항목입니다.")
-    @Digits(integer = 11, fraction = 0, message = "전화번호는 숫자만 입력해야 합니다.")   
-    private Integer tel;
+    @Pattern(regexp = "^\\d{9,20}$", message = "전화번호는 숫자만 입력해야 합니다.")  
+    private String tel;
 
     @NotNull(message = "우편번호는 필수 항목입니다.")
     private Integer zipCode;

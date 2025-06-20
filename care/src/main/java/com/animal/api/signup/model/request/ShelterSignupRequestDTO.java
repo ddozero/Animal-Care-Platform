@@ -43,8 +43,8 @@ public class ShelterSignupRequestDTO {
     private String gender;
     
     @NotNull(message = "전화번호는 필수 항목입니다.")
-    @Digits(integer = 11, fraction = 0, message = "전화번호는 숫자만 입력해야 합니다.")
-    private Integer tel;
+    @Pattern(regexp = "^\\d{9,20}$", message = "전화번호는 숫자만 입력해야 합니다.")
+    private String tel;
 
     @NotNull(message = "우편번호는 필수 항목입니다.")
     private Integer zipCode;
@@ -60,8 +60,8 @@ public class ShelterSignupRequestDTO {
     private Integer shelterTypeIdx;
 
     @NotNull(message = "보호소 연락처는 필수입니다")
-    @Digits(integer = 20, fraction = 0, message = "보호소 연락처는 숫자만 가능합니다")
-    private Integer shelterTel;
+    @Pattern(regexp = "^\\d{9,20}$", message = "보호소 연락처는 숫자만 가능합니다")
+    private String shelterTel;
 
     @NotBlank(message = "보호소 이름은 필수입니다")
     private String shelterName;

@@ -20,7 +20,7 @@ public class UserVO {
 
     private LocalDate birthDate;
     private String gender;
-    private int tel;
+    private String tel;
 
     private int zipCode;
     private String address;
