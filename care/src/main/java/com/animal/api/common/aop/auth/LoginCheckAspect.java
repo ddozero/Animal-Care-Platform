@@ -1,7 +1,6 @@
 package com.animal.api.common.aop.auth;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -10,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.animal.api.auth.model.response.LoginResponseDTO;
+import com.animal.api.common.aop.util.SessionUtils;
 import com.animal.api.common.model.OkResponseDTO;
 
 /**
@@ -49,8 +50,8 @@ public class LoginCheckAspect {
 		}
 
 		// 세션에서 로그인 사용자 정보(loginUser) 확인
-		HttpSession session = request.getSession(false);
-		Object loginUser = (session != null) ? session.getAttribute("loginUser") : null;
+        // SessionUtils를 통해 loginUser 가져오기
+        LoginResponseDTO loginUser = SessionUtils.getLoginUser(request);
 
 		// 로그인 정보가 없을 경우 401 Unauthorized 응답 반환
 		if (loginUser == null) {
