@@ -1,5 +1,7 @@
 package com.animal.api.auth.service;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,11 +45,7 @@ public class AuthServiceImple implements AuthService {
 		}
 		
 		if(user.getUserTypeIdx() == 3) {
-			//관리자 로직 처리 추가 예정
-		}
-		
-		if(user.getUserTypeIdx() != 3) {
-			throw new CustomException(403, "관리자 권한이 없습니다.");
+			throw new CustomException(403, "관리자는 별도의 로그인 경로를 이용해주세요.");
 		}
 		
 		authMapper.updateLastLoginAt(user.getIdx());
@@ -99,6 +97,49 @@ public class AuthServiceImple implements AuthService {
 
 		return res;
 		
+	}
+	
+	//관리자 게정 로그인 로직
+	@Override
+	public LoginResponseDTO loginAdmin(LoginRequestDTO dto) {
 		
+		// 1.관리자계정 존재 여부 확인 
+		UserVO user = authMapper.findUserById(dto.getId());
+		
+		if(user == null ) {
+			throw new CustomException(404, "존재하지 않는 아이디 입니다");
+		}
+		
+	    // 2. 비밀번호 일치 여부
+	    if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+	        throw new CustomException(401, "비밀번호가 일치하지 않습니다.");
+	    }
+
+	    // 3. 관리자 권한 확인
+	    if (user.getUserTypeIdx() != 3 ) {
+	        throw new CustomException(403, "관리자 권한이 없습니다.");
+	    }
+
+	    // 4. 관리자 계정 상태 확인 (선택적으로 잠금, 탈퇴 등 처리 가능)
+	    if (user.getStatus() == -1 ) {
+	        throw new CustomException(410, "탈퇴한 관리자 계정입니다.");
+	    }
+	    if (user.getLocked() == 1 ) {
+	        throw new CustomException(423, "잠긴 관리자 계정입니다.");
+	    }
+
+	    // 5. 마지막 로그인 시간 업데이트
+	    authMapper.updateLastLoginAt(user.getIdx());
+
+	    // 6. 관리자 정보만 담아서 리턴 
+	    LoginResponseDTO admin = new LoginResponseDTO();
+	    admin.setIdx(user.getIdx());
+	    admin.setUserTypeIdx(user.getUserTypeIdx());
+	    admin.setUserTypeName(user.getUserTypeName());
+	    admin.setId(user.getId());
+	    admin.setEmail(user.getEmail());
+	    admin.setName(user.getName());
+
+	    return admin;
 	}
 }
