@@ -1,5 +1,6 @@
 package com.animal.api.signup.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,22 @@ public class SignupController {
 	 */
 	//일반 사용자 회원가입
 	@PostMapping("/user")
-	public ResponseEntity<OkResponseDTO<String>> signup(@Valid @RequestBody UserSignupRequestDTO dto){
+	public ResponseEntity<OkResponseDTO<String>> signup(@Valid @RequestBody UserSignupRequestDTO dto, HttpSession session){
+		
+		//이메일 인증 확인
+		Boolean verified = (Boolean)session.getAttribute("emailVerified");
+		
+		if(verified == null || !verified) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new OkResponseDTO<>(403, "이메일 인증을 먼저 완료해주세요", null));
+		}
+		
 		signupService.signupUser(dto);
+		
+		//인증 완료 후 세션 정리
+	    session.removeAttribute("emailVerified");
+	    session.removeAttribute("emailAuthCode");
+	    session.removeAttribute("emailAuthTarget");
+	    
 		return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<>(201, "회원가입이 완료되었습니다", null));
 	}
 	/**
@@ -47,8 +62,22 @@ public class SignupController {
 	 */
     // 보호소 회원가입
     @PostMapping("/shelter")
-    public ResponseEntity<OkResponseDTO<String>> signupShelter(@Valid @RequestBody ShelterSignupRequestDTO dto) {
+    public ResponseEntity<OkResponseDTO<String>> signupShelter(@Valid @RequestBody ShelterSignupRequestDTO dto, HttpSession session) {
+    	
+    	// 이메일 인증 확인
+    	Boolean verified = (Boolean)session.getAttribute("emailVerified");
+
+    	if(verified == null || !verified) {
+    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new OkResponseDTO<>(403, "이메일 인증을 먼저 완료해주세요", null));
+    	}
+    	
         signupService.signupShelter(dto);
+        
+		//인증 완료 후 세션 정리
+	    session.removeAttribute("emailVerified");
+	    session.removeAttribute("emailAuthCode");
+	    session.removeAttribute("emailAuthTarget");
+	    
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(new OkResponseDTO<>(201, "보호소 회원가입이 요청이 완료되었습니다.", null));
     }
