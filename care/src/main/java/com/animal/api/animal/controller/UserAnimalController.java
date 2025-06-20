@@ -2,6 +2,8 @@ package com.animal.api.animal.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.animal.model.response.AdoptionAnimalResponseDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
+import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 
@@ -81,20 +85,44 @@ public class UserAnimalController {
 
 	/**
 	 * 유기동물의 상세 정보를 조회하는 메서드
+	 * 
 	 * @param idx 유기동물 관리번호
 	 * @return 사용자에게 보여줄 유기동물과 보호소 정보
 	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getAnimalDetail(@PathVariable int idx) {
 		AnimalDetailResponseDTO dto = service.getAnimalDetail(idx);
-		
+
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 동물이 존재하지 않습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<AnimalDetailResponseDTO>(200, "조회 성공", dto));
 		}
+	}
 
+	@GetMapping("/{idx}/adoption")
+	public ResponseEntity<?> getAdoptionInfo(@PathVariable int idx, HttpSession session) {
+
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		AdoptionAnimalResponseDTO dto = service.getAdoptionInfo(idx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 동물이 존재하지 않습니다."));
+		} else {
+			if (dto.getAdoptionStatusIdx() != 1) { // 1은 입양 가능 상태
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.body(new ErrorResponseDTO(400, "해당 동물은 입양할 수 없습니다."));
+			} else {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new OkResponseDTO<AdoptionAnimalResponseDTO>(200, "조회 성공", dto));
+			}
+		}
 	}
 
 }

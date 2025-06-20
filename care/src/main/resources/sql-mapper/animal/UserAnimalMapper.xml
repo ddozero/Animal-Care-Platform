@@ -139,7 +139,7 @@ JOIN SHELTERS S
 WHERE
 	A.IDX = ${idx}
 </select>
-<select id="getAdoptionInfo" parameterMap="int" resultType="com.animal.api.animal.model.response.AdoptionAnimalResponseDTO">
+<select id="getAdoptionInfo" parameterType="int" resultType="com.animal.api.animal.model.response.AdoptionAnimalResponseDTO">
 SELECT
 	A.IDX,
 	A.NAME,
