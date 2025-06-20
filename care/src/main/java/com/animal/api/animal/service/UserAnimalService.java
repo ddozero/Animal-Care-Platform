@@ -14,6 +14,9 @@ public interface UserAnimalService {
 			int neuter, int age, String adoptionStatus, String personality, int size, String name);
 
 	public AnimalDetailResponseDTO getAnimalDetail(int idx);
-	
+
 	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx);
+
+	public int submitAdoption(int userIdx, int animalIdx, String name, String email, String tel, int zipCode,
+			String adress, String adressDetail, int hasPet, String description);
 }

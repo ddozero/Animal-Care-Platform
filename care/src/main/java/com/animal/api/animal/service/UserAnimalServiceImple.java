@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.animal.mapper.UserAnimalMapper;
+import com.animal.api.animal.model.request.AdoptionSubmitReqestDTO;
 import com.animal.api.animal.model.request.SearchConditionsRequestDTO;
 import com.animal.api.animal.model.response.AdoptionAnimalResponseDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
@@ -59,6 +60,15 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx) {
 		AdoptionAnimalResponseDTO dto = mapper.getAdoptionInfo(idx);
 		return dto;
+	}
+
+	@Override
+	public int submitAdoption(int userIdx, int animalIdx, String name, String email, String tel, int zipCode,
+			String adress, String adressDetail, int hasPet, String description) {
+		AdoptionSubmitReqestDTO dto = new AdoptionSubmitReqestDTO(userIdx, animalIdx, name, email, tel, zipCode, adress,
+				adressDetail, hasPet, description);
+		int count = mapper.submitAdoption(dto);
+		return count;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드
