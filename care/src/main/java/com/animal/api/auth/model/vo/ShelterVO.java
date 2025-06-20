@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class ShelterVO {
 	
+	private int userIdx;
 	private Integer shelterTypeIdx;
 	private String shelterTypeName;
 	private Integer shelterTel;

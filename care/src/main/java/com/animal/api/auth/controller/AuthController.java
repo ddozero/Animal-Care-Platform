@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
  * 
  * @author Whistler95
  * @since 2025-06-16
- * @see com.animal.api.model.response.LoginResponseDTO
+ * @see com.animal.api.auth.model.response.LoginResponseDTO
  */
 
 @RequiredArgsConstructor
@@ -34,8 +34,8 @@ public class AuthController {
 	/**
 	 * 일반 , 보호시설 사용자의 통합 로그인 메서드
 	 * 
-	 * @param dto 로그인 폼
-	 * @session 로그인 정보 저장
+	 * @param LoginRequestDTO 로그인 폼
+	 * @session 로그인 한 사용자의 정보 저장
 	 * @return 로그인 한 사용자의 정보
 	 */
 	@PostMapping("/login")
