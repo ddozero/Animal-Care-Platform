@@ -64,11 +64,19 @@ public class UserAnimalServiceImple implements UserAnimalService {
 
 	@Override
 	public int submitAdoption(AdoptionSubmitReqestDTO dto) {
-		int checkStatus = mapper.checkAdoptionStatus(dto.getAnimalIdx());
+		String checkStatusString = mapper.checkAdoptionStatus(dto.getAnimalIdx());
+		int checkStatus = 0;
+
+		if (checkStatusString != null) {
+			checkStatus = Integer.parseInt(checkStatusString);
+		} else {
+			return RESERVATION_FAILD;
+		}
+
 		if (checkStatus != 1) {
 			return RESERVATION_UNAVAILABLE;
 		}
-		
+
 		int result = mapper.submitAdoption(dto);
 		if (result > 0) {
 			return RESERVATION_COMPLETED;

@@ -21,7 +21,7 @@ public interface UserAnimalMapper {
 
 	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx);
 
-	public int checkAdoptionStatus(int idx);
+	public String checkAdoptionStatus(int idx);
 
 	public int submitAdoption(AdoptionSubmitReqestDTO dto);
 
