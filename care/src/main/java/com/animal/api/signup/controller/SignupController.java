@@ -1,5 +1,7 @@
 package com.animal.api.signup.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ import com.animal.api.signup.service.SignupService;
  * @see com.animal.api.signup.model.request.UserSignupRequestDTO, com.animal.api.signup.model.request.ShelterSignupRequestDTO
  */
 @RestController
-@RequestMapping("/signup")
+@RequestMapping("/api/signup")
 public class SignupController {
 
 	@Autowired
@@ -29,11 +31,12 @@ public class SignupController {
 	/**
 	 * 일반 사용자 회원가입 메서드
 	 * @param UserSignupRequestDTO 회원가입 폼
+	 * @Valid UserSignupRequestDTO 유효성 검사 
 	 * @return 회원가입 완료
 	 */
 	//일반 사용자 회원가입
 	@PostMapping("/user")
-	public ResponseEntity<OkResponseDTO<String>> signup(@RequestBody UserSignupRequestDTO dto){
+	public ResponseEntity<OkResponseDTO<String>> signup(@Valid @RequestBody UserSignupRequestDTO dto){
 		signupService.signupUser(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<>(201, "회원가입이 완료되었습니다", null));
 	}
@@ -44,7 +47,7 @@ public class SignupController {
 	 */
     // 보호소 회원가입
     @PostMapping("/shelter")
-    public ResponseEntity<OkResponseDTO<String>> signupShelter(@RequestBody ShelterSignupRequestDTO dto) {
+    public ResponseEntity<OkResponseDTO<String>> signupShelter(@Valid @RequestBody ShelterSignupRequestDTO dto) {
         signupService.signupShelter(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(new OkResponseDTO<>(201, "보호소 회원가입이 요청이 완료되었습니다.", null));

@@ -18,39 +18,34 @@ import com.animal.api.common.model.OkResponseDTO;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 사용자 기준 로그인 기능 컨트롤러 클래스
  * 
  * @author Whistler95
- * @since 2025-06-16
+ * @since 2025-06-20
  * @see com.animal.api.auth.model.response.LoginResponseDTO
+ *
  */
-
-@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/auth")
-public class AuthController {
+@RequestMapping("/api/auth/admin")
+@RequiredArgsConstructor
+public class AdminAuthController {
 
 	private final AuthService authService;
-
+	
 	/**
-	 * 일반 , 보호시설 사용자 통합 로그인 메서드
 	 * 
-	 * @param LoginRequestDTO 로그인 폼
-	 * @session 로그인 한 사용자만의 정보 저장
-	 * @return 로그인 한 사용자의 정보 
+	 * @param LoginRequestDTO 관리자 계정
+	 * @session 관리자 간단 정보 저장
+	 * @return 로그인 한 관리자의 정보
 	 */
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto, HttpServletRequest request) {
-
-		LoginResponseDTO user = authService.login(dto);
-
-		HttpSession session = request.getSession(true);
-		session.setAttribute("loginUser", user);
+	public ResponseEntity<?> loginAdmin(@RequestBody LoginRequestDTO dto, HttpServletRequest request){
 		
-		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<LoginResponseDTO>(200, "로그인 성공", user));
+		LoginResponseDTO admin = authService.loginAdmin(dto);
+		
+		HttpSession session = request.getSession(true);
+		session.setAttribute("loginAdmin", admin);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<LoginResponseDTO>(200, "관리자 로그인 성공", admin));
 	}
-
-
-	
 }

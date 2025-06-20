@@ -28,7 +28,7 @@ public class LoginResponseDTO {
 	private LocalDate birthDate;
 
 	private String gender;
-	private int tel;
+	private String tel;
 
 	private int zipCode;
 	private String address;
@@ -54,7 +54,7 @@ public class LoginResponseDTO {
 	private Integer shelterTypeIdx;
 	private String shelterTypeName;
 
-	private Integer shelterTel;
+	private String shelterTel;
 	private String shelterName;
 	private String shelterPersonName;
 	private Integer shelterZipCode;

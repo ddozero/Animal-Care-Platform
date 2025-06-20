@@ -8,7 +8,7 @@ public class ShelterVO {
 	private int userIdx;
 	private Integer shelterTypeIdx;
 	private String shelterTypeName;
-	private Integer shelterTel;
+	private String shelterTel;
 	private String shelterName;
 	private String shelterPersonName;
 	private Integer shelterZipCode;

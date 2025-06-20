@@ -93,6 +93,31 @@ public class SignupServiceImple implements SignupService {
 
 	    // 3. USERS 테이블에 insert
 	    signupMapper.insertUser(user);
+	    
+	    switch(dto.getShelterTypeIdx()) {
+	    	case 1: 
+	    		if(dto.getShelterEmail() == null || !dto.getShelterEmail().matches(".*@(go\\.kr|korea\\.kr|or\\.kr|kr)$")) {
+	    			throw new CustomException(400, "공공 보호소는 go.kr, korea.kr, or.kr 도메인의 이메일이 필요합니다");
+	            }
+	            if (dto.getShelterBusinessNumber() == null || dto.getShelterBusinessNumber().isBlank()) {
+	                throw new CustomException(400, "공공 보호소는 사업자등록번호가 필요합니다");
+	            }
+	            break;
+	            
+	    	case 2:
+	    		if(dto.getShelterBusinessNumber() == null || dto.getShelterBusinessNumber().isBlank()) {
+	    			throw new CustomException(400, "민간 보호소는 사업자 등록 번호가 필요합니다.");
+	    		}
+	    		if(dto.getShelterBusinessFile() == null) {
+	    			throw new CustomException(400, "민간 보호소는 사업자등록증 파일이 필요합니다.");
+	    		}
+	    		break;
+	    		
+	    	case 3: 
+	    		break;
+	    	default: 
+	    		throw new CustomException(400, "올바르지 않은 보호시설 유형입니다.");
+	    }
 
 	    // 4. SHELTER VO 생성
 	    ShelterVO shelter = new ShelterVO();
