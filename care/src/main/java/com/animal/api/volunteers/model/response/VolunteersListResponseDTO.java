@@ -1,6 +1,8 @@
 package com.animal.api.volunteers.model.response;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,14 +13,16 @@ public class VolunteersListResponseDTO {
 
 	private int idx;
 	private String title;
-	private Date volunteerDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private Timestamp volunteerDate;
 	private int time;
 	private String location;
 	private int capacity;
 	private int applicants;
 	private String content;
 	private String ageTarget;
-	private Date createdAt;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private Timestamp createdAt;
 	private String type;
 	private String status;
 	private String sheelter;
