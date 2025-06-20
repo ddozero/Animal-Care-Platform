@@ -110,13 +110,13 @@ public class UserVolunteersController {
 			return ResponseEntity.ok(new OkResponseDTO<AllVolunteersResponseDTO>(200, "봉사 상세정보 조회 성공", dto));
 		}
 	}
-	
+
 	/**
-	 * 봉사페이지의 로그인한 사용자의 봉사신청 메서드 
+	 * 봉사페이지의 로그인한 사용자의 봉사신청 메서드
 	 * 
-	 * @param dto 봉사 신청 폼 목록 
-	 * @param idx 봉사 관리 번호
-	 * @param session 로그인 검증 세션 
+	 * @param dto     봉사 신청 폼 목록
+	 * @param idx     봉사 관리 번호
+	 * @param session 로그인 검증 세션
 	 * @return 신청에 따른 메세지
 	 */
 	@PostMapping("/{idx}/submit")
@@ -124,7 +124,7 @@ public class UserVolunteersController {
 			HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
-		if (loginUser == null) {ㄴ
+		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
 		}
 
