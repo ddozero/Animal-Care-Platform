@@ -44,7 +44,14 @@ public class AuthController {
 	public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto, HttpServletRequest request) {
 
 		LoginResponseDTO user = authService.login(dto);
-
+		
+		//기존 세션 무효화
+		HttpSession oldSession = request.getSession(false);
+		if(oldSession != null) {
+			oldSession.invalidate();
+		}
+		
+		//새로운 세션 생성
 		HttpSession session = request.getSession(true);
 		session.setAttribute("loginUser", user);
 		
