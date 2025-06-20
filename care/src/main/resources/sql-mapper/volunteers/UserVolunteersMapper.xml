@@ -147,6 +147,15 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
+<select id="getVolunteerStatus" parameterType="int" resultType="String">
+SELECT
+	IDX
+FROM
+	VOLUNTEER_STATUS
+WHERE
+	IDX = ${idx}
+</select>
+
 <update id="submitVolunteers" parameterType="com.animal.api.volunteers.model.request.VolunteersSubmitResponseDTO">
 INSERT
 	INTO
