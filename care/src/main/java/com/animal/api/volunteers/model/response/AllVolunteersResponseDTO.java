@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class VolunteersListResponseDTO {
+public class AllVolunteersResponseDTO {
 
 	private int idx;
 	private String title;
@@ -26,5 +26,7 @@ public class VolunteersListResponseDTO {
 	private String type;
 	private String status;
 	private String sheelter;
+	private String shelterName;
+	private String shelterType;
 
 }

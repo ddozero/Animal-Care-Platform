@@ -72,7 +72,7 @@ WHERE
 	V.IDX = ${idx}
 </select>
 
-<select id="searchVolunteers" parameterType="com.animal.api.volunteers.model.request.SearchVolunteerRequestDTO" resultType="com.animal.api.volunteers.model.response.VolunteersListResponseDTO">
+<select id="searchVolunteers" parameterType="com.animal.api.volunteers.model.request.SearchVolunteerRequestDTO" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
 SELECT
 	V.IDX,
 	V.TITLE,
@@ -113,7 +113,7 @@ JOIN VOLUNTEER_STATUS VS ON
 	<if test="shelterType !=null and shelterType !=''">
 		AND ST.NAME = #{shelterType}
 	</if>
-	<if test = "volunteerDate !=null and volunteerDate !=''">
+	<if test = "volunteerDate !=null">
 		AND V.VOLUNTEER_DATE = #{volunteerDate}
 	</if>
 	<if test = "type != null and type != ''">
