@@ -64,8 +64,17 @@ public class UserAnimalServiceImple implements UserAnimalService {
 
 	@Override
 	public int submitAdoption(AdoptionSubmitReqestDTO dto) {
-		int count = mapper.submitAdoption(dto);
-		return count;
+		int checkStatus = mapper.checkAdoptionStatus(dto.getAnimalIdx());
+		if (checkStatus != 1) {
+			return RESERVATION_UNAVAILABLE;
+		}
+		
+		int result = mapper.submitAdoption(dto);
+		if (result > 0) {
+			return RESERVATION_COMPLETED;
+		} else {
+			return RESERVATION_FAILD;
+		}
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드

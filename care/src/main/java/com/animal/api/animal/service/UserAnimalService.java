@@ -9,6 +9,10 @@ import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 
 public interface UserAnimalService {
 
+	static int RESERVATION_COMPLETED = 1; // 예약 신청 완료
+	static int RESERVATION_UNAVAILABLE = 0; // 예약 불가능
+	static int RESERVATION_FAILD = -1; // 에러
+
 	public List<AllAnimalListResponseDTO> getAllAnimals(int listSize, int cp);
 
 	public List<AllAnimalListResponseDTO> searchAnimals(int listSize, int cp, String type, String breed, String gender,
