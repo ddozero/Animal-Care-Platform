@@ -11,15 +11,18 @@ import lombok.Data;
 public class VolunteersSubmitResponseDTO {
 	
 	private int idx;
+	private int volunteerIdx;
+	private int userIdx;
+	private int statusIdx;
+	private String type;
 	private String name;
 	private String email;
 	private String tel;
-	private Timestamp BirthDate;
-	private String type;
+	private Timestamp birthDate;
 	private String groupName;
 	private String groupTel;
 	private int male;
 	private int female;
+	private String description;
 	
-
 }

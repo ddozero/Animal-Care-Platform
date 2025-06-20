@@ -145,7 +145,44 @@ ORDER BY
 	V.IDX DESC
 LIMIT
 #{listSize} OFFSET #{cp}
-
 </select>
+
+<update id="submitVolunteers" parameterType="com.animal.api.volunteers.model.request.VolunteersSubmitResponseDTO">
+INSERT
+	INTO
+	VOLUNTEER_REQUESTS(
+	IDX,
+	VOLUNTEER_IDX,
+	USER_IDX,
+	VOLUNTEER_REQUEST_STATUS_IDX,
+	TYPE,
+	NAME,
+	EMAIL,
+	TEL,
+	BIRTH_DATE,
+	GROUP_NAME,
+	GROUP_TEL,
+	DESCRIPTION,
+	MALE,
+	FEMALE,
+	CREATED_AT
+)
+VALUES(
+	#{volunteerIdx},
+	#{userIdx},
+	1,
+	#{type},
+	#{name},
+	#{email},
+	#{tel},
+	#{birthDate},
+	#{groupName},
+	#{groupTel},
+	#{description},
+	#{male},
+	#{female},
+	#{createdAt}
+)
+</update>
 
 </mapper>
