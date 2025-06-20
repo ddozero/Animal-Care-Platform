@@ -42,6 +42,14 @@ public class AuthServiceImple implements AuthService {
 			throw new CustomException(403, "보호시설 계정은 관리자 승인 후 로그인할 수 있습니다.");
 		}
 		
+		if(user.getUserTypeIdx() == 3) {
+			//관리자 로직 처리 추가 예정
+		}
+		
+		if(user.getUserTypeIdx() != 3) {
+			throw new CustomException(403, "관리자 권한이 없습니다.");
+		}
+		
 		authMapper.updateLastLoginAt(user.getIdx());
 
 		LoginResponseDTO res = new LoginResponseDTO();
@@ -90,5 +98,7 @@ public class AuthServiceImple implements AuthService {
 		}
 
 		return res;
+		
+		
 	}
 }

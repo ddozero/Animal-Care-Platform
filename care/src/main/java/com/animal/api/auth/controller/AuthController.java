@@ -1,5 +1,6 @@
 package com.animal.api.auth.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
@@ -32,17 +33,33 @@ public class AuthController {
 	private final AuthService authService;
 
 	/**
-	 * 일반 , 보호시설 사용자의 통합 로그인 메서드
+	 * 일반 , 보호시설 사용자 통합 로그인 메서드
 	 * 
 	 * @param LoginRequestDTO 로그인 폼
-	 * @session 로그인 한 사용자의 정보 저장
-	 * @return 로그인 한 사용자의 정보
+	 * @session 로그인 한 사용자만의 정보 저장
+	 * @return 사용자: 로그인 한 사용자의 정보 / 관리자: 로그인 정보 일치
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto, HttpSession session) {
-		LoginResponseDTO response = authService.login(dto);
-		session.setAttribute("loginUser", response);
-		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<LoginResponseDTO>(200, "로그인 성공", response));
+	public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto, HttpServletRequest request) {
+
+		LoginResponseDTO user = authService.login(dto);
+		
+		//관리자 로그인
+		if(user.getUserTypeIdx() == 3) {
+			//세션 x
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "관리자 로그인 성공", null));
+		}
+
+		//사용자 로그인
+		HttpSession session = request.getSession(true);
+		session.setAttribute("loginUser", user);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<LoginResponseDTO>(200, "로그인 성공", user));
 	}
 
+	/**
+	 * 
+	 * 
+	 */
+	
 }
