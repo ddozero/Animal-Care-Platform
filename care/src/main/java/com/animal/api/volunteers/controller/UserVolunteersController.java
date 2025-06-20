@@ -32,7 +32,7 @@ public class UserVolunteersController {
 
 	/**
 	 * 
-	 * @param 현재 페이지 번호
+	 * @param cp 현재 페이지 번호
 	 * @return 사용자 봉사 페이지에서 보여줄 봉사 목록
 	 */
 	@GetMapping
@@ -56,6 +56,12 @@ public class UserVolunteersController {
 					.body(new OkResponseDTO<List<VolunteersListResponseDTO>>(200, "게시물 목록 조회 성공", volunteersAllList));
 		}
 	}
+	
+	/**
+	 * 봉사페이지의 상세 정보를 조회하는 메서드
+	 * @param idx 봉사 관리 번호
+	 * @return 사용자 봉사 페이지에서 보여줄 봉사 정보
+	 */
 
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getVolunteersDetail(@PathVariable int idx) {
