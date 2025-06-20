@@ -2,6 +2,7 @@ package com.animal.api.animal.service;
 
 import java.util.List;
 
+import com.animal.api.animal.model.request.AdoptionSubmitReqestDTO;
 import com.animal.api.animal.model.response.AdoptionAnimalResponseDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
@@ -17,6 +18,5 @@ public interface UserAnimalService {
 
 	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx);
 
-	public int submitAdoption(int userIdx, int animalIdx, String name, String email, String tel, int zipCode,
-			String adress, String adressDetail, int hasPet, String description);
+	public int submitAdoption(AdoptionSubmitReqestDTO dto);
 }

@@ -186,10 +186,11 @@ INSERT
 		ADDRESS,
 		ADDRESS_DETAIL,
 		HAS_PET,
+		CONSULTED_AT,
 		DESCRIPTION
 	)
 VALUES (
-	${userIdx}, ${animalIdx}, ${name}, ${email}, ${tel}, ${zipCode}, ${adress}, ${adressDetail}, ${hasPet}, ${description}
+	#{userIdx}, #{animalIdx}, #{name}, #{email}, #{tel}, #{zipCode}, #{adress}, #{adressDetail}, #{hasPet}, #{consultedAt}, #{description}
 )
 </insert>
 </mapper>

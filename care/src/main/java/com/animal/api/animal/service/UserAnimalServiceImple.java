@@ -63,10 +63,7 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	}
 
 	@Override
-	public int submitAdoption(int userIdx, int animalIdx, String name, String email, String tel, int zipCode,
-			String adress, String adressDetail, int hasPet, String description) {
-		AdoptionSubmitReqestDTO dto = new AdoptionSubmitReqestDTO(userIdx, animalIdx, name, email, tel, zipCode, adress,
-				adressDetail, hasPet, description);
+	public int submitAdoption(AdoptionSubmitReqestDTO dto) {
 		int count = mapper.submitAdoption(dto);
 		return count;
 	}
