@@ -6,7 +6,7 @@
 
 <mapper namespace="com.animal.api.volunteers.mapper.UserVolunteersMapper">
 	
-<select id="getAllVolunteers" parameterType="com.animal.api.volunteers.model.response.VolunteersListResponseDTO">
+<select id="getAllVolunteers" parameterType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
 SELECT
 	V.IDX,
 	V.TITLE,
@@ -20,13 +20,16 @@ SELECT
 	V.CREATED_AT,
 	VT.NAME AS TYPE,
 	VS.NAME AS STATUS,
-	S.SHELTER_NAME AS SHEELTER
+	S.SHELTER_NAME AS SHELTER,
+	ST.NAME AS SHEELTERTYPE
 FROM
 	VOLUNTEERS V
 JOIN USERS U ON
 	V.USER_IDX = U.IDX
 JOIN SHELTERS S ON
 	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST ON
+	S.USER_IDX = ST.IDX
 JOIN VOLUNTEER_TYPES VT ON
 	V.VOLUNTEER_TYPE_IDX = VT.IDX
 JOIN VOLUNTEER_STATUS VS ON
@@ -43,7 +46,7 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
-<select id="getVolunteersDetail" parameterType="int" resultType="com.animal.api.volunteers.model.response.VolunteersListResponseDTO">
+<select id="getVolunteersDetail" parameterType="int" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
 SELECT
 	V.IDX,
 	V.TITLE,
@@ -57,13 +60,16 @@ SELECT
 	V.CREATED_AT,
 	VT.NAME AS TYPE,
 	VS.NAME AS STATUS,
-	S.SHELTER_NAME AS SHEELTER
+	S.SHELTER_NAME AS SHELTER,
+	ST.NAME AS SHEELTERTYPE
 FROM
 	VOLUNTEERS V
 JOIN USERS U ON
 	V.USER_IDX = U.IDX
 JOIN SHELTERS S ON
 	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST ON
+	S.USER_IDX = ST.IDX
 JOIN VOLUNTEER_TYPES VT ON
 	V.VOLUNTEER_TYPE_IDX = VT.IDX
 JOIN VOLUNTEER_STATUS VS ON
@@ -86,7 +92,7 @@ SELECT
 	V.CREATED_AT,
 	VT.NAME AS TYPE,
 	VS.NAME AS STATUS,
-	S.SHELTER_NAME AS SHEELTER,
+	S.SHELTER_NAME AS SHELTER,
 	ST.NAME AS SHEELTERTYPE
 FROM
 	VOLUNTEERS V
@@ -101,14 +107,20 @@ JOIN VOLUNTEER_TYPES VT ON
 JOIN VOLUNTEER_STATUS VS ON
 	V.VOLUNTEER_STATUS_IDX = VS.IDX
 <where>
-	<if test="location != null and type !=''">
-		AND V.LOCATION = #{location}
+	<if test = "title != null and title !=''">
+		AND V.TITLE LIKE '%${title}%'
+	</if>
+	<if test = "content != null and content != ''">
+		AND V.CONTENT LIKE '%${content}%'
+	</if>
+	<if test="location != null and location !=''">
+		AND V.LOCATION LIKE '%${location}%'
 	</if>
 	<if test="status != null and status !=''">
 		AND VS.NAME = #{status}
 	</if>
-	<if test="shelterName != null and type !=''">
-		AND S.SHELTER_NAME = #{shelterName}
+	<if test="shelter != null and shelter !=''">
+		AND S.SHELTER_NAME = #{shelter}
 	</if>
 	<if test="shelterType !=null and shelterType !=''">
 		AND ST.NAME = #{shelterType}

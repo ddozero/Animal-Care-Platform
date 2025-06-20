@@ -41,11 +41,10 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	}
 
 	@Override
-	public List<AllVolunteersResponseDTO> searchVolunteers(int listSize, int cp, String location, String status,
-			String shelterName, String shelterType, Timestamp volunteerDate, String type, int time) {
+	public List<AllVolunteersResponseDTO> searchVolunteers(int listSize, int cp, String title, String content, String location, String status,
+			String shelter, String shelterType, Timestamp volunteerDate, String type, int time) {
 
-		SearchVolunteerRequestDTO dto = new SearchVolunteerRequestDTO(cp, listSize, location, status, shelterName,
-				shelterType, volunteerDate, type, time);
+		SearchVolunteerRequestDTO dto = new SearchVolunteerRequestDTO(cp, listSize, title, content, location, status, shelter, shelterType, volunteerDate, type, time);
 		List<AllVolunteersResponseDTO> searchVolunteersList = mapper.searchVolunteers(dto);
 
 		return searchVolunteersList;

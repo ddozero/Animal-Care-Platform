@@ -34,10 +34,12 @@ public class UserVolunteersController {
 	/**
 	 * 사용자의 봉사 목록 조회 메서드
 	 * 
+	 * @param title         봉사 제목
+	 * @param content       봉사 내용
 	 * @param cp            현재 페이지 번호
 	 * @param location      봉사 장소
 	 * @param status        봉사 모집 상태
-	 * @param shelterName   봉사 보호소 이름
+	 * @param shelter       봉사 보호소 이름
 	 * @param shelterType   봉사 보호소 기관 종류
 	 * @param volunteerDate 봉사일
 	 * @param type          봉사 타입
@@ -47,9 +49,11 @@ public class UserVolunteersController {
 	 */
 	@GetMapping
 	public ResponseEntity<?> getVolunteersList(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			@RequestParam(value = "title", required = false) String title,
+			@RequestParam(value = "content", required = false) String content,
 			@RequestParam(value = "location", required = false) String location,
 			@RequestParam(value = "status", required = false) String status,
-			@RequestParam(value = "shelterName", required = false) String shelterName,
+			@RequestParam(value = "shelter", required = false) String shelter,
 			@RequestParam(value = "shelterType", required = false) String shelterType,
 			@RequestParam(value = "volunteerDate", required = false) Timestamp volunteerDate,
 			@RequestParam(value = "type", required = false) String type,
@@ -63,10 +67,11 @@ public class UserVolunteersController {
 		}
 
 		List<AllVolunteersResponseDTO> volunteersAllList = null;
-		if (location != null || status != null || shelterName != null || shelterType != null || volunteerDate != null
-				|| type != null || time != 0) {
-			volunteersAllList = volunteerService.searchVolunteers(listSize, cp, location, status, shelterName, shelterType, volunteerDate, type, time);
-		}else {
+		if (title != null || content != null || location != null || status != null || shelter != null
+				|| shelterType != null || volunteerDate != null || type != null || time != 0) {
+			volunteersAllList = volunteerService.searchVolunteers(listSize, cp, title, content, location, status,
+					shelter, shelterType, volunteerDate, type, time);
+		} else {
 			volunteersAllList = volunteerService.getAllVolunteers(listSize, cp);
 		}
 

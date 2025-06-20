@@ -11,7 +11,7 @@ public interface UserVolunteersService {
 
 	public AllVolunteersResponseDTO getVolunteersDetail(int idx);
 
-	public List<AllVolunteersResponseDTO> searchVolunteers(int listSize, int cp, String location, String status,
-			String shelterName, String shelterType, Timestamp volunteerDate, String type, int time);
+	public List<AllVolunteersResponseDTO> searchVolunteers(int listSize, int cp, String title, String content, String location, String status,
+			String shelter, String shelterType, Timestamp volunteerDate, String type, int time);
 
 }

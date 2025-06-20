@@ -26,7 +26,6 @@ public class AllVolunteersResponseDTO {
 	private String type;
 	private String status;
 	private String sheelter;
-	private String shelterName;
 	private String shelterType;
 
 }
