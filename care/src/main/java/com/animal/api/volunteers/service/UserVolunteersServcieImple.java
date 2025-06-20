@@ -29,4 +29,13 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 		return volunteerLists;
 	}
 
+	@Override
+	public VolunteersListResponseDTO getVolunteersDetail(int idx) {
+		VolunteersListResponseDTO dto = mapper.getVolunteersDetail(idx);
+		if (dto != null && dto.getContent() != null) {
+			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		}
+		return dto;
+	}
+
 }
