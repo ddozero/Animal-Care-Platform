@@ -1,7 +1,5 @@
 package com.animal.api.donation.controller;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +25,12 @@ import com.animal.api.donation.service.UserDonationsService;
 
 /**
  * @author consgary
- * @since 2025.06.19
+ * @since 2025.06.20
  * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
  * @see com.animal.api.donation.model.response.DonationDetailResponseDTO
  * @see com.animal.api.donation.model.response.AllDonationCommentsResponseDTO
  * @see com.animal.api.donation.model.response.AllDonationUserListResponseDTO
+ * @see com.animal.api.donation.model.request.DonationCommentRequestDTO
  */
 @RestController
 @RequestMapping("/api/donations")
@@ -128,6 +127,13 @@ public class UserDonationsController {
 		}
 	}
 
+	/**
+	 * 응원 댓글 등록
+	 * 
+	 * @param idx 기부번호
+	 * @param dto 댓글 폼
+	 * @return 댓글 등록 성공,실패 메세지
+	 */
 	@PostMapping("/{idx}/comments")
 	public ResponseEntity<?> addDonationComment(@PathVariable int idx, @RequestBody DonationCommentRequestDTO dto) {
 
