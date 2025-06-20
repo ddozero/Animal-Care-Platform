@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.donation.mapper.UserDonationsMapper;
+import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -75,5 +76,40 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		List<AllDonationUserListResponseDTO> userList = mapper.getDonationUserLists(map);
 
 		return userList;
+	}
+
+	@Override
+	public Map addDonationComment(DonationCommentRequestDTO dto) {
+		Map map = new HashMap();
+		int result = 0;
+		String msg = null;
+		Boolean errorCheck = false;
+		if (dto.getUserIdx() == 0) {
+			result = USER_NOT_FOUND;
+			msg = "잘못된 접근:유저정보없음";
+			errorCheck = true;
+		} else if (dto.getDonationIdx() == 0) {
+			result = DONATION_NOT_FOUND;
+			msg = "잘못된 접근:기부정보없음";
+			errorCheck = true;
+		} else if (dto.getContent() == null || dto.getContent().equals("")) {
+			result = COMMENT_CONTENT_EMPTY;
+			msg = "잘못된 접근:값을 입력해주세요";
+			errorCheck = true;
+		}
+		if (!errorCheck) {
+			int count = mapper.addDonationComment(dto);
+
+			if (count > 0) {
+				result = POST_SUCCESS;
+				msg = "응원 댓글 성공";
+			} else {
+				result = ERROR;
+				msg = " 잘못된 접근";
+			}
+		}
+		map.put("result", result);
+		map.put("msg", msg);
+		return map;
 	}
 }
