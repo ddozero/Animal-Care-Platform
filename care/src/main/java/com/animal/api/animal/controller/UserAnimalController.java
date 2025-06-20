@@ -25,9 +25,10 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사용자 기준 유기동물 관련 컨트롤러 클래스
  * 
  * @author Rege-97
- * @since 2025-06-19
+ * @since 2025-06-20
  * @see com.animal.api.animal.model.response.AllAnimalListResponseDTO
  * @see com.animal.api.animal.model.response.AnimalDetailResponseDTO
+ * @see com.animal.api.animal.model.response.AdoptionAnimalResponseDTO
  */
 @RestController
 @RequestMapping("/api/animals")
@@ -101,6 +102,13 @@ public class UserAnimalController {
 		}
 	}
 
+	/**
+	 * 유기동물의 입양 폼 페이지로 진입 했을 시 선택한 유기동물의 정보를 조회하는 메서드
+	 * 
+	 * @param idx     유기동물 관리번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 유기동물의 정보
+	 */
 	@GetMapping("/{idx}/adoption")
 	public ResponseEntity<?> getAdoptionInfo(@PathVariable int idx, HttpSession session) {
 
