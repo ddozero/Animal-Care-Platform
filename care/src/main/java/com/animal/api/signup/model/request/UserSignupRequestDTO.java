@@ -17,7 +17,7 @@ public class UserSignupRequestDTO {
 	@Pattern(regexp = "^[a-z0-9]{6,10}$", message = "아이디는 영문 소문자와 숫자 조합으로 6~10자 이내여야 합니다")
     private String id;
 	
-	@NotBlank(message = "이메일은 필수 항목 입니다")
+	@NotBlank(message = "이메일은 필수 입력 항목 입니다")
 	@Email(message = "올바른 이메일 형식이 아닙니다")
     private String email;
 	
@@ -27,11 +27,11 @@ public class UserSignupRequestDTO {
     private String password;
 
     @NotBlank(message = "이름은 필수 항목입니다.")
-    @Pattern(regexp = "^[가-힣]{2,5}$", message = "이름은 한글 2~5자여야 합니다.") // 외국인 포함하고 싶으면 조정 가능
+    @Pattern(regexp = "^[가-힣]{2,5}$", message = "이름은 한글 2~5자여야 합니다.")
     private String name;
     
     @NotBlank(message = "닉네임은 필수 항목입니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,10}$", message = "닉네임은 특수문자 없이 2~10자 이내여야 합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,20}$", message = "닉네임은 특수문자 없이 2~20자 이내여야 합니다.")
     private String nickname;
 
     @NotNull(message = "생년월일은 필수 항목입니다.")  

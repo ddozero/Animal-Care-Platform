@@ -22,7 +22,7 @@ import com.animal.api.signup.service.SignupService;
  * @see com.animal.api.signup.model.request.UserSignupRequestDTO, com.animal.api.signup.model.request.ShelterSignupRequestDTO
  */
 @RestController
-@RequestMapping("/signup")
+@RequestMapping("/api/signup")
 public class SignupController {
 
 	@Autowired
@@ -47,7 +47,7 @@ public class SignupController {
 	 */
     // 보호소 회원가입
     @PostMapping("/shelter")
-    public ResponseEntity<OkResponseDTO<String>> signupShelter(@RequestBody ShelterSignupRequestDTO dto) {
+    public ResponseEntity<OkResponseDTO<String>> signupShelter(@Valid @RequestBody ShelterSignupRequestDTO dto) {
         signupService.signupShelter(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(new OkResponseDTO<>(201, "보호소 회원가입이 요청이 완료되었습니다.", null));
