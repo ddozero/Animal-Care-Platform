@@ -105,7 +105,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 				msg = "응원 댓글 성공";
 			} else {
 				result = ERROR;
-				msg = "응원 댓글 등록 성공";
+				msg = " 잘못된 접근";
 			}
 		}
 		map.put("result", result);

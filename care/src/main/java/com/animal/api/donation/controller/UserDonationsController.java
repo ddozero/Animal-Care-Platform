@@ -3,6 +3,8 @@ package com.animal.api.donation.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
@@ -135,7 +138,14 @@ public class UserDonationsController {
 	 * @return 댓글 등록 성공,실패 메세지
 	 */
 	@PostMapping("/{idx}/comments")
-	public ResponseEntity<?> addDonationComment(@PathVariable int idx, @RequestBody DonationCommentRequestDTO dto) {
+	public ResponseEntity<?> addDonationComment(@PathVariable int idx, @RequestBody DonationCommentRequestDTO dto,
+			HttpSession session) {
+
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
 
 		Map resultMap = service.addDonationComment(dto);
 
