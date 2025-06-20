@@ -78,7 +78,23 @@
 	<!-- ✅ 컴포넌트 스캔 (서비스, DAO, 보안 관련 클래스 자동 등록) -->
 	<context:component-scan
 		base-package="com.animal.api" />
-
+		
+	<!-- ✅ MailSender -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp@gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="sdr020071@gmail.com" />
+		<property name="password" value="emet xruk krwo csrt" />
+		<property name="javaMailProperties">
+			<props>
+	            <prop key="mail.transport.protocol">smtp</prop>
+	            <prop key="mail.smtp.auth">true</prop>
+	            <prop key="mail.smtp.starttls.enable">true</prop>
+	            <prop key="mail.debug">true</prop> 
+			</props>
+		</property>
+	</bean>
+	
 	<!-- ✅ 메시지 컨버터 설정: 문자열 & JSON 응답을 UTF-8로 처리 -->
 	<mvc:annotation-driven>
 		<mvc:message-converters>
