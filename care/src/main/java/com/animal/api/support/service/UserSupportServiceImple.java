@@ -43,10 +43,10 @@ public class UserSupportServiceImple implements UserSupportService {
 
 		SearchNoticeRequestDTO dto = new SearchNoticeRequestDTO(cp, listSize, title, content);
 		List<UserNoticeResponseDTO> searchNoticeList = mapper.searchAllNotice(dto);
-		
+
 		return searchNoticeList;
 	}
-	
+
 	@Override
 	public int addNoticeViewCount(int idx) {
 		int count = mapper.updateNoticeViews(idx);

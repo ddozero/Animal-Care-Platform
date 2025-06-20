@@ -19,9 +19,9 @@ import com.animal.api.support.service.UserSupportService;
 /**
  * 사용자의 고객지원 페이지 공지사항 관련 컨트롤러 클래스
  * 
- * @author ddozero
+ * @author doyeong
  * @since 2025-06-19
- * @see com.animal.api.support.model.response.UserNoticeResponseDTO;
+ * @see com.animal.api.support.model.response.VolunteersListResponseDTO;
  */
 @RestController
 @RequestMapping("/api/support")
