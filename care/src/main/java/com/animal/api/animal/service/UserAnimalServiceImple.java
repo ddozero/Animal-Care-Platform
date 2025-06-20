@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.animal.api.animal.mapper.UserAnimalMapper;
 import com.animal.api.animal.model.request.SearchConditionsRequestDTO;
-
+import com.animal.api.animal.model.response.AdoptionAnimalResponseDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 
@@ -52,6 +52,12 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	@Override
 	public AnimalDetailResponseDTO getAnimalDetail(int idx) {
 		AnimalDetailResponseDTO dto = mapper.getAnimalDetail(idx);
+		return dto;
+	}
+
+	@Override
+	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx) {
+		AdoptionAnimalResponseDTO dto = mapper.getAdoptionInfo(idx);
 		return dto;
 	}
 
