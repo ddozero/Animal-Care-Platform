@@ -173,7 +173,7 @@ JOIN SHELTERS S
 WHERE
 	A.IDX = ${idx}
 </select>
-<select id="checkAdoptionStatus" parameterType="int" resultType="int">
+<select id="checkAdoptionStatus" parameterType="int" resultType="String">
 SELECT
 	ADOPTION_STATUS_IDX
 FROM
@@ -198,7 +198,7 @@ INSERT
 		DESCRIPTION
 	)
 VALUES (
-	#{userIdx}, #{animalIdx}, #{name}, #{email}, #{tel}, #{zipCode}, #{adress}, #{adressDetail}, #{hasPet}, #{consultedAt}, #{description}
+	#{userIdx}, #{animalIdx}, #{name}, #{email}, #{tel}, #{zipCode}, #{address}, #{addressDetail}, #{hasPet}, #{consultedAt}, #{description}
 )
 </insert>
 </mapper>

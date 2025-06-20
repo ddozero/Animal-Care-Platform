@@ -18,10 +18,10 @@ public class AdoptionSubmitReqestDTO {
 	private String email;
 	private String tel;
 	private int zipCode;
-	private String adress;
-	private String adressDetail;
+	private String address;
+	private String addressDetail;
 	private int hasPet;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp consultedAt;
 	private String description;
 
