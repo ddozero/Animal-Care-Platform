@@ -4,7 +4,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.animal.api.support.mapper.UserVolunteersMapper">
+<mapper namespace="com.animal.api.volunteers.mapper.UserVolunteersMapper">
 	
 <select id="getAllVolunteers" parameterType="com.animal.api.volunteers.model.response.VolunteersListResponseDTO">
 SELECT
@@ -30,7 +30,17 @@ JOIN SHELTERS S ON
 JOIN VOLUNTEER_TYPES VT ON
 	V.VOLUNTEER_TYPE_IDX = VT.IDX
 JOIN VOLUNTEER_STATUS VS ON
-	V.VOLUNTEER_STATUS_IDX = VS.IDX	
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+ORDER BY
+	CASE
+		VS.NAME
+		WHEN '모집중' THEN 0
+		WHEN '모집대기' THEN 1
+		ELSE 2
+	END,
+	V.IDX DESC
+LIMIT
+#{listSize} OFFSET #{cp}
 </select>
 
 </mapper>
