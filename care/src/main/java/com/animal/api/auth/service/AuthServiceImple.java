@@ -33,7 +33,15 @@ public class AuthServiceImple implements AuthService {
 		if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
 			throw new CustomException(401, "비밀번호가 일치하지 않습니다");
 		}
+		
+		if(user.getStatus() == -1) {
+			throw new CustomException(410, "탈퇴한 회원입니다.");
+		}
 
+		if(user.getUserTypeIdx() == 2 & user.getStatus() == 0) {
+			throw new CustomException(403, "보호시설 계정은 관리자 승인 후 로그인할 수 있습니다.");
+		}
+		
 		authMapper.updateLastLoginAt(user.getIdx());
 
 		LoginResponseDTO res = new LoginResponseDTO();
