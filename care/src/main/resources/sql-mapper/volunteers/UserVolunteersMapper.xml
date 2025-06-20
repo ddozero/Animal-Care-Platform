@@ -78,7 +78,7 @@ WHERE
 	V.IDX = ${idx}
 </select>
 
-<select id="searchVolunteers" parameterType="com.animal.api.volunteers.model.request.SearchVolunteerRequestDTO" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
+<select id="searchVolunteers" parameterType="com.animal.api.volunteers.model.response.SearchVolunteerResponseDTO" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
 SELECT
 	V.IDX,
 	V.TITLE,
@@ -147,20 +147,30 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
-<select id="getVolunteerStatus" parameterType="int" resultType="String">
-SELECT
-	IDX
-FROM
-	VOLUNTEER_STATUS
-WHERE
-	IDX = ${idx}
+<select id = "checkSubmit" resultType="int">
+SELECT 
+	COUNT(*)
+FROM 
+	VOLUNTEER_REQUESTS
+WHERE 
+	USER_IDX = #{userIdx}
+AND 
+	VOLUNTEER_IDX = #{volunteerIdx}
 </select>
 
-<update id="submitVolunteers" parameterType="com.animal.api.volunteers.model.request.VolunteersSubmitResponseDTO">
+<select id="getVolunteerStatus" parameterType="int" resultType="String">
+SELECT
+	VOLUNTEER_STATUS_IDX
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{volunteerIdx}
+</select>
+
+<update id="submitVolunteers" parameterType="com.animal.api.volunteers.model.request.VolunteersSubmitRequestDTO">
 INSERT
 	INTO
 	VOLUNTEER_REQUESTS(
-	IDX,
 	VOLUNTEER_IDX,
 	USER_IDX,
 	VOLUNTEER_REQUEST_STATUS_IDX,

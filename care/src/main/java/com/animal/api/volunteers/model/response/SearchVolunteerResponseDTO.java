@@ -1,4 +1,4 @@
-package com.animal.api.volunteers.model.request;
+package com.animal.api.volunteers.model.response;
 
 import java.sql.Timestamp;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SearchVolunteerRequestDTO {
+public class SearchVolunteerResponseDTO {
 	
 	private int cp;
 	private int listSize;

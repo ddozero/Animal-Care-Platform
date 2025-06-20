@@ -1,6 +1,5 @@
-package com.animal.api.volunteers.model.response;
+package com.animal.api.volunteers.model.request;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VolunteersSubmitResponseDTO {
-	
+public class VolunteersSubmitRequestDTO {
+
 	private int idx;
 	private int volunteerIdx;
 	private int userIdx;
@@ -26,5 +25,6 @@ public class VolunteersSubmitResponseDTO {
 	private int male;
 	private int female;
 	private String description;
-	
+	private Timestamp createdAt;
+
 }

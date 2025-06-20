@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.volunteers.mapper.UserVolunteersMapper;
-import com.animal.api.volunteers.model.request.SearchVolunteerRequestDTO;
+import com.animal.api.volunteers.model.request.VolunteersSubmitRequestDTO;
 import com.animal.api.volunteers.model.response.AllVolunteersResponseDTO;
-import com.animal.api.volunteers.model.response.VolunteersSubmitResponseDTO;
+import com.animal.api.volunteers.model.response.SearchVolunteerResponseDTO;
 
 @Service
 @Primary
@@ -46,7 +46,7 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 			String location, String status, String shelter, String shelterType, Timestamp volunteerDate, String type,
 			int time) {
 
-		SearchVolunteerRequestDTO dto = new SearchVolunteerRequestDTO(cp, listSize, title, content, location, status,
+		SearchVolunteerResponseDTO dto = new SearchVolunteerResponseDTO(cp, listSize, title, content, location, status,
 				shelter, shelterType, volunteerDate, type, time);
 		List<AllVolunteersResponseDTO> searchVolunteersList = mapper.searchVolunteers(dto);
 
@@ -54,26 +54,38 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	}
 
 	@Override
-	public int submitVolunteers(VolunteersSubmitResponseDTO dto) {
-		
-		String getVolunteerStatus = mapper.getVolunteerStatus(dto.getIdx());
-		int checkStatus = 0;
-		
+	public int submitVolunteers(VolunteersSubmitRequestDTO dto) {
+
+		int checkIdx = mapper.checkSubmit(dto.getUserIdx(), dto.getVolunteerIdx());
+		if (checkIdx > 0) {
+			return SUBMIT_DUPLICATE;
+		}
+
+		String getVolunteerStatus = mapper.getVolunteerStatus(dto.getVolunteerIdx());
 		if (getVolunteerStatus == null) {
 			return SUBMIT_ERROR;
-		} 
-		
+		}
+
+		int checkStatus = 0;
+
+		try {
+			checkStatus = Integer.parseInt(getVolunteerStatus);
+		} catch (NumberFormatException e) {
+			return SUBMIT_ERROR;
+		}
+
 		if (checkStatus == 3 || checkStatus == 4) {
 			return SUBMIT_NOT_OK;
 		}
 
 		int result = mapper.submitVolunteers(dto);
-		
+
 		if (result > 0) {
 			return SUBMIT_OK;
-		}else {
+		} else {
 			return SUBMIT_ERROR;
 		}
+
 	}
 
 }
