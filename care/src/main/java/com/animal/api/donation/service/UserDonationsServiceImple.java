@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.donation.mapper.UserDonationsMapper;
+import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -75,5 +76,12 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		List<AllDonationUserListResponseDTO> userList = mapper.getDonationUserLists(map);
 
 		return userList;
+	}
+
+	@Override
+	public int addDonationComment(DonationCommentRequestDTO dto) {
+		int count = mapper.addDonationComment(dto);
+
+		return count;
 	}
 }

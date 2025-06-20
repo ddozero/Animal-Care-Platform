@@ -2,6 +2,7 @@ package com.animal.api.donation.service;
 
 import java.util.List;
 
+import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -15,4 +16,6 @@ public interface UserDonationsService {
 	public List<AllDonationCommentsResponseDTO> getDonationComments(int idx, int listSize, int cp);
 
 	public List<AllDonationUserListResponseDTO> getDonationUserLists(int idx, int listSize, int cp);
+
+	public int addDonationComment(DonationCommentRequestDTO dto);
 }
