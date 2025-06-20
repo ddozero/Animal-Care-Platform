@@ -69,4 +69,11 @@ WHERE DD.DONATION_IDX=${idx}
 ORDER BY DD.IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
+
+<insert id="addDonationComment" parameterType="com.animal.api.donation.model.request.DonationCommentRequestDTO" >
+INSERT
+	INTO
+	DONATION_COMMENTS(USER_IDX, DONATION_IDX, CONTENT, CREATED_AT)
+VALUES(${userIdx}, ${donationIdx}, ${content}, CURRENT_TIMESTAMP)
+</insert>
 </mapper>
