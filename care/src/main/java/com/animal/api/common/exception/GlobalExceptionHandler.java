@@ -1,6 +1,7 @@
 package com.animal.api.common.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -9,6 +10,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<ErrorResponseDTO> handleCustomException(CustomException e) {
 		ErrorResponseDTO error = new ErrorResponseDTO(e.getStatusCode(), e.getMessage());
@@ -20,4 +22,18 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponseDTO> handleGeneralException(Exception e) {
 		return ResponseEntity.status(500).body(new ErrorResponseDTO(500, "서버 내부 오류: " + e.getMessage()));
 	}
+	
+	//회원가입 유효성 검사 통과 못했을 시
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex){ 
+		
+		String message = ex.getBindingResult().getFieldErrors().stream()
+				.map(error -> error.getField() + ":" + error.getDefaultMessage())
+				.findFirst()
+				.orElse("입력값이 유효하지 않습니다");
+		
+		return ResponseEntity.badRequest().body(new ErrorResponseDTO(400, message));
+	}
+
+
 }
