@@ -19,4 +19,7 @@ public interface UserShelterService {
 	public List<ShelterVolunteersDTO> getShelterVolunteers(int listSize, int cp, int idx);
 
 	public List<ShelterAnimalsDTO> getAllShelterAnimals(int listSize, int cp, int idx);
+
+	public List<ShelterAnimalsDTO> searchShelterAnimals(int idx, int listSize, int cp, String type, String breed,
+			String gender, int neuter, int age, String adoptionStatus, String personality, int size, String name);
 }
