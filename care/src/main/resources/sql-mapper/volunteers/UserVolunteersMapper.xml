@@ -72,4 +72,68 @@ WHERE
 	V.IDX = ${idx}
 </select>
 
+<select id="searchVolunteers" parameterType="com.animal.api.volunteers.model.request.SearchVolunteerRequestDTO" resultType="com.animal.api.volunteers.model.response.VolunteersListResponseDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	V.VOLUNTEER_DATE,
+	V.TIME,
+	V.LOCATION,
+	V.CAPACITY,
+	V.APPLICANTS,
+	V.CONTENT,
+	V.AGE_TARGET,
+	V.CREATED_AT,
+	VT.NAME AS TYPE,
+	VS.NAME AS STATUS,
+	S.SHELTER_NAME AS SHEELTER,
+	ST.NAME AS SHEELTERTYPE
+FROM
+	VOLUNTEERS V
+JOIN USERS U ON
+	V.USER_IDX = U.IDX
+JOIN SHELTERS S ON
+	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST ON
+	S.USER_IDX = ST.IDX
+JOIN VOLUNTEER_TYPES VT ON
+	V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+<where>
+	<if test="location != null and type !=''">
+		AND V.LOCATION = #{location}
+	</if>
+	<if test="status != null and status !=''">
+		AND VS.NAME = #{status}
+	</if>
+	<if test="shelterName != null and type !=''">
+		AND S.SHELTER_NAME = #{shelterName}
+	</if>
+	<if test="shelterType !=null and shelterType !=''">
+		AND ST.NAME = #{shelterType}
+	</if>
+	<if test = "volunteerDate !=null and volunteerDate !=''">
+		AND V.VOLUNTEER_DATE = #{volunteerDate}
+	</if>
+	<if test = "type != null and type != ''">
+		AND VT.NAME = #{type}
+	</if>
+	<if test = "time != 0">
+		AND V.TIME = #{time}
+	</if>
+</where>
+ORDER BY
+	CASE
+		VS.NAME
+		WHEN '모집중' THEN 0
+		WHEN '모집대기' THEN 1
+		ELSE 2
+	END,
+	V.IDX DESC
+LIMIT
+#{listSize} OFFSET #{cp}
+
+</select>
+
 </mapper>
