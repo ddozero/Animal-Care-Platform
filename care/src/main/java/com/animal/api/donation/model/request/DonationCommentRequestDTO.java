@@ -12,5 +12,5 @@ import lombok.Data;
 public class DonationCommentRequestDTO {
 	private int userIdx;
 	private int donationIdx;
-	private int content;
+	private String content;
 }
