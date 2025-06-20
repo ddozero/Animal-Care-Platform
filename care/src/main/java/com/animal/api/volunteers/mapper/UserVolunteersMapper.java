@@ -10,5 +10,7 @@ import com.animal.api.volunteers.model.response.VolunteersListResponseDTO;
 public interface UserVolunteersMapper {
 	
 	public List<VolunteersListResponseDTO> getAllVolunteers(Map map);
+	public VolunteersListResponseDTO getVolunteersDetail(int idx);
+	
 
 }

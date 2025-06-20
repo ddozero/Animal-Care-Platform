@@ -43,4 +43,33 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
+<select id="getVolunteersDetail" parameterType="int" resultType="com.animal.api.volunteers.model.response.VolunteersListResponseDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	V.VOLUNTEER_DATE,
+	V.TIME,
+	V.LOCATION,
+	V.CAPACITY,
+	V.APPLICANTS,
+	V.CONTENT,
+	V.AGE_TARGET,
+	V.CREATED_AT,
+	VT.NAME AS TYPE,
+	VS.NAME AS STATUS,
+	S.SHELTER_NAME AS SHEELTER
+FROM
+	VOLUNTEERS V
+JOIN USERS U ON
+	V.USER_IDX = U.IDX
+JOIN SHELTERS S ON
+	U.IDX = S.USER_IDX
+JOIN VOLUNTEER_TYPES VT ON
+	V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+WHERE
+	V.IDX = ${idx}
+</select>
+
 </mapper>
