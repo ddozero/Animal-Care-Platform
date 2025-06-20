@@ -135,6 +135,14 @@ public class UserAnimalController {
 		}
 	}
 
+	/**
+	 * 유기동물의 입양 폼 페이지에서 입양을 신청하는 메서드
+	 * 
+	 * @param dto     상담 신청 폼의 내용
+	 * @param idx     유기동물 관리번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 신청 성공 메세지
+	 */
 	@PostMapping("/{idx}/adoption")
 	public ResponseEntity<?> submitAdoption(@RequestBody AdoptionSubmitReqestDTO dto, @PathVariable int idx,
 			HttpSession session) {
