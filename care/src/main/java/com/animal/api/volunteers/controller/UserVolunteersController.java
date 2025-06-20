@@ -29,6 +29,12 @@ public class UserVolunteersController {
 	@Autowired
 	private UserVolunteersService volunteerService;
 	
+	
+	/**
+	 * 
+	 * @param 현재 페이지 번호
+	 * @return 사용자 봉사 페이지에서 보여줄 봉사 목록
+	 */
 	@GetMapping
 	public ResponseEntity<?> getVolunteersList(@RequestParam(value="cp", defaultValue = "0")int cp){
 		
