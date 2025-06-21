@@ -33,6 +33,7 @@ public class ShelterManageController {
 	private ShelterManageService shelterService;
 
 	/**
+	 * 보호시설 기본정보 조회 메서드
 	 * 
 	 * @param session 로그인 검증 세션
 	 * @return 로그인한 보호소 기본 정보
@@ -55,7 +56,14 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<AllManageShelterResponseDTO>(200, "보호소 기본정보 조회 성공", dto));
 		}
 	}
-
+	
+	/**
+	 * 보호시설 기본정보 수정 메서드
+	 * 
+	 * @param dto 보호시설 기본정보 
+	 * @param session 로그인 검증 세션
+	 * @return 수정에 따른 메세지
+	 */
 	@PutMapping
 	public ResponseEntity<?> updateShelterInfo(@RequestBody ShelterInfoUpdateRequestDTO dto, HttpSession session) {
 

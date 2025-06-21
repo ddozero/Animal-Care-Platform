@@ -23,7 +23,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 		return dto;
 	}
-	
+
 	@Override
 	public int updateSheterInfo(ShelterInfoUpdateRequestDTO dto) {
 		int count = mapper.updateSheterInfo(dto);
