@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
+import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -14,6 +15,7 @@ public interface UserDonationsService {
 	static int USER_NOT_FOUND = 2;
 	static int DONATION_NOT_FOUND = 3;
 	static int COMMENT_CONTENT_EMPTY = 4;
+	static int COMMENT_NOT_FOUND = 5;
 	static int ERROR = -1;
 
 	public List<AllDonationListResponseDTO> getAllDonations(int listSize, int cp);
@@ -25,4 +27,6 @@ public interface UserDonationsService {
 	public List<AllDonationUserListResponseDTO> getDonationUserLists(int idx, int listSize, int cp);
 
 	public Map addDonationComment(DonationCommentRequestDTO dto);
+
+	public Map updateDonationComment(DonationCommentUpdateRequestDTO dto);
 }
