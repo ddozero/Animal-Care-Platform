@@ -15,7 +15,7 @@ public class ShelterSignupRequestDTO {
 
     // USERS 테이블 정보
 	@NotBlank(message = "아이디는 필수 입력 항목입니다")
-	@Pattern(regexp = "^[a-z0-9]{6,10}$", message = "아이디는 영문 소문자와 숫자 조합으로 6~10자 이내여야 합니다")
+	@Pattern(regexp = "^[a-z0-9]{6,20}$", message = "아이디는 영문 소문자와 숫자 조합으로 6~20자 이내여야 합니다")
     private String id;
 	
 	@NotBlank(message = "이메일은 필수 입력 항목 입니다")
