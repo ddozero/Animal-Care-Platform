@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AllManageShelterDTO {
+public class AllManageShelterResponseDTO {
 
 	private int idx;
-	private int typeIdx;
+	private String type;
 	private String tel;
 	private String shelterName;
 	private String personName;

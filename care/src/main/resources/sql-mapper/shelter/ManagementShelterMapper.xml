@@ -5,19 +5,20 @@
   
 <mapper namespace="com.animal.api.management.shelter.mapper.ManagementShelterMapper">
 
-<select id="getShelterInfo" parameterType="int" resultType="com.animal.api.management.shelter.model.response.AllManageShelterDTO">
+<select id="getShelterInfo" parameterType="int" resultType="com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO">
 SELECT 
-	S.USER_IDX AS IDX,
-	S.SHELTER_NAME AS SHELTER_NAME,
-	ST.NAME AS TYPE,
-	S.SHELTER_PERSON_NAME,
-	S.SHELTER_TEL,
-	S.SHELTER_EMAIL,
-	S.SHELTER_ZIP_CODE,
-	S.SHELTER_ADDRESS,
-	S.SHELTER_ADDRESS_DETAIL,
-	S.SHELTER_BUSINESS_NUMBER,
-	S.SHELTER_DESCRIPTION
+	S.USER_IDX AS idx,
+	S.SHELTER_NAME AS shelterName,
+	ST.NAME AS type,
+	S.SHELTER_PERSON_NAME AS personName,
+	S.SHELTER_TEL AS tel,
+	S.SHELTER_EMAIL AS email,
+	S.SHELTER_ZIP_CODE AS zipCode,
+	S.SHELTER_ADDRESS AS address,
+	S.SHELTER_ADDRESS_DETAIL AS addressDetail,
+	S.SHELTER_BUSINESS_NUMBER AS businessNumber,
+	S.SHELTER_DESCRIPTION AS description,
+	S.SHELTER_BUSINESS_FILE as businessFile
 FROM
 	SHELTERS S
 LEFT JOIN
@@ -27,7 +28,7 @@ WHERE
     S.USER_IDX = #{idx};
 </select>
 
-<update id="updateSheterInfo" parameterType="com.animal.api.management.shelter.model.response.AllManageShelterDTO">
+<update id="updateSheterInfo" parameterType="com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO">
 UPDATE SHELTERS
 SET
     SHELTER_NAME = #{shelterName},
@@ -39,7 +40,7 @@ SET
     SHELTER_ADDRESS_DETAIL = #{addressDetail},
     SHELTER_BUSINESS_NUMBER = #{businessNumber},
     SHELTER_BUSINESS_FILE = #{businessFile},
-    SHELTER_DESCRIPTION = #{description}'
+    SHELTER_DESCRIPTION = #{description}
 WHERE
     USER_IDX = #{idx};
 </update>
