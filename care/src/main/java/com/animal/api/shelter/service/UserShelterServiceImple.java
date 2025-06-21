@@ -114,8 +114,14 @@ public class UserShelterServiceImple implements UserShelterService {
 
 	@Override
 	public ShelterBoardDetailResponseDTO getShelterBoardDetail(int idx) {
-		ShelterBoardDetailResponseDTO dto = mapper.getShelterBoardDetail(idx);
-		return dto;
+		int result = mapper.incrementViews(idx);
+
+		if (result > 0) {
+			ShelterBoardDetailResponseDTO dto = mapper.getShelterBoardDetail(idx);
+			return dto;
+		}else {
+			return null;
+		}
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드

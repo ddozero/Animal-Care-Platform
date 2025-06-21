@@ -32,4 +32,6 @@ public interface UserShelterMapper {
 	public List<ShelterBoardListResponseDTO> getShelterBoards(Map map);
 
 	public ShelterBoardDetailResponseDTO getShelterBoardDetail(int idx);
+
+	public int incrementViews(int idx);
 }

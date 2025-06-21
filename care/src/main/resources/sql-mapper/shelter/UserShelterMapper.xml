@@ -235,6 +235,14 @@ ORDER BY
 	IDX DESC
 LIMIT #{listSize} OFFSET #{cp}
 </select>
+<update id="incrementViews" parameterType="int">
+UPDATE
+	BOARDS
+SET
+	VIEWS = VIEWS + 1
+WHERE
+	IDX = #{idx}
+</update>
 <select id="getShelterBoardDetail" parameterType="int" resultType="com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO">
 SELECT
 	B.IDX,
