@@ -187,6 +187,13 @@ public class UserShelterController {
 		}
 	}
 
+	/**
+	 * 보호시설의 게시글 상세 조회 메서드
+	 * 
+	 * @param userIdx  보호시설 idx
+	 * @param boardIdx 게시글의 idx
+	 * @return 해당 게시글
+	 */
 	@GetMapping("/{userIdx}/boards/{boardIdx}")
 	public ResponseEntity<?> getShelterBoardDetail(@PathVariable int userIdx, @PathVariable int boardIdx) {
 		ShelterBoardDetailResponseDTO dto = service.getShelterBoardDetail(boardIdx);
@@ -194,7 +201,8 @@ public class UserShelterController {
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 글이 존재하지 않습니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<ShelterBoardDetailResponseDTO>(200, "게시글 조회 성공", dto));
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<ShelterBoardDetailResponseDTO>(200, "게시글 조회 성공", dto));
 		}
 
 	}
