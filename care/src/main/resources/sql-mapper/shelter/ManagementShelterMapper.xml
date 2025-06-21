@@ -44,5 +44,26 @@ SET
 WHERE
     USER_IDX = #{idx};
 </update>
+
+<select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ShelterVolunteerReviewResponseDTO">
+select
+	VR.IDX as reviewIdx,
+	VR.CONTENT as reviewContent,
+	VR.CREATED_AT as reviewDate,
+	REVIEWER.NICKNAME as reviewWriter,
+	V.TITLE as volunteerTitle,
+	V.IDX as volunteerIdx
+from
+	VOLUNTEERS V
+join VOLUNTEER_REVIEWS VR on
+	VR.VOLUNTEER_IDX = V.IDX
+join USERS REVIEWER on
+	VR.USER_IDX = REVIEWER.IDX
+where
+	V.USER_IDX = #{idx}
+	-- 로그인한 보호소의 USER_IDX
+order by
+	VR.CREATED_AT desc;
+</select>
  
  </mapper>
