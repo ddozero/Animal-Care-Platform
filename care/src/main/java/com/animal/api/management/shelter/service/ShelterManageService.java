@@ -4,6 +4,6 @@ import com.animal.api.management.shelter.model.response.AllManageShelterDTO;
 
 public interface ShelterManageService {
 
-	public AllManageShelterDTO getShelterInfo(int userIdx);
+	public AllManageShelterDTO getShelterInfo(int idx);
 
 }

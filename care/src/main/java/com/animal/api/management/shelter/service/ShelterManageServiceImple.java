@@ -15,8 +15,8 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	private ManagementShelterMapper mapper;
 
 	@Override
-	public AllManageShelterDTO getShelterInfo(int userIdx) {
-		AllManageShelterDTO dto = mapper.getShelterInfo(userIdx);
+	public AllManageShelterDTO getShelterInfo(int idx) {
+		AllManageShelterDTO dto = mapper.getShelterInfo(idx);
 		if (dto != null && dto.getDescription() != null) {
 			dto.setDescription(dto.getDescription().replaceAll("\n", "<br>"));
 		}

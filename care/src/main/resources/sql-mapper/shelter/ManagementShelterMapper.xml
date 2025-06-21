@@ -7,8 +7,8 @@
 
 <select id="getShelterInfo" parameterType="int" resultType="com.animal.api.management.shelter.model.response.AllManageShelterDTO">
 SELECT 
-	S.USER_IDX,
-	S.SHELTER_NAME,
+	S.USER_IDX AS IDX,
+	S.SHELTER_NAME AS SHELTER_NAME,
 	ST.NAME AS TYPE,
 	S.SHELTER_PERSON_NAME,
 	S.SHELTER_TEL,
@@ -20,11 +20,11 @@ SELECT
 	S.SHELTER_DESCRIPTION
 FROM
 	SHELTERS S
-JOIN
+LEFT JOIN
     SHELTER_TYPES ST ON
 	S.SHELTER_TYPE_IDX = ST.IDX
 WHERE
-    S.USER_IDX = #{userIdx};
+    S.USER_IDX = #{idx};
 </select>
  
  

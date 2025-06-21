@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AllManageShelterDTO {
 
-	private int userIdx;
+	private int idx;
 	private int typeIdx;
 	private String tel;
-	private String name;
+	private String shelterName;
 	private String personName;
 	private int zipCode;
 	private String address;
