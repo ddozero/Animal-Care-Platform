@@ -8,5 +8,7 @@ import com.animal.api.management.shelter.model.response.AllManageShelterDTO;
 public interface ManagementShelterMapper {
 
 	public AllManageShelterDTO getShelterInfo(int userIdx);
+	
+	public int updateSheterInfo(AllManageShelterDTO dto);
 
 }
