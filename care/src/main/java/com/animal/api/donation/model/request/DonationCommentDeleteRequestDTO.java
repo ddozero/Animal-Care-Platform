@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DonationCommentDeleteRequestDTO {
 	private int idx;
+	private int userIdx;
 }
