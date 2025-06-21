@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/find")
 @RequiredArgsConstructor
-public class FindController {
+public class FindUseridController {
 
 	private final FindService findService;
 	
