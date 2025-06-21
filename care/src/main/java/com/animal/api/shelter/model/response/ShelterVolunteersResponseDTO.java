@@ -1,4 +1,4 @@
-package com.animal.api.animal.model.response;
+package com.animal.api.shelter.model.response;
 
 import java.sql.Timestamp;
 
@@ -11,17 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AllAnimalListResponseDTO {
+public class ShelterVolunteersResponseDTO {
 	private int idx;
-	private String name;
-	private char gender;
-	private int age;
-	private int size;
-	private int neuter;
+	private String title;
+	private String shelterName;
+	private String location;
+	private String volunteerStatus;
+	private int volunteerTime;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Timestamp createAt;
-	private String breed;
-	private String type;
-	private String personality;
-	private String adoptionStatus;
+	private Timestamp createdAT;
 }

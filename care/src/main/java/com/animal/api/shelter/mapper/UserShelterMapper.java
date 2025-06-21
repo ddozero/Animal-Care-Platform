@@ -7,23 +7,31 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
-import com.animal.api.shelter.model.response.AllShelterListDTO;
-import com.animal.api.shelter.model.response.ShelterAnimalsDTO;
-import com.animal.api.shelter.model.response.ShelterDetailDTO;
-import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
+import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
+import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
+import com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO;
+import com.animal.api.shelter.model.response.ShelterBoardListResponseDTO;
+import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
 
 @Mapper
 public interface UserShelterMapper {
 
-	public List<AllShelterListDTO> getAllShelters(Map map);
+	public List<AllShelterListResponseDTO> getAllShelters(Map map);
 
-	public List<AllShelterListDTO> searchShelters(SearchShelterRequestDTO dto);
+	public List<AllShelterListResponseDTO> searchShelters(SearchShelterRequestDTO dto);
 
-	public ShelterDetailDTO getShelterDetail(int idx);
+	public ShelterDetailResponseDTO getShelterDetail(int idx);
 
-	public List<ShelterVolunteersDTO> getShelterVolunteers(Map map);
+	public List<ShelterVolunteersResponseDTO> getShelterVolunteers(Map map);
 
-	public List<ShelterAnimalsDTO> getAllShelterAnimals(Map map);
+	public List<ShelterAnimalsResponseDTO> getAllShelterAnimals(Map map);
 
-	public List<ShelterAnimalsDTO> searchShelterAnimals(SearchShelterAnimalRequestDTO dto);
+	public List<ShelterAnimalsResponseDTO> searchShelterAnimals(SearchShelterAnimalRequestDTO dto);
+
+	public List<ShelterBoardListResponseDTO> getShelterBoards(Map map);
+
+	public ShelterBoardDetailResponseDTO getShelterBoardDetail(int idx);
+
+	public int incrementViews(int idx);
 }
