@@ -78,10 +78,14 @@ VALUES(#{userIdx}, #{donationIdx}, #{content})
 </insert>
 
 <update id="updateDonationComment" parameterType="com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO">
-UPDATE DONATION_COMMENTS  
-SET CONTENT= #{content},
-    CREATED_AT=NOW() 
-WHERE USER_IDX=#{userIdx} 
-AND IDX =#{idx}
+UPDATE
+	DONATION_COMMENTS
+SET
+	CONTENT = #{content},
+	CREATED_AT = NOW()
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+	AND DONATION_IDX = #{donationIdx}
 </update>
 </mapper>
