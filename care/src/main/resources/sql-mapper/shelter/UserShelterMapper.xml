@@ -262,4 +262,52 @@ JOIN SHELTERS S
 WHERE
 	B.IDX = #{idx}
 </select>
+<select id="getShelterVolunteerReviews" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO">
+SELECT
+	VR.IDX,
+	VR.USER_IDX,
+	U.NICKNAME,
+	V.TITLE,
+	VR.CONTENT,
+	VR.CREATED_AT,
+	VR.REF,
+	VR.LEV,
+	VR.TURN
+FROM
+	VOLUNTEER_REVIEWS VR
+JOIN USERS U ON
+	VR.USER_IDX = U.IDX
+JOIN VOLUNTEERS V ON
+	VR.VOLUNTEER_IDX = V.IDX
+WHERE
+	V.USER_IDX = #{idx}
+ORDER BY
+	VR.REF DESC,
+	VR.TURN ASC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+<select id="getShelterAdoptionReviews" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO">
+SELECT
+	AR.IDX,
+	AR.USER_IDX,
+	U.NICKNAME,
+	A.NAME AS 'ANIMAL_NAME',
+	AR.CONTENT,
+	AR.CREATED_AT,
+	AR.REF,
+	AR.LEV,
+	AR.TURN
+FROM
+	ADOPTION_REVIEWS AR
+JOIN USERS U ON
+	AR.USER_IDX = U.IDX
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+WHERE
+	A.USER_IDX = #{idx}
+ORDER BY
+	AR.REF DESC,
+	AR.TURN ASC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
 </mapper>
