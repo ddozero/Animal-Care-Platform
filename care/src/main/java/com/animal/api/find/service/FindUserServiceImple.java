@@ -1,5 +1,6 @@
 package com.animal.api.find.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,12 @@ public class FindUserServiceImple implements FindUserService {
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final CaptchaServiceTest captchaService;  // 추후 프론트 개발 시 실제 캡챠랑 연동
 	
+	/**
+	 * @Value("${google.recaptcha.secret}") 프론트 구현 단계 시 연결 예정
+       private String recaptchaSecretKey;  외부 설정으로 주입
+	 */
+    @Value("${google.recaptcha.secret}")
+    private String recaptchaSecretKey; // ← 외부 설정으로 주입
     /**
      * 일반 사용자 아이디 찾기
      * 이메일 인증 코드 검증 후,
@@ -49,7 +56,8 @@ public class FindUserServiceImple implements FindUserService {
         return response;
     }
     /**
-     * 일반 사용자 비밀번호 찾기 시 아이디 입력
+     * 일반 사용자 비밀번호 찾기  
+     * 1단계: 아이디 확인
      * @param userid
      */
     
@@ -90,7 +98,7 @@ public class FindUserServiceImple implements FindUserService {
         if (!requestCode.equals(savedCode)) {
             throw new CustomException(400, "유효하지 않거나 만료된 인증코드입니다.");
         }
-        //인증 완료
+        //인증 완료 후 사용 처리
         certificationMapper.markAsUsed(cert.getIdx()); 
 	}
 
@@ -123,6 +131,14 @@ public class FindUserServiceImple implements FindUserService {
         // 3. 비밀번호 유효성 검사
         String newPassword = dto.getNewPassword();
         String confirmPassword = dto.getConfirmPassword();
+        
+        if (newPassword == null || newPassword.length() < 8 || newPassword.length() > 20) {
+            throw new CustomException(400, "비밀번호는 8자 이상 20자 이하로 입력해주세요.");
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new CustomException(400, "비밀번호 확인이 일치하지 않습니다.");
+        }
         
 		// 4. 비밀번호 암호화 후 업데이트
 		String encodedPassword = passwordEncoder.encode(dto.getNewPassword());

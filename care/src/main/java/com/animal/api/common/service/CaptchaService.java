@@ -2,6 +2,7 @@ package com.animal.api.common.service;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,14 +16,15 @@ import org.springframework.web.client.RestTemplate;
 @Primary
 public class CaptchaService {
 	
-    private final String SECRET_KEY = "구글에서 발급받은-secret-key";
+	@Value("${google.recaptcha.secret}")
+	private String recaptchaSecretKey;
 
     public boolean verify(String captchaToken) {
         String apiUrl = "https://www.google.com/recaptcha/api/siteverify";
         RestTemplate restTemplate = new RestTemplate();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("secret", SECRET_KEY);
+        params.add("secret", recaptchaSecretKey);
         params.add("response", captchaToken);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, new HttpHeaders());

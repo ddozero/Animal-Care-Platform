@@ -52,12 +52,7 @@ public class FindUserPasswordController {
      */
     @PostMapping("/reset")
     public ResponseEntity<?> resetPassword(@RequestBody @Valid FindUserPasswordResetRequestDTO dto) {
-        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
-            throw new CustomException(400, "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-        }
-        
         findPasswordService.resetUserPassword(dto);
-        
         return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "비밀번호가 성공적으로 변경되었습니다.", null));
     }
 }
