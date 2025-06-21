@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AllShelterListDTO {
+public class AllShelterListResponseDTO {
 	private int idx;
 	private String shelterName;
 	private String shelterAddress;

@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
-import com.animal.api.shelter.model.response.AllShelterListDTO;
-import com.animal.api.shelter.model.response.ShelterAnimalsDTO;
-import com.animal.api.shelter.model.response.ShelterBoardList;
-import com.animal.api.shelter.model.response.ShelterDetailDTO;
-import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
+import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
+import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
+import com.animal.api.shelter.model.response.ShelterBoardListResponseDTO;
+import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
 import com.animal.api.shelter.service.UserShelterService;
 
 /**
@@ -25,10 +25,11 @@ import com.animal.api.shelter.service.UserShelterService;
  * 
  * @author Rege-97
  * @since 2025-06-20
- * @see com.animal.api.shelter.model.response.AllShelterListDTO
- * @see com.animal.api.shelter.model.response.ShelterAnimalsDTO
- * @see com.animal.api.shelter.model.response.ShelterDetailDTO
- * @see com.animal.api.shelter.model.response.ShelterVolunteersDTO
+ * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterDetailResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO
  */
 @RestController
 @RequestMapping("/api/shelters")
@@ -53,7 +54,7 @@ public class UserShelterController {
 			@RequestParam(value = "shelterAddress", required = false) String shelterAddress,
 			@RequestParam(value = "shelterType", required = false) String shelterType) {
 		int listSize = 3;
-		List<AllShelterListDTO> shelterList = null;
+		List<AllShelterListResponseDTO> shelterList = null;
 
 		if (shelterName != null || shelterAddress != null || shelterType != null) {
 			shelterList = service.searchShelters(listSize, cp, shelterName, shelterAddress, shelterType);
@@ -67,7 +68,7 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllShelterListDTO>>(200, "조회 성공", shelterList));
+					.body(new OkResponseDTO<List<AllShelterListResponseDTO>>(200, "조회 성공", shelterList));
 		}
 	}
 
@@ -79,11 +80,12 @@ public class UserShelterController {
 	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getShelterDetail(@PathVariable int idx) {
-		ShelterDetailDTO dto = service.getShelterDetail(idx);
+		ShelterDetailResponseDTO dto = service.getShelterDetail(idx);
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 보호시설이 존재하지 않습니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<ShelterDetailDTO>(200, "조회 성공", dto));
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<ShelterDetailResponseDTO>(200, "조회 성공", dto));
 		}
 	}
 
@@ -98,7 +100,7 @@ public class UserShelterController {
 	public ResponseEntity<?> getShelterVolunteers(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
-		List<ShelterVolunteersDTO> volunteerList = service.getShelterVolunteers(listSize, cp, idx);
+		List<ShelterVolunteersResponseDTO> volunteerList = service.getShelterVolunteers(listSize, cp, idx);
 
 		if (volunteerList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
@@ -106,7 +108,7 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterVolunteersDTO>>(200, "조회 성공", volunteerList));
+					.body(new OkResponseDTO<List<ShelterVolunteersResponseDTO>>(200, "조회 성공", volunteerList));
 		}
 	}
 
@@ -140,7 +142,7 @@ public class UserShelterController {
 			@RequestParam(value = "name", required = false) String name) {
 		int listSize = 3;
 
-		List<ShelterAnimalsDTO> animalList = null;
+		List<ShelterAnimalsResponseDTO> animalList = null;
 
 		if (type != null || breed != null || gender != null || neuter != 0 || age != 0 || adoptionStatus != null
 				|| personality != null || size != 0 || name != null) {
@@ -156,16 +158,23 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterAnimalsDTO>>(200, "조회 성공", animalList));
+					.body(new OkResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList));
 		}
 	}
 
+	/**
+	 * 보호시설의 상세 정보에서 보호시설이 남긴 게시글 조회
+	 * 
+	 * @param idx 보호시설의 idx
+	 * @param cp  현재 페이지
+	 * @return 해당 보호시설의 게시물 리스트
+	 */
 	@GetMapping("/{idx}/boards")
 	public ResponseEntity<?> getShelterBoards(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
 
-		List<ShelterBoardList> boardList = service.getShelterBoards(listSize, cp, idx);
+		List<ShelterBoardListResponseDTO> boardList = service.getShelterBoards(listSize, cp, idx);
 
 		if (boardList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
@@ -173,7 +182,7 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterBoardList>>(200, "조회 성공", boardList));
+					.body(new OkResponseDTO<List<ShelterBoardListResponseDTO>>(200, "조회 성공", boardList));
 		}
 	}
 

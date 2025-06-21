@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.animal.api.shelter.mapper.UserShelterMapper">
-<select id="getAllShelters" parameterType="Map" resultType="com.animal.api.shelter.model.response.AllShelterListDTO">
+<select id="getAllShelters" parameterType="Map" resultType="com.animal.api.shelter.model.response.AllShelterListResponseDTO">
 SELECT
 	S.USER_IDX AS 'IDX',
 	S.SHELTER_NAME,
@@ -19,7 +19,7 @@ ORDER BY
 	S.USER_IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
-<select id="searchShelters" parameterType="com.animal.api.shelter.model.request.SearchShelterRequestDTO" resultType="com.animal.api.shelter.model.response.AllShelterListDTO">
+<select id="searchShelters" parameterType="com.animal.api.shelter.model.request.SearchShelterRequestDTO" resultType="com.animal.api.shelter.model.response.AllShelterListResponseDTO">
 SELECT
 	S.USER_IDX AS 'IDX',
 	S.SHELTER_NAME,
@@ -45,7 +45,7 @@ ORDER BY
 	S.USER_IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
-<select id="getShelterDetail" parameterType="int" resultType="com.animal.api.shelter.model.response.ShelterDetailDTO">
+<select id="getShelterDetail" parameterType="int" resultType="com.animal.api.shelter.model.response.ShelterDetailResponseDTO">
 SELECT
 	S.USER_IDX AS 'IDX',
 	S.SHELTER_NAME,
@@ -86,7 +86,7 @@ JOIN SHELTER_TYPES ST
 WHERE
 	S.USER_IDX = ${idx}
 </select>
-<select id="getShelterVolunteers" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterVolunteersDTO">
+<select id="getShelterVolunteers" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO">
 SELECT
 	V.IDX,
 	V.TITLE,
@@ -109,7 +109,7 @@ ORDER BY
 	V.IDX DESC
 LIMIT ${listSize} OFFSET ${cp}	
 </select>
-<select id="getAllShelterAnimals" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterAnimalsDTO">
+<select id="getAllShelterAnimals" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO">
 SELECT
 	A.IDX,
 	s.USER_IDX,
@@ -149,7 +149,7 @@ where s.USER_IDX = ${idx}
 ORDER BY IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
-<select id="searchShelterAnimals" parameterType="com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO" resultType="com.animal.api.shelter.model.response.ShelterAnimalsDTO">
+<select id="searchShelterAnimals" parameterType="com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO" resultType="com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO">
 SELECT
 	A.IDX,
 	S.USER_IDX,
@@ -213,7 +213,7 @@ JOIN SHELTERS S
 ORDER BY IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
-<select id="getShelterBoards" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterBoardList">
+<select id="getShelterBoards" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterBoardListResponseDTO">
 SELECT
 	B.IDX,
 	S.SHELTER_NAME,

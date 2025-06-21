@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ShelterAnimalsDTO {
+public class ShelterAnimalsResponseDTO {
 	private int idx;
 	private int userIdx;
 	private String name;

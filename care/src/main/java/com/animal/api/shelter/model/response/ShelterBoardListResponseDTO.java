@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShelterBoardList {
+public class ShelterBoardListResponseDTO {
 	private int idx;
 	private String shelterName;
 	private String title;
