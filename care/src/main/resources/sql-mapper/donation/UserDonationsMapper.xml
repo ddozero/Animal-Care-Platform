@@ -76,4 +76,12 @@ INSERT
 	DONATION_COMMENTS(USER_IDX, DONATION_IDX, CONTENT)
 VALUES(#{userIdx}, #{donationIdx}, #{content})
 </insert>
+
+<update id="updateDonationComment" parameterType="com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO">
+UPDATE DONATION_COMMENTS  
+SET CONTENT= #{content},
+    CREATED_AT=NOW() 
+WHERE USER_IDX=#{userIdx} 
+AND IDX =#{idx}
+</update>
 </mapper>
