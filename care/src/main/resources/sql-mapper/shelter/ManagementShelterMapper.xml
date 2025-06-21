@@ -61,7 +61,6 @@ join USERS REVIEWER on
 	VR.USER_IDX = REVIEWER.IDX
 where
 	V.USER_IDX = #{idx}
-	-- 로그인한 보호소의 USER_IDX
 order by
 	VR.CREATED_AT desc;
 </select>
