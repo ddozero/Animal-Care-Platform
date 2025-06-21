@@ -167,7 +167,7 @@ WHERE
 	IDX = #{volunteerIdx}
 </select>
 
-<update id="submitVolunteers" parameterType="com.animal.api.volunteers.model.request.VolunteersSubmitRequestDTO">
+<insert id="submitVolunteers" parameterType="com.animal.api.volunteers.model.request.VolunteersSubmitRequestDTO">
 INSERT
 	INTO
 	VOLUNTEER_REQUESTS(
@@ -183,8 +183,7 @@ INSERT
 	GROUP_TEL,
 	DESCRIPTION,
 	MALE,
-	FEMALE,
-	CREATED_AT
+	FEMALE
 )
 VALUES(
 	#{volunteerIdx},
@@ -199,9 +198,8 @@ VALUES(
 	#{groupTel},
 	#{description},
 	#{male},
-	#{female},
-	#{createdAt}
+	#{female}
 )
-</update>
+</insert>
 
 </mapper>
