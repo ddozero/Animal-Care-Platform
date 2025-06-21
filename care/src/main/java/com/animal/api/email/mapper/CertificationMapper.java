@@ -9,7 +9,11 @@ import com.animal.api.email.model.vo.CertificationVO;
 public interface CertificationMapper {
 
     void insertCertification(CertificationVO cert);
+    
     CertificationVO findLatestValidByEmail(@Param("email") String email);
+    
     void markAsUsed(@Param("idx") int idx);
+    
+    CertificationVO findLatestUsedByEmail(String email);
     
 }

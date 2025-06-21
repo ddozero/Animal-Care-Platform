@@ -12,22 +12,41 @@
             #{userIdx}, #{token}, #{expiresAt}, #{used}
         )
     </insert>
+    
+	<resultMap id="CertificationResultMap" type="com.animal.api.email.model.vo.CertificationVO">
+	    <id property="idx" column="IDX"/>
+	    <result property="userIdx" column="USER_IDX"/>
+	    <result property="token" column="TOKEN"/>
+	    <result property="expiresAt" column="EXPIRES_AT"/>
+	    <result property="used" column="USED"/>
+	    <result property="createdAt" column="CREATED_AT"/>
+	</resultMap>
 
-    <select id="findLatestValidByEmail" resultType="com.animal.api.email.model.vo.CertificationVO">
-        SELECT C.*
-        FROM CERTIFICATIONS C
-        JOIN USERS U ON U.IDX = C.USER_IDX
-        WHERE U.EMAIL = #{email}
-          AND C.EXPIRES_AT > CURRENT_TIMESTAMP
-          AND C.USED = 0
-        ORDER BY C.CREATED_AT DESC
-        LIMIT 1
-    </select>
+	<select id="findLatestValidByEmail" resultMap="CertificationResultMap">
+	    SELECT C.*
+	    FROM CERTIFICATIONS C
+	    JOIN USERS U ON U.IDX = C.USER_IDX
+	    WHERE LOWER(U.EMAIL) = LOWER(#{email})
+	      AND C.EXPIRES_AT > CURRENT_TIMESTAMP
+	      AND C.USED = 0
+	    ORDER BY C.CREATED_AT DESC
+	    LIMIT 1
+	</select>
 
     <update id="markAsUsed">
         UPDATE CERTIFICATIONS
         SET USED = 1
         WHERE IDX = #{idx}
     </update>
+    
+    <select id="findLatestUsedByEmail" resultMap="CertificationResultMap">
+	    SELECT C.*
+	    FROM CERTIFICATIONS C
+	    JOIN USERS U ON U.IDX = C.USER_IDX
+	    WHERE LOWER(U.EMAIL) = LOWER(#{email})
+	      AND C.USED = 1
+	    ORDER BY C.CREATED_AT DESC
+	    LIMIT 1
+	</select>
 
 </mapper>
