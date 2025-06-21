@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
+import com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
 import com.animal.api.shelter.service.UserShelterService;
 
@@ -205,6 +207,40 @@ public class UserShelterController {
 					.body(new OkResponseDTO<ShelterBoardDetailResponseDTO>(200, "게시글 조회 성공", dto));
 		}
 
+	}
+
+	@GetMapping("/{idx}/reviews/Voluntees")
+	public ResponseEntity<?> getShelterVolunteerReviews(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp) {
+		int listSize = 3;
+
+		List<ShelterVolunteerReviewResponseDTO> reviewList = service.getShelterVolunteerReviews(listSize, cp, idx);
+
+		if (reviewList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+		} else if (reviewList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterVolunteerReviewResponseDTO>>(200, "조회 성공", reviewList));
+		}
+	}
+
+	@GetMapping("/{idx}/reviews/adoptions")
+	public ResponseEntity<?> getShelterAdoptionReviews(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp) {
+		int listSize = 3;
+
+		List<ShelterAdoptionReviewResponseDTO> reviewList = service.getShelterAdoptionReviews(listSize, cp, idx);
+
+		if (reviewList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+		} else if (reviewList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterAdoptionReviewResponseDTO>>(200, "조회 성공", reviewList));
+		}
 	}
 
 }
