@@ -106,7 +106,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 				msg = "응원 댓글 성공";
 			} else {
 				result = ERROR;
-				msg = " 잘못된 접근";
+				msg = "잘못된 접근";
 			}
 		}
 		map.put("result", result);
@@ -123,6 +123,10 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		if (dto.getIdx() == 0) {
 			result = COMMENT_NOT_FOUND;
 			msg = "잘못된 접근:댓글정보없음";
+			errorCheck = true;
+		} else if (dto.getDonationIdx() == 0) {
+			result = DONATION_NOT_FOUND;
+			msg = "잘못된 접근:기부정보없음";
 			errorCheck = true;
 		} else if (dto.getUserIdx() == 0) {
 			result = USER_NOT_FOUND;
@@ -142,7 +146,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 				msg = "응원 댓글 수정 성공";
 			} else {
 				result = ERROR;
-				msg = " 잘못된 접근";
+				msg = "잘못된 접근";
 			}
 		}
 		map.put("result", result);
