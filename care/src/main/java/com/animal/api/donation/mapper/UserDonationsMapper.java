@@ -24,5 +24,5 @@ public interface UserDonationsMapper {
 
 	public int addDonationComment(DonationCommentRequestDTO dto);
 
-	public int addDonationComment(DonationCommentUpdateRequestDTO dto);
+	public int updateDonationComment(DonationCommentUpdateRequestDTO dto);
 }
