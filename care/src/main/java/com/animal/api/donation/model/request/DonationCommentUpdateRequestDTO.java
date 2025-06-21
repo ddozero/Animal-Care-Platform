@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class DonationCommentUpdateRequestDTO {
 	private int idx;
 	private int userIdx;
+	private int donationIdx;
 	private String content;
 }
