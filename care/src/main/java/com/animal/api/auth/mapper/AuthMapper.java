@@ -1,6 +1,7 @@
 package com.animal.api.auth.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.animal.api.auth.model.vo.ShelterVO;
 import com.animal.api.auth.model.vo.UserVO;
@@ -16,4 +17,7 @@ public interface AuthMapper {
 
 	// 로그인 성공 시 마지막 로그인 시간 갱신
 	void updateLastLoginAt(int idx);
+	
+	// 이메일로 사용자 조회 
+    UserVO findByEmail(@Param("email") String email);
 }

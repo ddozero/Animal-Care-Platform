@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.management.shelter.mapper.ManagementShelterMapper">
+
+<select id="getShelterInfo" parameterType="int" resultType="com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO">
+SELECT 
+	S.USER_IDX AS idx,
+	S.SHELTER_NAME AS shelterName,
+	ST.NAME AS type,
+	S.SHELTER_PERSON_NAME AS personName,
+	S.SHELTER_TEL AS tel,
+	S.SHELTER_EMAIL AS email,
+	S.SHELTER_ZIP_CODE AS zipCode,
+	S.SHELTER_ADDRESS AS address,
+	S.SHELTER_ADDRESS_DETAIL AS addressDetail,
+	S.SHELTER_BUSINESS_NUMBER AS businessNumber,
+	S.SHELTER_DESCRIPTION AS description,
+	S.SHELTER_BUSINESS_FILE as businessFile
+FROM
+	SHELTERS S
+LEFT JOIN
+    SHELTER_TYPES ST ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+WHERE
+    S.USER_IDX = #{idx};
+</select>
+
+<update id="updateSheterInfo" parameterType="com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO">
+UPDATE SHELTERS
+SET
+    SHELTER_NAME = #{shelterName},
+    SHELTER_PERSON_NAME = #{personName},
+    SHELTER_TEL = #{tel},
+    SHELTER_EMAIL = #{email},
+    SHELTER_ZIP_CODE = #{zipCode},
+    SHELTER_ADDRESS = #{address},
+    SHELTER_ADDRESS_DETAIL = #{addressDetail},
+    SHELTER_BUSINESS_NUMBER = #{businessNumber},
+    SHELTER_BUSINESS_FILE = #{businessFile},
+    SHELTER_DESCRIPTION = #{description}
+WHERE
+    USER_IDX = #{idx};
+</update>
+ 
+ </mapper>

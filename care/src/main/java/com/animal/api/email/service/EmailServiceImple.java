@@ -8,6 +8,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+/**
+ * 
+ * @author Whistler95
+ * @since 2025-06-20
+ * 회원가입시 1회용 세션 이메일 인증 Service 
+ */
 @Service
 @Primary
 public class EmailServiceImple implements EmailService {
