@@ -15,13 +15,25 @@ import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterDTO;
 import com.animal.api.management.shelter.service.ShelterManageService;
 
+/**
+ * 보호시설 관리자 페이지의 보호시설관리 관련 컨트롤러 클래스
+ * 
+ * @author doyeong
+ * @since 2025-06-21
+ * @see com.animal.api.management.shelter.model.response.AllManageShelterDTO
+ */
 @RestController
 @RequestMapping("api/management/shelter")
 public class ShelterManageController {
 
 	@Autowired
 	private ShelterManageService shelterService;
-
+	
+	/**
+	 * 
+	 * @param session 로그인 검증 세션
+	 * @return 로그인한 보호소 기본 정보
+	 */
 	@GetMapping
 	public ResponseEntity<?> getShelterInfo(HttpSession session) {
 
