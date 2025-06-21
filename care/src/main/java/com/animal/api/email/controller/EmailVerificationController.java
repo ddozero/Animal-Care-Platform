@@ -20,7 +20,8 @@ import lombok.RequiredArgsConstructor;
 /**
  * 
  * @author Whistler95
- * @return
+ * @since 2025-06-20
+ * @return 이메일 인증 완료
  */
 
 @RestController
@@ -45,6 +46,7 @@ public class EmailVerificationController {
 		String body = "인증번호는 [" + code + "] 입니다. 회원가입 화면에 정확히 입력 바랍니다.";
 		
 		emailService.sendEmail(email, subject, body);
+		
 		
 		//세션에 인증코드 저장
 		session.setAttribute("emailAuthCode", code);
