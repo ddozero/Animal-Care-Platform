@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.animal.api.auth.exception.CustomException;
 import com.animal.api.auth.model.vo.UserVO;
-import com.animal.api.common.service.CaptchaService;
+import com.animal.api.common.service.CaptchaServiceTest;
 import com.animal.api.email.mapper.CertificationMapper;
 import com.animal.api.email.model.vo.CertificationVO;
 import com.animal.api.find.mapper.FindMapper;
@@ -24,7 +24,7 @@ public class FindUserServiceImple implements FindUserService {
 	private final FindMapper findMapper;
 	private final CertificationMapper certificationMapper;
 	private final BCryptPasswordEncoder passwordEncoder;
-	private final CaptchaService captchaService;
+	private final CaptchaServiceTest captchaService;  // 추후 프론트 개발 시 실제 캡챠랑 연동
 	
     /**
      * 일반 사용자 아이디 찾기
