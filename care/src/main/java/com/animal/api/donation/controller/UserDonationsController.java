@@ -30,12 +30,13 @@ import com.animal.api.donation.service.UserDonationsService;
 
 /**
  * @author consgary
- * @since 2025.06.20
+ * @since 2025.06.21
  * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
  * @see com.animal.api.donation.model.response.DonationDetailResponseDTO
  * @see com.animal.api.donation.model.response.AllDonationCommentsResponseDTO
  * @see com.animal.api.donation.model.response.AllDonationUserListResponseDTO
  * @see com.animal.api.donation.model.request.DonationCommentRequestDTO
+ * @see com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO
  */
 @RestController
 @RequestMapping("/api/donations")
@@ -159,7 +160,16 @@ public class UserDonationsController {
 					.body(new ErrorResponseDTO(400, (String) resultMap.get("msg")));
 		}
 	}
-
+	
+	/**
+	 * 응원 댓글 수정 
+	 * 
+	 * @param idx 기부 번호
+	 * @param dcIdx 댓글 번호
+	 * @param dto 댓글 수정 폼
+	 * @param session 로그인 검증용
+	 * @return 댓글 수정 성공,실패 메세지
+	 */
 	@PutMapping("{idx}/comments/{dcIdx}")
 	public ResponseEntity<?> updateDonationComment(@PathVariable int idx, @PathVariable int dcIdx,
 			@RequestBody DonationCommentUpdateRequestDTO dto, HttpSession session) {
