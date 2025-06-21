@@ -17,7 +17,7 @@ JOIN SHELTER_TYPES ST
 	S.SHELTER_TYPE_IDX = ST.IDX
 ORDER BY
 	S.USER_IDX DESC
-LIMIT ${listSize} OFFSET ${cp}
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 <select id="searchShelters" parameterType="com.animal.api.shelter.model.request.SearchShelterRequestDTO" resultType="com.animal.api.shelter.model.response.AllShelterListResponseDTO">
 SELECT
@@ -43,7 +43,7 @@ JOIN SHELTER_TYPES ST
 </where>	
 ORDER BY
 	S.USER_IDX DESC
-LIMIT ${listSize} OFFSET ${cp}
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 <select id="getShelterDetail" parameterType="int" resultType="com.animal.api.shelter.model.response.ShelterDetailResponseDTO">
 SELECT
@@ -70,13 +70,13 @@ SELECT
 	FROM
 		VOLUNTEER_REVIEWS VR
 	WHERE
-		VR.USER_IDX = ${idx}) + (
+		VR.USER_IDX = #{idx}) + (
 	SELECT
 		COUNT(*)
 	FROM
 		ADOPTION_REVIEWS AR
 	WHERE
-		AR.USER_IDX = ${idx} ) AS 'REVIEW_COUNT',
+		AR.USER_IDX = #{idx} ) AS 'REVIEW_COUNT',
 	ST.NAME AS 'SHELTER_TYPE'
 FROM
 	SHELTERS S
@@ -84,7 +84,7 @@ JOIN SHELTER_TYPES ST
 	ON
 	S.SHELTER_TYPE_IDX = ST.IDX
 WHERE
-	S.USER_IDX = ${idx}
+	S.USER_IDX = #{idx}
 </select>
 <select id="getShelterVolunteers" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO">
 SELECT
@@ -104,10 +104,10 @@ JOIN SHELTERS s
 ON
 	V.USER_IDX = s.USER_IDX
 WHERE
-	V.USER_IDX = ${idx}
+	V.USER_IDX = #{idx}
 ORDER BY
 	V.IDX DESC
-LIMIT ${listSize} OFFSET ${cp}	
+LIMIT #{listSize} OFFSET #{cp}	
 </select>
 <select id="getAllShelterAnimals" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO">
 SELECT
@@ -145,9 +145,9 @@ JOIN ADOPTION_STATUS AS2
 	A.ADOPTION_STATUS_IDX = AS2.IDX
 JOIN SHELTERS s 
 	ON A.USER_IDX =s.USER_IDX
-where s.USER_IDX = ${idx}	
+where s.USER_IDX = #{idx}	
 ORDER BY IDX DESC
-LIMIT ${listSize} OFFSET ${cp}
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 <select id="searchShelterAnimals" parameterType="com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO" resultType="com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO">
 SELECT
