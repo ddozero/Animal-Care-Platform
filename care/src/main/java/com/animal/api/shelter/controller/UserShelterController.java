@@ -27,11 +27,14 @@ import com.animal.api.shelter.service.UserShelterService;
  * 사용자 기준 보호시설 관련 컨트롤러 클래스
  * 
  * @author Rege-97
- * @since 2025-06-20
+ * @since 2025-06-21
  * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterBoardListResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterDetailResponseDTO
- * @see com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO
  */
 @RestController
@@ -209,7 +212,14 @@ public class UserShelterController {
 
 	}
 
-	@GetMapping("/{idx}/reviews/Voluntees")
+	/**
+	 * 해당 보호시설의 봉사에 남겨진 리뷰 조회 메서드
+	 * 
+	 * @param idx 보소시설 idx
+	 * @param cp  현재 페이지
+	 * @return 봉사 리뷰 리스트
+	 */
+	@GetMapping("/{idx}/reviews/voluntees")
 	public ResponseEntity<?> getShelterVolunteerReviews(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
@@ -226,6 +236,13 @@ public class UserShelterController {
 		}
 	}
 
+	/**
+	 * 해당 보호시설의 입양에 남겨진 리뷰 조회 메서드
+	 * 
+	 * @param idx 보소시설 idx
+	 * @param cp  현재 페이지
+	 * @return 입양 리뷰 리스트
+	 */
 	@GetMapping("/{idx}/reviews/adoptions")
 	public ResponseEntity<?> getShelterAdoptionReviews(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
