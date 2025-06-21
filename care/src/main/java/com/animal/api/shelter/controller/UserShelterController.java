@@ -15,6 +15,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
+import com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
@@ -184,6 +185,18 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<ShelterBoardListResponseDTO>>(200, "조회 성공", boardList));
 		}
+	}
+
+	@GetMapping("/{userIdx}/boards/{boardIdx}")
+	public ResponseEntity<?> getShelterBoardDetail(@PathVariable int userIdx, @PathVariable int boardIdx) {
+		ShelterBoardDetailResponseDTO dto = service.getShelterBoardDetail(boardIdx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 글이 존재하지 않습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<ShelterBoardDetailResponseDTO>(200, "게시글 조회 성공", dto));
+		}
+
 	}
 
 }
