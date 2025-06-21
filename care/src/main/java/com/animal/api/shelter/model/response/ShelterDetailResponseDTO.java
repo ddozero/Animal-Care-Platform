@@ -2,10 +2,12 @@ package com.animal.api.shelter.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class ShelterDetailDTO {
+@NoArgsConstructor
+public class ShelterDetailResponseDTO {
 	private int idx;
 	private String shelterName;
 	private String shelterTel;

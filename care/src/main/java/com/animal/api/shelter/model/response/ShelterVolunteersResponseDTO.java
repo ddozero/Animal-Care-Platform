@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class ShelterVolunteersDTO {
+@NoArgsConstructor
+public class ShelterVolunteersResponseDTO {
 	private int idx;
 	private String title;
 	private String shelterName;

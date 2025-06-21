@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.management.shelter.mapper.ManagementShelterMapper">
+
+<select id="getShelterInfo" parameterType="int" resultType="com.animal.api.management.shelter.model.response.AllManageShelterDTO">
+SELECT 
+	S.USER_IDX AS IDX,
+	S.SHELTER_NAME AS SHELTER_NAME,
+	ST.NAME AS TYPE,
+	S.SHELTER_PERSON_NAME,
+	S.SHELTER_TEL,
+	S.SHELTER_EMAIL,
+	S.SHELTER_ZIP_CODE,
+	S.SHELTER_ADDRESS,
+	S.SHELTER_ADDRESS_DETAIL,
+	S.SHELTER_BUSINESS_NUMBER,
+	S.SHELTER_DESCRIPTION
+FROM
+	SHELTERS S
+LEFT JOIN
+    SHELTER_TYPES ST ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+WHERE
+    S.USER_IDX = #{idx};
+</select>
+ 
+ 
+ </mapper>
