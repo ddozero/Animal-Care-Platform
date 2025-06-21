@@ -31,5 +31,5 @@ public interface UserDonationsService {
 
 	public Map updateDonationComment(DonationCommentUpdateRequestDTO dto);
 
-	public int deleteDonationComment(DonationCommentDeleteRequestDTO dto);
+	public Map deleteDonationComment(DonationCommentDeleteRequestDTO dto);
 }

@@ -156,8 +156,34 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	}
 
 	@Override
-	public int deleteDonationComment(DonationCommentDeleteRequestDTO dto) {
+	public Map deleteDonationComment(DonationCommentDeleteRequestDTO dto) {
+		Map map = new HashMap();
+		int result = 0;
+		String msg = null;
+		Boolean errorCheck = false;
+		if (dto.getIdx() == 0) {
+			result = COMMENT_NOT_FOUND;
+			msg = "잘못된 접근:댓글정보없음";
+			errorCheck = true;
+		} else if (dto.getUserIdx() == 0) {
+			result = USER_NOT_FOUND;
+			msg = "잘못된 접근:유저정보없음";
+			errorCheck = true;
+		}
 
-		return 0;
+		if (!errorCheck) {
+			int count = mapper.deleteDonationComment(dto);
+
+			if (count > 0) {
+				result = POST_SUCCESS;
+				msg = "응원 댓글 삭제 성공";
+			} else {
+				result = ERROR;
+				msg = "잘못된 접근";
+			}
+		}
+		map.put("result", result);
+		map.put("msg", msg);
+		return map;
 	}
 }
