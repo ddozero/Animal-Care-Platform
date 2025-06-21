@@ -69,6 +69,13 @@
 	    WHERE EMAIL = #{email}
 	      AND STATUS = 1
 	</select>
+	
+	<select id="findByUserid" resultType="com.animal.api.auth.model.vo.UserVO">
+	    SELECT *
+	    FROM USERS
+	    WHERE ID = #{userid}
+	      AND STATUS = 1
+	</select>
 
 
 

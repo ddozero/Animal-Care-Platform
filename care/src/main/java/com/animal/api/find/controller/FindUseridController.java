@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.find.model.request.FindUserIdRequestDTO;
 import com.animal.api.find.model.response.FindUserIdResponseDTO;
-import com.animal.api.find.service.FindService;
+import com.animal.api.find.service.FindUserService;
 
 import lombok.RequiredArgsConstructor;
 /**
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FindUseridController {
 
-	private final FindService findService;
+	private final FindUserService findService;
 	
 	@PostMapping("/userid")
 	public ResponseEntity<?> findUserId(@RequestBody FindUserIdRequestDTO request) {

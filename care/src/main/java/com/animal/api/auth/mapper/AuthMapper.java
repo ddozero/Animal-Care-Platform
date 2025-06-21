@@ -20,4 +20,7 @@ public interface AuthMapper {
 	
 	// 이메일로 사용자 조회 
     UserVO findByEmail(@Param("email") String email);
+    
+    // 사용자 비밀번호 찾기 조회 
+    UserVO findByUserid(@Param("userid") String userid);
 }

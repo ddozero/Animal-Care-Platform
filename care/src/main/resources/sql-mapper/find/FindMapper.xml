@@ -4,13 +4,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.animal.api.find.mapper.FindMapper">
-
+	<!-- [아이디 찾기] 이름 + 이메일로 ID, 가입일자 조회  -->
     <select id="findUserByNameAndEmail" resultType="com.animal.api.find.model.response.FindUserIdResponseDTO">
 	    SELECT ID AS userid, CREATED_AT AS createdAt
 	    FROM USERS
 	    WHERE NAME = #{name}
 	      AND EMAIL = #{email}
 	      AND STATUS = 1
+    </select>  
+	
+    <!-- [비밀번호 재설정 공통] 아이디로 UserVO 조회 -->
+    <select id="findUserVOByUserid" resultType="com.animal.api.auth.model.vo.UserVO">
+        SELECT *
+        FROM USERS
+        WHERE ID = #{userid}
+          AND STATUS = 1
     </select>
-
+    
+	<!-- [비밀번호 재설정 최종] 비밀번호 암호화 후 업데이트  -->
+    <update id="updateUserPassword">
+	    UPDATE USERS
+	    SET PASSWORD = #{password}
+	    WHERE IDX = #{userIdx}
+	</update>
+	
 </mapper>
