@@ -9,6 +9,7 @@ import com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsDTO;
+import com.animal.api.shelter.model.response.ShelterBoardList;
 import com.animal.api.shelter.model.response.ShelterDetailDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersDTO;
 
@@ -26,4 +27,6 @@ public interface UserShelterMapper {
 	public List<ShelterAnimalsDTO> getAllShelterAnimals(Map map);
 
 	public List<ShelterAnimalsDTO> searchShelterAnimals(SearchShelterAnimalRequestDTO dto);
+
+	public List<ShelterBoardList> getShelterBoards(Map map);
 }

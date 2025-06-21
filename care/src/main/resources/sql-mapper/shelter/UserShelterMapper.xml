@@ -213,4 +213,26 @@ JOIN SHELTERS S
 ORDER BY IDX DESC
 LIMIT ${listSize} OFFSET ${cp}
 </select>
+<select id="getShelterBoards" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterBoardList">
+SELECT
+	B.IDX,
+	S.SHELTER_NAME,
+	B.TITLE,
+	B.CONTENT,
+	B.CREATED_AT,
+	B.`REF`,
+	B.LEV,
+	B.TURN
+FROM
+	BOARDS B
+JOIN SHELTERS S 
+	ON
+	B.USER_IDX = S.USER_IDX
+where
+	B.BOARD_TYPE_IDX = 3
+	and S.USER_IDX = #{idx}
+ORDER BY
+	IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
 </mapper>
