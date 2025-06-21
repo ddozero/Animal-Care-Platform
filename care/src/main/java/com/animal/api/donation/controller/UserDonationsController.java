@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
+import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -148,6 +150,26 @@ public class UserDonationsController {
 		}
 
 		Map resultMap = service.addDonationComment(dto);
+
+		if ((int) resultMap.get("result") == service.POST_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<Void>(200, (String) resultMap.get("msg"), null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ErrorResponseDTO(400, (String) resultMap.get("msg")));
+		}
+	}
+
+	@PutMapping("{idx}/comments/{dcIdx}")
+	public ResponseEntity<?> updateDonationComment(@PathVariable int idx, @PathVariable int dcIdx,
+			@RequestBody DonationCommentUpdateRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		Map resultMap = service.updateDonationComment(dto);
 
 		if ((int) resultMap.get("result") == service.POST_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK)
