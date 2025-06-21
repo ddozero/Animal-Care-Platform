@@ -1,5 +1,9 @@
 package com.animal.api.management.shelter.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -32,8 +36,14 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 	
 	@Override
-	public ShelterVolunteerReviewResponseDTO getVolunteerReview(int idx) {
-		ShelterVolunteerReviewResponseDTO dto = mapper.getVolunteerReview(idx);
-		return dto;
+	public List<ShelterVolunteerReviewResponseDTO> getVolunteerReviews(int listSize, int cp, int idx) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		map.put("idx", idx);
+		
+		List<ShelterVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReviews(map);
+		return reviewLists;
 	}
 }

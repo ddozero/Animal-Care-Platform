@@ -46,23 +46,25 @@ WHERE
 </update>
 
 <select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ShelterVolunteerReviewResponseDTO">
-select
+SELECT
 	VR.IDX as reviewIdx,
 	VR.CONTENT as reviewContent,
 	VR.CREATED_AT as reviewDate,
 	REVIEWER.NICKNAME as reviewWriter,
 	V.TITLE as volunteerTitle,
 	V.IDX as volunteerIdx
-from
+FROM
 	VOLUNTEERS V
-join VOLUNTEER_REVIEWS VR on
+JOIN VOLUNTEER_REVIEWS VR on
 	VR.VOLUNTEER_IDX = V.IDX
-join USERS REVIEWER on
+JOIN USERS REVIEWER on
 	VR.USER_IDX = REVIEWER.IDX
-where
+WHERE
 	V.USER_IDX = #{idx}
-order by
+ORDER BY
 	VR.CREATED_AT desc;
+LIMIT
+#{listSize} OFFSET #{cp}
 </select>
  
  </mapper>

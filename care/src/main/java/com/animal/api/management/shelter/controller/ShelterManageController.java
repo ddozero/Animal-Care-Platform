@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
@@ -16,6 +17,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
+import com.animal.api.management.shelter.model.response.ShelterVolunteerReviewResponseDTO;
 import com.animal.api.management.shelter.service.ShelterManageService;
 
 /**
@@ -56,11 +58,11 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<AllManageShelterResponseDTO>(200, "보호소 기본정보 조회 성공", dto));
 		}
 	}
-	
+
 	/**
 	 * 보호시설 기본정보 수정 메서드
 	 * 
-	 * @param dto 보호시설 기본정보 
+	 * @param dto     보호시설 기본정보
 	 * @param session 로그인 검증 세션
 	 * @return 수정에 따른 메세지
 	 */
@@ -81,6 +83,36 @@ public class ShelterManageController {
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "기본정보 수정 실패"));
 		}
+	}
+
+	@GetMapping
+	public ResponseEntity<?> getVolunteerReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			HttpSession session) {
+		
+		int listSize = 5;
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
+
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
+		}
+		int userIdx = loginUser.getIdx();
+
+		ShelterVolunteerReviewResponseDTO dto = shelterService.getVolunteerReview(userIdx, listSize, cp);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
+		} else if (dto.getReviewIdx() <= 0) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "등록된 리뷰가 없습니다", dto));
+		} else {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "보호소 기본정보 및 리뷰 조회 성공", dto));
+		}
+
 	}
 
 }
