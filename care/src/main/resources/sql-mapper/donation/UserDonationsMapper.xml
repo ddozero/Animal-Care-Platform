@@ -88,4 +88,12 @@ WHERE
 	AND USER_IDX = #{userIdx}
 	AND DONATION_IDX = #{donationIdx}
 </update>
+
+<delete id="deleteDonationComment" parameterType="int">
+DELETE
+FROM
+	DONATION_COMMENTS
+WHERE
+	IDX = #{idx}
+</delete>
 </mapper>
