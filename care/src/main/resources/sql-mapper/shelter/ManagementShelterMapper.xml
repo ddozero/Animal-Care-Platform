@@ -26,6 +26,22 @@ LEFT JOIN
 WHERE
     S.USER_IDX = #{idx};
 </select>
- 
+
+<update id="updateSheterInfo" parameterType="com.animal.api.management.shelter.model.response.AllManageShelterDTO">
+UPDATE SHELTERS
+SET
+    SHELTER_NAME = #{shelterName},
+    SHELTER_PERSON_NAME = #{personName},
+    SHELTER_TEL = #{tel},
+    SHELTER_EMAIL = #{email},
+    SHELTER_ZIP_CODE = #{zipCode},
+    SHELTER_ADDRESS = #{address},
+    SHELTER_ADDRESS_DETAIL = #{addressDetail},
+    SHELTER_BUSINESS_NUMBER = #{businessNumber},
+    SHELTER_BUSINESS_FILE = #{businessFile},
+    SHELTER_DESCRIPTION = #{description}'
+WHERE
+    USER_IDX = #{idx};
+</update>
  
  </mapper>
