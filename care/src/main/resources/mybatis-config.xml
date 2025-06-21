@@ -4,7 +4,6 @@
   "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-
 	<!-- 🔹 콘솔에 SQL 로그 출력 -->
 	<settings>
 		<setting name="logImpl" value="STDOUT_LOGGING" />
@@ -22,6 +21,5 @@
 			</dataSource>
 		</environment>
 	</environments>
-
 
 </configuration>
