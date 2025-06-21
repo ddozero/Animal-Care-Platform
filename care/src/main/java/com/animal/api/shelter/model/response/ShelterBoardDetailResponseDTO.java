@@ -11,14 +11,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShelterBoardListResponseDTO {
+public class ShelterBoardDetailResponseDTO {
 	private int idx;
 	private String shelterName;
 	private String title;
+	private String content;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Timestamp createdAt;
 	private int views;
 	private int ref;
 	private int lev;
 	private int turn;
+
 }

@@ -13,6 +13,7 @@ import com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
+import com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
@@ -38,8 +39,8 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
-	public List<AllShelterListResponseDTO> searchShelters(int listSize, int cp, String shelterName, String shelterAddress,
-			String shelterType) {
+	public List<AllShelterListResponseDTO> searchShelters(int listSize, int cp, String shelterName,
+			String shelterAddress, String shelterType) {
 		cp = changeCurrentPage(cp, listSize);
 		SearchShelterRequestDTO dto = new SearchShelterRequestDTO(listSize, cp, shelterName, shelterAddress,
 				shelterType);
@@ -84,8 +85,9 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
-	public List<ShelterAnimalsResponseDTO> searchShelterAnimals(int idx, int listSize, int cp, String type, String breed,
-			String gender, int neuter, int age, String adoptionStatus, String personality, int size, String name) {
+	public List<ShelterAnimalsResponseDTO> searchShelterAnimals(int idx, int listSize, int cp, String type,
+			String breed, String gender, int neuter, int age, String adoptionStatus, String personality, int size,
+			String name) {
 		cp = changeCurrentPage(cp, listSize);
 
 		SearchShelterAnimalRequestDTO dto = new SearchShelterAnimalRequestDTO(idx, listSize, cp, type, breed, gender,
@@ -108,6 +110,18 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<ShelterBoardListResponseDTO> boardList = mapper.getShelterBoards(map);
 
 		return boardList;
+	}
+
+	@Override
+	public ShelterBoardDetailResponseDTO getShelterBoardDetail(int idx) {
+		int result = mapper.incrementViews(idx);
+
+		if (result > 0) {
+			ShelterBoardDetailResponseDTO dto = mapper.getShelterBoardDetail(idx);
+			return dto;
+		}else {
+			return null;
+		}
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드

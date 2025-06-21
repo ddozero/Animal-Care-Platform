@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
+import com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
@@ -25,4 +26,6 @@ public interface UserShelterService {
 			String gender, int neuter, int age, String adoptionStatus, String personality, int size, String name);
 
 	public List<ShelterBoardListResponseDTO> getShelterBoards(int listSize, int cp, int idx);
+	
+	public ShelterBoardDetailResponseDTO getShelterBoardDetail(int idx);
 }

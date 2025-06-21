@@ -155,7 +155,7 @@ public class UserAnimalController {
 		int result = service.submitAdoption(dto);
 
 		if (result == service.RESERVATION_COMPLETED) {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "입양 상담 신청 성공", null));
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "입양 상담 신청 성공", null));
 		} else if (result == service.RESERVATION_UNAVAILABLE) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "입양 상담 신청 가능 상태가 아닙니다."));
 		} else {
