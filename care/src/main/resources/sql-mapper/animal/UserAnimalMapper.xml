@@ -38,7 +38,7 @@ JOIN ADOPTION_STATUS AS2
 	ON
 	A.ADOPTION_STATUS_IDX = AS2.IDX
 ORDER BY A.IDX DESC
-LIMIT ${listSize} OFFSET ${cp}
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 <select id="searchAnimals" parameterType="com.animal.api.animal.model.request.SearchConditionsRequestDTO" resultType="com.animal.api.animal.model.response.AllAnimalListResponseDTO">
 SELECT
@@ -97,7 +97,7 @@ JOIN ADOPTION_STATUS AS2
 	</if>
 </where>
 ORDER BY A.IDX DESC
-LIMIT ${listSize} OFFSET ${cp}
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 <select id="getAnimalDetail" parameterType="int" resultType="com.animal.api.animal.model.response.AnimalDetailResponseDTO">
 SELECT
@@ -137,7 +137,7 @@ JOIN SHELTERS S
 	ON
 	A.USER_IDX = S.USER_IDX
 WHERE
-	A.IDX = ${idx}
+	A.IDX = #{idx}
 </select>
 <select id="getAdoptionInfo" parameterType="int" resultType="com.animal.api.animal.model.response.AdoptionAnimalResponseDTO">
 SELECT
@@ -171,7 +171,7 @@ JOIN SHELTERS S
 	ON
 	A.USER_IDX = S.USER_IDX
 WHERE
-	A.IDX = ${idx}
+	A.IDX = #{idx}
 </select>
 <select id="checkAdoptionStatus" parameterType="int" resultType="String">
 SELECT
@@ -179,7 +179,7 @@ SELECT
 FROM
 	ANIMALS
 WHERE
-	IDX = ${idx}
+	IDX = #{idx}
 </select>
 <insert id="submitAdoption" parameterType="com.animal.api.animal.model.request.AdoptionSubmitReqestDTO">
 INSERT
