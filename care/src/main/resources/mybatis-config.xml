@@ -5,6 +5,11 @@
 <configuration>
 
 	<!-- 🔹 콘솔에 SQL 로그 출력 -->
+	<settings>
+		<setting name="logImpl" value="STDOUT_LOGGING" />
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
 	<environments default="dev">
 		<environment id="dev">
 			<transactionManager type="JDBC" />
