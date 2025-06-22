@@ -17,6 +17,7 @@ public interface UserDonationsService {
 	static int DONATION_NOT_FOUND = 3;
 	static int COMMENT_CONTENT_EMPTY = 4;
 	static int COMMENT_NOT_FOUND = 5;
+	static int DELETE_SUCCESS = 6;
 	static int ERROR = -1;
 
 	public List<AllDonationListResponseDTO> getAllDonations(int listSize, int cp);

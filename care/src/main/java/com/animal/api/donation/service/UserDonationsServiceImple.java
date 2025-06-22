@@ -175,7 +175,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 			int count = mapper.deleteDonationComment(dto);
 
 			if (count > 0) {
-				result = POST_SUCCESS;
+				result = DELETE_SUCCESS;
 				msg = "응원 댓글 삭제 성공";
 			} else {
 				result = ERROR;
