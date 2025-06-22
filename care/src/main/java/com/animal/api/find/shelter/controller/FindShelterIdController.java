@@ -15,7 +15,11 @@ import com.animal.api.find.shelter.model.request.FindShelterIdRequestDTO;
 import com.animal.api.find.shelter.service.FindShelterService;
 
 import lombok.RequiredArgsConstructor;
-
+/**
+ * 보호시설 사용자 아이디 찾기 컨트롤러
+ * @author Whistler95
+ * @since 2025-06-22
+ */
 @RestController
 @RequestMapping("/api/find/shelter")
 @RequiredArgsConstructor

@@ -3,12 +3,16 @@ package com.animal.api.find.shelter.model.request;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 보호소 아이디 찾기 요청 DTO
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FindShelterIdRequestDTO {
 
     @NotBlank(message = "이름은 필수 입력 항목입니다.")

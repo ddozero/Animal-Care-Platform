@@ -19,8 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 일반 사용자 비밀번호 찾기 컨트롤러
- * 
- * @author 
+ * @author Whistler95
  * @since 2025-06-21
  */
 @RestController

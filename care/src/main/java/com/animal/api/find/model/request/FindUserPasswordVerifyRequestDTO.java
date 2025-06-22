@@ -3,12 +3,16 @@ package com.animal.api.find.model.request;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 비밀번호 재설정 전, 이름 + 이메일 + 인증번호 검증 요청 DTO
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FindUserPasswordVerifyRequestDTO {
 
 	@NotBlank(message = "아이디는 필수입니다.")

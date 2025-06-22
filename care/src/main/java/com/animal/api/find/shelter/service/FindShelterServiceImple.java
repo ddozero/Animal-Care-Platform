@@ -125,7 +125,7 @@ public class FindShelterServiceImple implements FindShelterService {
             throw new CustomException(403, "탈퇴 하거나 사용 가능성이 없는 계정입니다.");
         }
         if (user.getStatus() == 0) {
-            throw new CustomException(403, "잠꧈된 계정입니다. 관리자에게 문의해주세요.");
+            throw new CustomException(403, "잠긴 계정입니다. 관리자에게 문의해주세요.");
         }
 
         if (!captchaService.verify(dto.getCaptcha())) {

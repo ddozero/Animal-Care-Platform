@@ -13,6 +13,7 @@ import com.animal.api.find.service.FindUserService;
 
 import lombok.RequiredArgsConstructor;
 /**
+ * 일반 사용자 아이디 찾기 컨트롤러
  * @author Whistler95
  * @since 2025-06-21
  * @see FindUserIdRequestDTO 아이디 찾기 입력 값

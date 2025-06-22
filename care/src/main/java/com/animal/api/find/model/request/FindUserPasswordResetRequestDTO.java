@@ -4,12 +4,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 비밀번호 재설정 요청 DTO
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FindUserPasswordResetRequestDTO {
 
     @NotBlank(message = "아이디는 필수입니다.")
