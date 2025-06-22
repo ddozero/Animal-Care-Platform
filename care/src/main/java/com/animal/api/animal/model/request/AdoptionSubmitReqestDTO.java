@@ -2,6 +2,14 @@ package com.animal.api.animal.model.request;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -12,17 +20,42 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdoptionSubmitReqestDTO {
-	private int userIdx;
-	private int animalIdx;
-	private String name;
-	private String email;
-	private String tel;
-	private int zipCode;
-	private String address;
-	private String addressDetail;
-	private int hasPet;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Timestamp consultedAt;
-	private String description;
+    @NotNull(message = "유저 번호는 필수입니다.")
+    private Integer userIdx;
+
+    @NotNull(message = "동물 번호는 필수입니다.")
+    private Integer animalIdx;
+
+    @NotBlank(message = "이름은 필수입니다.")
+    @Size(max = 50, message = "이름은 최대 50자까지 입력 가능합니다.")
+    private String name;
+
+    @NotBlank(message = "이메일은 필수입니다.")
+    @Email(message = "이메일 형식이 올바르지 않습니다.")
+    private String email;
+
+    @NotBlank(message = "전화번호는 필수입니다.")
+    @Pattern(regexp = "^\\d{9,20}$", message = "전화번호 형식이 올바르지 않습니다.")
+    private String tel;
+
+    @NotNull(message = "우편번호는 필수입니다.")
+    private Integer zipCode;
+
+    @NotBlank(message = "주소는 필수입니다.")
+    private String address;
+
+    private String addressDetail;
+
+    @NotNull(message = "반려동물 여부는 필수입니다.")
+    @Min(value = 0, message = "반려동물 여부는 0 또는 1이어야 합니다.")
+    @Max(value = 1, message = "반려동물 여부는 0 또는 1이어야 합니다.")
+    private Integer hasPet;
+
+    @NotNull(message = "상담 예약일은 필수입니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp consultedAt;
+
+    @NotBlank(message = "상담 내용은 필수입니다.")
+    private String description;
 
 }

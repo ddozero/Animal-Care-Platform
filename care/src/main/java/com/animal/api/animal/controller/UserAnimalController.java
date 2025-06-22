@@ -3,6 +3,7 @@ package com.animal.api.animal.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -144,7 +145,7 @@ public class UserAnimalController {
 	 * @return 신청 성공 메세지
 	 */
 	@PostMapping("/{idx}/adoption")
-	public ResponseEntity<?> submitAdoption(@RequestBody AdoptionSubmitReqestDTO dto, @PathVariable int idx,
+	public ResponseEntity<?> submitAdoption(@Valid @RequestBody AdoptionSubmitReqestDTO dto, @PathVariable int idx,
 			HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
