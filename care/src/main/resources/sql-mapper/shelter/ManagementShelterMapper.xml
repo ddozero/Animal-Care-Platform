@@ -47,12 +47,12 @@ WHERE
 
 <select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
 SELECT
-	VR.IDX as reviewIdx,
-	VR.CONTENT as reviewContent,
-	VR.CREATED_AT as reviewDate,
-	REVIEWER.NICKNAME as reviewWriter,
-	V.TITLE as volunteerTitle,
-	V.IDX as volunteerIdx,
+	VR.IDX AS reviewIdx,
+	VR.CONTENT AS reviewContent,
+	VR.CREATED_AT AS reviewDate,
+	REVIEWER.NICKNAME AS reviewWriter,
+	V.TITLE AS volunteerTitle,
+	V.IDX AS volunteerIdx,
 	VR.REF,
 	VR.LEV,
 	VR.TURN
@@ -67,6 +67,31 @@ WHERE
 ORDER BY
 	VR.REF DESC,
 	VR.TURN ASC
+LIMIT
+#{listSize} OFFSET #{cp};
+</select>
+
+<select id="getAdoptionReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO">
+SELECT
+	AR.IDX AS reviewIdx,
+	AR.CONTENT AS reviewContent,
+	U.NICKNAME,
+	A.NAME AS animalName,
+	AR.CONTENT,
+	AR.CREATED_AT as createdAt,
+	AR.REF,
+	AR.TURN
+FROM
+	ADOPTION_REVIEWS AR
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+JOIN USERS U ON
+	AR.ANIMAL_IDX = U.IDX
+WHERE
+	A.USER_IDX = #{idx}
+ORDER BY
+	AR.REF DESC,
+	AR.TURN ASC
 LIMIT
 #{listSize} OFFSET #{cp};
 </select>
