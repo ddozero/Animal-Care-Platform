@@ -15,4 +15,6 @@ public interface ShelterAnimalsMapper {
 
 	public int updateAnimal(AnimalUpdateRequestDTO dto);
 
+	public int deleteAnimal(int idx);
+
 }
