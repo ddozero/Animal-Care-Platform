@@ -27,7 +27,8 @@ import com.animal.api.management.animal.service.ShelterAnimalsService;
  * @author Rege-97
  * @since 2026-06-22
  * @see com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO
- * @see com.animal.api.management.animal.model.response.AnimalInsertRequestDTO
+ * @see com.animal.api.management.animal.model.request.AnimalInsertRequestDTO
+ * @see com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO
  */
 
 @RestController
@@ -93,6 +94,13 @@ public class ShelterAnimalsController {
 		}
 	}
 
+	/**
+	 * 유기동물의 정보를 수정하는 메서드
+	 * 
+	 * @param dto     수정될 내용을 담은 폼 데이터
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
 	@PutMapping("/{idx}")
 	public ResponseEntity<?> updateAnimal(@Valid @RequestBody AnimalUpdateRequestDTO dto, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
