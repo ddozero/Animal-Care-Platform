@@ -22,4 +22,30 @@ JOIN SHELTER_TYPES ST
 WHERE 
 	S.USER_IDX = #{idx}
 </select>
+<insert id="insertAnimal" parameterType="com.animal.api.management.animal.model.request.AnimalInsertRequestDTO">
+INSERT
+	INTO
+	ANIMALS (USER_IDX,
+	ADOPTION_STATUS_IDX,
+	ANIMAL_BREED_IDX,
+	ANIMAL_PERSONALITY_IDX,
+	NAME,
+	GENDER,
+	AGE,
+	SIZE,
+	NEUTER,
+	DESCRIPTION)
+VALUES (
+#{userIdx},
+#{adoptionStatusIdx},
+#{animalBreedIdx},
+#{animalPersonalityIdx},
+#{name},
+#{gender},
+#{age},
+#{size},
+#{neuter},
+#{description}
+    )
+</insert>
 </mapper>

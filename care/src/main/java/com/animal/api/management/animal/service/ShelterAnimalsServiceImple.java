@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.management.animal.mapper.ShelterAnimalsMapper;
+import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO;
 
 @Service
@@ -18,5 +19,13 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	public AnimalAddShelterInfoResponseDTO getShelterProfile(int idx) {
 		AnimalAddShelterInfoResponseDTO dto = mapper.getShelterProfile(idx);
 		return dto;
+	}
+
+	@Override
+	public int insertAnimal(AnimalInsertRequestDTO dto) {
+		int result = mapper.insertAnimal(dto);
+
+		result = result > 0 ? POST_SUCCESS : ERROR;
+		return result;
 	}
 }
