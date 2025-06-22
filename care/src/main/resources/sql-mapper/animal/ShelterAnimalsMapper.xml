@@ -71,4 +71,12 @@ FROM
 WHERE
 	IDX = #{idx}
 </delete>
+<select id="getAnimalShelter" parameterType="int" resultType="int">
+SELECT
+	USER_IDX
+FROM
+	ANIMALS
+WHERE
+	IDX = #{idx}
+</select>
 </mapper>

@@ -37,4 +37,19 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 		result = result > 0 ? UPDATE_SUCCESS : ERROR;
 		return result;
 	}
+	
+
+	@Override
+	public int deleteAnimal(int idx) {
+		int result = mapper.deleteAnimal(idx);
+
+		result = result > 0 ? DELETE_SUCCESS : ERROR;
+		return result;
+	}
+	
+	@Override
+	public int getAnimalShelter(int idx) {
+		int userIdx = mapper.getAnimalShelter(idx);
+		return userIdx;
+	}
 }
