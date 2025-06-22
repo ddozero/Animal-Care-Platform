@@ -7,11 +7,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.animal.api.donation.mapper.UserDonationsMapper;
 import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
+import com.animal.api.donation.model.request.DonationRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -188,8 +190,42 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	}
 
 	@Override
-	public int getDonationUserPoint(int idx) {
-		int userPoint = mapper.getDonationUserPoint(idx);
+	public int getDonationUserPoint(int userIdx) {
+		int userPoint = mapper.getDonationUserPoint(userIdx);
 		return userPoint;
+	}
+
+	@Transactional
+	@Override
+	public Map addDonation(DonationRequestDTO dto, int userIdx) {
+		Map map = new HashMap();
+		int result = 0;
+		String msg = null;
+		Boolean errorCheck = false;
+		int userPoint = getDonationUserPoint(userIdx);
+		if (userPoint < dto.getDonatedAmount()) {
+			result = INSUFFICIENT_POINT;
+			msg = "보유하신 포인트가 부족합니다.";
+			errorCheck = true;
+		}
+
+		if (!errorCheck) {
+			int donationDetailInsert = mapper.addDonation(dto);
+			int donationUpdate = mapper.updateDonation(dto);
+			int userUpdate = mapper.updateUserPoint(dto);
+
+			if (donationDetailInsert > 0 && donationUpdate > 0 && userUpdate > 0) {
+				result = POST_SUCCESS;
+				msg = "기부 성공";
+			} else {
+				result = ERROR;
+				msg = "잘못된 접근";
+				throw new RuntimeException("기부 처리 중 오류 발생: 트랜잭션 롤백");
+			}
+		}
+		map.put("result", result);
+		map.put("msg", msg);
+		return map;
+
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
+import com.animal.api.donation.model.request.DonationRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -18,6 +19,7 @@ public interface UserDonationsService {
 	static int COMMENT_CONTENT_EMPTY = 4;
 	static int COMMENT_NOT_FOUND = 5;
 	static int DELETE_SUCCESS = 6;
+	public static final int INSUFFICIENT_POINT = 7;
 	static int ERROR = -1;
 
 	public List<AllDonationListResponseDTO> getAllDonations(int listSize, int cp);
@@ -34,5 +36,7 @@ public interface UserDonationsService {
 
 	public Map deleteDonationComment(DonationCommentDeleteRequestDTO dto);
 
-	public int getDonationUserPoint(int idx);
+	public int getDonationUserPoint(int userIdx);
+
+	public Map addDonation(DonationRequestDTO dto, int userIdx);
 }
