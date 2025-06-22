@@ -28,6 +28,7 @@ import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
 import com.animal.api.donation.model.response.DonationDetailResponseDTO;
+import com.animal.api.donation.model.response.UserPointResponseDTO;
 import com.animal.api.donation.service.UserDonationsService;
 
 /**
@@ -220,5 +221,17 @@ public class UserDonationsController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new ErrorResponseDTO(400, (String) resultMap.get("msg")));
 		}
+	}
+
+	@GetMapping("/{donationIdx}/donation")
+	public ResponseEntity<?> getDonationUserPoint(@PathVariable int donationIdx,
+			@RequestBody UserPointResponseDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+		
+		int point=service.getDonationUserPoint();
 	}
 }
