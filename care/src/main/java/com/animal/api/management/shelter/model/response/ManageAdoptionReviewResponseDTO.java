@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ManageVolunteerReviewResponseDTO {
+public class ManageAdoptionReviewResponseDTO {
 
 	private int reviewIdx;
 	private String nickName;
-	private String volunteerTitle;
+	private String animalName;
 	private String content;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Timestamp createdAt;
