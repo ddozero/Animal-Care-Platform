@@ -28,4 +28,6 @@ public interface UserDonationsMapper {
 	public int updateDonationComment(DonationCommentUpdateRequestDTO dto);
 
 	public int deleteDonationComment(DonationCommentDeleteRequestDTO dto);
+
+	public int getDonationUserPoint(int idx);
 }

@@ -33,4 +33,6 @@ public interface UserDonationsService {
 	public Map updateDonationComment(DonationCommentUpdateRequestDTO dto);
 
 	public Map deleteDonationComment(DonationCommentDeleteRequestDTO dto);
+
+	public int getDonationUserPoint(int idx);
 }

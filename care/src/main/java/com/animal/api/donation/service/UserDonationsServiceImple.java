@@ -186,4 +186,10 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		map.put("msg", msg);
 		return map;
 	}
+
+	@Override
+	public int getDonationUserPoint(int idx) {
+		int userPoint = mapper.getDonationUserPoint(idx);
+		return userPoint;
+	}
 }
