@@ -113,6 +113,10 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
+		if (loginUser.getIdx() != dto.getUserIdx()) {	// 로그인된 보호시설 유기동물 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
+		}
+
 		int result = service.updateAnimal(dto);
 
 		if (result == service.UPDATE_SUCCESS) {

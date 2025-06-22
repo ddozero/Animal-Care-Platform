@@ -16,6 +16,9 @@ import lombok.NoArgsConstructor;
 public class AnimalUpdateRequestDTO {
 	@NotNull(message = "동물 관리번호는 필수입니다.")
 	private Integer idx;
+	
+	@NotNull(message = "유저 IDX는 필수입니다.")
+	private Integer userIdx;
 
 	@NotNull(message = "입양 상태는 필수입니다.")
 	private Integer adoptionStatusIdx;
