@@ -15,6 +15,14 @@ import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO;
 import com.animal.api.management.animal.service.ShelterAnimalsService;
 
+/**
+ * 보호시설의 관리 페이지에서 유기동물에 관련되어 있는 컨트롤러 클래스
+ * 
+ * @author Rege-97
+ * @since 2026-06-22
+ * @see com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO
+ */
+
 @RestController
 @RequestMapping("api/management/animals")
 public class ShelterAnimalsController {
@@ -22,6 +30,12 @@ public class ShelterAnimalsController {
 	@Autowired
 	private ShelterAnimalsService service;
 
+	/**
+	 * 유기동물 등록 시 내 보호시설 확인 메서드
+	 * 
+	 * @param session 로그인 정보 검증을 위한 세션
+	 * @return 로그인된 보호소 정보 반환
+	 */
 	@GetMapping("/shelter")
 	public ResponseEntity<?> getShelterProfile(HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
