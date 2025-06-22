@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
+import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
 import com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO;
 import com.animal.api.management.animal.service.ShelterAnimalsService;
 
@@ -44,11 +46,12 @@ public class ShelterAnimalsController {
 	@GetMapping("/shelter")
 	public ResponseEntity<?> getShelterProfile(HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
-		if (loginUser == null) {
+
+		if (loginUser == null) { // 로그인 여부 검증
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
 
-		if (loginUser.getUserTypeIdx() != 2) {
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
@@ -73,11 +76,11 @@ public class ShelterAnimalsController {
 	public ResponseEntity<?> insertAnimal(@Valid @RequestBody AnimalInsertRequestDTO dto, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
-		if (loginUser == null) {
+		if (loginUser == null) { // 로그인 여부 검증
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
 
-		if (loginUser.getUserTypeIdx() != 2) {
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
@@ -87,6 +90,27 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "유기동물 등록 성공", null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 등록 실패"));
+		}
+	}
+
+	@PutMapping("/{idx}")
+	public ResponseEntity<?> updateAnimal(@Valid @RequestBody AnimalUpdateRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+
+		int result = service.updateAnimal(dto);
+
+		if (result == service.UPDATE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "유기동물 수정 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 수정 실패"));
 		}
 	}
 
