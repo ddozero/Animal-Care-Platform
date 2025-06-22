@@ -87,7 +87,7 @@ public class ShelterManageController {
 		}
 	}
 
-	@GetMapping
+	@GetMapping("/reviews/volunteer")
 	public ResponseEntity<?> getVolunteerReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
 
@@ -99,13 +99,13 @@ public class ShelterManageController {
 		}
 
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
-
-		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReviews(listSize, cp, listSize);
-
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
 		}
+
 		int userIdx = loginUser.getIdx();
+
+		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(listSize, cp, userIdx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));

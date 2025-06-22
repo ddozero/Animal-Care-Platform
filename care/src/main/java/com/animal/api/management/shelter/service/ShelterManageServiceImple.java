@@ -36,14 +36,14 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 	
 	@Override
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReviews(int listSize, int cp, int idx) {
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int listSize, int cp, int idx) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		map.put("idx", idx);
 		
-		List<ManageVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReviews(map);
+		List<ManageVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReview(map);
 		return reviewLists;
 	}
 }

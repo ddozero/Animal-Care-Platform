@@ -12,6 +12,6 @@ public interface ShelterManageService {
 	
 	public int updateSheterInfo(ShelterInfoUpdateRequestDTO dto);
 	
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReviews(int listSize, int cp, int idx);
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int listSize, int cp, int idx);
 
 }

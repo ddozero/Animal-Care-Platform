@@ -16,6 +16,6 @@ public interface ManagementShelterMapper {
 
 	public int updateSheterInfo(ShelterInfoUpdateRequestDTO dto);
 
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReviews(Map map);
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(Map map);
 
 }

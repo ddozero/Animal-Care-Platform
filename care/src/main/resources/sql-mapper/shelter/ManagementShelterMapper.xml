@@ -62,9 +62,9 @@ JOIN USERS REVIEWER on
 WHERE
 	V.USER_IDX = #{idx}
 ORDER BY
-	VR.CREATED_AT desc;
+	VR.CREATED_AT desc
 LIMIT
-#{listSize} OFFSET #{cp}
+#{listSize} OFFSET #{cp};
 </select>
  
  </mapper>
