@@ -121,7 +121,7 @@ public class ShelterManageController {
 		} else if (reviewList.size() == 0) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList));
 		} else {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "보호소 기본정보 및 리뷰 조회 성공", reviewList));
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 조회 성공", reviewList));
 		}
 
 	}
