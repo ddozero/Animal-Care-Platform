@@ -38,5 +38,5 @@ public interface UserDonationsService {
 
 	public int getDonationUserPoint(int idx);
 
-	public int addDonation(DonationRequestDTO dto,int userPoint);
+	public Map addDonation(DonationRequestDTO dto,int userPoint);
 }

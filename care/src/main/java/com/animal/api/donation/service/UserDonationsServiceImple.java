@@ -194,16 +194,33 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		int userPoint = mapper.getDonationUserPoint(idx);
 		return userPoint;
 	}
-	
+
 	@Transactional
 	@Override
-	public int addDonation(DonationRequestDTO dto,int userPoint) {
-		
+	public Map addDonation(DonationRequestDTO dto, int userPoint) {
+		Map map = new HashMap();
+		int result = 0;
+		String msg = null;
+		Boolean errorCheck = false;
+
 		if (userPoint < dto.getDonatedAmount()) {
-			return INSUFFICIENT_POINT;
+			result = INSUFFICIENT_POINT;
+			msg = "잘못된 접근:보유 포인트 부족";
+			errorCheck = true;
 		}
 		
-		int result=mapper.addDonation(dto);
-		return result;
+		if (!errorCheck) {
+			result = mapper.addDonation(dto);
+			if (result > 0) {
+				result = POST_SUCCESS;
+				msg = "기부 성공";
+			} else {
+				result = ERROR;
+				msg = "잘못된 접근";
+			}
+		}
+		map.put("result", result);
+		map.put("msg", msg);
+		return map;
 	}
 }
