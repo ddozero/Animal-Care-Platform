@@ -40,6 +40,7 @@ public class ShelterManageController {
 	 * 보호시설 기본정보 조회 메서드
 	 * 
 	 * @param session 로그인 검증 세션
+	 * 
 	 * @return 로그인한 보호소 기본 정보
 	 */
 	@GetMapping
@@ -87,6 +88,14 @@ public class ShelterManageController {
 		}
 	}
 
+	/**
+	 * 해당 보호시설 봉사 리뷰 조회 메서드
+	 * 
+	 * @param cp      현재 페이지 번호
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 로그인한 보호시설의 사용자 봉사 리뷰 조회
+	 */
 	@GetMapping("/reviews/volunteer")
 	public ResponseEntity<?> getVolunteerReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
