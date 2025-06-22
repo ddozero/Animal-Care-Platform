@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -118,11 +120,11 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 조회 성공", reviewList));
 		}
 	}
-	
+
 	/**
 	 * 해당 보호시설 입양 리뷰 조회 메서드
 	 * 
-	 * @param cp 현재 페이지 번호
+	 * @param cp      현재 페이지 번호
 	 * @param session 로그인 검증 세션
 	 * 
 	 * @return 로그인한 보호시설의 사용자 입양 리뷰 조회
@@ -153,7 +155,26 @@ public class ShelterManageController {
 		}
 
 	}
-	
+
+	@PostMapping
+	public ResponseEntity<?> addVolunterReviewApply(@RequestBody ManageVolunteerReplyRequestDTO dto,
+			HttpSession session) {
+		
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+		int userIdx = loginUser.getIdx();
+		
+		int result = shelterService.addVolunterReviewApply(dto);
+		dto.setUserIdx(userIdx);
+		
+		if(result == shelterService.DELETE_REVIEW) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "삭제된 리뷰에는 답글 달 수 없음"));
+		}else if(result == shelterService.REPLY_OK) {
+			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
+		}else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+		}
+
+	}
 
 	/**
 	 * 로그인 및 보호시설 사용자 검증 메서드
@@ -174,6 +195,5 @@ public class ShelterManageController {
 
 		return loginUser;
 	}
-
 
 }
