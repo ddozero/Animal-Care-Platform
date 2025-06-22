@@ -62,7 +62,13 @@
 
 	<!-- ✅ MyBatis Mapper 자동 등록 (XML + 인터페이스 연결) -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.animal.api.**" />
+		<property name="basePackage" value="com.animal.api" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+	</bean>
+	
+	<!-- ✅ SqlSessionTemplate 등록 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	    <constructor-arg index="0" ref="sqlSessionFactory"/>
 	</bean>
 
 	<!-- ✅ 트랜잭션 매니저: DB 트랜잭션 처리용 -->

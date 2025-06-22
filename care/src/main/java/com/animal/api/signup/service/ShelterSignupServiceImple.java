@@ -11,11 +11,10 @@ import com.animal.api.auth.model.vo.ShelterVO;
 import com.animal.api.auth.model.vo.UserVO;
 import com.animal.api.signup.mapper.SignupMapper;
 import com.animal.api.signup.model.request.ShelterSignupRequestDTO;
-import com.animal.api.signup.model.request.UserSignupRequestDTO;
 
 @Service
 @Primary
-public class SignupServiceImple implements SignupService {
+public class ShelterSignupServiceImple implements ShelterSignupService {
 
 	@Autowired
 	private SignupMapper signupMapper;
@@ -23,48 +22,12 @@ public class SignupServiceImple implements SignupService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
-	//일반 사용자 회원가입 Service
-	@Override
-	public void signupUser(UserSignupRequestDTO dto) {
-
-		// 1. 중복 검사
-		if (signupMapper.isDuplicateId(dto.getId()) > 0) {
-			throw new CustomException(409, "이미 사용 중인 아이디입니다.");
-		}
-
-		if (signupMapper.isDuplicateEmail(dto.getEmail()) > 0) {
-			throw new CustomException(409, "이미 가입된 이메일 입니다.");
-		}
-
-		if (signupMapper.isDuplicateNickname(dto.getNickname()) > 0) {
-			throw new CustomException(409, "이미 사용 중인 닉네임입니다.");
-		}
-
-		// 2. DTO -> VO 매핑
-		UserVO user = new UserVO();
-		user.setUserTypeIdx(1); // 일반 사용자
-		user.setId(dto.getId());
-		user.setEmail(dto.getEmail());
-		user.setPassword(passwordEncoder.encode(dto.getPassword())); // 암호화
-		user.setName(dto.getName());
-		user.setNickname(dto.getNickname());
-		user.setBirthDate(dto.getBirthDate());
-		user.setGender(dto.getGender());
-		user.setTel(dto.getTel());
-		user.setZipCode(dto.getZipCode());
-		user.setAddress(dto.getAddress());
-		user.setAddressDetail(dto.getAddressDetail());
-
-		// 3. DB 저장
-		signupMapper.insertUser(user);
-	}
-	
 	//보호시설 사용자 회원가입 Service
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void signupShelter(ShelterSignupRequestDTO dto) {
 
-	    // 1. 중복 체크
+	    // 1. [USERS] 관련 유효성 검사
 	    if (signupMapper.isDuplicateId(dto.getId()) > 0) {
 	        throw new CustomException(409, "이미 사용 중인 아이디입니다.");
 	    }
@@ -75,30 +38,15 @@ public class SignupServiceImple implements SignupService {
 	        throw new CustomException(409, "이미 사용 중인 닉네임입니다.");
 	    }
 
-	    // 2. USER VO 생성
-	    UserVO user = new UserVO();
-	    user.setUserTypeIdx(2); // 보호시설 고정
-	    user.setId(dto.getId());
-	    user.setEmail(dto.getEmail());
-	    user.setPassword(passwordEncoder.encode(dto.getPassword()));
-	    user.setName(dto.getName());
-	    user.setNickname(dto.getNickname());
-	    user.setBirthDate(dto.getBirthDate());
-	    user.setGender(dto.getGender());
-	    user.setTel(dto.getTel());
-	    user.setZipCode(dto.getZipCode());
-	    user.setAddress(dto.getAddress());
-	    user.setAddressDetail(dto.getAddressDetail());
-	    user.setStatus(0); // **관리자 승인 대기 상태
-
-	    // 3. USERS 테이블에 insert
-	    signupMapper.insertUser(user);
-	    
+	    // 2. [SHELTERS] 관련 유효성 검사 (선택 사항: email 도메인, 사업자번호 포맷 등)
 	    switch(dto.getShelterTypeIdx()) {
 	    	case 1: 
-	    		if(dto.getShelterEmail() == null || !dto.getShelterEmail().matches(".*@(go\\.kr|korea\\.kr|or\\.kr|kr)$")) {
-	    			throw new CustomException(400, "공공 보호소는 go.kr, korea.kr, or.kr 도메인의 이메일이 필요합니다");
-	            }
+	    		if (dto.getShelterEmail() == null || !dto.getShelterEmail().matches(
+	    			    "^[A-Za-z0-9._%+-]+@([A-Za-z0-9.-]+\\.)?(go\\.kr|korea\\.kr|or\\.kr)$"
+	    			)) {
+	    			    throw new CustomException(400, 
+	    			        "공공 보호소는 go.kr, korea.kr, or.kr 도메인의 이메일이 필요합니다");
+	    			}
 	            if (dto.getShelterBusinessNumber() == null || dto.getShelterBusinessNumber().isBlank()) {
 	                throw new CustomException(400, "공공 보호소는 사업자등록번호가 필요합니다");
 	            }
@@ -118,7 +66,25 @@ public class SignupServiceImple implements SignupService {
 	    	default: 
 	    		throw new CustomException(400, "올바르지 않은 보호시설 유형입니다.");
 	    }
+	    // 3. USER VO 생성
+	    UserVO user = new UserVO();
+	    user.setUserTypeIdx(2); // 보호시설 고정
+	    user.setId(dto.getId());
+	    user.setEmail(dto.getEmail());
+	    user.setPassword(passwordEncoder.encode(dto.getPassword()));
+	    user.setName(dto.getName());
+	    user.setNickname(dto.getNickname());
+	    user.setBirthDate(dto.getBirthDate());
+	    user.setGender(dto.getGender());
+	    user.setTel(dto.getTel());
+	    user.setZipCode(dto.getZipCode());
+	    user.setAddress(dto.getAddress());
+	    user.setAddressDetail(dto.getAddressDetail());
+	    user.setStatus(0); // **관리자 승인 대기 상태
 
+	    // 3. USERS 테이블에 insert
+	    signupMapper.insertUser(user);
+	    
 	    // 4. SHELTER VO 생성
 	    ShelterVO shelter = new ShelterVO();
 	    shelter.setUserIdx(user.getIdx()); // 방금 insert된 사용자 PK

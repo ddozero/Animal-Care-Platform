@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex){ 
 		
 		String message = ex.getBindingResult().getFieldErrors().stream()
-				.map(error -> error.getField() + ":" + error.getDefaultMessage())
+				.map(error -> error.getDefaultMessage())
 				.findFirst()
 				.orElse("입력값이 유효하지 않습니다");
 		

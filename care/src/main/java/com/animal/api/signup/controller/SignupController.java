@@ -16,7 +16,8 @@ import com.animal.api.common.aop.email.RequireEmailVerified;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.signup.model.request.ShelterSignupRequestDTO;
 import com.animal.api.signup.model.request.UserSignupRequestDTO;
-import com.animal.api.signup.service.SignupService;
+import com.animal.api.signup.service.ShelterSignupService;
+import com.animal.api.signup.service.UserSignupService;
 
 /**
  * 일반 사용자/ 보호시설 회원가입 컨트롤러 클래스
@@ -29,7 +30,9 @@ import com.animal.api.signup.service.SignupService;
 public class SignupController {
 
 	@Autowired
-	private SignupService signupService;
+	private ShelterSignupService signupService;
+	@Autowired
+	private UserSignupService userSignupService;
 	
 	/**
 	 * 일반 사용자 회원가입 메서드
@@ -43,7 +46,7 @@ public class SignupController {
 	@RequireEmailVerified
 	public ResponseEntity<OkResponseDTO<String>> signup(@Valid @RequestBody UserSignupRequestDTO dto, HttpServletRequest request){
 		
-		signupService.signupUser(dto);
+		userSignupService.signupUser(dto);
 		
 		//인증 완료 후 세션 정리
 		HttpSession session = request.getSession(false);

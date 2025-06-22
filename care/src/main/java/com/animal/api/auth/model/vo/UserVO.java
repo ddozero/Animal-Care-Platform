@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserVO {
 	
-    private int idx;
+    private Integer idx;
     private int userTypeIdx;
     private String userTypeName;
 
