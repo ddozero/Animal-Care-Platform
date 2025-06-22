@@ -16,6 +16,7 @@ import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
 import com.animal.api.donation.model.response.DonationDetailResponseDTO;
+import com.animal.api.donation.model.response.UserPointResponseDTO;
 
 @Service
 @Primary
@@ -185,5 +186,11 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		map.put("result", result);
 		map.put("msg", msg);
 		return map;
+	}
+
+	@Override
+	public UserPointResponseDTO getDonationUserPoint(int idx) {
+		UserPointResponseDTO userPoint = mapper.getDonationUserPoint(idx);
+		return userPoint;
 	}
 }
