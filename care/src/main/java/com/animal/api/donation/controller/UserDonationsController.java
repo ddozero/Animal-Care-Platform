@@ -42,6 +42,7 @@ import com.animal.api.donation.service.UserDonationsService;
  * @see com.animal.api.donation.model.request.DonationCommentRequestDTO
  * @see com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO
  * @see com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO
+ * @see com.animal.api.donation.model.request.DonationRequestDTO
  */
 @RestController
 @RequestMapping("/api/donations")
@@ -254,6 +255,14 @@ public class UserDonationsController {
 		}
 	}
 
+	/**
+	 * 기부하기
+	 * 
+	 * @param donationIdx 기부번호
+	 * @param dto         기능 수행을 위한 정보들
+	 * @param session     로그인 검증용 세션
+	 * @return 기부 성공 실패 메세지
+	 */
 	@PostMapping("/{donationIdx}/users")
 	public ResponseEntity<?> addDonation(@PathVariable int donationIdx, @Valid @RequestBody DonationRequestDTO dto,
 			HttpSession session) {
