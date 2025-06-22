@@ -19,13 +19,13 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd">
-
+	
 	<!-- AOP 설정: @Aspect 애노테이션 기반 AOP 활성화 -->
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 
 	<!-- ✅ DB 접속 정보를 담고 있는 properties 파일 로드 -->
 	<context:property-placeholder
-		location="classpath:db.properties" />
+		location="classpath:db.properties,classpath:application.properties" />
 
 	<!-- ✅ DB 연결 및 커넥션 풀 설정 (DBCP2) -->
 	<bean id="dataSource"
