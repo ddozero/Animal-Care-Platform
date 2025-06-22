@@ -7,11 +7,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.animal.api.donation.mapper.UserDonationsMapper;
 import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
+import com.animal.api.donation.model.request.DonationRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -191,5 +193,17 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	public int getDonationUserPoint(int idx) {
 		int userPoint = mapper.getDonationUserPoint(idx);
 		return userPoint;
+	}
+	
+	@Transactional
+	@Override
+	public int addDonation(DonationRequestDTO dto,int userPoint) {
+		
+		if (userPoint < dto.getDonatedAmount()) {
+			return INSUFFICIENT_POINT;
+		}
+		
+		int result=mapper.addDonation(dto);
+		return result;
 	}
 }
