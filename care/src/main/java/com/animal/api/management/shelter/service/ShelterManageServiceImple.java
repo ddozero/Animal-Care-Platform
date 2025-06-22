@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.animal.api.management.shelter.mapper.ManagementShelterMapper;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
-import com.animal.api.management.shelter.model.response.ShelterVolunteerReviewResponseDTO;
+import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
 
 @Service
 @Primary
@@ -36,14 +36,14 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 	
 	@Override
-	public List<ShelterVolunteerReviewResponseDTO> getVolunteerReviews(int listSize, int cp, int idx) {
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReviews(int listSize, int cp, int idx) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		map.put("idx", idx);
 		
-		List<ShelterVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReviews(map);
+		List<ManageVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReviews(map);
 		return reviewLists;
 	}
 }

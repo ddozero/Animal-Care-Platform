@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShelterVolunteerReviewResponseDTO {
+public class ManageVolunteerReviewResponseDTO {
 	
 	private int reviewIdx;
 	private int reviewContent;

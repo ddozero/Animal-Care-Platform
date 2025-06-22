@@ -45,7 +45,7 @@ WHERE
     USER_IDX = #{idx};
 </update>
 
-<select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ShelterVolunteerReviewResponseDTO">
+<select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
 SELECT
 	VR.IDX as reviewIdx,
 	VR.CONTENT as reviewContent,

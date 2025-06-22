@@ -1,5 +1,7 @@
 package com.animal.api.management.shelter.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
-import com.animal.api.management.shelter.model.response.ShelterVolunteerReviewResponseDTO;
+import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
 import com.animal.api.management.shelter.service.ShelterManageService;
 
 /**
@@ -88,7 +90,7 @@ public class ShelterManageController {
 	@GetMapping
 	public ResponseEntity<?> getVolunteerReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
-		
+
 		int listSize = 5;
 		if (cp == 0) {
 			cp = 1;
@@ -98,19 +100,19 @@ public class ShelterManageController {
 
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
+		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReviews(listSize, cp, listSize);
+
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
 		}
 		int userIdx = loginUser.getIdx();
 
-		ShelterVolunteerReviewResponseDTO dto = shelterService.getVolunteerReview(userIdx, listSize, cp);
-
-		if (dto == null) {
+		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
-		} else if (dto.getReviewIdx() <= 0) {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "등록된 리뷰가 없습니다", dto));
+		} else if (reviewList.size() == 0) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList));
 		} else {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "보호소 기본정보 및 리뷰 조회 성공", dto));
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "보호소 기본정보 및 리뷰 조회 성공", reviewList));
 		}
 
 	}
