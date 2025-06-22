@@ -41,9 +41,12 @@ public class ShelterSignupServiceImple implements ShelterSignupService {
 	    // 2. [SHELTERS] 관련 유효성 검사 (선택 사항: email 도메인, 사업자번호 포맷 등)
 	    switch(dto.getShelterTypeIdx()) {
 	    	case 1: 
-	    		if(dto.getShelterEmail() == null || !dto.getShelterEmail().matches(".*@(go\\.kr|korea\\.kr|or\\.kr|kr)$")) {
-	    			throw new CustomException(400, "공공 보호소는 go.kr, korea.kr, or.kr 도메인의 이메일이 필요합니다");
-	            }
+	    		if (dto.getShelterEmail() == null || !dto.getShelterEmail().matches(
+	    			    "^[A-Za-z0-9._%+-]+@([A-Za-z0-9.-]+\\.)?(go\\.kr|korea\\.kr|or\\.kr)$"
+	    			)) {
+	    			    throw new CustomException(400, 
+	    			        "공공 보호소는 go.kr, korea.kr, or.kr 도메인의 이메일이 필요합니다");
+	    			}
 	            if (dto.getShelterBusinessNumber() == null || dto.getShelterBusinessNumber().isBlank()) {
 	                throw new CustomException(400, "공공 보호소는 사업자등록번호가 필요합니다");
 	            }

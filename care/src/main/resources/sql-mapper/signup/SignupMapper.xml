@@ -29,11 +29,11 @@
 		INSERT INTO USERS (
 			USER_TYPE_IDX, ID, EMAIL, PASSWORD,
 			NAME, NICKNAME, BIRTH_DATE, GENDER, TEL,
-			ZIP_CODE, ADDRESS, ADDRESS_DETAIL
+			ZIP_CODE, ADDRESS, ADDRESS_DETAIL, STATUS
 		) VALUES (
 			#{userTypeIdx}, #{id}, #{email}, #{password},
 			#{name}, #{nickname}, #{birthDate}, #{gender}, #{tel},
-			#{zipCode}, #{address}, #{addressDetail}
+			#{zipCode}, #{address}, #{addressDetail},#{status}
 		)
 	</insert>
 

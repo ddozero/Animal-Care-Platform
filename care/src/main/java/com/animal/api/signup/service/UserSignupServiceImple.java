@@ -1,13 +1,17 @@
 package com.animal.api.signup.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.animal.api.auth.exception.CustomException;
 import com.animal.api.auth.model.vo.UserVO;
 import com.animal.api.signup.mapper.SignupMapper;
 import com.animal.api.signup.model.request.UserSignupRequestDTO;
 
+@Service
+@Primary
 public class UserSignupServiceImple implements UserSignupService {
     @Autowired
     private SignupMapper signupMapper;
@@ -43,6 +47,7 @@ public class UserSignupServiceImple implements UserSignupService {
 		user.setZipCode(dto.getZipCode());
 		user.setAddress(dto.getAddress());
 		user.setAddressDetail(dto.getAddressDetail());
+		user.setStatus(1);
 
 		// 3. DB 저장
 		signupMapper.insertUser(user);
