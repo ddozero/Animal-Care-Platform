@@ -39,26 +39,6 @@ public class ShelterManageController {
 	private ShelterManageService shelterService;
 
 	/**
-	 * 로그인 및 보호시설 사용자 검증 메서드
-	 * 
-	 * @param session 로그인 검증 세션
-	 * 
-	 * @return 보호시설 계정으로 로그인한 관리자
-	 */
-	public LoginResponseDTO shelterUserCheck(HttpSession session) {
-		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
-
-		if (loginUser == null) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 후 이용가능");
-		}
-		if (loginUser.getUserTypeIdx() != 2) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "보호소 사용자만 접근 가능");
-		}
-
-		return loginUser;
-	}
-
-	/**
 	 * 보호시설 기본정보 조회 메서드
 	 * 
 	 * @param session 로그인 검증 세션
@@ -173,5 +153,27 @@ public class ShelterManageController {
 		}
 
 	}
+	
+
+	/**
+	 * 로그인 및 보호시설 사용자 검증 메서드
+	 * 
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 보호시설 계정으로 로그인한 관리자
+	 */
+	public LoginResponseDTO shelterUserCheck(HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 후 이용가능");
+		}
+		if (loginUser.getUserTypeIdx() != 2) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "보호소 사용자만 접근 가능");
+		}
+
+		return loginUser;
+	}
+
 
 }
