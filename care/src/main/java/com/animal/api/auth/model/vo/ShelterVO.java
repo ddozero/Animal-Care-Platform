@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ShelterVO {
 	
-	private int userIdx;
+	private Integer userIdx;
 	private Integer shelterTypeIdx;
 	private String shelterTypeName;
 	private String shelterTel;

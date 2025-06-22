@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import com.animal.api.auth.model.vo.ShelterVO;
 import com.animal.api.auth.model.vo.UserVO;
 
-@Mapper
 public interface SignupMapper {
 
     int isDuplicateId(String id);

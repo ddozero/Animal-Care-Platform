@@ -20,16 +20,20 @@
 	</select>
 
 	<!-- 4. 일반 사용자 회원가입 -->
-	<insert id="insertUser" parameterType="com.animal.api.auth.model.vo.UserVO"
-		useGeneratedKeys="true" keyProperty="idx">
+	<insert id="insertUser" parameterType="com.animal.api.auth.model.vo.UserVO">
+		<!-- INSERT 후 자동 증가된 PK를 VO의 idx 필드에 설정 -->
+		<selectKey keyProperty="idx" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		
 		INSERT INTO USERS (
-		USER_TYPE_IDX, ID, EMAIL, PASSWORD,
-		NAME, NICKNAME, BIRTH_DATE, GENDER, TEL,
-		ZIP_CODE, ADDRESS, ADDRESS_DETAIL
+			USER_TYPE_IDX, ID, EMAIL, PASSWORD,
+			NAME, NICKNAME, BIRTH_DATE, GENDER, TEL,
+			ZIP_CODE, ADDRESS, ADDRESS_DETAIL
 		) VALUES (
-		#{userTypeIdx}, #{id}, #{email}, #{password},
-		#{name}, #{nickname}, #{birthDate}, #{gender}, #{tel},
-		#{zipCode}, #{address}, #{addressDetail}
+			#{userTypeIdx}, #{id}, #{email}, #{password},
+			#{name}, #{nickname}, #{birthDate}, #{gender}, #{tel},
+			#{zipCode}, #{address}, #{addressDetail}
 		)
 	</insert>
 
