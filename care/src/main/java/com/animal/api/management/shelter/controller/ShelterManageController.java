@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
@@ -36,7 +37,25 @@ public class ShelterManageController {
 	@Autowired
 	private ShelterManageService shelterService;
 	
+	/**
+	 * 로그인 및 보호시설 사용자 검증 메서드
+	 * 
+	 * @param session 로그인 검증 세션 
+	 * 
+	 * @return 보호시설 계정으로 로그인한 관리자
+	 */
+	public LoginResponseDTO shelterUserCheck(HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
+		if (loginUser == null) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 후 이용가능");
+		}
+		if (loginUser.getUserTypeIdx() != 2) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "보호소 사용자만 접근 가능");
+		}
+
+		return loginUser;
+	}
 
 	/**
 	 * 보호시설 기본정보 조회 메서드
@@ -48,21 +67,14 @@ public class ShelterManageController {
 	@GetMapping
 	public ResponseEntity<?> getShelterInfo(HttpSession session) {
 
-		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
-
-		if (loginUser == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
-		}
-		if (loginUser.getUserTypeIdx() != 2) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호소 사용자만 접근 가능"));
-		}
+		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 
 		AllManageShelterResponseDTO dto = shelterService.getShelterInfo(userIdx);
 
 		if (dto == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "회원이 존재하지 않음"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "존재하지 않는 보호소"));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<AllManageShelterResponseDTO>(200, "보호소 기본정보 조회 성공", dto));
 		}
@@ -73,19 +85,13 @@ public class ShelterManageController {
 	 * 
 	 * @param dto     보호시설 기본정보
 	 * @param session 로그인 검증 세션
+	 * 
 	 * @return 수정에 따른 메세지
 	 */
 	@PutMapping
 	public ResponseEntity<?> updateShelterInfo(@RequestBody ShelterInfoUpdateRequestDTO dto, HttpSession session) {
 
-		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
-		
-		if (loginUser == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
-		}
-		if (loginUser.getUserTypeIdx() != 2) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호소 사용자만 접근 가능"));
-		}
+		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 		dto.setIdx(userIdx);
@@ -117,14 +123,7 @@ public class ShelterManageController {
 			cp = (cp - 1) * listSize;
 		}
 
-		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
-		if (loginUser == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
-		}
-		
-		if (loginUser.getUserTypeIdx() != 2) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호소 사용자만 접근 가능"));
-		}
+		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 
