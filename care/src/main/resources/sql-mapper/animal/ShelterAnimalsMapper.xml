@@ -48,4 +48,20 @@ VALUES (
 #{description}
     )
 </insert>
+<update id="updateAnimal" parameterType="com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO">
+UPDATE
+	ANIMALS
+SET
+	ADOPTION_STATUS_IDX = #{adoptionStatusIdx},
+	ANIMAL_BREED_IDX = #{animalBreedIdx},
+	ANIMAL_PERSONALITY_IDX = #{animalPersonalityIdx},
+	NAME = #{name},
+	GENDER = #{gender},
+	AGE = #{age},
+	SIZE = #{size},
+	NEUTER = #{neuter},
+	DESCRIPTION = #{description}
+WHERE
+	IDX = #{idx};
+</update>
 </mapper>

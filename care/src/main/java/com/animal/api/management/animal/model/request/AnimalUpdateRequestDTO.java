@@ -11,22 +11,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class AnimalInsertRequestDTO {
-	@NotNull(message = "유저 IDX는 필수입니다.")
-	private Integer userIdx;
+@AllArgsConstructor
+public class AnimalUpdateRequestDTO {
+	@NotNull(message = "동물 관리번호는 필수입니다.")
+	private Integer idx;
 
-	@NotNull(message = "입양 상태 IDX는 필수입니다.")
+	@NotNull(message = "입양 상태는 필수입니다.")
 	private Integer adoptionStatusIdx;
 
-	@NotNull(message = "동물 품종 IDX는 필수입니다.")
+	@NotNull(message = "동물 품종은 필수입니다.")
 	private Integer animalBreedIdx;
 
-	@NotNull(message = "동물 성격 IDX는 필수입니다.")
+	@NotNull(message = "동물 성격은 필수입니다.")
 	private Integer animalPersonalityIdx;
 
-	@NotBlank(message = "동물 이름은 필수입니다.")
+	@NotBlank(message = "이름은 필수입니다.")
 	private String name;
 
 	@NotBlank(message = "성별은 필수입니다.")
@@ -37,13 +37,13 @@ public class AnimalInsertRequestDTO {
 	@Min(value = 0, message = "나이는 0 이상이어야 합니다.")
 	private Integer age;
 
-	@NotNull(message = "사이즈는 필수입니다.")
-	@Min(value = 0, message = "사이즈는 0 이상이어야 합니다.")
+	@NotNull(message = "크기 정보는 필수입니다.")
+	@Min(value = 0, message = "크기는 0 이상이어야 합니다.")
 	private Integer size;
 
 	@NotNull(message = "중성화 여부는 필수입니다.")
-	@Min(value = 0)
-	@Max(value = 1)
+	@Min(value = 0, message = "중성화 여부는 0 또는 1이어야 합니다.")
+	@Max(value = 1, message = "중성화 여부는 0 또는 1이어야 합니다.")
 	private Integer neuter;
 
 	@NotBlank(message = "설명은 필수입니다.")
