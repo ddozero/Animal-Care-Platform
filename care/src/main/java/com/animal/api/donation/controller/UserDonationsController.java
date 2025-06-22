@@ -196,14 +196,14 @@ public class UserDonationsController {
 	/**
 	 * 응원 댓글 삭제
 	 * 
-	 * @param idx     기부 번호
-	 * @param dcIdx   댓글 번호
-	 * @param dto     댓글 삭제를 위한 정보
-	 * @param session 로그인 검증용
-	 * @return 댓글 삭제 성공,실패 메세지
+	 * @param donationIdx        기부 번호
+	 * @param donationCommentIdx 응원 댓글 번호
+	 * @param dto                댓글 삭제를 위한 정보
+	 * @param session            로그인 검증용
+	 * @return 댓글 삭제,성공 메세지
 	 */
-	@DeleteMapping("{idx}/comments/{dcIdx}")
-	public ResponseEntity<?> deleteDonationComment(@PathVariable int idx, @PathVariable int dcIdx,
+	@DeleteMapping("{donationIdx}/comments/{donationCommentIdx}")
+	public ResponseEntity<?> deleteDonationComment(@PathVariable int donationIdx, @PathVariable int donationCommentIdx,
 			@RequestBody DonationCommentDeleteRequestDTO dto, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
