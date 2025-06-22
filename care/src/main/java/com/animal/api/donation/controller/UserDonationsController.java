@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
+import com.animal.api.donation.model.request.DonationRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
@@ -250,5 +252,26 @@ public class UserDonationsController {
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "회원 정보 존재하지 않음"));
 		}
+	}
+
+	@PostMapping("/{donationIdx}/users")
+	public ResponseEntity<?> addDonation(@PathVariable int donationIdx, @Valid @RequestBody DonationRequestDTO dto,
+			HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		Map resultMap = service.addDonation(dto, loginUser.getIdx());
+
+		if ((int) resultMap.get("result") == service.POST_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Void>(201, (String) resultMap.get("msg"), null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ErrorResponseDTO(400, (String) resultMap.get("msg")));
+		}
+
 	}
 }

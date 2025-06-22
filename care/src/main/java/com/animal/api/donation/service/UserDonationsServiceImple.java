@@ -190,37 +190,42 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	}
 
 	@Override
-	public int getDonationUserPoint(int idx) {
-		int userPoint = mapper.getDonationUserPoint(idx);
+	public int getDonationUserPoint(int userIdx) {
+		int userPoint = mapper.getDonationUserPoint(userIdx);
 		return userPoint;
 	}
 
 	@Transactional
 	@Override
-	public Map addDonation(DonationRequestDTO dto, int userPoint) {
+	public Map addDonation(DonationRequestDTO dto, int userIdx) {
 		Map map = new HashMap();
 		int result = 0;
 		String msg = null;
 		Boolean errorCheck = false;
-
+		int userPoint = getDonationUserPoint(userIdx);
 		if (userPoint < dto.getDonatedAmount()) {
 			result = INSUFFICIENT_POINT;
-			msg = "잘못된 접근:보유 포인트 부족";
+			msg = "보유하신 포인트가 부족합니다.";
 			errorCheck = true;
 		}
-		
+
 		if (!errorCheck) {
-			result = mapper.addDonation(dto);
-			if (result > 0) {
+			int donationDetailInsert = mapper.addDonation(dto);
+			int donationUpdate = mapper.updateDonation(dto);
+			int userUpdate = mapper.updateUserPoint(dto);
+
+			if (donationDetailInsert > 0 && donationUpdate > 0 && userUpdate > 0) {
 				result = POST_SUCCESS;
 				msg = "기부 성공";
 			} else {
 				result = ERROR;
 				msg = "잘못된 접근";
+				throw new RuntimeException("기부 처리 중 오류 발생: 트랜잭션 롤백");
 			}
 		}
 		map.put("result", result);
 		map.put("msg", msg);
 		return map;
+
 	}
 }
