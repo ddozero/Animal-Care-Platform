@@ -109,7 +109,7 @@ WHERE
 	AND TURN >= #{turn};
 </update>
 
-<insert id="addVolunterReviewApply" parameterType="com.animal.api.management.shelter.model.response.ManageVolunteerReplyRequestDTO">
+<insert id="addVolunterReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
 INSERT
 	INTO
 	VOLUNTEER_REVIEWS(
@@ -122,13 +122,13 @@ TURN,
 CREATED_AT
 )
 VALUES (
-#{volunteerIdx},
 #{userIdx},
+#{volunteerIdx},
 #{content},
 #{ref},
 #{lev},
 #{turn},
-#{createAt}
+#{createdAt}
 );
 </insert>
  

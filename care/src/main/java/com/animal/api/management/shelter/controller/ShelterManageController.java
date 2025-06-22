@@ -34,7 +34,7 @@ import com.animal.api.management.shelter.service.ShelterManageService;
  * @see com.animal.api.management.shelter.model.response.AllManageShelterDTO
  */
 @RestController
-@RequestMapping("api/management/shelter")
+@RequestMapping("/api/management/shelter")
 public class ShelterManageController {
 
 	@Autowired
@@ -155,16 +155,24 @@ public class ShelterManageController {
 		}
 
 	}
-
-	@PostMapping
-	public ResponseEntity<?> addVolunterReviewApply(@RequestBody ManageVolunteerReplyRequestDTO dto,
+	
+	/**
+	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 작성 메서드 
+	 * 
+	 * @param dto 봉사 리뷰글
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 해당 보호시설 봉사 리뷰글 답글 작성 
+	 */
+	@PostMapping("/reviews/volunteer")
+	public ResponseEntity<?> addVolunteerReviewApply(@RequestBody ManageVolunteerReplyRequestDTO dto,
 			HttpSession session) {
 		
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 		int userIdx = loginUser.getIdx();
+		dto.setUserIdx(userIdx);
 		
 		int result = shelterService.addVolunterReviewApply(dto);
-		dto.setUserIdx(userIdx);
 		
 		if(result == shelterService.DELETE_REVIEW) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "삭제된 리뷰에는 답글 달 수 없음"));
@@ -173,7 +181,6 @@ public class ShelterManageController {
 		}else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}
-
 	}
 
 	/**
