@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -20,5 +21,9 @@ public interface ManagementShelterMapper {
 	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(Map map);
 
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(Map map);
+	
+	public void updateTurn(Map map);
+	
+	public int addVolunterReviewApply(ManageVolunteerReplyRequestDTO dto);
 
 }

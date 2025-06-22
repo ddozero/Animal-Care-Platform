@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.management.shelter.mapper.ManagementShelterMapper;
+import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -58,5 +59,18 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		
 		List<ManageAdoptionReviewResponseDTO> reviewLists = mapper.getAdoptionReview(map);
 		return reviewLists;
+	}
+	
+	@Override
+	public int addVolunterReviewApply(ManageVolunteerReplyRequestDTO dto) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		map.put("ref", dto.getRef());
+		map.put("turn", dto.getTurn() + 1);
+		mapper.updateTurn(map);
+		
+		int count = mapper.addVolunterReviewApply(dto);
+		
+		return count;
 	}
 }
