@@ -44,5 +44,31 @@ SET
 WHERE
     USER_IDX = #{idx};
 </update>
+
+<select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
+SELECT
+	VR.IDX as reviewIdx,
+	VR.CONTENT as reviewContent,
+	VR.CREATED_AT as reviewDate,
+	REVIEWER.NICKNAME as reviewWriter,
+	V.TITLE as volunteerTitle,
+	V.IDX as volunteerIdx,
+	VR.REF,
+	VR.LEV,
+	VR.TURN
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_REVIEWS VR ON
+	VR.VOLUNTEER_IDX = V.IDX
+JOIN USERS REVIEWER ON
+	VR.USER_IDX = REVIEWER.IDX
+WHERE
+	V.USER_IDX = #{idx}
+ORDER BY
+	VR.REF DESC,
+	VR.TURN ASC
+LIMIT
+#{listSize} OFFSET #{cp};
+</select>
  
  </mapper>

@@ -1,5 +1,9 @@
 package com.animal.api.management.shelter.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -7,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.animal.api.management.shelter.mapper.ManagementShelterMapper;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
+import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
 
 @Service
 @Primary
@@ -28,5 +33,17 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	public int updateSheterInfo(ShelterInfoUpdateRequestDTO dto) {
 		int count = mapper.updateSheterInfo(dto);
 		return count;
+	}
+	
+	@Override
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int listSize, int cp, int idx) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		map.put("idx", idx);
+		
+		List<ManageVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReview(map);
+		return reviewLists;
 	}
 }
