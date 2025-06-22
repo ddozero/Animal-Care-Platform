@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.animal.api.auth.exception.CustomException;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.find.model.request.FindUserPasswordInitRequestDTO;
 import com.animal.api.find.model.request.FindUserPasswordResetRequestDTO;
@@ -20,12 +19,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 일반 사용자 비밀번호 찾기 컨트롤러
- * 
- * @author 
+ * @author Whistler95
  * @since 2025-06-21
  */
 @RestController
-@RequestMapping("/api/find/password")
+@RequestMapping("/api/find/user/password")
 @RequiredArgsConstructor
 public class FindUserPasswordController {
 	

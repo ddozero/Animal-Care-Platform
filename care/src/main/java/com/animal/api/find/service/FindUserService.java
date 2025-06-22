@@ -1,6 +1,5 @@
 package com.animal.api.find.service;
 
-import com.animal.api.find.model.request.FindUserPasswordInitRequestDTO;
 import com.animal.api.find.model.request.FindUserPasswordResetRequestDTO;
 import com.animal.api.find.model.request.FindUserPasswordVerifyRequestDTO;
 import com.animal.api.find.model.response.FindUserIdResponseDTO;

@@ -132,8 +132,8 @@ public class FindUserServiceImple implements FindUserService {
         String newPassword = dto.getNewPassword();
         String confirmPassword = dto.getConfirmPassword();
         
-        if (newPassword == null || newPassword.length() < 8 || newPassword.length() > 20) {
-            throw new CustomException(400, "비밀번호는 8자 이상 20자 이하로 입력해주세요.");
+        if (newPassword == null || newPassword.length() < 9 || newPassword.length() > 20) {
+            throw new CustomException(400, "비밀번호는 9자 이상 20자 이하로 입력해주세요.");
         }
 
         if (!newPassword.equals(confirmPassword)) {
