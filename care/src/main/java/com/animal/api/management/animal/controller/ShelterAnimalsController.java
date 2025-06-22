@@ -130,6 +130,13 @@ public class ShelterAnimalsController {
 		}
 	}
 
+	/**
+	 * 유기동물의 데이터를 삭제하는 메서드
+	 * 
+	 * @param idx     유기동물 관리번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
 	@DeleteMapping("/{idx}")
 	public ResponseEntity<?> deleteAnimal(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
