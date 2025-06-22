@@ -1,7 +1,5 @@
 package com.animal.api.auth.service;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
