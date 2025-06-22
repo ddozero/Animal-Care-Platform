@@ -48,9 +48,9 @@ WHERE
 <select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
 SELECT
 	VR.IDX AS reviewIdx,
-	VR.CONTENT AS reviewContent,
-	VR.CREATED_AT AS reviewDate,
-	REVIEWER.NICKNAME AS reviewWriter,
+	VR.CONTENT,
+	VR.CREATED_AT AS createdAt,
+	REVIEWER.NICKNAME,
 	V.TITLE AS volunteerTitle,
 	V.IDX AS volunteerIdx,
 	VR.REF,
@@ -74,7 +74,7 @@ LIMIT
 <select id="getAdoptionReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO">
 SELECT
 	AR.IDX AS reviewIdx,
-	AR.CONTENT AS reviewContent,
+	AR.CONTENT AS content,
 	U.NICKNAME,
 	A.NAME AS animalName,
 	AR.CONTENT,

@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 public class ManageVolunteerReviewResponseDTO {
 
 	private int reviewIdx;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Timestamp reviewDate;
-	private String reviewWriter;
-	private String reviewContent;
+	private String nickName;
 	private String volunteerTitle;
+	private String content;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	private Timestamp createdAt;
 	private int ref;
 	private int lev;
 	private int turn;
