@@ -6,6 +6,7 @@ import com.animal.api.management.animal.model.response.AnimalAddShelterInfoRespo
 
 public interface ShelterAnimalsService {
 	
+	public static int NOT_ANIMAL = 0;
 	public static int POST_SUCCESS = 1;
 	public static int UPDATE_SUCCESS = 2;
 	public static int DELETE_SUCCESS = 3;

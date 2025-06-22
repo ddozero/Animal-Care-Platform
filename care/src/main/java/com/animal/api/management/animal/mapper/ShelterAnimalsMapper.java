@@ -17,6 +17,6 @@ public interface ShelterAnimalsMapper {
 
 	public int deleteAnimal(int idx);
 	
-	public int getAnimalShelter(int idx);
+	public Integer getAnimalShelter(int idx);
 
 }

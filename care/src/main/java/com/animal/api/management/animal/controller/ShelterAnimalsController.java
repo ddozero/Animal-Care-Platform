@@ -117,7 +117,14 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		if (loginUser.getIdx() != dto.getUserIdx()) { // 로그인된 보호시설 유기동물 검증
+		int userIdx = service.getAnimalShelter(idx); // 유기동물이 소속된 보호시설 조회
+
+		if (userIdx == service.NOT_ANIMAL) { // 유기동물 DB 데이터 유무 검증
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 삭제되었습니다."));
+		}
+
+		if (loginUser.getIdx() != userIdx) { // 로그인된 보호시설 유기동물 검증
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
 		}
 
@@ -150,6 +157,11 @@ public class ShelterAnimalsController {
 		}
 
 		int userIdx = service.getAnimalShelter(idx); // 유기동물이 소속된 보호시설 조회
+
+		if (userIdx == service.NOT_ANIMAL) { // 유기동물 DB 데이터 유무 검증
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 이미 삭제되었습니다."));
+		}
 
 		if (loginUser.getIdx() != userIdx) { // 로그인된 보호시설 유기동물 검증
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));

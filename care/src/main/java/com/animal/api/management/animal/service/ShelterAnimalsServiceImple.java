@@ -49,7 +49,12 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	
 	@Override
 	public int getAnimalShelter(int idx) {
-		int userIdx = mapper.getAnimalShelter(idx);
+		Integer userIdx = mapper.getAnimalShelter(idx);
+		
+		if(userIdx==null) {
+			return NOT_ANIMAL;
+		}
+		
 		return userIdx;
 	}
 }

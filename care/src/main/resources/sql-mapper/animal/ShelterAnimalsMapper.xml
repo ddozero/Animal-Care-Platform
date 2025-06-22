@@ -71,7 +71,7 @@ FROM
 WHERE
 	IDX = #{idx}
 </delete>
-<select id="getAnimalShelter" parameterType="int" resultType="int">
+<select id="getAnimalShelter" parameterType="int" resultType="Integer">
 SELECT
 	USER_IDX
 FROM
