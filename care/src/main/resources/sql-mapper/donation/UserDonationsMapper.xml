@@ -106,4 +106,31 @@ FROM
 WHERE
 	IDX = #{idx}
 </select>
+
+<insert id="addDonation" parameterType="com.animal.api.donation.model.request.DonationRequestDTO">
+INSERT
+	INTO
+	DONATION_DETAILS(USER_IDX, DONATION_IDX, DONATED_AMOUNT)
+VALUES(#{userIdx}, #{donationIdx}, #{donatedAmount})
+</insert>
+
+<update id="updateDonation" parameterType="com.animal.api.donation.model.request.DonationRequestDTO">
+UPDATE 
+	DONATIONS
+SET
+  COMPLETION_AMOUNT = COMPLETION_AMOUNT + #{donatedAmount},
+  COMPLETION_RATE = (COMPLETION_AMOUNT + #{donatedAmount}) / AMOUNT
+WHERE
+  IDX = #{donationIdx}
+  AND DONATION_STATUS_IDX = 2
+</update>
+
+<update id="updateUserPoint" parameterType="com.animal.api.donation.model.request.DonationRequestDTO">
+UPDATE 
+	USERS
+SET
+  POINT = POINT - #{donatedAmount}
+WHERE
+  IDX = #{userIdx}
+</update>
 </mapper>
