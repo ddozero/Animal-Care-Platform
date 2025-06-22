@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
-import com.animal.api.common.aop.auth.RequireLogin;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
@@ -33,13 +32,14 @@ import com.animal.api.donation.service.UserDonationsService;
 
 /**
  * @author consgary
- * @since 2025.06.21
+ * @since 2025.06.22
  * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
  * @see com.animal.api.donation.model.response.DonationDetailResponseDTO
  * @see com.animal.api.donation.model.response.AllDonationCommentsResponseDTO
  * @see com.animal.api.donation.model.response.AllDonationUserListResponseDTO
  * @see com.animal.api.donation.model.request.DonationCommentRequestDTO
  * @see com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO
+ * @see com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO
  */
 @RestController
 @RequestMapping("/api/donations")
@@ -193,6 +193,15 @@ public class UserDonationsController {
 		}
 	}
 
+	/**
+	 * 응원 댓글 삭제
+	 * 
+	 * @param idx     기부 번호
+	 * @param dcIdx   댓글 번호
+	 * @param dto     댓글 삭제를 위한 정보
+	 * @param session 로그인 검증용
+	 * @return 댓글 삭제 성공,실패 메세지
+	 */
 	@DeleteMapping("{idx}/comments/{dcIdx}")
 	public ResponseEntity<?> deleteDonationComment(@PathVariable int idx, @PathVariable int dcIdx,
 			@RequestBody DonationCommentDeleteRequestDTO dto, HttpSession session) {
@@ -205,8 +214,8 @@ public class UserDonationsController {
 		Map resultMap = service.deleteDonationComment(dto);
 
 		if ((int) resultMap.get("result") == service.DELETE_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT)
-					.body(new OkResponseDTO<Void>(204, (String) resultMap.get("msg"), null));
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<Void>(200, (String) resultMap.get("msg"), null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new ErrorResponseDTO(400, (String) resultMap.get("msg")));
