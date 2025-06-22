@@ -138,7 +138,15 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 조회 성공", reviewList));
 		}
 	}
-
+	
+	/**
+	 * 해당 보호시설 입양 리뷰 조회 메서드
+	 * 
+	 * @param cp 현재 페이지 번호
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 로그인한 보호시설의 사용자 입양 리뷰 조회
+	 */
 	@GetMapping("/reviews/adoption")
 	public ResponseEntity<?> getAdoptionReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
