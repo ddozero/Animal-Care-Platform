@@ -47,12 +47,15 @@ WHERE
 
 <select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
 SELECT
-	VR.IDX AS reviewIdx,
-	VR.CONTENT AS reviewContent,
-	VR.CREATED_AT AS reviewDate,
-	REVIEWER.NICKNAME AS reviewWriter,
-	V.TITLE AS volunteerTitle,
-	V.IDX AS volunteerIdx
+	VR.IDX as reviewIdx,
+	VR.CONTENT as reviewContent,
+	VR.CREATED_AT as reviewDate,
+	REVIEWER.NICKNAME as reviewWriter,
+	V.TITLE as volunteerTitle,
+	V.IDX as volunteerIdx,
+	VR.REF,
+	VR.LEV,
+	VR.TURN
 FROM
 	VOLUNTEERS V
 JOIN VOLUNTEER_REVIEWS VR ON
@@ -62,7 +65,8 @@ JOIN USERS REVIEWER ON
 WHERE
 	V.USER_IDX = #{idx}
 ORDER BY
-	VR.CREATED_AT desc
+	VR.REF DESC,
+	VR.TURN ASC
 LIMIT
 #{listSize} OFFSET #{cp};
 </select>
