@@ -64,4 +64,19 @@ SET
 WHERE
 	IDX = #{idx};
 </update>
+<delete id="deleteAnimal" parameterType="int">
+DELETE
+FROM
+	ANIMALS
+WHERE
+	IDX = #{idx}
+</delete>
+<select id="getAnimalShelter" parameterType="int" resultType="Integer">
+SELECT
+	USER_IDX
+FROM
+	ANIMALS
+WHERE
+	IDX = #{idx}
+</select>
 </mapper>
