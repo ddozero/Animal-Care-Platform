@@ -47,17 +47,17 @@ WHERE
 
 <select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
 SELECT
-	VR.IDX as reviewIdx,
-	VR.CONTENT as reviewContent,
-	VR.CREATED_AT as reviewDate,
-	REVIEWER.NICKNAME as reviewWriter,
-	V.TITLE as volunteerTitle,
-	V.IDX as volunteerIdx
+	VR.IDX AS reviewIdx,
+	VR.CONTENT AS reviewContent,
+	VR.CREATED_AT AS reviewDate,
+	REVIEWER.NICKNAME AS reviewWriter,
+	V.TITLE AS volunteerTitle,
+	V.IDX AS volunteerIdx
 FROM
 	VOLUNTEERS V
-JOIN VOLUNTEER_REVIEWS VR on
+JOIN VOLUNTEER_REVIEWS VR ON
 	VR.VOLUNTEER_IDX = V.IDX
-JOIN USERS REVIEWER on
+JOIN USERS REVIEWER ON
 	VR.USER_IDX = REVIEWER.IDX
 WHERE
 	V.USER_IDX = #{idx}
