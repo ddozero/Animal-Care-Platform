@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 public class ManageVolunteerReviewResponseDTO {
 
 	private int reviewIdx;
+	private int userIdx;
+	private int shelterIdx;
+	private int volunteerIdx;
 	private String nickName;
 	private String volunteerTitle;
 	private String content;
