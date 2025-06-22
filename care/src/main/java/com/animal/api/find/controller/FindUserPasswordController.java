@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2025-06-21
  */
 @RestController
-@RequestMapping("/api/find/password")
+@RequestMapping("/api/find/user/password")
 @RequiredArgsConstructor
 public class FindUserPasswordController {
 	

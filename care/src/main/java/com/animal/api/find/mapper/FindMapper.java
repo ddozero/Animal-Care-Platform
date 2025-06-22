@@ -17,4 +17,5 @@ public interface FindMapper {
 
 	//비밀번호 재설정 최종 단계: 비밀번호 업데이트
 	void updateUserPassword(@Param("userIdx") int userIdx, @Param("password") String password);
+
 }

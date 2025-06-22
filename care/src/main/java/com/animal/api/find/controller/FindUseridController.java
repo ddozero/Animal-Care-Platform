@@ -19,13 +19,13 @@ import lombok.RequiredArgsConstructor;
  *
  */
 @RestController
-@RequestMapping("/api/find")
+@RequestMapping("/api/find/user")
 @RequiredArgsConstructor
 public class FindUseridController {
 
 	private final FindUserService findService;
 	
-	@PostMapping("/userid")
+	@PostMapping("/id")
 	public ResponseEntity<?> findUserId(@RequestBody FindUserIdRequestDTO request) {
 	    FindUserIdResponseDTO response = findService.findUserId(request.getName(), request.getEmail());
 

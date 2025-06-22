@@ -1,4 +1,4 @@
-package com.animal.api.find.model.request;
+package com.animal.api.find.shelter.model.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -7,10 +7,10 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 /**
- * 비밀번호 재설정 요청 DTO
+ * 보호소 비밀번호 찾기 - 인증코드 검증 요청 DTO
  */
 @Data
-public class FindUserPasswordResetRequestDTO {
+public class FindShelterPasswordResetRequestDTO {
 
     @NotBlank(message = "아이디는 필수입니다.")
     private String userid;
