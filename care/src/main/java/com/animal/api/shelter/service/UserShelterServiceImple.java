@@ -12,10 +12,12 @@ import com.animal.api.shelter.mapper.UserShelterMapper;
 import com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
+import com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
 
 @Service
@@ -119,9 +121,37 @@ public class UserShelterServiceImple implements UserShelterService {
 		if (result > 0) {
 			ShelterBoardDetailResponseDTO dto = mapper.getShelterBoardDetail(idx);
 			return dto;
-		}else {
+		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public List<ShelterVolunteerReviewResponseDTO> getShelterVolunteerReviews(int listSize, int cp, int idx) {
+		cp = changeCurrentPage(cp, listSize);
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		map.put("idx", idx);
+
+		List<ShelterVolunteerReviewResponseDTO> reviewList = mapper.getShelterVolunteerReviews(map);
+
+		return reviewList;
+	}
+
+	@Override
+	public List<ShelterAdoptionReviewResponseDTO> getShelterAdoptionReviews(int listSize, int cp, int idx) {
+		cp = changeCurrentPage(cp, listSize);
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		map.put("idx", idx);
+
+		List<ShelterAdoptionReviewResponseDTO> reviewList = mapper.getShelterAdoptionReviews(map);
+
+		return reviewList;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드

@@ -8,10 +8,12 @@ import org.apache.ibatis.annotations.Mapper;
 import com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO;
 import com.animal.api.shelter.model.request.SearchShelterRequestDTO;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
+import com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterBoardListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
 
 @Mapper
@@ -34,4 +36,8 @@ public interface UserShelterMapper {
 	public ShelterBoardDetailResponseDTO getShelterBoardDetail(int idx);
 
 	public int incrementViews(int idx);
+
+	public List<ShelterVolunteerReviewResponseDTO> getShelterVolunteerReviews(Map map);
+
+	public List<ShelterAdoptionReviewResponseDTO> getShelterAdoptionReviews(Map map);
 }
