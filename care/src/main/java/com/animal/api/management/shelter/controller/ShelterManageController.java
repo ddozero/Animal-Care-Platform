@@ -20,6 +20,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
+import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
 import com.animal.api.management.shelter.service.ShelterManageService;
 
@@ -36,11 +37,11 @@ public class ShelterManageController {
 
 	@Autowired
 	private ShelterManageService shelterService;
-	
+
 	/**
 	 * 로그인 및 보호시설 사용자 검증 메서드
 	 * 
-	 * @param session 로그인 검증 세션 
+	 * @param session 로그인 검증 세션
 	 * 
 	 * @return 보호시설 계정으로 로그인한 관리자
 	 */
@@ -128,6 +129,32 @@ public class ShelterManageController {
 		int userIdx = loginUser.getIdx();
 
 		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(listSize, cp, userIdx);
+
+		if (reviewList == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
+		} else if (reviewList.size() == 0) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList));
+		} else {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 조회 성공", reviewList));
+		}
+	}
+
+	@GetMapping("/reviews/adoption")
+	public ResponseEntity<?> getAdoptionReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			HttpSession session) {
+
+		int listSize = 5;
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+
+		List<ManageAdoptionReviewResponseDTO> reviewList = shelterService.getAdoptionReview(listSize, cp, userIdx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
