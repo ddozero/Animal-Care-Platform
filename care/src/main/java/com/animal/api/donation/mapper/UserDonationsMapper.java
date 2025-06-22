@@ -12,7 +12,6 @@ import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
 import com.animal.api.donation.model.response.DonationDetailResponseDTO;
-import com.animal.api.donation.model.response.UserPointResponseDTO;
 
 @Mapper
 public interface UserDonationsMapper {
@@ -30,5 +29,5 @@ public interface UserDonationsMapper {
 
 	public int deleteDonationComment(DonationCommentDeleteRequestDTO dto);
 
-	public UserPointResponseDTO getDonationUserPoint(int idx);
+	public int getDonationUserPoint(int idx);
 }

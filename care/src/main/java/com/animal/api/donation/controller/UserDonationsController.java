@@ -28,7 +28,6 @@ import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
 import com.animal.api.donation.model.response.AllDonationListResponseDTO;
 import com.animal.api.donation.model.response.AllDonationUserListResponseDTO;
 import com.animal.api.donation.model.response.DonationDetailResponseDTO;
-import com.animal.api.donation.model.response.UserPointResponseDTO;
 import com.animal.api.donation.service.UserDonationsService;
 
 /**
@@ -223,15 +222,33 @@ public class UserDonationsController {
 		}
 	}
 
-	@GetMapping("/{donationIdx}/donation")
-	public ResponseEntity<?> getDonationUserPoint(@PathVariable int donationIdx,
-			@RequestBody UserPointResponseDTO dto, HttpSession session) {
+	/**
+	 * 회원 보유 포인트 조회
+	 * 
+	 * @param donationIdx 기부번호
+	 * @param userIdx     회원번호
+	 * @param session     로그인 검증용 세션
+	 * @return 회원 보유 포인트
+	 */
+	@GetMapping("/{donationIdx}/users/{userIdx}")
+	public ResponseEntity<?> getDonationUserPoint(@PathVariable int donationIdx, @PathVariable int userIdx,
+			HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-		
-		int point=service.getDonationUserPoint();
+
+		if (userIdx <= 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유효하지 않은 회원 번호"));
+		}
+
+		int point = service.getDonationUserPoint(userIdx);
+
+		if (point >= 0) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "회원 보유 포인트 조회 성공", point));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "회원 정보 존재하지 않음"));
+		}
 	}
 }

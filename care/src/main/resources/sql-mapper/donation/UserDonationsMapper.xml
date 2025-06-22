@@ -97,7 +97,8 @@ WHERE
 	IDX = #{idx}
 	AND USER_IDX = #{userIdx}
 </delete>
-<select id="getDonationUserPoint" parameterType="int" resultType="com.animal.api.donation.model.response.UserPointResponseDTO">
+
+<select id="getDonationUserPoint" parameterType="int" resultType="int">
 SELECT
 	POINT
 FROM
