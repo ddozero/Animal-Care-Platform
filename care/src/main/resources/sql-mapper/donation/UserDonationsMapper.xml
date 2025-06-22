@@ -88,4 +88,13 @@ WHERE
 	AND USER_IDX = #{userIdx}
 	AND DONATION_IDX = #{donationIdx}
 </update>
+
+<delete id="deleteDonationComment" parameterType="com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO">
+DELETE
+FROM
+	DONATION_COMMENTS
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+</delete>
 </mapper>

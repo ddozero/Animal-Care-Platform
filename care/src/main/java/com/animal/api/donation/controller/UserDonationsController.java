@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
 import com.animal.api.donation.model.response.AllDonationCommentsResponseDTO;
@@ -30,13 +32,14 @@ import com.animal.api.donation.service.UserDonationsService;
 
 /**
  * @author consgary
- * @since 2025.06.21
+ * @since 2025.06.22
  * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
  * @see com.animal.api.donation.model.response.DonationDetailResponseDTO
  * @see com.animal.api.donation.model.response.AllDonationCommentsResponseDTO
  * @see com.animal.api.donation.model.response.AllDonationUserListResponseDTO
  * @see com.animal.api.donation.model.request.DonationCommentRequestDTO
  * @see com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO
+ * @see com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO
  */
 @RestController
 @RequestMapping("/api/donations")
@@ -160,13 +163,13 @@ public class UserDonationsController {
 					.body(new ErrorResponseDTO(400, (String) resultMap.get("msg")));
 		}
 	}
-	
+
 	/**
-	 * 응원 댓글 수정 
+	 * 응원 댓글 수정
 	 * 
-	 * @param idx 기부 번호
-	 * @param dcIdx 댓글 번호
-	 * @param dto 댓글 수정 폼
+	 * @param idx     기부 번호
+	 * @param dcIdx   댓글 번호
+	 * @param dto     댓글 수정 폼
 	 * @param session 로그인 검증용
 	 * @return 댓글 수정 성공,실패 메세지
 	 */
@@ -182,6 +185,35 @@ public class UserDonationsController {
 		Map resultMap = service.updateDonationComment(dto);
 
 		if ((int) resultMap.get("result") == service.POST_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<Void>(200, (String) resultMap.get("msg"), null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ErrorResponseDTO(400, (String) resultMap.get("msg")));
+		}
+	}
+
+	/**
+	 * 응원 댓글 삭제
+	 * 
+	 * @param donationIdx        기부 번호
+	 * @param donationCommentIdx 응원 댓글 번호
+	 * @param dto                댓글 삭제를 위한 정보
+	 * @param session            로그인 검증용
+	 * @return 댓글 삭제,성공 메세지
+	 */
+	@DeleteMapping("{donationIdx}/comments/{donationCommentIdx}")
+	public ResponseEntity<?> deleteDonationComment(@PathVariable int donationIdx, @PathVariable int donationCommentIdx,
+			@RequestBody DonationCommentDeleteRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		Map resultMap = service.deleteDonationComment(dto);
+
+		if ((int) resultMap.get("result") == service.DELETE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<Void>(200, (String) resultMap.get("msg"), null));
 		} else {
