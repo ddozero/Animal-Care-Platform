@@ -35,6 +35,8 @@ public class ShelterManageController {
 
 	@Autowired
 	private ShelterManageService shelterService;
+	
+
 
 	/**
 	 * 보호시설 기본정보 조회 메서드
@@ -51,6 +53,10 @@ public class ShelterManageController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
 		}
+		if (loginUser.getUserTypeIdx() != 2) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호소 사용자만 접근 가능"));
+		}
+
 		int userIdx = loginUser.getIdx();
 
 		AllManageShelterResponseDTO dto = shelterService.getShelterInfo(userIdx);
@@ -73,8 +79,12 @@ public class ShelterManageController {
 	public ResponseEntity<?> updateShelterInfo(@RequestBody ShelterInfoUpdateRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
+		}
+		if (loginUser.getUserTypeIdx() != 2) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호소 사용자만 접근 가능"));
 		}
 
 		int userIdx = loginUser.getIdx();
@@ -110,6 +120,10 @@ public class ShelterManageController {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
+		}
+		
+		if (loginUser.getUserTypeIdx() != 2) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호소 사용자만 접근 가능"));
 		}
 
 		int userIdx = loginUser.getIdx();
