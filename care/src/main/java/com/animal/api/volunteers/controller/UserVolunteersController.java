@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -120,7 +121,7 @@ public class UserVolunteersController {
 	 * @return 신청에 따른 메세지
 	 */
 	@PostMapping("/{idx}/submit")
-	public ResponseEntity<?> submitVolunteers(@RequestBody VolunteersSubmitRequestDTO dto, @PathVariable("idx") int idx,
+	public ResponseEntity<?> submitVolunteers(@Valid @RequestBody VolunteersSubmitRequestDTO dto, @PathVariable("idx") int idx,
 			HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
