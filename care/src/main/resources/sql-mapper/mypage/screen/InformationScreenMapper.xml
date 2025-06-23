@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.animal.api.mypage.information.screen.mapper.InformationScreenMapper">
+
+    <!-- 1. 봉사 완료 횟수 -->
+    <select id="countVolunteer" resultType="int">
+        SELECT COUNT(*)
+        FROM VOLUNTEER_REQUESTS
+        WHERE USER_IDX = #{userIdx}
+          AND VOLUNTEER_REQUEST_STATUS_IDX = (
+              SELECT IDX FROM VOLUNTEER_REQUEST_STATUS WHERE NAME = '봉사완료'
+          )
+    </select>
+
+    <!-- 2. 입양 후기 작성 수 (입양 완료로 간주) -->
+    <select id="countAdoption" resultType="int">
+        SELECT COUNT(*)
+        FROM ADOPTION_REVIEWS
+        WHERE USER_IDX = #{userIdx}
+    </select>
+
+    <!-- 3. 총 기부 금액 -->
+    <select id="sumDonations" resultType="int">
+        SELECT IFNULL(SUM(DONATED_AMOUNT), 0)
+        FROM DONATION_DETAILS
+        WHERE USER_IDX = #{userIdx}
+    </select>
+
+    <!-- 4. 최근 활동 내역 (최신순 5개) -->
+    <select id="getRecentActivities" resultType="string">
+        (
+            SELECT CONCAT(DATE_FORMAT(CREATED_AT, '%Y-%m-%d'), ' 봉사 신청 완료')
+            FROM VOLUNTEER_REQUESTS
+            WHERE USER_IDX = #{userIdx}
+            ORDER BY CREATED_AT DESC
+            LIMIT 2
+        )
+        UNION ALL
+        (
+            SELECT CONCAT(DATE_FORMAT(CREATED_AT, '%Y-%m-%d'), ' 입양 후기 작성')
+            FROM ADOPTION_REVIEWS
+            WHERE USER_IDX = #{userIdx}
+            ORDER BY CREATED_AT DESC
+            LIMIT 2
+        )
+        UNION ALL
+        (
+            SELECT CONCAT(DATE_FORMAT(CREATED_AT, '%Y-%m-%d'), ' 기부 완료')
+            FROM DONATION_DETAILS
+            WHERE USER_IDX = #{userIdx}
+            ORDER BY CREATED_AT DESC
+            LIMIT 2
+        )
+        ORDER BY 1 DESC
+        LIMIT 5
+    </select>
+
+</mapper>
