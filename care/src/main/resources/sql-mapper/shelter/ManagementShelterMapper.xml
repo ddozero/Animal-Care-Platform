@@ -132,7 +132,7 @@ VALUES (
 );
 </insert>
 
-<update id="updateVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
+<update id="updateVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
 UPDATE
 	VOLUNTEER_REVIEWS
 SET
@@ -141,7 +141,13 @@ WHERE
 	IDX = #{reviewIdx};
 </update>
 
-<delete id="deleteVolunter"></delete>
+<delete id="deleteVolunter" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+DELETE
+FROM
+	VOLUNTEER_REVIEWS
+WHERE
+	IDX = #{reviewIdx};
+</delete>
 
  
  </mapper>
