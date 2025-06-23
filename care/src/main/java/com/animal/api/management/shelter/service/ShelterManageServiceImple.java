@@ -106,5 +106,11 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		int count = mapper.updateVolunteerReviewApply(dto);
 		return count;
 	}
+	
+	@Override
+	public int deleteVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto) {
+		int count = mapper.deleteVolunteerReviewApply(dto);
+		return count;
+	}
 
 }
