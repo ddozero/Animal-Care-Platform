@@ -136,7 +136,7 @@ ON
 WHERE
 	AC.IDX = #{idx}
 </select>
-<update id="updateAdoptionConsultStatus" parameterType=com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO>
+<update id="updateAdoptionConsultStatus" parameterType="com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO">
 UPDATE
 	ADOPTION_CONSULTS
 SET

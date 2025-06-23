@@ -273,8 +273,8 @@ public class ShelterAnimalsController {
 		}
 	}
 
-	@PutMapping("/adoptions/{idx}")
-	public ResponseEntity<?> updateAdoptionConsultStatus(@PathVariable int idx,
+	@PutMapping("/adoptions/{consultIdx}")
+	public ResponseEntity<?> updateAdoptionConsultStatus(@PathVariable int consultIdx,
 			@Valid @RequestBody AdoptionConsultStatusRequestDTO dto, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
@@ -286,13 +286,16 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int result = service.updateAdoptionConsultStatus(dto, loginUser.getIdx());
+		int result = service.updateAdoptionConsultStatus(dto, loginUser.getIdx(), consultIdx);
 
 		if (result == service.UPDATE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "상태 변경 성공", null));
-		} else if(result == service.NOT_CONSULT){
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 상담 신청이 아닙니다."));
-		}else{
+		} else if (result == service.NOT_CONSULT) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 상담 신청을 찾을 수 없습니다."));
+		} else if (result == service.NOT_OWNED_CONSULT) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN)
+					.body(new ErrorResponseDTO(403, "로그인한 보호시설의 상담신청이 아닙니다."));
+		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "상태 변경 실패"));
 		}
 	}

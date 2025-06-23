@@ -107,12 +107,15 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	}
 
 	@Override
-	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto, int userIdx) {
-		Integer checkUserIdx = mapper.checkAdoptionConsultShelter(userIdx);
-		if (checkUserIdx == null) {	// 해당 보호시설의 상담 신청이 맞는지 검증
+	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto, int userIdx, int consultIdx) {
+		Integer checkUserIdx = mapper.checkAdoptionConsultShelter(consultIdx);
+		if (checkUserIdx == null) {// 해당 상담신청이 있는지 검증
 			return NOT_CONSULT;
 		}
-
+		if (checkUserIdx != userIdx) { // 해당 보호시설의 상담 신청이 맞는지 검증
+			return NOT_OWNED_CONSULT;
+		}
+		dto.setIdx(consultIdx);
 		int result = mapper.updateAdoptionConsultStatus(dto);
 		result = result > 0 ? UPDATE_SUCCESS : ERROR;
 		return result;
