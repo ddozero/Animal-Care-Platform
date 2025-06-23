@@ -21,7 +21,9 @@ public interface UserAnimalMapper {
 
 	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx);
 
-	public String checkAdoptionStatus(int idx);
+	public Integer checkAdoptionStatus(int idx);
+	
+	public Integer checkDuplicateUser(Map map);
 
 	public int submitAdoption(AdoptionSubmitReqestDTO dto);
 

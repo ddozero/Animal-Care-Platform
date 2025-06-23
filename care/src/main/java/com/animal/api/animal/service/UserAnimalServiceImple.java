@@ -85,17 +85,23 @@ public class UserAnimalServiceImple implements UserAnimalService {
 
 	@Override
 	public int submitAdoption(AdoptionSubmitReqestDTO dto) {
-		String checkStatusString = mapper.checkAdoptionStatus(dto.getAnimalIdx());
-		int checkStatus = 0;
-
-		if (checkStatusString != null) {
-			checkStatus = Integer.parseInt(checkStatusString);
-		} else {
+		// 입양 가능 상태 검사
+		Integer checkStatus = mapper.checkAdoptionStatus(dto.getAnimalIdx());
+		if (checkStatus == null) {
 			return RESERVATION_FAILD;
 		}
 
 		if (checkStatus != 1) {
 			return RESERVATION_UNAVAILABLE;
+		}
+		Map<String, Integer> map = new HashMap<String, Integer>();
+
+		// 중복 신청 검사
+		map.put("userIdx", dto.getUserIdx());
+		map.put("animalIdx", dto.getAnimalIdx());
+		Integer checkDuplicate = mapper.checkDuplicateUser(map);
+		if (checkDuplicate != null) {
+			return RESERVATION_DUPLICATE;
 		}
 
 		int result = mapper.submitAdoption(dto);
