@@ -273,6 +273,14 @@ public class ShelterAnimalsController {
 		}
 	}
 
+	/**
+	 * 해당 보호시설의 입양 상담 신청의 상태를 변경하는 메서드
+	 * 
+	 * @param consultIdx 입양 상담 신청 번호
+	 * @param dto        변경할 상태
+	 * @param session    로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
 	@PutMapping("/adoptions/{consultIdx}")
 	public ResponseEntity<?> updateAdoptionConsultStatus(@PathVariable int consultIdx,
 			@Valid @RequestBody AdoptionConsultStatusRequestDTO dto, HttpSession session) {
