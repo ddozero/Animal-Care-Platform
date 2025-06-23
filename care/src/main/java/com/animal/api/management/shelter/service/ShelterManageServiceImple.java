@@ -67,39 +67,44 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("ref", ref);
 		map.put("turn", turn);
-		
+
 		int count = mapper.updateTurn(map);
-		
-		if(count > 0) {
+
+		if (count > 0) {
 			return REPLY_OK;
-		}else if(count == 0) {
+		} else if (count == 0) {
 			return NOT_REVIEW;
-		}else {
+		} else {
 			return REPLY_ERROR;
 		}
 	}
-	
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional
 	public int addVolunterReviewApply(ManageVolunteerReplyRequestDTO dto) {
-		
+
 		int turnResult = updateTurn(dto.getRef(), dto.getTurn());
-				
-		if(turnResult!=REPLY_OK) {
+
+		if (turnResult != REPLY_OK) {
 			return turnResult;
 		}
 
 		dto.setTurn(dto.getTurn() + 1);
 		dto.setLev(dto.getLev() + 1);
-		
+
 		int result = mapper.addVolunterReviewApply(dto);
-		
-		if(result > 0) {
+
+		if (result > 0) {
 			return REPLY_OK;
-		}else {
+		} else {
 			return REPLY_ERROR;
 		}
+	}
+	
+	@Override
+	public int updateVolunterReviewApply(ManageVolunteerReviewResponseDTO dto) {
+		int count = mapper.updateVolunterReviewApply(dto);
+		return count;
 	}
 
 }
