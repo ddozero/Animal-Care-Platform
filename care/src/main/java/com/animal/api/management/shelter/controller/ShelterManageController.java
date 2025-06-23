@@ -161,10 +161,10 @@ public class ShelterManageController {
 	/**
 	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 작성 메서드
 	 * 
-	 * @param dto     봉사 리뷰글
+	 * @param dto     봉사 리뷰 답변글
 	 * @param session 로그인 검증 세션
 	 * 
-	 * @return 해당 보호시설 봉사 리뷰글 답글 작성
+	 * @return 해당 보호시설 봉사 리뷰글 답글
 	 */
 	@PostMapping("/reviews/volunteer")
 	public ResponseEntity<?> addVolunteerReviewApply(@Valid @RequestBody ManageVolunteerReplyRequestDTO dto,
@@ -185,6 +185,14 @@ public class ShelterManageController {
 		}
 	}
 	
+	/**
+	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 작성 수정 메서드
+	 * 
+	 * @param dto 봉사 리뷰 답변글
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 해당 보호시설 봉사 리뷰글 답글 수정
+	 */
 	@PutMapping("/reviews/volunteer")
 	public ResponseEntity<?> updateVolunterReviewApply(@Valid @RequestBody ManageVolunteerReplyRequestDTO dto,
 			HttpSession session) {
@@ -205,7 +213,7 @@ public class ShelterManageController {
 
 
 	/**
-	 * 로그인 및 보호시설 사용자 검증 메서드
+	 * (공통) 로그인 및 보호시설 사용자 검증 메서드
 	 * 
 	 * @param session 로그인 검증 세션
 	 * 
