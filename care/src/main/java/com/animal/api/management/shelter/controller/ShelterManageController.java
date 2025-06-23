@@ -166,7 +166,7 @@ public class ShelterManageController {
 	 * @return 해당 보호시설 봉사 리뷰글 답글 작성 
 	 */
 	@PostMapping("/reviews/volunteer")
-	public ResponseEntity<?> addVolunteerReviewApply(@RequestBody ManageVolunteerReplyRequestDTO dto,
+	public ResponseEntity<?> addVolunteerReviewApply(@Valid @RequestBody ManageVolunteerReplyRequestDTO dto,
 			HttpSession session) {
 		
 		LoginResponseDTO loginUser = shelterUserCheck(session);
