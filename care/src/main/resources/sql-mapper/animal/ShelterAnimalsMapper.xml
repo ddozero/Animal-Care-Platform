@@ -107,4 +107,29 @@ ORDER BY
 	AC.IDX DESC
 LIMIT #{listSize} OFFSET #{cp}
 </select>
+<select id="getAdoptionConsultDetail" parameterType="int" resultType="com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO">
+SELECT
+	AC.IDX,
+	AC.USER_IDX,
+	AC.ANIMAL_IDX, 
+	AC.NAME,
+	AC.EMAIL,
+	AC.TEL,
+	AC.ZIP_CODE,
+	AC.ADDRESS,
+	AC.ADDRESS_DETAIL,
+	AC.HAS_PET,
+	AC.CONSULTED_AT,
+	AC.DESCRIPTION,
+	AC.CREATED_AT,
+	ACS.IDX AS 'STATUS_IDX',
+	ACS.NAME AS 'STATUS'
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ADOPTION_CONSULT_STATUS ACS 
+ON
+	AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+WHERE
+	AC.IDX = #{idx}
+</select>
 </mapper>
