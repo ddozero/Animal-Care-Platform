@@ -24,8 +24,8 @@ public interface ShelterManageService {
 
 	public int updateTurn(int ref, int turn);
 
-	public int addVolunterReviewApply(ManageVolunteerReplyRequestDTO dto);
+	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 	
-	public int updateVolunterReviewApply(ManageVolunteerReplyRequestDTO dto);
+	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 
 }

@@ -111,7 +111,7 @@ WHERE
 	AND TURN >= #{turn};
 </update>
 
-<insert id="addVolunterReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+<insert id="addVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
 INSERT
 	INTO
 	VOLUNTEER_REVIEWS(
@@ -132,7 +132,7 @@ VALUES (
 );
 </insert>
 
-<update id="updateVolunterReviewApply" parameterType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
+<update id="updateVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
 UPDATE
 	VOLUNTEER_REVIEWS
 SET
@@ -141,6 +141,7 @@ WHERE
 	IDX = #{reviewIdx};
 </update>
 
+<delete id="deleteVolunter"></delete>
 
  
  </mapper>

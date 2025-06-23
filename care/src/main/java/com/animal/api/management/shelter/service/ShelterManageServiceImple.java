@@ -81,7 +81,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	@Override
 	@Transactional
-	public int addVolunterReviewApply(ManageVolunteerReplyRequestDTO dto) {
+	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto) {
 
 		int turnResult = updateTurn(dto.getRef(), dto.getTurn());
 
@@ -92,7 +92,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		dto.setTurn(dto.getTurn() + 1);
 		dto.setLev(dto.getLev() + 1);
 
-		int result = mapper.addVolunterReviewApply(dto);
+		int result = mapper.addVolunteerReviewApply(dto);
 
 		if (result > 0) {
 			return REPLY_OK;
@@ -102,8 +102,8 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 
 	@Override
-	public int updateVolunterReviewApply(ManageVolunteerReplyRequestDTO dto) {
-		int count = mapper.updateVolunterReviewApply(dto);
+	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto) {
+		int count = mapper.updateVolunteerReviewApply(dto);
 		return count;
 	}
 
