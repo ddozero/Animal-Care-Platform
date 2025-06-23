@@ -15,6 +15,11 @@ import com.animal.api.board.service.UserBoardService;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 
+/**
+ * @author consgary
+ * @since 2025.06.23
+ * @see com.animal.api.board.model.response.AllBoardListResponseDTO
+ */
 @RestController
 @RequestMapping("/api/boards")
 public class UserBoardController {
@@ -22,6 +27,12 @@ public class UserBoardController {
 	@Autowired
 	private UserBoardService service;
 
+	/**
+	 * 자유게시판 전체 조회
+	 * 
+	 * @param cp 현재 페이지
+	 * @return 게시판 전체 리스트
+	 */
 	@GetMapping
 	public ResponseEntity<?> getBoards(@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
