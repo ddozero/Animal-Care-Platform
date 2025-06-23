@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.aop.util.SessionUtils;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.mypage.information.modify.model.request.EmailChangeRequestDTO;
 import com.animal.api.mypage.information.modify.model.request.InformationModifyRequsetDTO;
 import com.animal.api.mypage.information.modify.model.request.PasswordChangeRequestDTO;
 import com.animal.api.mypage.information.modify.model.response.InformationModifyResponseDTO;
@@ -78,7 +79,7 @@ public class InformationModifyController {
 	}
 
 	/**
-	 * 비밀번호 변경
+	 * 내 정보 수정 비밀번호 변경
 	 * @param requestDTO 비밀번호 변경 입력 폼 값
 	 * @param reuqest 세선에 저장된 사용자 정보
 	 * @return 비밀번호 변경 완료 / 캡차 인증
@@ -96,5 +97,25 @@ public class InformationModifyController {
 		informationModifyService.updatePassword(loginUser.getIdx(), requestDTO, request);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "비밀번호가 성공적으로 변경되었습니다", null));
+	}
+	
+	/**
+	 * 내 정보 수정 이메일 변경 
+	 * @param requestDTO 이메일 변경 폼 값
+	 * @param request 로그인한 유저의 정보
+	 * @return 이메일 변경 성공
+	 */
+	@PutMapping("/email")
+	public ResponseEntity<?> updateEmail(@Valid @RequestBody EmailChangeRequestDTO requestDTO, HttpServletRequest request){
+		
+		LoginResponseDTO loginUser = SessionUtils.getLoginUser(request);
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new OkResponseDTO<>(401, "로그인 정보가 없습니다", null));
+		}
+		
+		informationModifyService.updateEmail(loginUser.getIdx(), requestDTO);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "이메일이 성공적으로 변경되었습니다", null));
 	}
 }

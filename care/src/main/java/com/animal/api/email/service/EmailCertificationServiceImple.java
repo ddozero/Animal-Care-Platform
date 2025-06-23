@@ -1,5 +1,6 @@
 package com.animal.api.email.service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import org.springframework.context.annotation.Primary;
@@ -61,4 +62,9 @@ public class EmailCertificationServiceImple implements EmailCertificationService
 		return true;
 	}
 
+	@Override
+	public void saveCertificationWithUser(int userIdx, String email, String code, int expireMinutes) {
+	    Timestamp expiresAt = Timestamp.valueOf(LocalDateTime.now().plusMinutes(expireMinutes));
+	    certificationMapper.insertCertificationWithEmail(userIdx, email, code, expiresAt);
+	}
 }

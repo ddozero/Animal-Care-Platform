@@ -16,6 +16,18 @@ public interface InformationModifyMapper {
 
 	// 현재 비밀번호 확인
 	String selectEncryptedPassword(@Param("userIdx") int userIdx); 
+	
 	// 내 비밀번호 변경
 	int updatePassword(@Param("userIdx") int userIdx, @Param("encodedPassword") String encodedPassword);
+	
+	
+	// 내 이메일 조회
+	String selectUserEmail(@Param("userIdx") int userIdx);
+	
+	// 변경 이메일 중복 조회
+	boolean existsByEmail(@Param("email") String email);
+	
+	// 내 이메일 변경
+	int updateUserEmail(@Param("userIdx") int userIdx, @Param("newEmail") String newEmail);
+	
 }
