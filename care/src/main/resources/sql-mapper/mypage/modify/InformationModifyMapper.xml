@@ -34,6 +34,12 @@
 		   	   UPDATED_AT = NOW()
 		 WHERE IDX = #{userIdx}
 	</update>
+	<!-- 현재 비밀번호 확인 -->
+	<select id="selectEncryptedPassword">
+		SELECT PASSWORD 
+		  FROM USERS
+		 WHERE IDX = #{userIdx}
+	</select>
 	<!-- 비밀번호 변경 -->
 	<update id="updatePassword">
 	    UPDATE USERS
