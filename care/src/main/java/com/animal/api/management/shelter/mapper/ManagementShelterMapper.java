@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
@@ -28,6 +29,12 @@ public interface ManagementShelterMapper {
 	
 	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 	
-	public int deleteVolunteerReviewApply(int idx);
+	public int deleteVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
+	
+	public Integer checkVolunteerReview(@Param("reviewIdx") int reviewIdx);
+	
+	public Integer checkShelterUser(ManageVolunteerReplyRequestDTO dto);
+	
+	
 
 }
