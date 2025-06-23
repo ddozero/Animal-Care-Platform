@@ -3,11 +3,13 @@ package com.animal.api.management.shelter.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -32,31 +35,11 @@ import com.animal.api.management.shelter.service.ShelterManageService;
  * @see com.animal.api.management.shelter.model.response.AllManageShelterDTO
  */
 @RestController
-@RequestMapping("api/management/shelter")
+@RequestMapping("/api/management/shelter")
 public class ShelterManageController {
 
 	@Autowired
 	private ShelterManageService shelterService;
-
-	/**
-	 * 로그인 및 보호시설 사용자 검증 메서드
-	 * 
-	 * @param session 로그인 검증 세션
-	 * 
-	 * @return 보호시설 계정으로 로그인한 관리자
-	 */
-	public LoginResponseDTO shelterUserCheck(HttpSession session) {
-		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
-
-		if (loginUser == null) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 후 이용가능");
-		}
-		if (loginUser.getUserTypeIdx() != 2) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "보호소 사용자만 접근 가능");
-		}
-
-		return loginUser;
-	}
 
 	/**
 	 * 보호시설 기본정보 조회 메서드
@@ -90,7 +73,7 @@ public class ShelterManageController {
 	 * @return 수정에 따른 메세지
 	 */
 	@PutMapping
-	public ResponseEntity<?> updateShelterInfo(@RequestBody ShelterInfoUpdateRequestDTO dto, HttpSession session) {
+	public ResponseEntity<?> updateShelterInfo(@Valid @RequestBody ShelterInfoUpdateRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
@@ -138,11 +121,11 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 조회 성공", reviewList));
 		}
 	}
-	
+
 	/**
 	 * 해당 보호시설 입양 리뷰 조회 메서드
 	 * 
-	 * @param cp 현재 페이지 번호
+	 * @param cp      현재 페이지 번호
 	 * @param session 로그인 검증 세션
 	 * 
 	 * @return 로그인한 보호시설의 사용자 입양 리뷰 조회
@@ -172,6 +155,53 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 조회 성공", reviewList));
 		}
 
+	}
+	
+	/**
+	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 작성 메서드 
+	 * 
+	 * @param dto 봉사 리뷰글
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 해당 보호시설 봉사 리뷰글 답글 작성 
+	 */
+	@PostMapping("/reviews/volunteer")
+	public ResponseEntity<?> addVolunteerReviewApply(@Valid @RequestBody ManageVolunteerReplyRequestDTO dto,
+			HttpSession session) {
+		
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+		int userIdx = loginUser.getIdx();
+		dto.setUserIdx(userIdx);
+		
+		int result = shelterService.addVolunterReviewApply(dto);
+		
+		if(result == shelterService.NOT_REVIEW) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "삭제된 리뷰에는 답글 달 수 없음"));
+		}else if(result == shelterService.REPLY_OK) {
+			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
+		}else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+		}
+	}
+
+	/**
+	 * 로그인 및 보호시설 사용자 검증 메서드
+	 * 
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 보호시설 계정으로 로그인한 관리자
+	 */
+	public LoginResponseDTO shelterUserCheck(HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 후 이용가능");
+		}
+		if (loginUser.getUserTypeIdx() != 2) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "보호소 사용자만 접근 가능");
+		}
+
+		return loginUser;
 	}
 
 }

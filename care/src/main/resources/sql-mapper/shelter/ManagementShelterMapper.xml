@@ -47,12 +47,14 @@ WHERE
 
 <select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
 SELECT
-	VR.IDX AS reviewIdx,
-	VR.CONTENT,
-	VR.CREATED_AT AS createdAt,
-	REVIEWER.NICKNAME,
-	V.TITLE AS volunteerTitle,
+	VR.IDX AS reviewIdx, 
+	VR.USER_IDX AS userIdx, 
+	V.USER_IDX AS shelterIdx,
 	V.IDX AS volunteerIdx,
+	V.TITLE AS volunteerTitle,
+	VR.CONTENT,
+	REVIEWER.NICKNAME,
+	VR.CREATED_AT AS createdAt,
 	VR.REF,
 	VR.LEV,
 	VR.TURN
@@ -64,11 +66,12 @@ JOIN USERS REVIEWER ON
 	VR.USER_IDX = REVIEWER.IDX
 WHERE
 	V.USER_IDX = #{idx}
+	-- 로그인한 보호소의 USER_IDX
 ORDER BY
 	VR.REF DESC,
 	VR.TURN ASC
 LIMIT
-#{listSize} OFFSET #{cp};
+#{listSize} OFFSET #{cp}
 </select>
 
 <select id="getAdoptionReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO">
@@ -78,7 +81,7 @@ SELECT
 	U.NICKNAME,
 	A.NAME AS animalName,
 	AR.CONTENT,
-	AR.CREATED_AT as createdAt,
+	AR.CREATED_AT AS createdAt,
 	AR.REF,
 	AR.TURN
 FROM
@@ -95,5 +98,36 @@ ORDER BY
 LIMIT
 #{listSize} OFFSET #{cp};
 </select>
+
+<update id="updateTurn" parameterType="map">
+UPDATE
+	VOLUNTEER_REVIEWS
+SET
+	TURN = TURN + 1
+WHERE
+	REF = #{ref}
+	AND TURN >= #{turn};
+</update>
+
+<insert id="addVolunterReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+INSERT
+	INTO
+	VOLUNTEER_REVIEWS(
+USER_IDX,
+VOLUNTEER_IDX,
+CONTENT,
+REF,
+LEV,
+TURN
+)
+VALUES (
+#{userIdx},
+#{volunteerIdx},
+#{content},
+#{ref},
+#{lev},
+#{turn}
+);
+</insert>
  
  </mapper>
