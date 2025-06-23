@@ -14,4 +14,8 @@ public interface InformationModifyMapper {
 	// 내 정보 수정
 	int updateUserInfo(@Param("userIdx") int userIdx, @Param("dto") InformationModifyRequsetDTO dto);
 
+	// 현재 비밀번호 확인
+	String selectEncryptedPassword(@Param("userIdx") int userIdx); 
+	// 내 비밀번호 변경
+	int updatePassword(@Param("userIdx") int userIdx, @Param("encodedPassword") String encodedPassword);
 }

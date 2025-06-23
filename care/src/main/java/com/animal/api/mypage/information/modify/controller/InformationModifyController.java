@@ -15,6 +15,7 @@ import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.aop.util.SessionUtils;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.mypage.information.modify.model.request.InformationModifyRequsetDTO;
+import com.animal.api.mypage.information.modify.model.request.PasswordChangeRequestDTO;
 import com.animal.api.mypage.information.modify.model.response.InformationModifyResponseDTO;
 import com.animal.api.mypage.information.modify.service.InformationModifyService;
 
@@ -36,7 +37,7 @@ public class InformationModifyController {
 	/**
 	 * 내 정보 수정 조회 및 출력
 	 * 
-	 * @param request
+	 * @param request 세션의 정보
 	 * @return userInfo 로그인 한 유저의 내 정보 목록
 	 */
 	@GetMapping("/modify")
@@ -57,6 +58,9 @@ public class InformationModifyController {
 
 	/**
 	 * 내 정보 수정
+	 * 
+	 * @param InformationModifyRequestDTO 내 정보 수정 목록
+	 * @return 정보 수정 완료
 	 */
 	@PutMapping("/update")
 	public ResponseEntity<?> updateUserInfo(@Valid @RequestBody InformationModifyRequsetDTO requestDTO,
@@ -71,5 +75,26 @@ public class InformationModifyController {
 		informationModifyService.updateUserInformation(loginUser.getIdx(), requestDTO);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "회원 정보가 성공적으로 수정되었습니다.", null));
+	}
+
+	/**
+	 * 비밀번호 변경
+	 * @param requestDTO 비밀번호 변경 입력 폼 값
+	 * @param reuqest 세선에 저장된 사용자 정보
+	 * @return 비밀번호 변경 완료 / 캡차 인증
+	 */
+	@PutMapping("/password")
+	public ResponseEntity<?> updatePassword(@Valid @RequestBody PasswordChangeRequestDTO requestDTO,
+			HttpServletRequest request) {
+
+		LoginResponseDTO loginUser = SessionUtils.getLoginUser(request);
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new OkResponseDTO<>(401, "로그인 정보가 없습니다", null));
+		}
+
+		informationModifyService.updatePassword(loginUser.getIdx(), requestDTO, request);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "비밀번호가 성공적으로 변경되었습니다", null));
 	}
 }
