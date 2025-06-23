@@ -136,10 +136,7 @@ VALUES (
 UPDATE
 	VOLUNTEER_REVIEWS
 SET
-	CONTENT = #{content},
-    REF = #{ref},
-	LEV = #{lev},
-	TURN = #{turn}
+	CONTENT = #{content}
 WHERE
 	IDX = #{reviewIdx};
 </update>
