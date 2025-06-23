@@ -32,5 +32,7 @@ public interface ShelterAnimalsMapper {
 	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx);
 
 	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto);
+	
+	public Integer checkAdoptionConsultShelter(int idx);
 
 }

@@ -144,4 +144,15 @@ SET
 WHERE
 	IDX = #{idx}
 </update>
+<select id="checkAdoptionConsultShelter" parameterType="int" resultType="Integer">
+SELECT
+	A.USER_IDX
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
+where
+	AC.IDX = #{idx}
+</select>
 </mapper>

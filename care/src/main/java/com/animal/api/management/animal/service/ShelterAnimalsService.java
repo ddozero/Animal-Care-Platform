@@ -18,6 +18,7 @@ public interface ShelterAnimalsService {
 	public static int UPDATE_SUCCESS = 2;
 	public static int DELETE_SUCCESS = 3;
 	public static int UPLOAD_SUCCESS = 4;
+	public static int NOT_CONSULT = 5;
 	public static int ERROR = -1;
 
 	public AnimalAddShelterInfoResponseDTO getShelterProfile(int idx);
@@ -33,9 +34,9 @@ public interface ShelterAnimalsService {
 	public int uploadAnimalImage(MultipartFile[] files, int idx);
 
 	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(int idx, int listSize, int cp);
-	
+
 	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx);
-	
-	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto);
+
+	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto, int userIdx);
 
 }

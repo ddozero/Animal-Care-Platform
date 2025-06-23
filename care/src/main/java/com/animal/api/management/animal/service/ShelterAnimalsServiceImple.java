@@ -99,17 +99,21 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 
 		return consultList;
 	}
-	
+
 	@Override
 	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx) {
 		AdoptionConsultDetailResponseDTO dto = mapper.getAdoptionConsultDetail(idx);
 		return dto;
 	}
-	
+
 	@Override
-	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto) {
+	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto, int userIdx) {
+		Integer checkUserIdx = mapper.checkAdoptionConsultShelter(userIdx);
+		if (checkUserIdx == null) {	// 해당 보호시설의 상담 신청이 맞는지 검증
+			return NOT_CONSULT;
+		}
+
 		int result = mapper.updateAdoptionConsultStatus(dto);
-		
 		result = result > 0 ? UPDATE_SUCCESS : ERROR;
 		return result;
 	}
