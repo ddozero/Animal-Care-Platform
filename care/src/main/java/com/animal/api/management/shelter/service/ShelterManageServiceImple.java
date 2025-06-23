@@ -100,7 +100,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return REPLY_ERROR;
 		}
 	}
-	
+
 	@Override
 	public int updateVolunterReviewApply(ManageVolunteerReplyRequestDTO dto) {
 		int count = mapper.updateVolunterReviewApply(dto);

@@ -184,11 +184,11 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}
 	}
-	
+
 	/**
 	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 작성 수정 메서드
 	 * 
-	 * @param dto 봉사 리뷰 답변글
+	 * @param dto     봉사 리뷰 답변글
 	 * @param session 로그인 검증 세션
 	 * 
 	 * @return 해당 보호시설 봉사 리뷰글 답글 수정
@@ -204,13 +204,11 @@ public class ShelterManageController {
 
 		int count = shelterService.updateVolunterReviewApply(dto);
 		if (count > 0) {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "봉사 리뷰 답글 수정 성공",null));
-		}else {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "봉사 리뷰 답글 수정 성공", null));
+		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}
 	}
-
-
 
 	/**
 	 * (공통) 로그인 및 보호시설 사용자 검증 메서드
