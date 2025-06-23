@@ -19,4 +19,7 @@ public class AllBoardListResponseDTO {
 	private Timestamp createdAt;
 	private int views;
 	private int likeCount;
+	private int ref;
+	private int lev;
+	private int turn;
 }

@@ -6,29 +6,26 @@
 <mapper namespace="com.animal.api.board.mapper.UserBoardMapper">
 <select id="getAllBoards" parameterType="Map" resultType="com.animal.api.board.model.response.AllBoardListResponseDTO">
 SELECT
-	B.IDX,
-	B.TITLE,
-	IFNULL(U.NICKNAME, '탈퇴 회원'),
-	B.CREATED_AT,
-	B.VIEWS,
-	COUNT(BL.IDX) AS LIKE_COUNT
+    B.IDX,
+    B.TITLE,
+    IFNULL(U.NICKNAME, '탈퇴 회원'),
+    B.CREATED_AT,
+    B.VIEWS,
+    COUNT(BL.IDX) AS LIKE_COUNT,
+    B.REF,
+    B.LEV,
+    B.TURN 
 FROM
-	BOARDS B
-LEFT JOIN USERS U ON
-	B.USER_IDX = U.IDX
-LEFT JOIN BOARD_LIKES BL ON
-	B.IDX = BL.BOARD_IDX
-	AND BL.IS_LIKE = 1
+    BOARDS B
+LEFT JOIN USERS U ON B.USER_IDX = U.IDX
+LEFT JOIN BOARD_LIKES BL ON B.IDX = BL.BOARD_IDX AND BL.IS_LIKE = 1
 WHERE
-	B.BOARD_TYPE_IDX = 2
+    B.BOARD_TYPE_IDX = 2
 GROUP BY
-	B.IDX,
-	B.TITLE,
-	B.CREATED_AT,
-	B.VIEWS,
-	U.NICKNAME
+    B.IDX, B.TITLE, B.CREATED_AT, B.VIEWS, U.NICKNAME, B.REF, B.LEV, B.TURN
 ORDER BY
-	B.IDX DESC
-LIMIT ${listSize} OFFSET ${cp}
+    B.REF DESC,      
+    B.TURN ASC       
+LIMIT #{listSize} OFFSET #{cp};
 </select>
 </mapper>
