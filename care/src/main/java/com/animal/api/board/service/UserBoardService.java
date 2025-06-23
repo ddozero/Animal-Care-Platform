@@ -20,4 +20,6 @@ public interface UserBoardService {
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
 
+	public List<AllBoardListResponseDTO> searchBoards(String type, String keyword, int listSize, int cp);
+
 }
