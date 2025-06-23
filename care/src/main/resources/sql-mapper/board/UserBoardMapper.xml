@@ -51,16 +51,16 @@ LEFT JOIN BOARD_LIKES BL ON
 	B.BOARD_TYPE_IDX = 2
 
     <choose>
-        <when test = "type == 'title' AND keyword != NULL AND keyword != ''">
+        <when test = "type == 'title' and keyword != null and keyword != ''">
 			AND B.TITLE LIKE CONCAT('%', #{keyword}, '%')
         </when>
-        <when test = "type == 'nickname' AND keyword != NULL AND keyword != ''">
+        <when test = "type == 'nickname' and keyword != null and keyword != ''">
             AND U.NICKNAME LIKE CONCAT('%', #{keyword}, '%')
         </when>
-        <when test = "type == 'content' AND keyword != NULL AND keyword != ''">
+        <when test = "type == 'content' and keyword != null and keyword != ''">
             AND B.CONTENT LIKE CONCAT('%', #{keyword}, '%')
         </when>
-        <when test = "(type == 'all' OR type == null) AND keyword != NULL AND keyword != ''">
+        <when test = "(type == 'all' or type == null) and keyword != null and keyword != ''">
             AND (
                 B.TITLE LIKE CONCAT('%', #{keyword}, '%')
                 OR U.NICKNAME LIKE CONCAT('%', #{keyword}, '%')

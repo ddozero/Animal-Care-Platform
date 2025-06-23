@@ -34,17 +34,25 @@ public class UserBoardController {
 	 * @return 게시판 전체 리스트
 	 */
 	@GetMapping
-	public ResponseEntity<?> getBoards(@RequestParam(value = "cp", defaultValue = "0") int cp) {
+	public ResponseEntity<?> getBoards(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "keyword", required = false) String keyword) {
 		int listSize = 3;
-		List<AllBoardListResponseDTO> boardList = service.getAllBoards(listSize, cp);
+		List<AllBoardListResponseDTO> boardList = null;
+		if (type != null || keyword != null) {
+			boardList = service.searchBoards(type, keyword, listSize, cp);
+		} else {
+			boardList = service.getAllBoards(listSize, cp);
 
+		}
 		if (boardList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		} else if (boardList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllBoardListResponseDTO>>(200, "게시판 전체 조회 성공", boardList));
+					.body(new OkResponseDTO<List<AllBoardListResponseDTO>>(200, "게시판 조회 성공", boardList));
 		}
 	}
+
 }
