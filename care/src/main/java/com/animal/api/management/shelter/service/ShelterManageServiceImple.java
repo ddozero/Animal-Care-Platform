@@ -63,11 +63,21 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 
 	@Override
-	public void updateTurn(int ref, int turn) {
+	public int updateTurn(int ref, int turn) {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("ref", ref);
 		map.put("turn", turn);
-		mapper.updateTurn(map);
+		
+		int count = mapper.updateTurn(map);
+		
+		if(count > 0) {
+			return REPLY_OK;
+		}else if (count == 0) {
+			return NOT_REVIEW;
+		}else {
+			return REPLY_ERROR;
+		}
+		
 	}
 
 	@Override

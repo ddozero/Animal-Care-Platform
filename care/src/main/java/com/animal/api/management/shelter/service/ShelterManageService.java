@@ -11,7 +11,8 @@ import com.animal.api.management.shelter.model.response.ManageVolunteerReviewRes
 public interface ShelterManageService {
 
 	public static int REPLY_OK = 1;
-	public static int DELETE_REVIEW = -1;
+	public static int NOT_REVIEW = 0;
+	public static int REPLY_ERROR = -1;
 
 	public AllManageShelterResponseDTO getShelterInfo(int idx);
 
@@ -21,7 +22,7 @@ public interface ShelterManageService {
 
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int listSize, int cp, int idx);
 
-	public void updateTurn(int ref, int turn);
+	public int updateTurn(int ref, int turn);
 
 	public int addVolunterReviewApply(ManageVolunteerReplyRequestDTO dto);
 
