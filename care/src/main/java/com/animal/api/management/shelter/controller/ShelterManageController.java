@@ -3,6 +3,7 @@ package com.animal.api.management.shelter.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,7 +73,7 @@ public class ShelterManageController {
 	 * @return 수정에 따른 메세지
 	 */
 	@PutMapping
-	public ResponseEntity<?> updateShelterInfo(@RequestBody ShelterInfoUpdateRequestDTO dto, HttpSession session) {
+	public ResponseEntity<?> updateShelterInfo(@Valid @RequestBody ShelterInfoUpdateRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
@@ -174,7 +175,7 @@ public class ShelterManageController {
 		
 		int result = shelterService.addVolunterReviewApply(dto);
 		
-		if(result == shelterService.DELETE_REVIEW) {
+		if(result == shelterService.NOT_REVIEW) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "삭제된 리뷰에는 답글 달 수 없음"));
 		}else if(result == shelterService.REPLY_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
