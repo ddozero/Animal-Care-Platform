@@ -19,6 +19,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @author consgary
  * @since 2025.06.23
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
+ * @see com.animal.api.board.model.request.BoardSearchRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -28,10 +29,12 @@ public class UserBoardController {
 	private UserBoardService service;
 
 	/**
-	 * 자유게시판 전체 조회
+	 * 전체 게시판 검색 , 조건(제목,닉네임,본문,전체) 검색
 	 * 
-	 * @param cp 현재 페이지
-	 * @return 게시판 전체 리스트
+	 * @param cp      현재 페이지
+	 * @param type    검색 조건
+	 * @param keyword 검색어
+	 * @return 전체 검색 게시판 리스트 or 조건 검색 게시판 리스트
 	 */
 	@GetMapping
 	public ResponseEntity<?> getBoards(@RequestParam(value = "cp", defaultValue = "0") int cp,
