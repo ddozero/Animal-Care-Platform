@@ -1,5 +1,9 @@
 package com.animal.api.management.animal.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -9,6 +13,7 @@ import com.animal.api.common.util.FileManager;
 import com.animal.api.management.animal.mapper.ShelterAnimalsMapper;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
+import com.animal.api.management.animal.model.response.AdoptionConsultListResponseDTO;
 import com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO;
 
 @Service
@@ -47,11 +52,11 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 		int result = mapper.deleteAnimal(idx);
 
 		result = result > 0 ? DELETE_SUCCESS : ERROR;
-		
-		if(result == DELETE_SUCCESS) {
+
+		if (result == DELETE_SUCCESS) {
 			fileManager.deleteFolder("animals", idx);
 		}
-		
+
 		return result;
 	}
 
@@ -77,5 +82,29 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 			mapper.deleteAnimal(idx);
 			return ERROR;
 		}
+	}
+
+	@Override
+	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(int idx, int listSize, int cp) {
+		cp = changeCurrentPage(cp, listSize);
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("idx", idx);
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+
+		List<AdoptionConsultListResponseDTO> consultList = mapper.getAdoptionConsultList(map);
+
+		return consultList;
+	}
+
+	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드
+	public int changeCurrentPage(int cp, int listSize) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		cp = (cp - 1) * listSize;
+
+		return cp;
 	}
 }

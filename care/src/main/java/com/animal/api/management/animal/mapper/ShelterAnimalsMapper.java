@@ -1,5 +1,6 @@
 package com.animal.api.management.animal.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -24,6 +25,6 @@ public interface ShelterAnimalsMapper {
 	
 	public Integer getAnimalMaxIdx();
 	
-	public AdoptionConsultListResponseDTO getAdoptionConsultList(Map map);
+	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(Map map);
 
 }
