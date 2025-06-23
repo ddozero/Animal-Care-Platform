@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.common.util.FileManager;
 import com.animal.api.management.animal.mapper.ShelterAnimalsMapper;
+import com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
 import com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO;
@@ -103,6 +104,14 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx) {
 		AdoptionConsultDetailResponseDTO dto = mapper.getAdoptionConsultDetail(idx);
 		return dto;
+	}
+	
+	@Override
+	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto) {
+		int result = mapper.updateAdoptionConsultStatus(dto);
+		
+		result = result > 0 ? UPDATE_SUCCESS : ERROR;
+		return result;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드
