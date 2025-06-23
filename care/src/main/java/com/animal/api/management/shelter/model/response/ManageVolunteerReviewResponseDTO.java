@@ -18,6 +18,7 @@ public class ManageVolunteerReviewResponseDTO {
 	private int shelterIdx;
 	private int volunteerIdx;
 	private String nickName;
+	private String shelterName;
 	private String volunteerTitle;
 	private String content;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
