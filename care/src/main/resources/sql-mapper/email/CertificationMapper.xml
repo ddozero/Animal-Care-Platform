@@ -48,5 +48,24 @@
 	    ORDER BY C.CREATED_AT DESC
 	    LIMIT 1
 	</select>
-
+	
+	<!-- 이메일 변경 / 인증코드 발송 -->
+	<insert id="insertCertificationWithEmail">
+	    INSERT INTO CERTIFICATIONS (
+	        USER_IDX, EMAIL, TOKEN, EXPIRES_AT, USED
+	    ) VALUES (
+	        #{userIdx}, #{email}, #{token}, #{expiresAt}, 0
+	    )
+	</insert>
+	
+	<!-- 이메일 변경 / 이메일만 인증 코드 조회 -->
+	<select id="findLatestValidByNewEmailOnly" resultMap="CertificationResultMap">
+	    SELECT *
+	    FROM CERTIFICATIONS
+	    WHERE LOWER(EMAIL) = LOWER(#{email})
+	      AND EXPIRES_AT > CURRENT_TIMESTAMP
+	      AND USED = 0
+	    ORDER BY CREATED_AT DESC
+	    LIMIT 1
+	</select>
 </mapper>

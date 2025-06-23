@@ -47,11 +47,25 @@
 	           UPDATED_AT = NOW()
 	     WHERE IDX = #{userIdx}
 	</update>
+	<!-- 내 이메일 조회 -->
+	<select id="selectUserEmail">
+		SELECT EMAIL 
+		  FROM USERS
+		 WHERE IDX = #{userIdx}
+	</select>
+	<!-- 이메일 중복 확인 -->
+	<select id="existsByEmail">
+		SELECT EXISTS (
+		       SELECT 1
+		         FROM USERS
+		        WHERE EMAIL = #{email}
+		)
+	</select>
 	<!-- 이메일변경 -->
 	<update id="updateUserEmail">
 		UPDATE USERS
-		   SET EMIAL = #{newEmail},
-		   	   UPDATED_AT = NOW()
+		   SET EMAIL = #{newEmail},
+		       UPDATED_AT = NOW()
 		 WHERE IDX = #{userIdx}
 	</update>
 </mapper>

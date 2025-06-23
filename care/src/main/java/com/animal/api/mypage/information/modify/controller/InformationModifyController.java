@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.aop.util.SessionUtils;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.mypage.information.modify.model.request.EmailChangeRequestDTO;
 import com.animal.api.mypage.information.modify.model.request.InformationModifyRequsetDTO;
 import com.animal.api.mypage.information.modify.model.request.PasswordChangeRequestDTO;
 import com.animal.api.mypage.information.modify.model.response.InformationModifyResponseDTO;
@@ -96,5 +97,19 @@ public class InformationModifyController {
 		informationModifyService.updatePassword(loginUser.getIdx(), requestDTO, request);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "비밀번호가 성공적으로 변경되었습니다", null));
+	}
+	
+	@PutMapping("/email")
+	public ResponseEntity<?> updateEmail(@Valid @RequestBody EmailChangeRequestDTO requestDTO, HttpServletRequest request){
+		
+		LoginResponseDTO loginUser = SessionUtils.getLoginUser(request);
+
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new OkResponseDTO<>(401, "로그인 정보가 없습니다", null));
+		}
+		
+		informationModifyService.updateEmail(loginUser.getIdx(), requestDTO);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "이메일이 성공적으로 변경되었습니다", null));
 	}
 }
