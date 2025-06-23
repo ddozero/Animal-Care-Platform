@@ -1,7 +1,5 @@
 package com.animal.api.management.animal.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -16,12 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
-import com.animal.api.common.util.FileManager;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
 import com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO;
@@ -43,9 +39,6 @@ public class ShelterAnimalsController {
 
 	@Autowired
 	private ShelterAnimalsService service;
-
-	@Autowired
-	private FileManager fileManager;
 
 	/**
 	 * 유기동물 등록 시 내 보호시설 확인 메서드
@@ -180,28 +173,6 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "유기동물 삭제 성공", null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 삭제 실패"));
-		}
-	}
-
-	@PostMapping("/filetest")
-	public ResponseEntity<?> fileTest(MultipartFile[] files) {
-		boolean result = fileManager.uploadIntoImages("test", 3, files);
-		if (result) {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "업로드 성공", null));
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "실패"));
-		}
-	}
-
-	@GetMapping("/filetest")
-	public ResponseEntity<?> fileTest2() {
-		List<String> filePath = fileManager.getImagePath("test", 3);
-
-		if (filePath == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ErrorResponseDTO(404, "실패"));
-		}else {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<List<String>>(200, "업로드 성공", filePath));
 		}
 	}
 
