@@ -43,9 +43,15 @@
 	<!-- 비밀번호 변경 -->
 	<update id="updatePassword">
 	    UPDATE USERS
-	    SET PASSWORD = #{encodedPassword},
-	        UPDATED_AT = NOW()
-	    WHERE IDX = #{userIdx}
+	       SET PASSWORD = #{encodedPassword},
+	           UPDATED_AT = NOW()
+	     WHERE IDX = #{userIdx}
 	</update>
-	
+	<!-- 이메일변경 -->
+	<update id="updateUserEmail">
+		UPDATE USERS
+		   SET EMIAL = #{newEmail},
+		   	   UPDATED_AT = NOW()
+		 WHERE IDX = #{userIdx}
+	</update>
 </mapper>
