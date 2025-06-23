@@ -40,6 +40,7 @@ import com.animal.api.management.animal.service.ShelterAnimalsService;
  * @see com.animal.api.management.animal.model.request.AnimalInsertRequestDTO
  * @see com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO
  * @see com.animal.api.management.animal.model.response.AdoptionConsultListResponseDTO
+ * @see com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO
  */
 
 @RestController
@@ -240,6 +241,13 @@ public class ShelterAnimalsController {
 		}
 	}
 
+	/**
+	 * 해당 보호시설의 입양 상담 신청의 상세정보 조회
+	 * 
+	 * @param idx     입양 상담 신청 번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 입양 상담 신청 상세정보
+	 */
 	@GetMapping("/adoptions/{idx}")
 	public ResponseEntity<?> getAdoptionConsultDetail(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
@@ -256,7 +264,7 @@ public class ShelterAnimalsController {
 
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 상담 신청을 찾을 수 없습니다."));
-		} else if (dto.getShelterIdx() != loginUser.getIdx()) {
+		} else if (dto.getShelterIdx() != loginUser.getIdx()) { // 해당 입양 상담 신청이 로그인한 보호시설의 신청이 아닐 때
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(403, "해당 보호시설의 상담 신청이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
