@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdoptionConsultDetailResponseDTO {
 	private int idx;
+	private int shelterIdx;
 	private int userIdx;
 	private int animalIdx;
 	private String name;

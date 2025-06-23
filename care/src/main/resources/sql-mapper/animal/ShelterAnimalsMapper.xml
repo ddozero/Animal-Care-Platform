@@ -110,6 +110,7 @@ LIMIT #{listSize} OFFSET #{cp}
 <select id="getAdoptionConsultDetail" parameterType="int" resultType="com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO">
 SELECT
 	AC.IDX,
+	A.USER_IDX AS 'SHELTER_IDX',
 	AC.USER_IDX,
 	AC.ANIMAL_IDX, 
 	AC.NAME,
@@ -129,6 +130,9 @@ FROM
 JOIN ADOPTION_CONSULT_STATUS ACS 
 ON
 	AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
 WHERE
 	AC.IDX = #{idx}
 </select>

@@ -26,6 +26,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
+import com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO;
 import com.animal.api.management.animal.model.response.AdoptionConsultListResponseDTO;
 import com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO;
 import com.animal.api.management.animal.service.ShelterAnimalsService;
@@ -206,7 +207,8 @@ public class ShelterAnimalsController {
 
 	/**
 	 * 해당 보호시설의 입양 신청 내역 리스트를 조회하는 메서드
-	 * @param cp 현재 페이지
+	 * 
+	 * @param cp      현재 페이지
 	 * @param session 로그인 검증을 위한 세션
 	 * @return 입양 상담 신청내역 리스트
 	 */
@@ -236,6 +238,31 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<AdoptionConsultListResponseDTO>>(200, "조회 성공", consultList));
 		}
+	}
+
+	@GetMapping("/adoptions/{idx}")
+	public ResponseEntity<?> getAdoptionConsultDetail(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+
+		AdoptionConsultDetailResponseDTO dto = service.getAdoptionConsultDetail(idx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 상담 신청을 찾을 수 없습니다."));
+		} else if (dto.getShelterIdx() != loginUser.getIdx()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(403, "해당 보호시설의 상담 신청이 아닙니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<AdoptionConsultDetailResponseDTO>(200, "조회 성공", dto));
+		}
+
 	}
 
 }
