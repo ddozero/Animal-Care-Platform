@@ -22,4 +22,5 @@ public class ShelterVolunteerReviewResponseDTO {
 	private int ref;
 	private int lev;
 	private int turn;
+	private String imagePath;
 }	

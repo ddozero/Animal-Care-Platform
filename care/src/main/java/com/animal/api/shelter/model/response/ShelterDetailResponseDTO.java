@@ -19,4 +19,5 @@ public class ShelterDetailResponseDTO {
 	private int animalCount;
 	private int reviewCount;
 	private String shelterType;
+	private String imagePath;
 }

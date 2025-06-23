@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.util.FileManager;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;

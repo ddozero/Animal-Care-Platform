@@ -31,4 +31,5 @@ public class AnimalDetailResponseDTO {
 	private int shelterZipCode;
 	private String shelterAddress;
 	private String shelterAddressDetail;
+	private String imagePath;
 }

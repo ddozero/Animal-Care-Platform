@@ -48,5 +48,8 @@ public class AnimalInsertRequestDTO {
 
 	@NotBlank(message = "설명은 필수입니다.")
 	private String description;
+	
+	// DB 생성 후 등록된 idx 값
+	private int idx;
 
 }

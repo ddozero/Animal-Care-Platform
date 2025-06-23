@@ -138,14 +138,15 @@ public class FileManager {
 	 * @return 설정한 폴더 내부의 이미지들의 경로
 	 */
 	public List<String> getImagePath(String folderPath, int idx) {
+		List<String> filesPath = new ArrayList<String>();
 		String realPath = context.getRealPath("/resources/" + folderPath + "/" + idx + "/images");
 		File dir = new File(realPath);
 		if (!dir.exists()) {
-			return null;
+			filesPath.add(null);
+			return filesPath;
 		}
 
 		File[] files = dir.listFiles();
-		List<String> filesPath = new ArrayList<String>();
 		for (File f : files) {
 			filesPath.add("/resources/" + folderPath + "/" + idx + "/images/" + f.getName());
 		}

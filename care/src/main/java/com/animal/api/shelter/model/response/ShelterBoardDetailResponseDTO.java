@@ -1,6 +1,7 @@
 package com.animal.api.shelter.model.response;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -22,5 +23,7 @@ public class ShelterBoardDetailResponseDTO {
 	private int ref;
 	private int lev;
 	private int turn;
+	private List<String> imagePaths;
+	private List<String> filePaths;
 
 }

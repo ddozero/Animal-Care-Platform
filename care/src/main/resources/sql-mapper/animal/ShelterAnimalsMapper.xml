@@ -22,7 +22,7 @@ JOIN SHELTER_TYPES ST
 WHERE 
 	S.USER_IDX = #{idx}
 </select>
-<insert id="insertAnimal" parameterType="com.animal.api.management.animal.model.request.AnimalInsertRequestDTO">
+<insert id="insertAnimal" parameterType="com.animal.api.management.animal.model.request.AnimalInsertRequestDTO" useGeneratedKeys="true" keyProperty="idx">
 INSERT
 	INTO
 	ANIMALS (USER_IDX,
