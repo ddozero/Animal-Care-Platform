@@ -13,6 +13,7 @@ import com.animal.api.common.util.FileManager;
 import com.animal.api.management.animal.mapper.ShelterAnimalsMapper;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
+import com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO;
 import com.animal.api.management.animal.model.response.AdoptionConsultListResponseDTO;
 import com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO;
 
@@ -96,6 +97,12 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 		List<AdoptionConsultListResponseDTO> consultList = mapper.getAdoptionConsultList(map);
 
 		return consultList;
+	}
+	
+	@Override
+	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx) {
+		AdoptionConsultDetailResponseDTO dto = mapper.getAdoptionConsultDetail(idx);
+		return dto;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드
