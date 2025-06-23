@@ -183,6 +183,15 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}
 	}
+	
+	public ResponseEntity<?> updateVolunterReviewApply(HttpSession session){
+		
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+		dto.setIdx(userIdx);
+		
+	}
 
 	/**
 	 * 로그인 및 보호시설 사용자 검증 메서드
