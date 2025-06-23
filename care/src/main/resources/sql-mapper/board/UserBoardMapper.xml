@@ -8,7 +8,7 @@
 SELECT
     B.IDX,
     B.TITLE,
-    IFNULL(U.NICKNAME, '탈퇴 회원'),
+    IFNULL(U.NICKNAME, '탈퇴 회원') AS NICKNAME,
     B.CREATED_AT,
     B.VIEWS,
     COUNT(BL.IDX) AS LIKE_COUNT,

@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import com.animal.api.board.mapper.UserBoardMapper;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 
+@Service
+@Primary
 public class UserBoardServiceImple implements UserBoardService {
 
 	@Autowired
