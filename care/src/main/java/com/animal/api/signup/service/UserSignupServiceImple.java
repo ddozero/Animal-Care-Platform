@@ -1,5 +1,7 @@
 package com.animal.api.signup.service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +34,8 @@ public class UserSignupServiceImple implements UserSignupService {
 		if (signupMapper.isDuplicateNickname(dto.getNickname()) > 0) {
 			throw new CustomException(409, "이미 사용 중인 닉네임입니다.");
 		}
+		
+		LocalDate parsedBirthDate = LocalDate.parse(dto.getBirthDate());
 
 		// 2. DTO -> VO 매핑
 		UserVO user = new UserVO();
@@ -41,7 +45,7 @@ public class UserSignupServiceImple implements UserSignupService {
 		user.setPassword(passwordEncoder.encode(dto.getPassword())); // 암호화
 		user.setName(dto.getName());
 		user.setNickname(dto.getNickname());
-		user.setBirthDate(dto.getBirthDate());
+		user.setBirthDate(parsedBirthDate);
 		user.setGender(dto.getGender());
 		user.setTel(dto.getTel());
 		user.setZipCode(dto.getZipCode());

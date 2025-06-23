@@ -2,6 +2,7 @@ package com.animal.api.signup.model.request;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -41,10 +42,11 @@ public class ShelterSignupRequestDTO {
     private String nickname;
 
     @NotNull(message = "생년월일은 필수 항목입니다.")
-    private LocalDate birthDate;
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "생년월일은 yyyy-MM-dd 형식이어야 합니다.")
+    private String birthDate;
 
     @NotBlank(message = "성별은 필수 항목입니다.")
-    @Pattern(regexp = "^[MF]$", message = "성별은 M 또는 F여야 합니다.")
+    @Pattern(regexp = "^[M|F]$", message = "성별은 M 또는 F여야 합니다.")
     private String gender;
 
     @NotBlank(message = "전화번호는 필수 항목입니다.")
@@ -58,6 +60,16 @@ public class ShelterSignupRequestDTO {
     private String address;
 
     private String addressDetail;
+    
+    @AssertTrue(message = "유효하지 않은 생년월일입니다.")
+    public boolean isValidBirthDate() {
+        try {
+            LocalDate.parse(this.birthDate); // 유효하지 않은 날짜 검증
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     // SHELTERS 테이블 공통
     @NotNull(message = "보호소 유형은 필수입니다.")
@@ -87,6 +99,6 @@ public class ShelterSignupRequestDTO {
     // 조건 분기
     private String shelterEmail; // 공공(1)
     private String shelterBusinessNumber; // 공공(1), 민간유(2)
-    private Integer shelterBusinessFile;  // 민간유(2)
+    private Integer shelterBusinessFile;  // 공공(1),민간유(2)
 	
 }
