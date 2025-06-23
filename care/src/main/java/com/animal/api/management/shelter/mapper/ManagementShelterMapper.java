@@ -28,6 +28,6 @@ public interface ManagementShelterMapper {
 	
 	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 	
-	public int deleteVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
+	public int deleteVolunteerReviewApply(int idx);
 
 }

@@ -8,7 +8,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -174,7 +176,7 @@ public class ShelterManageController {
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
 
-		int result = shelterService.addVolunterReviewApply(dto);
+		int result = shelterService.addVolunteerReviewApply(dto);
 
 		if (result == shelterService.NOT_REVIEW) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "삭제된 리뷰에는 답글 달 수 없음"));
@@ -202,9 +204,24 @@ public class ShelterManageController {
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
 
-		int count = shelterService.updateVolunterReviewApply(dto);
+		int count = shelterService.updateVolunteerReviewApply(dto);
 		if (count > 0) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "봉사 리뷰 답글 수정 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+		}
+	}
+
+	@DeleteMapping("/reviews/volunteer/{reviewIdx}")
+	public ResponseEntity<?> deleteVolunteerReviewApply(@PathVariable int reviewIdx, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+
+		int result = shelterService.deleteVolunteerReviewApply(reviewIdx);
+		if (result > 0) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "봉사 리뷰 답글 삭제 성공", null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}

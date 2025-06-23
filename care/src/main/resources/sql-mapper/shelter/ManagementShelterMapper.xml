@@ -141,7 +141,7 @@ WHERE
 	IDX = #{reviewIdx};
 </update>
 
-<delete id="deleteVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+<delete id="deleteVolunteerReviewApply" parameterType="int">
 DELETE
 FROM
 	VOLUNTEER_REVIEWS
