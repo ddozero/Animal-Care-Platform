@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdoptionConsultStatusRequestDTO {
-	private Integer idx;	// 컨트롤러에서 세팅
+	private Integer idx;	// 서비스에서 세팅
 	@NotNull(message = "상담 상태는 필수입니다.")
 	@Min(value = 1, message = "상담 상태는 1 ~ 4 여야 합니다.")
 	@Max(value = 4, message = "상담 상태는 1 ~ 4 여야 합니다.")

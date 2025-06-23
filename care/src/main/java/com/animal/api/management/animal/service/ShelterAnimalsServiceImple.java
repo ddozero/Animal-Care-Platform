@@ -34,7 +34,8 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	}
 
 	@Override
-	public int insertAnimal(AnimalInsertRequestDTO dto) {
+	public int insertAnimal(AnimalInsertRequestDTO dto, int userIdx) {
+		dto.setUserIdx(userIdx);
 		int result = mapper.insertAnimal(dto);
 
 		result = result > 0 ? POST_SUCCESS : ERROR;
@@ -42,23 +43,37 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	}
 
 	@Override
-	public int updateAnimal(AnimalUpdateRequestDTO dto) {
-		int result = mapper.updateAnimal(dto);
+	public int updateAnimal(AnimalUpdateRequestDTO dto, int animalIdx, int userIdx) {
+		Integer checkUserIdx = mapper.getAnimalShelter(animalIdx);
+		if (checkUserIdx == null) {// 해당 상담신청이 있는지 검증
+			return NOT_ANIMAL;
+		}
+		if (checkUserIdx != userIdx) { // 해당 보호시설의 유기동물이 맞는지 검증
+			return NOT_OWNED_ANIMAL;
+		}
+		dto.setIdx(animalIdx);
 
+		int result = mapper.updateAnimal(dto);
 		result = result > 0 ? UPDATE_SUCCESS : ERROR;
 		return result;
 	}
 
 	@Override
-	public int deleteAnimal(int idx) {
-		int result = mapper.deleteAnimal(idx);
+	public int deleteAnimal(int animalIdx, int userIdx) {
+		Integer checkUserIdx = mapper.getAnimalShelter(animalIdx);
+		if (checkUserIdx == null) {// 해당 상담신청이 있는지 검증
+			return NOT_ANIMAL;
+		}
+		if (checkUserIdx != userIdx) { // 해당 보호시설의 유기동물이 맞는지 검증
+			return NOT_OWNED_ANIMAL;
+		}
 
+		int result = mapper.deleteAnimal(animalIdx);
 		result = result > 0 ? DELETE_SUCCESS : ERROR;
 
 		if (result == DELETE_SUCCESS) {
-			fileManager.deleteFolder("animals", idx);
+			fileManager.deleteFolder("animals", animalIdx);
 		}
-
 		return result;
 	}
 

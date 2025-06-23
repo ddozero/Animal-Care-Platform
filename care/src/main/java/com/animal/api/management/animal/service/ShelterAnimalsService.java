@@ -13,22 +13,23 @@ import com.animal.api.management.animal.model.response.AnimalAddShelterInfoRespo
 
 public interface ShelterAnimalsService {
 
-	public static int NOT_ANIMAL = 0;
 	public static int POST_SUCCESS = 1;
 	public static int UPDATE_SUCCESS = 2;
 	public static int DELETE_SUCCESS = 3;
 	public static int UPLOAD_SUCCESS = 4;
-	public static int NOT_CONSULT = 5;
-	public static int NOT_OWNED_CONSULT= 6;
+	public static int NOT_ANIMAL = 5;
+	public static int NOT_OWNED_ANIMAL = 6;
+	public static int NOT_CONSULT = 7;
+	public static int NOT_OWNED_CONSULT = 8;
 	public static int ERROR = -1;
 
 	public AnimalAddShelterInfoResponseDTO getShelterProfile(int idx);
 
-	public int insertAnimal(AnimalInsertRequestDTO dto);
+	public int insertAnimal(AnimalInsertRequestDTO dto, int userIdx);
 
-	public int updateAnimal(AnimalUpdateRequestDTO dto);
+	public int updateAnimal(AnimalUpdateRequestDTO dto, int animalIdx, int userIdx);
 
-	public int deleteAnimal(int idx);
+	public int deleteAnimal(int animalIdx, int userIdx);
 
 	public int getAnimalShelter(int idx);
 
@@ -38,6 +39,6 @@ public interface ShelterAnimalsService {
 
 	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx);
 
-	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto, int userIdx,int consultIdx);
+	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto, int userIdx, int consultIdx);
 
 }

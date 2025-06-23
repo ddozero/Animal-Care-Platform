@@ -98,7 +98,7 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int result = service.insertAnimal(dto);
+		int result = service.insertAnimal(dto, loginUser.getIdx());
 
 		if (result == service.POST_SUCCESS) {
 			Map<String, Integer> map = new HashMap<String, Integer>();
@@ -130,13 +130,13 @@ public class ShelterAnimalsController {
 	/**
 	 * 유기동물의 정보를 수정하는 메서드
 	 * 
-	 * @param idx     유기동물 관리번호
-	 * @param dto     수정될 내용을 담은 폼 데이터
-	 * @param session 로그인 검증을 위한 세션
+	 * @param animalIdx 유기동물 관리번호
+	 * @param dto       수정될 내용을 담은 폼 데이터
+	 * @param session   로그인 검증을 위한 세션
 	 * @return 성공 또는 실패 메세지
 	 */
-	@PutMapping("/{idx}")
-	public ResponseEntity<?> updateAnimal(@PathVariable int idx, @Valid @RequestBody AnimalUpdateRequestDTO dto,
+	@PutMapping("/{animalIdx}")
+	public ResponseEntity<?> updateAnimal(@PathVariable int animalIdx, @Valid @RequestBody AnimalUpdateRequestDTO dto,
 			HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
@@ -148,21 +148,15 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int userIdx = service.getAnimalShelter(idx); // 유기동물이 소속된 보호시설 조회
-
-		if (userIdx == service.NOT_ANIMAL) { // 유기동물 DB 데이터 유무 검증
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 삭제되었습니다."));
-		}
-
-		if (loginUser.getIdx() != userIdx) { // 로그인된 보호시설 유기동물 검증
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
-		}
-
-		int result = service.updateAnimal(dto);
+		int result = service.updateAnimal(dto, animalIdx, loginUser.getIdx());
 
 		if (result == service.UPDATE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "유기동물 수정 성공", null));
+		} else if (result == service.NOT_ANIMAL) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 삭제되었습니다."));
+		} else if (result == service.NOT_OWNED_ANIMAL) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 수정 실패"));
 		}
@@ -171,12 +165,12 @@ public class ShelterAnimalsController {
 	/**
 	 * 유기동물의 데이터를 삭제하는 메서드
 	 * 
-	 * @param idx     유기동물 관리번호
-	 * @param session 로그인 검증을 위한 세션
+	 * @param animalIdx 유기동물 관리번호
+	 * @param session   로그인 검증을 위한 세션
 	 * @return 성공 또는 실패 메세지
 	 */
-	@DeleteMapping("/{idx}")
-	public ResponseEntity<?> deleteAnimal(@PathVariable int idx, HttpSession session) {
+	@DeleteMapping("/{animalIdx}")
+	public ResponseEntity<?> deleteAnimal(@PathVariable int animalIdx, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
 		if (loginUser == null) { // 로그인 여부 검증
@@ -187,21 +181,15 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int userIdx = service.getAnimalShelter(idx); // 유기동물이 소속된 보호시설 조회
-
-		if (userIdx == service.NOT_ANIMAL) { // 유기동물 DB 데이터 유무 검증
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 이미 삭제되었습니다."));
-		}
-
-		if (loginUser.getIdx() != userIdx) { // 로그인된 보호시설 유기동물 검증
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
-		}
-
-		int result = service.deleteAnimal(idx);
+		int result = service.deleteAnimal(animalIdx, loginUser.getIdx());
 
 		if (result == service.DELETE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "유기동물 삭제 성공", null));
+		} else if (result == service.NOT_ANIMAL) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 이미 삭제되었습니다."));
+		} else if (result == service.NOT_OWNED_ANIMAL) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 삭제 실패"));
 		}
