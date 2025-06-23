@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 내 정보 수정 - 내 정보 조회 값 DTO  
+ * 내 정보 수정 - 내 정보 조회 값 DTO
  */
 @Data
 @AllArgsConstructor
@@ -14,7 +14,7 @@ public class InformationModifyResponseDTO {
 
 	private String id;
 	private String email;
-	private String password; //마스킹 된 값으로 표현
+	private String password; // 마스킹 된 값으로 표현
 	private String name;
 	private String nickname;
 	private String birthDate;

@@ -1,5 +1,7 @@
 package com.animal.api.signup.service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -66,6 +68,9 @@ public class ShelterSignupServiceImple implements ShelterSignupService {
 	    	default: 
 	    		throw new CustomException(400, "올바르지 않은 보호시설 유형입니다.");
 	    }
+	    
+		LocalDate parsedBirthDate = LocalDate.parse(dto.getBirthDate());
+		
 	    // 3. USER VO 생성
 	    UserVO user = new UserVO();
 	    user.setUserTypeIdx(2); // 보호시설 고정
@@ -74,7 +79,7 @@ public class ShelterSignupServiceImple implements ShelterSignupService {
 	    user.setPassword(passwordEncoder.encode(dto.getPassword()));
 	    user.setName(dto.getName());
 	    user.setNickname(dto.getNickname());
-	    user.setBirthDate(dto.getBirthDate());
+	    user.setBirthDate(parsedBirthDate);
 	    user.setGender(dto.getGender());
 	    user.setTel(dto.getTel());
 	    user.setZipCode(dto.getZipCode());

@@ -15,7 +15,7 @@ public class PasswordVerifyServiceImple implements PasswordVerifyService {
 
 	private final PasswordVerifyMapper passwordVerifyMapper;
 	private final BCryptPasswordEncoder passwordEncoder;
-	
+
 	@Override
 	public boolean verifyPassword(int userIdx, String rawPassword) {
 		String encrytedPassword = passwordVerifyMapper.selectEncryptedPassword(userIdx);
