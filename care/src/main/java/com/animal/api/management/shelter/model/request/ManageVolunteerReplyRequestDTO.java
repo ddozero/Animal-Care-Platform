@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ManageVolunteerReplyRequestDTO {
-
+	
+	@NotNull(message = "리뷰 IDX는 필수입니다.")
+	private int reviewIdx;
+	
 	@NotNull(message = "유저 IDX는 필수입니다.")
 	private int userIdx;
 

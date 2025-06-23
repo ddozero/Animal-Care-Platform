@@ -73,7 +73,8 @@ public class ShelterManageController {
 	 * @return 수정에 따른 메세지
 	 */
 	@PutMapping
-	public ResponseEntity<?> updateShelterInfo(@Valid @RequestBody ShelterInfoUpdateRequestDTO dto, HttpSession session) {
+	public ResponseEntity<?> updateShelterInfo(@Valid @RequestBody ShelterInfoUpdateRequestDTO dto,
+			HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
@@ -156,42 +157,52 @@ public class ShelterManageController {
 		}
 
 	}
-	
+
 	/**
-	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 작성 메서드 
+	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 작성 메서드
 	 * 
-	 * @param dto 봉사 리뷰글
+	 * @param dto     봉사 리뷰글
 	 * @param session 로그인 검증 세션
 	 * 
-	 * @return 해당 보호시설 봉사 리뷰글 답글 작성 
+	 * @return 해당 보호시설 봉사 리뷰글 답글 작성
 	 */
 	@PostMapping("/reviews/volunteer")
 	public ResponseEntity<?> addVolunteerReviewApply(@Valid @RequestBody ManageVolunteerReplyRequestDTO dto,
 			HttpSession session) {
-		
+
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
-		
+
 		int result = shelterService.addVolunterReviewApply(dto);
-		
-		if(result == shelterService.NOT_REVIEW) {
+
+		if (result == shelterService.NOT_REVIEW) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "삭제된 리뷰에는 답글 달 수 없음"));
-		}else if(result == shelterService.REPLY_OK) {
+		} else if (result == shelterService.REPLY_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
-		}else {
+		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}
 	}
 	
-	public ResponseEntity<?> updateVolunterReviewApply(HttpSession session){
-		
+	@PutMapping("/reviews/volunteer")
+	public ResponseEntity<?> updateVolunterReviewApply(@Valid @RequestBody ManageVolunteerReplyRequestDTO dto,
+			HttpSession session) {
+
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
-		dto.setIdx(userIdx);
-		
+		dto.setUserIdx(userIdx);
+
+		int count = shelterService.updateVolunterReviewApply(dto);
+		if (count > 0) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "봉사 리뷰 답글 수정 성공",null));
+		}else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+		}
 	}
+
+
 
 	/**
 	 * 로그인 및 보호시설 사용자 검증 메서드
