@@ -36,7 +36,7 @@ public class InformationModifyController {
 	/**
 	 * 내 정보 수정 조회 및 출력
 	 * 
-	 * @param request
+	 * @param request 세션의 정보
 	 * @return userInfo 로그인 한 유저의 내 정보 목록
 	 */
 	@GetMapping("/modify")
@@ -57,6 +57,8 @@ public class InformationModifyController {
 
 	/**
 	 * 내 정보 수정
+	 * @param InformationModifyRequestDTO 내 정보 수정 목록
+	 * @return 정보 수정 완료 
 	 */
 	@PutMapping("/update")
 	public ResponseEntity<?> updateUserInfo(@Valid @RequestBody InformationModifyRequsetDTO requestDTO,
