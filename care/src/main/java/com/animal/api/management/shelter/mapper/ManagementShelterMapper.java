@@ -22,19 +22,17 @@ public interface ManagementShelterMapper {
 	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(Map map);
 
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(Map map);
-	
+
 	public int updateTurn(Map map);
-	
+
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
-	
+
 	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
-	
+
 	public int deleteVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
-	
+
 	public Integer checkVolunteerReview(@Param("reviewIdx") int reviewIdx);
-	
+
 	public Integer checkShelterUser(ManageVolunteerReplyRequestDTO dto);
-	
-	
 
 }
