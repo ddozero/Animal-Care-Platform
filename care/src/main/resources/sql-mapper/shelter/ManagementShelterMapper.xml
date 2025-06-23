@@ -118,8 +118,7 @@ VOLUNTEER_IDX,
 CONTENT,
 REF,
 LEV,
-TURN,
-CREATED_AT
+TURN
 )
 VALUES (
 #{userIdx},
@@ -127,8 +126,7 @@ VALUES (
 #{content},
 #{ref},
 #{lev},
-#{turn},
-#{createdAt}
+#{turn}
 );
 </insert>
  
