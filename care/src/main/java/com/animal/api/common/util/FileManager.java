@@ -143,7 +143,7 @@ public class FileManager {
 		if (!dir.exists()) {
 			return null;
 		}
-		
+
 		File[] files = dir.listFiles();
 		List<String> filesPath = new ArrayList<String>();
 		for (File f : files) {
@@ -153,7 +153,12 @@ public class FileManager {
 		return filesPath;
 	}
 
-
+	/**
+	 * 테이블 삭제 시 관련 폴더도 삭제하는 메서드
+	 * 
+	 * @param folderPath 삭제할 테이블명(폴더명)
+	 * @param idx        해당 테이블의 기본키
+	 */
 	public void deleteFolder(String folderPath, int idx) {
 		String realPath = context.getRealPath("/resources/" + folderPath + "/" + idx);
 		File dir = new File(realPath);
@@ -162,6 +167,11 @@ public class FileManager {
 		}
 	}
 
+	/**
+	 * 폴더 삭제 시 폴더 안에 폴더 탐색하는 재귀 메서드
+	 * 
+	 * @param file 확인할 파일
+	 */
 	private void deleteRecursive(File file) {
 		if (file.isDirectory()) {
 			for (File sub : file.listFiles()) {
@@ -171,6 +181,11 @@ public class FileManager {
 		file.delete();
 	}
 
+	/**
+	 * 특정 파일만 삭제하는 메서드
+	 * 
+	 * @param filePath 삭제할 파일의 경로
+	 */
 	public void deleteFile(String filePath) {
 		File f = new File(context.getRealPath(filePath));
 		if (f.exists()) {
