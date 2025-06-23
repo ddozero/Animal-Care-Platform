@@ -136,4 +136,23 @@ ON
 WHERE
 	AC.IDX = #{idx}
 </select>
+<update id="updateAdoptionConsultStatus" parameterType="com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO">
+UPDATE
+	ADOPTION_CONSULTS
+SET
+	ADOPTION_CONSULT_STATUS_IDX = #{statusIdx}
+WHERE
+	IDX = #{idx}
+</update>
+<select id="checkAdoptionConsultShelter" parameterType="int" resultType="Integer">
+SELECT
+	A.USER_IDX
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
+where
+	AC.IDX = #{idx}
+</select>
 </mapper>

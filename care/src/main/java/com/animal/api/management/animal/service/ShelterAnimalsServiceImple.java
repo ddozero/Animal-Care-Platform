@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.common.util.FileManager;
 import com.animal.api.management.animal.mapper.ShelterAnimalsMapper;
+import com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
 import com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO;
@@ -33,7 +34,8 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	}
 
 	@Override
-	public int insertAnimal(AnimalInsertRequestDTO dto) {
+	public int insertAnimal(AnimalInsertRequestDTO dto, int userIdx) {
+		dto.setUserIdx(userIdx);
 		int result = mapper.insertAnimal(dto);
 
 		result = result > 0 ? POST_SUCCESS : ERROR;
@@ -41,23 +43,37 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	}
 
 	@Override
-	public int updateAnimal(AnimalUpdateRequestDTO dto) {
-		int result = mapper.updateAnimal(dto);
+	public int updateAnimal(AnimalUpdateRequestDTO dto, int animalIdx, int userIdx) {
+		Integer checkUserIdx = mapper.getAnimalShelter(animalIdx);
+		if (checkUserIdx == null) {// 해당 상담신청이 있는지 검증
+			return NOT_ANIMAL;
+		}
+		if (checkUserIdx != userIdx) { // 해당 보호시설의 유기동물이 맞는지 검증
+			return NOT_OWNED_ANIMAL;
+		}
+		dto.setIdx(animalIdx);
 
+		int result = mapper.updateAnimal(dto);
 		result = result > 0 ? UPDATE_SUCCESS : ERROR;
 		return result;
 	}
 
 	@Override
-	public int deleteAnimal(int idx) {
-		int result = mapper.deleteAnimal(idx);
+	public int deleteAnimal(int animalIdx, int userIdx) {
+		Integer checkUserIdx = mapper.getAnimalShelter(animalIdx);
+		if (checkUserIdx == null) {// 해당 상담신청이 있는지 검증
+			return NOT_ANIMAL;
+		}
+		if (checkUserIdx != userIdx) { // 해당 보호시설의 유기동물이 맞는지 검증
+			return NOT_OWNED_ANIMAL;
+		}
 
+		int result = mapper.deleteAnimal(animalIdx);
 		result = result > 0 ? DELETE_SUCCESS : ERROR;
 
 		if (result == DELETE_SUCCESS) {
-			fileManager.deleteFolder("animals", idx);
+			fileManager.deleteFolder("animals", animalIdx);
 		}
-
 		return result;
 	}
 
@@ -98,11 +114,26 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 
 		return consultList;
 	}
-	
+
 	@Override
 	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx) {
 		AdoptionConsultDetailResponseDTO dto = mapper.getAdoptionConsultDetail(idx);
 		return dto;
+	}
+
+	@Override
+	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto, int userIdx, int consultIdx) {
+		Integer checkUserIdx = mapper.checkAdoptionConsultShelter(consultIdx);
+		if (checkUserIdx == null) {// 해당 상담신청이 있는지 검증
+			return NOT_CONSULT;
+		}
+		if (checkUserIdx != userIdx) { // 해당 보호시설의 상담 신청이 맞는지 검증
+			return NOT_OWNED_CONSULT;
+		}
+		dto.setIdx(consultIdx);
+		int result = mapper.updateAdoptionConsultStatus(dto);
+		result = result > 0 ? UPDATE_SUCCESS : ERROR;
+		return result;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드

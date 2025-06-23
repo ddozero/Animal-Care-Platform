@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AnimalUpdateRequestDTO {
-	@NotNull(message = "동물 관리번호는 필수입니다.")
+	// 서비스에서 세팅
 	private Integer idx;
 
 	@NotNull(message = "입양 상태는 필수입니다.")
