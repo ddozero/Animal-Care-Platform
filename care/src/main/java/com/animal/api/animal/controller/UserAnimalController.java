@@ -152,14 +152,16 @@ public class UserAnimalController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-
+		dto.setUserIdx(loginUser.getIdx());
 		int result = service.submitAdoption(dto);
 
 		if (result == service.RESERVATION_COMPLETED) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "입양 상담 신청 성공", null));
 		} else if (result == service.RESERVATION_UNAVAILABLE) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "입양 상담 신청 가능 상태가 아닙니다."));
-		} else {
+		} else if(result == service.RESERVATION_DUPLICATE) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "이미 상담을 신청하였습니다."));
+		}else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
 		}
 	}

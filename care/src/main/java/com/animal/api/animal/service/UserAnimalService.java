@@ -10,6 +10,7 @@ import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 public interface UserAnimalService {
 
 	static int RESERVATION_COMPLETED = 1; // 예약 신청 완료
+	static int RESERVATION_DUPLICATE = 2; // 예약 신청 완료
 	static int RESERVATION_UNAVAILABLE = 0; // 예약 불가능
 	static int RESERVATION_FAILD = -1; // 에러
 
