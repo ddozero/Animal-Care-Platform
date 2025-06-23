@@ -79,4 +79,32 @@ FROM
 WHERE
 	IDX = #{idx}
 </select>
+<select id="getAdoptionConsultList" parameterType="Map" resultType="com.animal.api.management.animal.model.response.AdoptionConsultListResponseDTO">
+SELECT
+	AC.IDX,
+	U.IDX AS 'USER_IDX',
+	A.NAME AS 'ANIMAL_NAME',
+	AC.NAME,
+	AC.TEL,
+	AC.CONSULTED_AT,
+	ACS.IDX AS 'STATUS_IDX',
+	ACS.NAME AS 'STATUS',
+	AC.CREATED_AT
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
+JOIN USERS U 
+ON
+	AC.USER_IDX = U.IDX
+JOIN ADOPTION_CONSULT_STATUS ACS 
+ON
+	AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+WHERE
+	A.USER_IDX = #{idx}
+ORDER BY
+	AC.IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
 </mapper>
