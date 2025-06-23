@@ -44,7 +44,7 @@ public class ShelterSignupRequestDTO {
     private LocalDate birthDate;
 
     @NotBlank(message = "성별은 필수 항목입니다.")
-    @Pattern(regexp = "^[MF]$", message = "성별은 M 또는 F여야 합니다.")
+    @Pattern(regexp = "^[M|F]$", message = "성별은 M 또는 F여야 합니다.")
     private String gender;
 
     @NotBlank(message = "전화번호는 필수 항목입니다.")

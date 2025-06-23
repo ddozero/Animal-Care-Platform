@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.animal.api.mypage.information.modify.mapper.InformationModifyMapper">
+
+	<select id="selectUserInfo" resultType="com.animal.api.mypage.information.modify.model.response.InformationModifyResponseDTO">
+		SELECT ID AS id,
+			   EMAIL AS email,
+			   '*********' AS PASSWORD,
+			   NAME AS name,
+			   NICKNAME AS nickname,
+			   DATE_FORMAT(BIRTH_DATE, '%Y-%m-%d') AS birthDate,
+			   GENDER AS gender,
+			   TEL AS tel,
+			   ZIP_CODE AS zipCode,
+			   ADDRESS AS address,
+			   ADDRESS_DETAIL AS addressDetail
+	   	 FROM USERS
+	   	WHERE IDX = #{userIdx}
+	</select>
+
+</mapper>

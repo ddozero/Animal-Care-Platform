@@ -3,8 +3,10 @@ package com.animal.api.mypage.information.modify.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.animal.api.mypage.information.modify.model.response.InformationModifyResponseDTO;
+
 @Mapper
 public interface InformationModifyMapper {
-	//내 정보 수정 1단계: 비밀번호 확인
-	void passwordCheck(@Param("userid") String userid, @Param("password") String password);
+	// IDX 로 유저 정보 조회 
+	InformationModifyResponseDTO selectUserInfo(@Param("userIdx") int userIdx);
 }

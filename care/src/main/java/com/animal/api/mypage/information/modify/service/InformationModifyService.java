@@ -1,5 +1,7 @@
 package com.animal.api.mypage.information.modify.service;
 
-public interface InformationModifyService {
+import com.animal.api.mypage.information.modify.model.response.InformationModifyResponseDTO;
 
+public interface InformationModifyService {
+	InformationModifyResponseDTO getUserInformation(int userIdx);
 }
