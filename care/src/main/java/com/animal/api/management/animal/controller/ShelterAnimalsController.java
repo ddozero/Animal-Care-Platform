@@ -1,5 +1,8 @@
 package com.animal.api.management.animal.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
@@ -27,7 +31,7 @@ import com.animal.api.management.animal.service.ShelterAnimalsService;
  * 보호시설의 관리 페이지에서 유기동물에 관련되어 있는 컨트롤러 클래스
  * 
  * @author Rege-97
- * @since 2026-06-22
+ * @since 2026-06-23
  * @see com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO
  * @see com.animal.api.management.animal.model.request.AnimalInsertRequestDTO
  * @see com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO
@@ -73,7 +77,7 @@ public class ShelterAnimalsController {
 	 * 
 	 * @param dto     유기동물 정보 폼 데이터
 	 * @param session 로그인 검증을 위한 세션
-	 * @return 등록성공 또는 실패 메세지
+	 * @return 생성된 idx
 	 */
 	@PostMapping
 	public ResponseEntity<?> insertAnimal(@Valid @RequestBody AnimalInsertRequestDTO dto, HttpSession session) {
@@ -90,9 +94,28 @@ public class ShelterAnimalsController {
 		int result = service.insertAnimal(dto);
 
 		if (result == service.POST_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "유기동물 등록 성공", null));
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			map.put("createdIdx", dto.getIdx());
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "유기동물 등록 성공", map));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 등록 실패"));
+		}
+	}
+
+	/**
+	 * 유기동물 이미지 업로드 메서드
+	 * @param files 프론트 영역에서 받은 유기동물 이미지
+	 * @param idx 유기동물이 생성되면서 생긴 관리번호
+	 * @return 파일 업로드 성공 또는 실패
+	 */
+	@PostMapping("/upload/{idx}")
+	public ResponseEntity<?> uploadAnimalImage(MultipartFile[] files, @PathVariable int idx) {
+		int result = service.uploadAnimalImage(files, idx);
+		if (result == service.UPLOAD_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "이미지 업로드 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미지 업로드 실패"));
 		}
 	}
 

@@ -12,4 +12,5 @@ public class AllShelterListResponseDTO {
 	private String shelterName;
 	private String shelterAddress;
 	private String shelterType;
+	private String imagePath;
 }

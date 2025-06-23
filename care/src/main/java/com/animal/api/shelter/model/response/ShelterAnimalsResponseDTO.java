@@ -25,4 +25,5 @@ public class ShelterAnimalsResponseDTO {
 	private String type;
 	private String personality;
 	private String adoptionStatus;
+	private String imagePath;
 }

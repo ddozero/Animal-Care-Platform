@@ -18,5 +18,7 @@ public interface ShelterAnimalsMapper {
 	public int deleteAnimal(int idx);
 	
 	public Integer getAnimalShelter(int idx);
+	
+	public Integer getAnimalMaxIdx();
 
 }
