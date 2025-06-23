@@ -26,6 +26,54 @@ GROUP BY
 ORDER BY
     B.REF DESC,      
     B.TURN ASC       
-LIMIT #{listSize} OFFSET #{cp};
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+
+<select id="searchBoards" parameterType="com.animal.api.board.model.request.BoardSearchRequestDTO" resultType="com.animal.api.board.model.response.AllBoardListResponseDTO">
+SELECT
+	B.IDX,
+	B.TITLE,
+	IFNULL(U.NICKNAME, '탈퇴 회원') AS NICKNAME,
+	B.CREATED_AT,
+	B.VIEWS,
+	COUNT(BL.IDX) AS LIKE_COUNT,
+	B.REF,
+	B.LEV,
+	B.TURN
+FROM
+	BOARDS B
+LEFT JOIN USERS U ON
+	B.USER_IDX = U.IDX
+LEFT JOIN BOARD_LIKES BL ON
+	B.IDX = BL.BOARD_IDX
+	AND BL.IS_LIKE = 1
+<where>
+	B.BOARD_TYPE_IDX = 2
+
+    <choose>
+        <when test = "type == 'title' and keyword != null and keyword != ''">
+			AND B.TITLE LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test = "type == 'nickname' and keyword != null and keyword != ''">
+            AND U.NICKNAME LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test = "type == 'content' and keyword != null and keyword != ''">
+            AND B.CONTENT LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test = "(type == 'all' or type == null) and keyword != null and keyword != ''">
+            AND (
+                B.TITLE LIKE CONCAT('%', #{keyword}, '%')
+                OR U.NICKNAME LIKE CONCAT('%', #{keyword}, '%')
+                OR B.CONTENT LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </when>
+    </choose>
+</where>
+GROUP BY
+    B.IDX, B.TITLE, B.CREATED_AT, B.VIEWS, U.NICKNAME, B.REF, B.LEV, B.TURN
+ORDER BY
+    B.REF DESC,
+    B.TURN ASC
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 </mapper>
