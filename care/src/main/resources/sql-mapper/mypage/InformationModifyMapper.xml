@@ -4,4 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.animal.api.mypage.information.modify.mapper.InformationModifyMapper">
 
+	<select id="passwordCheck" parameterType="String">
+		SELECT ID AS userid, PASSWORD AS password
+		FORM USERS
+		WHERE ID = #{userid}
+	 	  AND PASSWORD = #{password}
+	</select>
+
 </mapper>
