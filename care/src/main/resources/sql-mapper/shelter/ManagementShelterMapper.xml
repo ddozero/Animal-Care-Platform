@@ -235,5 +235,16 @@ VALUES (
 #{turn}
 )
 </insert>
+
+<update id="updateAdoptionReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+UPDATE
+	ADOPTION_REVIEWS
+SET
+	CONTENT = #{content}
+WHERE
+	IDX = #{idx}
+AND 
+	USER_IDX = #{userIdx}
+</update>
  
  </mapper>
