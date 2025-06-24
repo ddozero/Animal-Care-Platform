@@ -11,6 +11,7 @@ import com.animal.api.auth.exception.CustomException;
 import com.animal.api.common.aop.util.SessionUtils;
 import com.animal.api.mypage.information.screen.mapper.InformationScreenMapper;
 import com.animal.api.mypage.information.screen.model.response.InformationScreenResponseDTO;
+import com.animal.api.mypage.information.screen.model.response.RecentActivityDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +23,8 @@ public class InformationScreenServiceImple implements InformationScreenService {
     private final InformationScreenMapper informationScreenMapper;
 
     @Override
-    public InformationScreenResponseDTO getMypageSummary(HttpServletRequest request) {
+    public InformationScreenResponseDTO getInformationScreen(HttpServletRequest request) {
+    	
 
         // 세션에서 로그인 사용자 정보 가져오기
         var loginUser = SessionUtils.getLoginUser(request);
@@ -32,22 +34,22 @@ public class InformationScreenServiceImple implements InformationScreenService {
 
         int userIdx = loginUser.getIdx();
 
-        // 각 항목별 정보 수집
-        int point = loginUser.getPoint();
+        // Mapper 통해 정보 조회
         int volunteerCount = informationScreenMapper.countVolunteer(userIdx);
         int adoptionCount = informationScreenMapper.countAdoption(userIdx);
         int totalDonationAmount = informationScreenMapper.sumDonations(userIdx);
-        List<String> activityHistory = informationScreenMapper.getRecentActivities(userIdx);
+        List<RecentActivityDTO> activityHistory = informationScreenMapper.selectRecentActivities(userIdx);
+        
+        // DTO 조립 및 반환
+        InformationScreenResponseDTO response = new InformationScreenResponseDTO();
+        response.setUsername(loginUser.getName());
+        response.setPoint(loginUser.getPoint());
+        response.setVolunteerCount(volunteerCount);
+        response.setAdoptionCount(adoptionCount);
+        response.setTotalDonationAmount(totalDonationAmount);
+        response.setActivityHistory(activityHistory);
+        
+        return response;
 
-        // DTO 조립
-        return InformationScreenResponseDTO.builder()
-                .username(loginUser.getName())
-                .point(point)
-                .volunteerCount(volunteerCount)
-                .adoptionCount(adoptionCount)
-                .totalDonationAmount(totalDonationAmount)
-                .activityHistory(activityHistory)
-                .activityBadge("우리집도 보호시설 등급") // 추후 로직 처리 예정
-                .build();
     }
 }

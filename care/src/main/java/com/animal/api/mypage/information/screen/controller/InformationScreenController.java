@@ -14,7 +14,7 @@ import com.animal.api.mypage.information.screen.service.InformationScreenService
 import lombok.RequiredArgsConstructor;
 
 /**
- * 
+ * 마이페이지 첫 화면 조회 컨트롤러
  * @author Whistler95
  * @since 2025-06-23
  */
@@ -32,7 +32,7 @@ public class InformationScreenController {
      */
     @GetMapping("/info")
     public ResponseEntity<?> getMypageInfo(HttpServletRequest request) {
-        InformationScreenResponseDTO info = informationScreenService.getMypageSummary(request);
+        InformationScreenResponseDTO info = informationScreenService.getInformationScreen(request);
         return ResponseEntity.ok(new OkResponseDTO<>(200, "마이페이지 정보 조회 성공", info));
     }
 }

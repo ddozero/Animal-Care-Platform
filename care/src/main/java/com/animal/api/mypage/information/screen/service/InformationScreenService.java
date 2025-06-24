@@ -6,6 +6,6 @@ import com.animal.api.mypage.information.screen.model.response.InformationScreen
 
 public interface InformationScreenService {
 
-	InformationScreenResponseDTO getMypageSummary(HttpServletRequest request);
+	InformationScreenResponseDTO getInformationScreen(HttpServletRequest request);
 	
 }
