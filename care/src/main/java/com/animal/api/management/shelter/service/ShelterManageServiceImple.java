@@ -138,10 +138,10 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		dto.setUserIdx(userIdx);
 
 		Integer shelterCheck = mapper.checkShelterUserVR(dto);
-		if (shelterCheck == null || shelterCheck == 0) {// 해당 보호소 관리자인지 확인 
+		if (shelterCheck == null || shelterCheck == 0) {// 해당 보호소 관리자인지 확인
 			return NOT_SHELTER_MANAGER;
 		}
-		
+
 		int count = mapper.deleteVolunteerReviewApply(dto);
 		if (count > 0) {
 			return DELETE_OK;
@@ -183,10 +183,10 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return REPLY_ERROR;
 		}
 	}
-	
+
 	@Override
 	public int updateAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx) {
-		
+
 		Integer reviewCheck = mapper.checkAdoptionReview(reviewIdx);
 
 		if (reviewCheck == null) { // 리뷰글이 있는지 확인
@@ -208,10 +208,10 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return REPLY_ERROR;
 		}
 	}
-	
+
 	@Override
 	public int deleteAdoptionReviewApply(int userIdx, int reviewIdx) {
-		
+
 		Integer reviewCheck = mapper.checkAdoptionReview(reviewIdx);
 		if (reviewCheck == null) {// 리뷰글이 있는지 확인
 			return NOT_REVIEW;
@@ -220,12 +220,12 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		ManageAdoptionReplyRequestDTO dto = new ManageAdoptionReplyRequestDTO();
 		dto.setReviewIdx(reviewIdx);
 		dto.setUserIdx(userIdx);
-		
+
 		Integer shelterCheck = mapper.checkShelterUserAR(dto);
-		if (shelterCheck == null || shelterCheck == 0) {// 해당 보호소 관리자인지 확인 
+		if (shelterCheck == null || shelterCheck == 0) {// 해당 보호소 관리자인지 확인
 			return NOT_SHELTER_MANAGER;
 		}
-		
+
 		int count = mapper.deleteAdoptionReviewApply(dto);
 		if (count > 0) {
 			return DELETE_OK;
@@ -233,20 +233,29 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return REPLY_ERROR;
 		}
 	}
-	
+
 	@Override
-	public List<ShelterBoardResponseDTO> getShelterboardList(int userIdx, int listSize, int cp) {
-		
+	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int listSize, int cp) {
+
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		
+
 		map.put("userIdx", userIdx);
 		map.put("listSize", listSize);
 		map.put("cp", cp);
-		
-		List<ShelterBoardResponseDTO> boardLists = mapper.getShelterboardList(map);
-		
+
+		List<ShelterBoardResponseDTO> boardLists = mapper.getShelterBoardList(map);
+
 		return boardLists;
 	}
 
+	@Override
+	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx) {
+
+		ShelterBoardResponseDTO dto = mapper.getShelterBoardDetail(idx, userIdx);
+		if (dto != null && dto.getContent() != null) {
+			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		}
+		return dto;
+	}
 
 }

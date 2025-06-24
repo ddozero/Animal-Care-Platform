@@ -1,7 +1,6 @@
 package com.animal.api.management.shelter.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
@@ -39,6 +38,8 @@ public interface ShelterManageService {
 	
 	public int deleteAdoptionReviewApply(int userIdx, int reviewIdx);
 	
-	public List<ShelterBoardResponseDTO> getShelterboardList(int userIdx, int listSize, int cp);
+	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int listSize, int cp);
+	
+	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx);
 
 }

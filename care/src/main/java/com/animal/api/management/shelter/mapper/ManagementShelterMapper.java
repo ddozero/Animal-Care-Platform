@@ -50,5 +50,7 @@ public interface ManagementShelterMapper {
 	public int deleteAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto);
 	
 	public List<ShelterBoardResponseDTO> getShelterBoardList(Map map);
+	
+	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx);
 
 }

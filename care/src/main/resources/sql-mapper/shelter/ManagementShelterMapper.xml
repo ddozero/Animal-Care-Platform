@@ -281,7 +281,7 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
-<select id="getShelter">
+<select id="getShelterBoardDetail" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO">
 SELECT 
 	IDX,
 	USER_IDX,
