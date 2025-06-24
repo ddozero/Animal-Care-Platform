@@ -84,7 +84,7 @@ FROM
 	BOARDS
 </select>
 
-<insert id="addBoard" parameterType="com.animal.api.board.model.request.BoardWriteRequestDTO">
+<insert id="addBoard" parameterType="com.animal.api.board.model.request.BoardWriteRequestDTO" useGeneratedKeys="true" keyProperty="idx">
 INSERT
 	INTO
 	BOARDS(USER_IDX, BOARD_TYPE_IDX, TITLE, CONTENT, REF, LEV, TURN)

@@ -18,4 +18,5 @@ public interface UserBoardMapper {
 	public int getMaxRef();
 
 	public int addBoard(BoardWriteRequestDTO dto);
+
 }

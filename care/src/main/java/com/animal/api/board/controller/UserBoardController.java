@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
@@ -74,6 +76,7 @@ public class UserBoardController {
 	 * @param dto     글 등록 폼
 	 * @param session 로그인 검증용
 	 * @return 글 등록 성공,실패 메세지
+	 * @return 생성된 idx(게시판 테이블 idx)
 	 */
 	@PostMapping
 	public ResponseEntity<?> addBoard(@Valid @RequestBody BoardWriteRequestDTO dto, HttpSession session) {
@@ -86,9 +89,28 @@ public class UserBoardController {
 		int result = service.addBoard(dto);
 
 		if (result == service.POST_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "게시판 글 등록 성공", null));
+			Integer boardIdx = dto.getIdx();
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Integer>(201, "게시판 글 등록 성공", boardIdx));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 등록 실패"));
+		}
+	}
+
+	/**
+	 * 게시판 글 등록시 파일 업로드
+	 * 
+	 * @param files 프론트에서 받은 파일
+	 * @param idx   게시판 글이 등록 되면서 생긴 번호
+	 * @return 업로드 성공 또는 실패 메세지
+	 */
+	@PostMapping("/upload/{idx}")
+	public ResponseEntity<?> uploadBoardFile(MultipartFile[] files, @PathVariable int idx) {
+		int result = service.uploadBoardFile(files, idx);
+		if (result == service.UPLOAD_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "파일 업로드 실패"));
 		}
 	}
 

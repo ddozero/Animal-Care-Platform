@@ -2,6 +2,8 @@ package com.animal.api.board.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 
@@ -17,6 +19,7 @@ public interface UserBoardService {
 	static int REF_NOT_FOUND = 9;
 	static int LEV_NOT_FOUND = 10;
 	static int TURN_NOT_FOUND = 11;
+	static int UPLOAD_SUCCESS = 12;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
@@ -24,4 +27,6 @@ public interface UserBoardService {
 	public List<AllBoardListResponseDTO> searchBoards(String type, String keyword, int listSize, int cp);
 
 	public int addBoard(BoardWriteRequestDTO dto);
+
+	public int uploadBoardFile(MultipartFile[] files, int idx);
 }
