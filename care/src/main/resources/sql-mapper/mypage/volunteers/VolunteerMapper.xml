@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.animal.api.mypage.volunteers.mapper.VolunteerMapper">
+
 	<!-- 봉사 내역 리스트 -->
 	<select id="findVolunteerListByUserIdx" resultType="com.animal.api.mypage.volunteers.model.response.VolunteerListResponseDTO">
 		SELECT
@@ -25,36 +26,99 @@
 		WHERE VR.USER_IDX = #{userIdx}
 		ORDER BY VR.CREATED_AT DESC
 	</select>
+	
 	<!-- 봉사 내역 상세 정보 -->
 	<select id="findVolunteerDetailByRequestIdx" resultType="com.animal.api.mypage.volunteers.model.response.VolunteerDetailResponseDTO">
-    SELECT 
-        VR.IDX AS volunteerRequestIdx,
-        VP.TITLE AS title,
-        VP.CONTENT AS content,
-        S.SHELTER_NAME AS shelterName,
-        VP.LOCATION AS location,
-
-        CASE VR.VOLUNTEER_REQUEST_STATUS_IDX
-            WHEN 1 THEN '신청완료'
-            WHEN 2 THEN '승인완료'
-            WHEN 3 THEN '거절됨'
-            WHEN 4 THEN '참여완료'
-            ELSE '대기중'
-        END AS statusText,
-
-        VP.VOLUNTEER_DATE AS volunteerDate,
-        VP.CREATED_AT AS createdAt,
-        VP.CAPACITY AS capacity,
-        VP.APPLICANTS AS applicants,
-        VR.TEL AS contact,
-        VR.CREATED_AT AS participatedAt
-
-    FROM VOLUNTEER_REQUESTS VR
-    JOIN VOLUNTEERS VP ON VR.VOLUNTEER_IDX = VP.IDX
-    JOIN USERS U ON VP.USER_IDX = U.IDX AND U.USER_TYPE_IDX = 2
-    JOIN SHELTERS S ON U.IDX = S.USER_IDX
-    WHERE VR.IDX = #{volunteerRequestIdx}
-    
+	    SELECT 
+	        VR.IDX AS volunteerRequestIdx,
+	        VP.TITLE AS title,
+	        VP.CONTENT AS content,
+	        S.SHELTER_NAME AS shelterName,
+	        VP.LOCATION AS location,
+	
+	        CASE VR.VOLUNTEER_REQUEST_STATUS_IDX
+	            WHEN 1 THEN '신청완료'
+	            WHEN 2 THEN '승인완료'
+	            WHEN 3 THEN '거절됨'
+	            WHEN 4 THEN '참여완료'
+	            ELSE '대기중'
+	        END AS statusText,
+	
+	        VP.VOLUNTEER_DATE AS volunteerDate,
+	        VP.CREATED_AT AS createdAt,
+	        VP.CAPACITY AS capacity,
+	        VP.APPLICANTS AS applicants,
+	        VR.TEL AS contact,
+	        VR.CREATED_AT AS participatedAt
+	
+	    FROM VOLUNTEER_REQUESTS VR
+	    JOIN VOLUNTEERS VP ON VR.VOLUNTEER_IDX = VP.IDX
+	    JOIN USERS U ON VP.USER_IDX = U.IDX AND U.USER_TYPE_IDX = 2
+	    JOIN SHELTERS S ON U.IDX = S.USER_IDX
+	    WHERE VR.IDX = #{volunteerRequestIdx}
 	</select>
+	
+		<!-- 1. 참여완료 상태인지 확인 -->
+	<select id="isCompletedVolunteerRequest" resultType="boolean">
+	    SELECT COUNT(*) > 0
+	    FROM VOLUNTEER_REQUESTS
+	    WHERE IDX = #{volunteerRequestIdx}
+	      AND USER_IDX = #{userIdx}
+	      AND VOLUNTEER_REQUEST_STATUS_IDX = 4
+	</select>
+	
+	<!-- 2. 기존 후기 작성 여부 확인 -->
+	<select id="hasAlreadyWrittenReview" resultType="boolean">
+	    SELECT COUNT(*) > 0
+	    FROM VOLUNTEER_REVIEWS
+	    WHERE USER_IDX = #{userIdx}
+	      AND VOLUNTEER_IDX = (
+	          SELECT VOLUNTEER_IDX
+	          FROM VOLUNTEER_REQUESTS
+	          WHERE IDX = #{volunteerRequestIdx}
+	      )
+	</select>
+	
+	<!-- 3. VOLUNTEER_IDX 가져오기 -->
+	<select id="findVolunteerIdxByRequestIdx" resultType="int">
+	    SELECT VOLUNTEER_IDX
+	    FROM VOLUNTEER_REQUESTS
+	    WHERE IDX = #{volunteerRequestIdx}
+	</select>
+	
+	<!-- 4. 후기 등록 (REF는 자가 증가 IDX를 반영) -->
+	<insert id="insertVolunteerReview" useGeneratedKeys="true" keyProperty="idx">
+	    INSERT INTO VOLUNTEER_REVIEWS (
+	        USER_IDX, VOLUNTEER_IDX, CONTENT, CREATED_AT, REF, LEV, TURN
+	    ) VALUES (
+	        #{userIdx},
+	        #{volunteerIdx},
+	        #{content},
+	        NOW(),
+	        #{idx},
+	        0,
+	        0
+	    )
+	</insert>
+	
+	<!-- 5. 포인트 지급 -->
+	<insert id="grantVolunteerReviewPoint">
+	    INSERT INTO POINT_GRANTS (
+	        USER_IDX, POINT_TYPE_IDX, CREATED_AT
+	    ) VALUES (
+	        #{userIdx}, 1, NOW()
+	    )
+	</insert>
+	
+	<!-- 6. 사용자 포인트 증가 -->
+	<update id="increaseUserPoint">
+	    UPDATE USERS
+	    SET POINT = POINT + (
+	        SELECT POINT
+	        FROM POINT_TYPES
+	        WHERE IDX = 1
+	    )
+	    WHERE IDX = #{userIdx}
+	</update>
 	
 </mapper>
