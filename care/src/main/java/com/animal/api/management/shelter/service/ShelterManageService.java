@@ -2,6 +2,7 @@ package com.animal.api.management.shelter.service;
 
 import java.util.List;
 
+import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
@@ -31,5 +32,9 @@ public interface ShelterManageService {
 	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx);
 	
 	public int deleteVolunteerReviewApply(int userIdx, int reviewIdx);
+	
+	public int updateTurnAR(int ref, int turn);
+	
+	public int addAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx);
 
 }

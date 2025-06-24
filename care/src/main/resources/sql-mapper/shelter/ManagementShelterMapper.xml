@@ -147,7 +147,7 @@ WHERE
 	IDX = #{reviewIdx}
 </select>
 
-<select id="checkShelterUser" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+<select id="checkShelterUserVR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.AllCheckRequestDTO">
 SELECT
 	S.USER_IDX
 FROM
@@ -181,6 +181,29 @@ WHERE
 AND 
 	USER_IDX = #{userIdx}
 </delete>
+
+<select id = "checkAdoptionReview" resultType="Integer">
+SELECT
+	IDX
+FROM
+	ADOPTION_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+</select>
+
+<select id="checkShelterUserAR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.AllCheckRequestDTO">
+SELECT
+	S.USER_IDX
+FROM
+	ADOPTION_REVIEWS AR
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+JOIN SHELTERS S ON
+	A.USER_IDX = S.USER_IDX
+WHERE
+	AR.IDX = #{reviewIdx}
+	AND S.USER_IDX = #{userIdx}
+</select>
 
 <update id="updateTurnAR" parameterType="map">
 UPDATE

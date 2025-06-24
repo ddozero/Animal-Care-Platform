@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
@@ -179,7 +180,7 @@ public class ShelterManageController {
 		int result = shelterService.addVolunteerReviewApply(dto);
 
 		if (result == shelterService.NOT_REVIEW) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "삭제된 리뷰에는 답글 달 수 없음"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없음"));
 		} else if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
 		} else {
@@ -244,6 +245,30 @@ public class ShelterManageController {
 					.body(new ErrorResponseDTO(403, "답글을 작성한 담당 보호소 관리자가 아님"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 삭제 실패"));
+		}
+	}
+
+	@PostMapping("/reviews/adoption")
+	public ResponseEntity<?> addAdoptionReviewApply(@Valid @RequestBody ManageAdoptionReplyRequestDTO dto,
+			HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+		int userIdx = loginUser.getIdx();
+		dto.setUserIdx(userIdx);
+
+		int reviewIdx = 0;
+		dto.setReviewIdx(reviewIdx);
+
+		int result = shelterService.addAdoptionReviewApply(dto, userIdx, reviewIdx);
+
+		if (result == shelterService.NOT_REVIEW) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없음"));
+		} else if (result == shelterService.UPDATE_OK) {
+			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
+		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아님"));
+		}else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 등록 실패"));
 		}
 	}
 
