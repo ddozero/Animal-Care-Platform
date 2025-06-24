@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.animal.api.management.shelter.mapper.ManagementShelterMapper;
-import com.animal.api.management.shelter.model.request.AllCheckRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
