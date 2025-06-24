@@ -3,7 +3,6 @@ package com.animal.api.admin.board.controller;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +67,13 @@ public class AdminBoardController {
 		}
 	}
 
+	/**
+	 * 관리자 페이지에서 공지사항을 삭제하는 메서드
+	 * 
+	 * @param idx     게시글 번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
 	@DeleteMapping("/{idx}")
 	public ResponseEntity<?> deleteNotice(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
