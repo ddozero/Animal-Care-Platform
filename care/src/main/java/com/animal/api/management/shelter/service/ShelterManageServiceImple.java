@@ -137,8 +137,8 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		dto.setUserIdx(userIdx);
 
 		Integer shelterCheck = mapper.checkShelterUserVR(dto);
-		if (shelterCheck == 0) {// 해당 보호소 관리자인지 확인 
-			return REPLY_ERROR;
+		if (shelterCheck == null || shelterCheck == 0) {// 해당 보호소 관리자인지 확인 
+			return NOT_SHELTER_MANAGER;
 		}
 		
 		int count = mapper.deleteVolunteerReviewApply(dto);
@@ -207,5 +207,32 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return REPLY_ERROR;
 		}
 	}
+	
+	@Override
+	public int deleteAdoptionReviewApply(int userIdx, int reviewIdx) {
+		
+		Integer reviewCheck = mapper.checkAdoptionReview(reviewIdx);
+		if (reviewCheck == null) {// 리뷰글이 있는지 확인
+			return NOT_REVIEW;
+		}
+
+		ManageAdoptionReplyRequestDTO dto = new ManageAdoptionReplyRequestDTO();
+		dto.setReviewIdx(reviewIdx);
+		dto.setUserIdx(userIdx);
+		
+		Integer shelterCheck = mapper.checkShelterUserAR(dto);
+		if (shelterCheck == null || shelterCheck == 0) {// 해당 보호소 관리자인지 확인 
+			return NOT_SHELTER_MANAGER;
+		}
+		
+		int count = mapper.deleteAdoptionReviewApply(dto);
+		if (count > 0) {
+			return DELETE_OK;
+		} else {
+			return REPLY_ERROR;
+		}
+		
+	}
+
 
 }
