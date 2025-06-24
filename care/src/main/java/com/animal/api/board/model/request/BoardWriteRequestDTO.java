@@ -20,4 +20,6 @@ public class BoardWriteRequestDTO {
 	@NotBlank(message = "본문 입력은 필수입니다.")
 	private String content;
 	private int ref;
+	// DB 생성 후 등록된 idx 값
+	private int idx;
 }
