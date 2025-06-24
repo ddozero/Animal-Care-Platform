@@ -20,4 +20,11 @@ SET
 	CONTENT = #{content}
 WHERE IDX = #{idx}
 </update>
+<delete id="deleteNotice" parameterType="int">
+DELETE
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</delete>
 </mapper>

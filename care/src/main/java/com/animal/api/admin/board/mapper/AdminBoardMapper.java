@@ -11,4 +11,6 @@ public interface AdminBoardMapper {
 
 	public int updateNotice(NoticeUpdateRequestDTO dto);
 
+	public int deleteNotice(int idx);
+
 }
