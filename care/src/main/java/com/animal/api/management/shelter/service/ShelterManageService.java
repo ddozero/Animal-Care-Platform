@@ -32,5 +32,7 @@ public interface ShelterManageService {
 	public int deleteVolunteerReviewApply(int userIdx, int reviewIdx);
 	
 	public int addAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx);
+	
+	public int updateAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx);
 
 }
