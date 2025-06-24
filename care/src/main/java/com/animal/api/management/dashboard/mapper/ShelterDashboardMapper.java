@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.animal.api.management.dashboard.model.response.SheltervolunteerDashboardResponseDTO;
+import com.animal.api.management.dashboard.model.response.ShelterAnimalDashboardResponseDTO;
+import com.animal.api.management.dashboard.model.response.ShelterVolunteerDashboardResponseDTO;
 
 @Mapper
 public interface ShelterDashboardMapper {
 
-	public List<SheltervolunteerDashboardResponseDTO> getVolunteerDashboard(int idx);
+	public List<ShelterVolunteerDashboardResponseDTO> getVolunteerDashboard(int idx);
+
+	public ShelterAnimalDashboardResponseDTO getAdoptionDashboard(int idx);
 
 }

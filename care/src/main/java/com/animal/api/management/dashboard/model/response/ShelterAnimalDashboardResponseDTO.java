@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ShelterVolunteerDashboardResponseDTO {
-	private String month;
-	private int count;
+@NoArgsConstructor
+public class ShelterAnimalDashboardResponseDTO {
+	private int year;
+	private int totalAnimals;
+	private int adoptedAnimals;
+	private double adoptionRate;
 }
