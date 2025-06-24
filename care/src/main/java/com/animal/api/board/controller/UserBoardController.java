@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
+import com.animal.api.board.model.response.BoardDetailResponseDTO;
 import com.animal.api.board.service.UserBoardService;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
@@ -113,5 +114,18 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "파일 업로드 실패"));
 		}
 	}
-	
+
+	@GetMapping("/{idx}")
+	public ResponseEntity<?> getBoardDetail(@PathVariable int idx) {
+
+		BoardDetailResponseDTO boardDetail = service.getBoardDetail(idx);
+
+		if (boardDetail == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시판 상세 데이터가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<BoardDetailResponseDTO>(200, "게시판 상세 조회 성공", boardDetail));
+		}
+	}
+
 }
