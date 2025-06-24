@@ -242,7 +242,7 @@ UPDATE
 SET
 	CONTENT = #{content}
 WHERE
-	IDX = #{idx}
+	IDX = #{reviewIdx}
 AND 
 	USER_IDX = #{userIdx}
 </update>

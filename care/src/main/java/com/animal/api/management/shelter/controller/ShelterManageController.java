@@ -212,6 +212,7 @@ public class ShelterManageController {
 		dto.setReviewIdx(reviewIdx);
 
 		int result = shelterService.updateVolunteerReviewApply(dto, loginUser.getIdx(), reviewIdx);
+
 		if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "봉사 리뷰 답글 수정 성공", null));
 		} else if (result == shelterService.NOT_REVIEW) {
@@ -282,6 +283,30 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아님"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 등록 실패"));
+		}
+	}
+
+	@PutMapping("/reviews/adoption/{reviewIdx}")
+	public ResponseEntity<?> updateAdoptionReviewApply(@PathVariable int reviewIdx,
+			@Valid @RequestBody ManageAdoptionReplyRequestDTO dto, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+		dto.setUserIdx(userIdx);
+		dto.setReviewIdx(reviewIdx);
+
+		int result = shelterService.updateAdoptionReviewApply(dto, userIdx, reviewIdx);
+
+		if (result == shelterService.UPDATE_OK) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "입양 리뷰 답글 수정 성공", null));
+		} else if (result == shelterService.NOT_REVIEW) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없음"));
+		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN)
+					.body(new ErrorResponseDTO(403, "답글을 작성한 담당 보호소 관리자가 아님"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 수정 실패"));
 		}
 	}
 

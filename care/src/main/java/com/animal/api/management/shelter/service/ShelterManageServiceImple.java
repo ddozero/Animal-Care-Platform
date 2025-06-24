@@ -186,7 +186,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	@Override
 	public int updateAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx) {
 		
-		Integer reviewCheck = mapper.checkVolunteerReview(reviewIdx);
+		Integer reviewCheck = mapper.checkAdoptionReview(reviewIdx);
 
 		if (reviewCheck == null) { // 리뷰글이 있는지 확인
 			return NOT_REVIEW;
@@ -200,7 +200,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return NOT_SHELTER_MANAGER;
 		}
 
-		int count = mapper.addAdoptionReviewApply(dto);
+		int count = mapper.updateAdoptionReviewApply(dto);
 		if (count > 0) {
 			return UPDATE_OK;
 		} else {
