@@ -182,5 +182,30 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return REPLY_ERROR;
 		}
 	}
+	
+	@Override
+	public int updateAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx) {
+		
+		Integer reviewCheck = mapper.checkVolunteerReview(reviewIdx);
+
+		if (reviewCheck == null) { // 리뷰글이 있는지 확인
+			return NOT_REVIEW;
+		}
+
+		dto.setReviewIdx(reviewIdx);
+		dto.setUserIdx(userIdx);
+
+		Integer shelterCheck = mapper.checkShelterUserAR(dto);
+		if (shelterCheck == null || shelterCheck == 0) { // 해당 보호소 관리자인지 확인
+			return NOT_SHELTER_MANAGER;
+		}
+
+		int count = mapper.addAdoptionReviewApply(dto);
+		if (count > 0) {
+			return UPDATE_OK;
+		} else {
+			return REPLY_ERROR;
+		}
+	}
 
 }
