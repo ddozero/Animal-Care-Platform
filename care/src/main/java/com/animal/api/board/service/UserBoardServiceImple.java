@@ -51,13 +51,15 @@ public class UserBoardServiceImple implements UserBoardService {
 	@Override
 	public int addBoard(BoardWriteRequestDTO dto) {
 		int ref = mapper.getMaxRef();
-		if (ref < 1) {
-			return REF_NOT_FOUND;
-		} else {
-			dto.setRef(ref);
-		}
-		
+
+		dto.setRef(ref + 1);
+
 		int result = mapper.addBoard(dto);
-		return result;
+
+		if (result == 1) {
+			return POST_SUCCESS;
+		} else {
+			return ERROR;
+		}
 	}
 }

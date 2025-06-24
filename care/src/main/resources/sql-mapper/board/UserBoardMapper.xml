@@ -79,7 +79,7 @@ LIMIT #{listSize} OFFSET #{cp}
 
 <select id="getMaxRef" resultType="int">
 SELECT
-	MAX(REF)
+	IFNULL(MAX(REF), 0)
 FROM
 	BOARDS
 </select>
