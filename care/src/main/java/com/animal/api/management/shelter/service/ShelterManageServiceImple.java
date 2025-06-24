@@ -16,6 +16,7 @@ import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestD
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
+import com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO;
 
 @Service
 @Primary
@@ -231,7 +232,19 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		} else {
 			return REPLY_ERROR;
 		}
+	}
+	
+	@Override
+	public List<ShelterBoardResponseDTO> getShelterboardList(int listSize, int cp) {
 		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		
+		List<ShelterBoardResponseDTO> boardLists = mapper.getShelterboardList(map);
+		
+		return boardLists;
 	}
 
 

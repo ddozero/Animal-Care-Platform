@@ -12,6 +12,7 @@ import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestD
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
+import com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO;
 
 @Mapper
 public interface ManagementShelterMapper {
@@ -47,5 +48,7 @@ public interface ManagementShelterMapper {
 	public int updateAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto);
 	
 	public int deleteAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto);
+	
+	public List<ShelterBoardResponseDTO> getShelterboardList(Map map);
 
 }

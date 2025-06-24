@@ -257,7 +257,7 @@ AND
 	USER_IDX = #{userIdx}
 </delete>
 
-<select id="getShelterboardList" resultType="com.">
+<select id="getShelterboardList" resultType="com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO">
 SELECT 
 	IDX,
 	USER_IDX,
