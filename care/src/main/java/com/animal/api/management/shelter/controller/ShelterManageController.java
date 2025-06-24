@@ -247,7 +247,15 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 삭제 실패"));
 		}
 	}
-
+	
+	/**
+	 * 해당 보호시설 입양 리뷰글에 대한 답글 작성 메서드 
+	 * 
+	 * @param dto 입양 리뷰 답변글
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 해당 보호시설 입양 리뷰글 답글
+	 */
 	@PostMapping("/reviews/adoption")
 	public ResponseEntity<?> addAdoptionReviewApply(@Valid @RequestBody ManageAdoptionReplyRequestDTO dto,
 			HttpSession session) {
