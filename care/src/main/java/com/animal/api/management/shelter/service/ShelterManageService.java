@@ -41,5 +41,7 @@ public interface ShelterManageService {
 	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int listSize, int cp);
 	
 	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx);
+	
+	public int addBoardViewCount(int idx);
 
 }

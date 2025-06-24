@@ -375,7 +375,23 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<ShelterBoardResponseDTO>>(200, "보호소 게시판 목록 조회 성공", boardLists));
 		}
+	}
 
+	@GetMapping("/{idx}")
+	public ResponseEntity<?> getShelterBoardDetail(@PathVariable int idx, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+
+		int result = shelterService.addBoardViewCount(idx);
+		ShelterBoardResponseDTO dto = shelterService.getShelterBoardDetail(idx, userIdx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "삭제되거나 없는 게시물"));
+		} else {
+			return ResponseEntity.ok(new OkResponseDTO<ShelterBoardResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
+		}
 	}
 
 	/**

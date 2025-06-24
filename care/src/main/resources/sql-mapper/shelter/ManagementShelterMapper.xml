@@ -303,5 +303,14 @@ AND
 	IDX = #{idx}
 </select>
 
+<update id="updateBoardViews" parameterType="int">
+UPDATE
+	BOARDS
+SET
+	VIEWS = VIEWS + 1
+WHERE
+	IDX = #{idx}
+</update>
+
  
  </mapper>

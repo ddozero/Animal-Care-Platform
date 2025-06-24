@@ -257,5 +257,11 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 		return dto;
 	}
+	
+	@Override
+	public int addBoardViewCount(int idx) {
+		int count = mapper.updateBoardViews(idx);
+		return count;
+	}
 
 }
