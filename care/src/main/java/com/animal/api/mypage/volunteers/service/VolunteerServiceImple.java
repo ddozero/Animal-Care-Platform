@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.animal.api.common.util.FileManager;
 import com.animal.api.mypage.volunteers.mapper.VolunteerMapper;
+import com.animal.api.mypage.volunteers.model.response.VolunteerDetailResponseDTO;
 import com.animal.api.mypage.volunteers.model.response.VolunteerListResponseDTO;
 
 @Service
@@ -35,5 +36,17 @@ public class VolunteerServiceImple implements VolunteerService {
         }
 
         return list;
+    }
+    
+    @Override
+    public VolunteerDetailResponseDTO getVolunteerDetailByRequestIdx(int volunteerRequestIdx) {
+        VolunteerDetailResponseDTO dto = volunteerMapper.findVolunteerDetailByRequestIdx(volunteerRequestIdx);
+        
+        if (dto != null) {
+            List<String> imagePaths = fileManager.getImagePath("volunteerReviews", volunteerRequestIdx);
+            dto.setImagePaths(imagePaths);
+        }
+
+        return dto;
     }
 }

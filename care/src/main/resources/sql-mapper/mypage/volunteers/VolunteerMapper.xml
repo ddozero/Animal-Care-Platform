@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.animal.api.mypage.volunteers.mapper.VolunteerMapper">
-
+	<!-- 봉사 내역 리스트 -->
 	<select id="findVolunteerListByUserIdx" resultType="com.animal.api.mypage.volunteers.model.response.VolunteerListResponseDTO">
 		SELECT
 		    VR.IDX AS volunteerRequestIdx,
@@ -25,4 +25,36 @@
 		WHERE VR.USER_IDX = #{userIdx}
 		ORDER BY VR.CREATED_AT DESC
 	</select>
+	<!-- 봉사 내역 상세 정보 -->
+	<select id="findVolunteerDetailByRequestIdx" resultType="com.animal.api.mypage.volunteers.model.response.VolunteerDetailResponseDTO">
+    SELECT 
+        VR.IDX AS volunteerRequestIdx,
+        VP.TITLE AS title,
+        VP.CONTENT AS content,
+        S.SHELTER_NAME AS shelterName,
+        VP.LOCATION AS location,
+
+        CASE VR.VOLUNTEER_REQUEST_STATUS_IDX
+            WHEN 1 THEN '신청완료'
+            WHEN 2 THEN '승인완료'
+            WHEN 3 THEN '거절됨'
+            WHEN 4 THEN '참여완료'
+            ELSE '대기중'
+        END AS statusText,
+
+        VP.VOLUNTEER_DATE AS volunteerDate,
+        VP.CREATED_AT AS createdAt,
+        VP.CAPACITY AS capacity,
+        VP.APPLICANTS AS applicants,
+        VR.TEL AS contact,
+        VR.CREATED_AT AS participatedAt
+
+    FROM VOLUNTEER_REQUESTS VR
+    JOIN VOLUNTEERS VP ON VR.VOLUNTEER_IDX = VP.IDX
+    JOIN USERS U ON VP.USER_IDX = U.IDX AND U.USER_TYPE_IDX = 2
+    JOIN SHELTERS S ON U.IDX = S.USER_IDX
+    WHERE VR.IDX = #{volunteerRequestIdx}
+    
+	</select>
+	
 </mapper>
