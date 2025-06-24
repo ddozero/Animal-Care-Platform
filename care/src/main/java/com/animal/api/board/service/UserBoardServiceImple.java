@@ -13,6 +13,7 @@ import com.animal.api.board.mapper.UserBoardMapper;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
+import com.animal.api.board.model.response.BoardDetailResponseDTO;
 import com.animal.api.common.util.FileManager;
 
 @Service
@@ -79,4 +80,12 @@ public class UserBoardServiceImple implements UserBoardService {
 			return ERROR;
 		}
 	}
+
+	@Override
+	public BoardDetailResponseDTO getBoardDetail(int idx) {
+		BoardDetailResponseDTO boardDetail = mapper.getBoardDetail(idx);
+
+		return boardDetail;
+	}
+
 }

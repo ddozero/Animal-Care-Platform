@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
+import com.animal.api.board.model.response.BoardDetailResponseDTO;
 
 public interface UserBoardService {
 	static int GET_SUCCESS = 1;
@@ -29,4 +30,6 @@ public interface UserBoardService {
 	public int addBoard(BoardWriteRequestDTO dto);
 
 	public int uploadBoardFile(MultipartFile[] files, int idx);
+
+	public BoardDetailResponseDTO getBoardDetail(int idx);
 }

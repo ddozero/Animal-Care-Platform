@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
+import com.animal.api.board.model.response.BoardDetailResponseDTO;
 
 @Mapper
 public interface UserBoardMapper {
@@ -19,4 +20,5 @@ public interface UserBoardMapper {
 
 	public int addBoard(BoardWriteRequestDTO dto);
 
+	public BoardDetailResponseDTO getBoardDetail(int idx);
 }
