@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.animal.api.board.mapper.UserBoardMapper;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
+import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 
 @Service
@@ -45,5 +46,20 @@ public class UserBoardServiceImple implements UserBoardService {
 		List<AllBoardListResponseDTO> boardList = mapper.searchBoards(request);
 
 		return boardList;
+	}
+
+	@Override
+	public int addBoard(BoardWriteRequestDTO dto) {
+		int ref = mapper.getMaxRef();
+
+		dto.setRef(ref + 1);
+
+		int result = mapper.addBoard(dto);
+
+		if (result == 1) {
+			return POST_SUCCESS;
+		} else {
+			return ERROR;
+		}
 	}
 }

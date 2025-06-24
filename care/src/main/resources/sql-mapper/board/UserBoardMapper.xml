@@ -76,4 +76,18 @@ ORDER BY
     B.TURN ASC
 LIMIT #{listSize} OFFSET #{cp}
 </select>
+
+<select id="getMaxRef" resultType="int">
+SELECT
+	IFNULL(MAX(REF), 0)
+FROM
+	BOARDS
+</select>
+
+<insert id="addBoard" parameterType="com.animal.api.board.model.request.BoardWriteRequestDTO">
+INSERT
+	INTO
+	BOARDS(USER_IDX, BOARD_TYPE_IDX, TITLE, CONTENT, REF, LEV, TURN)
+VALUES(#{userIdx},2,#{title},#{content},#{ref},0,0)
+</insert>
 </mapper>
