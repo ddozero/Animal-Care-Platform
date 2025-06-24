@@ -2,6 +2,7 @@ package com.animal.api.board.service;
 
 import java.util.List;
 
+import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 
 public interface UserBoardService {
@@ -22,4 +23,5 @@ public interface UserBoardService {
 
 	public List<AllBoardListResponseDTO> searchBoards(String type, String keyword, int listSize, int cp);
 
+	public int addBoard(BoardWriteRequestDTO dto);
 }
