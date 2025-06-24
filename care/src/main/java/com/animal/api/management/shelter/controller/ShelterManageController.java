@@ -320,6 +320,14 @@ public class ShelterManageController {
 		}
 	}
 	
+	/**
+	 * 해당 보호시설 입양 리뷰글에 대한 답글 삭제 메서드 
+	 * 
+	 * @param reviewIdx 입양 리뷰 글 번호 
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 해당 보호시설 입양 리뷰글 답글 삭제
+	 */
 	@DeleteMapping("/reviews/adoption/{reviewIdx}")
 	public ResponseEntity<?> deleteAdoptionReviewApply(@PathVariable int reviewIdx, HttpSession session) {
 
