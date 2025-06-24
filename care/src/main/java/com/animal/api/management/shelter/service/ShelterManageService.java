@@ -10,10 +10,12 @@ import com.animal.api.management.shelter.model.response.ManageVolunteerReviewRes
 
 public interface ShelterManageService {
 
-	public static int REPLY_OK = 1;
-	public static int NOT_REVIEW = 0;
-	public static int REPLY_ERROR = -1;
-
+	public static int UPDATE_OK = 0;
+	public static int DELETE_OK = 1;
+	public static int NOT_REVIEW = -1;
+	public static int REPLY_ERROR = -2;
+	public static int NOT_SHELTER_MANAGER = -3;
+	
 	public AllManageShelterResponseDTO getShelterInfo(int idx);
 
 	public int updateSheterInfo(ShelterInfoUpdateRequestDTO dto);
@@ -24,8 +26,10 @@ public interface ShelterManageService {
 
 	public int updateTurn(int ref, int turn);
 
-	public int addVolunterReviewApply(ManageVolunteerReplyRequestDTO dto);
+	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 	
-	public int updateVolunterReviewApply(ManageVolunteerReplyRequestDTO dto);
+	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx);
+	
+	public int deleteVolunteerReviewApply(int userIdx, int reviewIdx);
 
 }

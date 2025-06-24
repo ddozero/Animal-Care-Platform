@@ -111,7 +111,7 @@ WHERE
 	AND TURN >= #{turn};
 </update>
 
-<insert id="addVolunterReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+<insert id="addVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
 INSERT
 	INTO
 	VOLUNTEER_REVIEWS(
@@ -132,15 +132,49 @@ VALUES (
 );
 </insert>
 
-<update id="updateVolunterReviewApply" parameterType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
+<select id = "checkVolunteerReview" resultType="Integer">
+SELECT
+	IDX
+FROM
+	VOLUNTEER_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+</select>
+
+<select id="checkShelterUser" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+SELECT
+	S.USER_IDX
+FROM
+	VOLUNTEER_REVIEWS R
+JOIN VOLUNTEERS V ON 
+	R.VOLUNTEER_IDX = V.IDX
+JOIN SHELTERS S ON 
+	V.USER_IDX = S.USER_IDX
+WHERE
+	R.IDX = #{reviewIdx}
+	AND S.USER_IDX = #{userIdx}	
+</select>
+
+<update id="updateVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
 UPDATE
 	VOLUNTEER_REVIEWS
 SET
 	CONTENT = #{content}
 WHERE
-	IDX = #{reviewIdx};
+	IDX = #{reviewIdx}
+AND 
+	USER_IDX = #{userIdx}
 </update>
 
+<delete id="deleteVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+DELETE
+FROM
+	VOLUNTEER_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+AND 
+	USER_IDX = #{userIdx}
+</delete>
 
  
  </mapper>

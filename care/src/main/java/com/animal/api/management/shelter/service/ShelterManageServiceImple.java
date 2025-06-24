@@ -71,7 +71,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		int count = mapper.updateTurn(map);
 
 		if (count > 0) {
-			return REPLY_OK;
+			return UPDATE_OK;
 		} else if (count == 0) {
 			return NOT_REVIEW;
 		} else {
@@ -81,30 +81,74 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	@Override
 	@Transactional
-	public int addVolunterReviewApply(ManageVolunteerReplyRequestDTO dto) {
+	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto) {
 
 		int turnResult = updateTurn(dto.getRef(), dto.getTurn());
 
-		if (turnResult != REPLY_OK) {
+		if (turnResult != UPDATE_OK) {
 			return turnResult;
 		}
 
 		dto.setTurn(dto.getTurn() + 1);
 		dto.setLev(dto.getLev() + 1);
 
-		int result = mapper.addVolunterReviewApply(dto);
+		int result = mapper.addVolunteerReviewApply(dto);
 
 		if (result > 0) {
-			return REPLY_OK;
+			return UPDATE_OK;
 		} else {
 			return REPLY_ERROR;
 		}
 	}
 
 	@Override
-	public int updateVolunterReviewApply(ManageVolunteerReplyRequestDTO dto) {
-		int count = mapper.updateVolunterReviewApply(dto);
-		return count;
+	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx) {
+
+		Integer reviewCheck = mapper.checkVolunteerReview(reviewIdx);
+
+		if (reviewCheck == null) { // 리뷰글이 있는지 확인
+			return NOT_REVIEW;
+		}
+
+		dto.setReviewIdx(reviewIdx);
+		dto.setUserIdx(userIdx);
+
+		Integer shelterCheck = mapper.checkShelterUser(dto);
+		if (shelterCheck == null || shelterCheck == 0) { // 해당 보호소 관리자인지 확인
+			return NOT_SHELTER_MANAGER;
+		}
+
+		int count = mapper.updateVolunteerReviewApply(dto);
+		if (count > 0) {
+			return UPDATE_OK;
+		} else {
+			return REPLY_ERROR;
+		}
+	}
+
+	@Override
+	public int deleteVolunteerReviewApply(int userIdx, int reviewIdx) {
+
+		Integer reviewCheck = mapper.checkVolunteerReview(reviewIdx);
+		if (reviewCheck == null) {// 리뷰글이 있는지 확인
+			return NOT_REVIEW;
+		}
+
+		ManageVolunteerReplyRequestDTO dto = new ManageVolunteerReplyRequestDTO();
+		dto.setReviewIdx(reviewIdx);
+		dto.setUserIdx(userIdx);
+
+		Integer shelterCheck = mapper.checkShelterUser(dto);
+		if (shelterCheck == 0) {// 해당 보호소 관리자인지 확인
+			return NOT_SHELTER_MANAGER;
+		}
+
+		int count = mapper.deleteVolunteerReviewApply(dto);
+		if (count > 0) {
+			return DELETE_OK;
+		} else {
+			return REPLY_ERROR;
+		}
 	}
 
 }
