@@ -107,7 +107,7 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
-<update id="updateTurn" parameterType="map">
+<update id="updateTurnVR" parameterType="map">
 UPDATE
 	VOLUNTEER_REVIEWS
 SET
@@ -182,5 +182,35 @@ AND
 	USER_IDX = #{userIdx}
 </delete>
 
+<update id="updateTurnAR" parameterType="map">
+UPDATE
+	ADOPTION_REVIEWS
+SET
+	TURN = TURN + 1
+WHERE
+	REF = #{ref}
+	AND TURN >= #{turn};
+</update>
+
+<insert id="addAdoptionReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+INSERT
+	INTO
+	ADOPTION_REVIEWS(
+USER_IDX,
+ANIMAL_IDX,
+CONTENT,
+REF,
+LEV,
+TURN
+)
+VALUES (
+#{userIdx},
+#{animalIdx},
+#{content},
+#{ref},
+#{lev},
+#{turn}
+)
+</insert>
  
  </mapper>

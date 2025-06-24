@@ -23,7 +23,7 @@ public interface ManagementShelterMapper {
 
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(Map map);
 
-	public int updateTurn(Map map);
+	public int updateTurnVR(Map map);
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 

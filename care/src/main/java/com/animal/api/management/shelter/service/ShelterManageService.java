@@ -24,7 +24,7 @@ public interface ShelterManageService {
 
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int listSize, int cp, int idx);
 
-	public int updateTurn(int ref, int turn);
+	public int updateTurnVR(int ref, int turn);
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 	

@@ -63,12 +63,12 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 
 	@Override
-	public int updateTurn(int ref, int turn) {
+	public int updateTurnVR(int ref, int turn) {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("ref", ref);
 		map.put("turn", turn);
 
-		int count = mapper.updateTurn(map);
+		int count = mapper.updateTurnVR(map);
 
 		if (count > 0) {
 			return UPDATE_OK;
@@ -83,7 +83,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	@Transactional
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto) {
 
-		int turnResult = updateTurn(dto.getRef(), dto.getTurn());
+		int turnResult = updateTurnVR(dto.getRef(), dto.getTurn());
 
 		if (turnResult != UPDATE_OK) {
 			return turnResult;
