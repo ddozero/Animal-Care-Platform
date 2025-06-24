@@ -256,5 +256,31 @@ WHERE
 AND 
 	USER_IDX = #{userIdx}
 </delete>
+
+<select id="getShelterboardList" resultType="com.">
+SELECT 
+	IDX,
+	USER_IDX,
+	BOARD_TYPE_IDX,
+	TITLE,
+	CONTENT,
+	CREATED_AT,
+	VIEWS,
+	REF,
+	LEV,
+	TURN
+FROM
+	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 3
+and 
+	USER_IDX = #{userIdx}
+ORDER BY
+	IDX DESC
+LIMIT
+#{listSize} OFFSET #{cp}
+
+</select>
+
  
  </mapper>
