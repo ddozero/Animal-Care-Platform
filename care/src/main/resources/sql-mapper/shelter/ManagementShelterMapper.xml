@@ -246,5 +246,15 @@ WHERE
 AND 
 	USER_IDX = #{userIdx}
 </update>
+
+<delete id="deleteAdoptionReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+DELETE
+FROM
+	ADOPTION_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+AND 
+	USER_IDX = #{userIdx}
+</delete>
  
  </mapper>
