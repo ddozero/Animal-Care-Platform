@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NoticeUpdateRequestDTO {
 
-	@NotNull(message = "게시글 번호는 필수입니다.")
+	// 서비스에서 세팅
 	private Integer idx;
 	
 	@NotNull(message = "게시글 제목은 필수입니다.")

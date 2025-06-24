@@ -12,7 +12,7 @@ FROM
 WHERE
 	IDX = #{idx}
 </select>
-<update id="updateNotice" parameterType="com.animal.api.admin.board.model.request">
+<update id="updateNotice" parameterType="com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO">
 UPDATE
 	BOARDS
 SET
