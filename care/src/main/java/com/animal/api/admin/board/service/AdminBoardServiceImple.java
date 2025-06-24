@@ -28,4 +28,18 @@ public class AdminBoardServiceImple implements AdminBoardService {
 		result = result > 0 ? UPDATE_SUCCESS : ERROR;
 		return result;
 	}
+
+	@Override
+	public int deleteNotice(int idx) {
+		int boardTypeIdx = mapper.checkBoardType(idx);
+
+		if (boardTypeIdx != 1) { // 공지사항인지 확인
+			return NOT_NOTICE;
+		}
+
+		int result = mapper.deleteNotice(idx);
+
+		result = result > 0 ? UPDATE_SUCCESS : ERROR;
+		return result;
+	}
 }

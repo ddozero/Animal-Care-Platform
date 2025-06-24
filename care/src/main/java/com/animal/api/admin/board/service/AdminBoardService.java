@@ -11,4 +11,6 @@ public interface AdminBoardService {
 	public static int ERROR = -1;
 
 	public int updateNotice(NoticeUpdateRequestDTO dto, int idx);
+
+	public int deleteNotice(int idx);
 }
