@@ -79,29 +79,35 @@ LIMIT
 <select id="getAdoptionReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO">
 SELECT
 	AR.IDX AS reviewIdx,
-	AR.CONTENT AS content,
+	S.USER_IDX as shelterIdx,
+	U.IDX as userIdx,
+	A.IDX as animalIdx,
+	AR.CONTENT AS reviewContent,
 	U.NICKNAME,
 	A.NAME AS animalName,
 	AR.CONTENT,
-	AR.CREATED_AT AS createdAt,
+	AR.CREATED_AT as createdAt,
 	AR.REF,
+	AR.LEV,
 	AR.TURN
 FROM
 	ADOPTION_REVIEWS AR
 JOIN ANIMALS A ON
 	AR.ANIMAL_IDX = A.IDX
 JOIN USERS U ON
-	AR.ANIMAL_IDX = U.IDX
+	AR.USER_IDX = U.IDX
+JOIN SHELTERS S ON
+S.USER_IDX = A.USER_IDX
 WHERE
-	A.USER_IDX = #{idx}
+	A.USER_IDX = 52
 ORDER BY
 	AR.REF DESC,
 	AR.TURN ASC
 LIMIT
-#{listSize} OFFSET #{cp};
+#{listSize} OFFSET #{cp}
 </select>
 
-<update id="updateTurn" parameterType="map">
+<update id="updateTurnVR" parameterType="map">
 UPDATE
 	VOLUNTEER_REVIEWS
 SET
@@ -141,17 +147,17 @@ WHERE
 	IDX = #{reviewIdx}
 </select>
 
-<select id="checkShelterUser" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+<select id="checkShelterUserVR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
 SELECT
 	S.USER_IDX
 FROM
-	VOLUNTEER_REVIEWS R
+	VOLUNTEER_REVIEWS VR
 JOIN VOLUNTEERS V ON 
-	R.VOLUNTEER_IDX = V.IDX
+	VR.VOLUNTEER_IDX = V.IDX
 JOIN SHELTERS S ON 
 	V.USER_IDX = S.USER_IDX
 WHERE
-	R.IDX = #{reviewIdx}
+	VR.IDX = #{reviewIdx}
 	AND S.USER_IDX = #{userIdx}	
 </select>
 
@@ -176,5 +182,58 @@ AND
 	USER_IDX = #{userIdx}
 </delete>
 
+<select id = "checkAdoptionReview" resultType="Integer">
+SELECT
+	IDX
+FROM
+	ADOPTION_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+</select>
+
+<select id="checkShelterUserAR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+SELECT
+	S.USER_IDX
+FROM
+	ADOPTION_REVIEWS AR
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+JOIN SHELTERS S ON
+	A.USER_IDX = S.USER_IDX
+WHERE
+	AR.IDX = #{reviewIdx}
+	AND S.USER_IDX = #{userIdx}
+</select>
+
+<update id="updateTurnAR" parameterType="map">
+UPDATE
+	ADOPTION_REVIEWS
+SET
+	TURN = TURN + 1
+WHERE
+	REF = #{ref}
+	AND TURN >= #{turn};
+</update>
+
+<insert id="addAdoptionReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+INSERT
+	INTO
+	ADOPTION_REVIEWS(
+USER_IDX,
+ANIMAL_IDX,
+CONTENT,
+REF,
+LEV,
+TURN
+)
+VALUES (
+#{userIdx},
+#{animalIdx},
+#{content},
+#{ref},
+#{lev},
+#{turn}
+)
+</insert>
  
  </mapper>
