@@ -113,5 +113,5 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "파일 업로드 실패"));
 		}
 	}
-
+	
 }
