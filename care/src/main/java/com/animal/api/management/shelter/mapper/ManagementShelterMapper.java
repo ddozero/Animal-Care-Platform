@@ -45,5 +45,7 @@ public interface ManagementShelterMapper {
 	public int addAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto);
 	
 	public int updateAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto);
+	
+	public int deleteAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto);
 
 }
