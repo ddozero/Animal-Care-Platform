@@ -39,6 +39,6 @@ public interface ShelterManageService {
 	
 	public int deleteAdoptionReviewApply(int userIdx, int reviewIdx);
 	
-	public List<ShelterBoardResponseDTO> getShelterboardList(int listSize, int cp);
+	public List<ShelterBoardResponseDTO> getShelterboardList(int userIdx, int listSize, int cp);
 
 }

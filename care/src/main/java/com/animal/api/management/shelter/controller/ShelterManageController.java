@@ -28,7 +28,9 @@ import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestD
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
+import com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO;
 import com.animal.api.management.shelter.service.ShelterManageService;
+import com.animal.api.support.model.response.UserNoticeResponseDTO;
 
 /**
  * 보호시설 관리자 페이지의 보호시설관리 관련 컨트롤러 클래스
@@ -319,12 +321,12 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 수정 실패"));
 		}
 	}
-	
+
 	/**
-	 * 해당 보호시설 입양 리뷰글에 대한 답글 삭제 메서드 
+	 * 해당 보호시설 입양 리뷰글에 대한 답글 삭제 메서드
 	 * 
-	 * @param reviewIdx 입양 리뷰 글 번호 
-	 * @param session 로그인 검증 세션
+	 * @param reviewIdx 입양 리뷰 글 번호
+	 * @param session   로그인 검증 세션
 	 * 
 	 * @return 해당 보호시설 입양 리뷰글 답글 삭제
 	 */
@@ -346,6 +348,34 @@ public class ShelterManageController {
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 삭제 실패"));
 		}
+	}
+
+	@GetMapping("/board")
+	public ResponseEntity<?> getShelterboardList(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+
+		int listSize = 5;
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
+
+		List<ShelterBoardResponseDTO> boardLists = shelterService.getShelterboardList(userIdx, listSize, cp);
+
+		if (boardLists == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+		} else if (boardLists.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterBoardResponseDTO>>(200, "보호소 게시판 목록 조회 성공", boardLists));
+		}
+
 	}
 
 	/**

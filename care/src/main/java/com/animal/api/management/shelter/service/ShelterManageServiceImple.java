@@ -235,10 +235,11 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 	
 	@Override
-	public List<ShelterBoardResponseDTO> getShelterboardList(int listSize, int cp) {
+	public List<ShelterBoardResponseDTO> getShelterboardList(int userIdx, int listSize, int cp) {
 		
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		
+		map.put("userIdx", userIdx);
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		
