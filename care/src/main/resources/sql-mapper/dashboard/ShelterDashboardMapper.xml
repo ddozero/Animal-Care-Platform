@@ -44,4 +44,19 @@ WHERE
 GROUP BY
 	YEAR(A.CREATED_AT);
 </select>
+<select id="getViewDashboard" parameterType="int" resultType="com.animal.api.management.dashboard.model.response.ShelterViewDashboardResponseDTO">
+SELECT
+	DATE_FORMAT(B.CREATED_AT, '%Y-%m') AS 'MONTH',
+	SUM(B.VIEWS) AS 'VIEWS'
+FROM
+	BOARDS B
+WHERE
+	B.BOARD_TYPE_IDX = 3
+	AND B.CREATED_AT >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+	AND B.USER_IDX = #{idx}
+GROUP BY
+	DATE_FORMAT(B.CREATED_AT, '%Y-%m')
+ORDER BY
+	DATE_FORMAT(B.CREATED_AT, '%Y-%m') ASC
+</select>
 </mapper>
