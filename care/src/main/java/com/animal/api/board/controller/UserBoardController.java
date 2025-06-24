@@ -23,6 +23,8 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 
 /**
+ * 사용자 기준 자유게시판에 관련되어 있는 컨트롤러 클래스
+ * 
  * @author consgary
  * @since 2025.06.24
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
