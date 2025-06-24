@@ -86,7 +86,7 @@
 	    WHERE IDX = #{volunteerRequestIdx}
 	</select>
 	
-	<!-- 4. 후기 등록 (REF는 자가 증가 IDX를 반영) -->
+	<!-- 4. 후기 등록 ( -->
 	<insert id="insertVolunteerReview" useGeneratedKeys="true" keyProperty="idx">
 	    INSERT INTO VOLUNTEER_REVIEWS (
 	        USER_IDX, VOLUNTEER_IDX, CONTENT, CREATED_AT, REF, LEV, TURN
@@ -95,13 +95,20 @@
 	        #{volunteerIdx},
 	        #{content},
 	        NOW(),
-	        #{idx},
+	        0,
 	        0,
 	        0
 	    )
 	</insert>
 	
-	<!-- 5. 포인트 지급 -->
+	<!-- 5. 생성된 ID로 REF 업데이트 --> 
+	<update id="updateVolunteerReviewRef">
+	    UPDATE VOLUNTEER_REVIEWS
+	    SET REF = #{idx}
+	    WHERE IDX = #{idx}
+	</update>
+		
+	<!-- 6. 포인트 지급 -->
 	<insert id="grantVolunteerReviewPoint">
 	    INSERT INTO POINT_GRANTS (
 	        USER_IDX, POINT_TYPE_IDX, CREATED_AT
@@ -110,7 +117,7 @@
 	    )
 	</insert>
 	
-	<!-- 6. 사용자 포인트 증가 -->
+	<!-- 7. 사용자 포인트 증가 -->
 	<update id="increaseUserPoint">
 	    UPDATE USERS
 	    SET POINT = POINT + (

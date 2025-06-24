@@ -82,6 +82,7 @@ public class VolunteerServiceImple implements VolunteerService {
         review.setContent(dto.getContent());
 
         volunteerMapper.insertVolunteerReview(review); // review.getIdx() 생성됨
+        volunteerMapper.updateVolunteerReviewRef(review.getIdx()); // ref에 idx 업데이트
 
         // 5. 이미지가 있으면 저장
         if (image != null && !image.isEmpty()) {

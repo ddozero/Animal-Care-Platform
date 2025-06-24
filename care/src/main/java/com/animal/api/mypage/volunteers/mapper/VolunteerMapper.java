@@ -27,12 +27,15 @@ public interface VolunteerMapper {
     // 3. VOLUNTEER_IDX 가져오기
     int findVolunteerIdxByRequestIdx(int volunteerRequestIdx);
 
-    // 4. 후기 등록 (REF = IDX)
+    // 4. 후기 등록 
     void insertVolunteerReview(VolunteerReviewEntity review);
+    
+    // 5. ref 번호 업데이트
+    void updateVolunteerReviewRef(int idx);
 
-    // 5. 포인트 지급
+    // 6. 포인트 지급
     void grantVolunteerReviewPoint(int userIdx);
     
-    // 6. 사용자 포인트 증가
+    // 7. 사용자 포인트 증가
     void increaseUserPoint(int userIdx);
 }
