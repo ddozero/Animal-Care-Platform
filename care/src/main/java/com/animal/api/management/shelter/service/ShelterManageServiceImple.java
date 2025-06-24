@@ -140,6 +140,13 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		if (shelterCheck == 0) {// 해당 보호소 관리자인지 확인 
 			return REPLY_ERROR;
 		}
+		
+		int count = mapper.deleteVolunteerReviewApply(dto);
+		if (count > 0) {
+			return DELETE_OK;
+		} else {
+			return REPLY_ERROR;
+		}
 	}
 
 	@Override
