@@ -20,12 +20,7 @@
 		base-package="com.animal.api" />
 
 	<!-- ✅ 정적 자원 매핑 설정 -->
-	<!-- ex) /js/main.js 요청 → /resources/static/js/main.js 경로에서 파일 제공 -->
-	<mvc:resources mapping="/js/**" location="/resources/js/" />
-	<mvc:resources mapping="/css/**"
-		location="/resources/css/" />
-	<mvc:resources mapping="/images/**"
-		location="/resources/images/" />
+	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<!-- ✅ JSP 파일 경로 설정: 뷰 이름 → 실제 JSP 경로로 매핑 -->
 	<bean
