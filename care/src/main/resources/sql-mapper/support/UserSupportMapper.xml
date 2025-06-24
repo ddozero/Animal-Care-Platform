@@ -43,7 +43,7 @@ FROM
 	BOARDS
 WHERE
 	BOARD_TYPE_IDX = 1
-	AND IDX = ${idx}
+	AND IDX = #{idx}
 </select>
 
 <select id="searchAllNotice" parameterType="map" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
@@ -83,7 +83,7 @@ UPDATE
 SET
 	VIEWS = VIEWS + 1
 WHERE
-	IDX = ${idx}
+	IDX = #{idx}
 </update>
 
 
