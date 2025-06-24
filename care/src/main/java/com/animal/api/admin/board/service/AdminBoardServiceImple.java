@@ -16,7 +16,11 @@ public class AdminBoardServiceImple implements AdminBoardService {
 
 	@Override
 	public int updateNotice(NoticeUpdateRequestDTO dto, int idx) {
-		int boardTypeIdx = mapper.checkBoardType(idx);
+		Integer boardTypeIdx = mapper.checkBoardType(idx);
+		
+		if(boardTypeIdx==null) {
+			return NOTICE_NOT_FOUND;
+		}
 
 		if (boardTypeIdx != 1) { // 공지사항인지 확인
 			return NOT_NOTICE;
@@ -26,6 +30,24 @@ public class AdminBoardServiceImple implements AdminBoardService {
 		int result = mapper.updateNotice(dto);
 
 		result = result > 0 ? UPDATE_SUCCESS : ERROR;
+		return result;
+	}
+
+	@Override
+	public int deleteNotice(int idx) {
+		Integer boardTypeIdx = mapper.checkBoardType(idx);
+
+		if (boardTypeIdx == null) {
+			return NOTICE_NOT_FOUND;
+		}
+		
+		if (boardTypeIdx != 1) { // 공지사항인지 확인
+			return NOT_NOTICE;
+		}
+
+		int result = mapper.deleteNotice(idx);
+
+		result = result > 0 ? DELETE_SUCCESS : ERROR;
 		return result;
 	}
 }
