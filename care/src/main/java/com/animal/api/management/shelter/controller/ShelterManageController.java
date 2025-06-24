@@ -177,12 +177,17 @@ public class ShelterManageController {
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
 
-		int result = shelterService.addVolunteerReviewApply(dto);
+		int reviewIdx = 0;
+		dto.setReviewIdx(reviewIdx);
+
+		int result = shelterService.addVolunteerReviewApply(dto, userIdx, reviewIdx);
 
 		if (result == shelterService.NOT_REVIEW) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없음"));
 		} else if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
+		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아님"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}
@@ -247,11 +252,11 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 삭제 실패"));
 		}
 	}
-	
+
 	/**
-	 * 해당 보호시설 입양 리뷰글에 대한 답글 작성 메서드 
+	 * 해당 보호시설 입양 리뷰글에 대한 답글 작성 메서드
 	 * 
-	 * @param dto 입양 리뷰 답변글
+	 * @param dto     입양 리뷰 답변글
 	 * @param session 로그인 검증 세션
 	 * 
 	 * @return 해당 보호시설 입양 리뷰글 답글
@@ -275,7 +280,7 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
 		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아님"));
-		}else {
+		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 등록 실패"));
 		}
 	}

@@ -83,7 +83,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	@Override
 	@Transactional
-	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto) {
+	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx) {
 
 		int turnResult = updateTurnVR(dto.getRef(), dto.getTurn());
 
@@ -93,6 +93,14 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 		dto.setTurn(dto.getTurn() + 1);
 		dto.setLev(dto.getLev() + 1);
+
+		dto.setUserIdx(userIdx);
+		dto.setReviewIdx(dto.getRef());
+
+		Integer shelterCheck = mapper.checkShelterUserVR(dto);
+		if (shelterCheck == null || shelterCheck == 0) { // 해당 보호소 관리자인지 확인
+			return NOT_SHELTER_MANAGER;
+		}
 
 		int result = mapper.addVolunteerReviewApply(dto);
 
@@ -155,6 +163,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	@Override
 	public int updateTurnAR(int ref, int turn) {
+
 		Map<String, Integer> map = new HashMap<>();
 		map.put("ref", ref);
 		map.put("turn", turn);
@@ -172,6 +181,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	@Override
 	public int addAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx) {
+
 		int turnResult = updateTurnAR(dto.getRef(), dto.getTurn());
 
 		if (turnResult != UPDATE_OK) {
@@ -180,7 +190,6 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 		dto.setTurn(dto.getTurn() + 1);
 		dto.setLev(dto.getLev() + 1);
-		dto.setUserIdx(userIdx);
 
 		dto.setUserIdx(userIdx);
 		dto.setReviewIdx(dto.getRef());
