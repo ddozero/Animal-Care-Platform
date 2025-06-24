@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.management.dashboard.mapper.ShelterDashboardMapper">
+<select id="getVolunteerDashboard" parameterType="int" resultType="com.animal.api.management.dashboard.model.response.ShelterVolunteerDashboardResponseDTO">
+SELECT
+	DATE_FORMAT(VR.CREATED_AT, '%Y-%m') AS 'MONTH',
+	COUNT(*) AS 'COUNT'
+FROM
+	VOLUNTEER_REQUESTS VR
+JOIN VOLUNTEERS V 
+ON
+	VR.VOLUNTEER_IDX = V.IDX
+WHERE
+	VR.VOLUNTEER_REQUEST_STATUS_IDX = 4
+	AND VR.CREATED_AT >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+	AND V.USER_IDX = #{idx}
+GROUP BY
+	DATE_FORMAT(VR.CREATED_AT, '%Y-%m')
+ORDER BY
+	DATE_FORMAT(VR.CREATED_AT, '%Y-%m') ASC
+</select>
+<select id="getAdoptionDashboard" parameterType="int" resultType="com.animal.api.management.dashboard.model.response.ShelterAnimalDashboardResponseDTO">
+SELECT
+	YEAR(A.CREATED_AT) AS 'YEAR',
+	COUNT(*) AS 'TOTAL_ANIMALS',
+	(
+	SELECT
+		COUNT(*)
+	FROM
+		ANIMALS A2
+	WHERE
+		A2.USER_IDX = 53
+		AND YEAR(A2.CREATED_AT) = YEAR(A2.CREATED_AT)
+		AND A2.ADOPTION_STATUS_IDX = 3
+    ) AS 'ADOPTED_ANIMALS'
+FROM
+	ANIMALS A
+WHERE
+	A.USER_IDX = #{idx}
+	AND YEAR(A.CREATED_AT) = YEAR(NOW())
+GROUP BY
+	YEAR(A.CREATED_AT);
+</select>
+<select id="getViewDashboard" parameterType="int" resultType="com.animal.api.management.dashboard.model.response.ShelterViewDashboardResponseDTO">
+SELECT
+	DATE_FORMAT(B.CREATED_AT, '%Y-%m') AS 'MONTH',
+	SUM(B.VIEWS) AS 'VIEWS'
+FROM
+	BOARDS B
+WHERE
+	B.BOARD_TYPE_IDX = 3
+	AND B.CREATED_AT >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+	AND B.USER_IDX = #{idx}
+GROUP BY
+	DATE_FORMAT(B.CREATED_AT, '%Y-%m')
+ORDER BY
+	DATE_FORMAT(B.CREATED_AT, '%Y-%m') ASC
+</select>
+</mapper>
