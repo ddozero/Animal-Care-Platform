@@ -33,6 +33,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
  * @see com.animal.api.board.model.request.BoardSearchRequestDTO
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
+ * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -115,6 +116,12 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 게시판 상세 정보 조회
+	 * 
+	 * @param idx 게시판 번호
+	 * @return 게시판 상세정보
+	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getBoardDetail(@PathVariable int idx) {
 
@@ -127,5 +134,4 @@ public class UserBoardController {
 					.body(new OkResponseDTO<BoardDetailResponseDTO>(200, "게시판 상세 조회 성공", boardDetail));
 		}
 	}
-
 }
