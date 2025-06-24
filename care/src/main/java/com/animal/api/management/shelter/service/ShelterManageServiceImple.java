@@ -64,30 +64,19 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 
 	@Override
-	public int updateTurnVR(int ref, int turn) {
-		Map<String, Integer> map = new HashMap<>();
-		map.put("ref", ref);
-		map.put("turn", turn);
-
-		int count = mapper.updateTurnVR(map);
-
-		if (count > 0) {
-			return UPDATE_OK;
-		} else if (count == 0) {
-			return NOT_REVIEW;
-		} else {
-			return REPLY_ERROR;
-		}
-	}
-
-	@Override
 	@Transactional
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx) {
 
-		int turnResult = updateTurnVR(dto.getRef(), dto.getTurn());
+		Map<String, Integer> map = new HashMap<>();
+		map.put("ref", dto.getRef());
+		map.put("turn", dto.getTurn());
 
-		if (turnResult != UPDATE_OK) {
-			return turnResult;
+		int count = mapper.updateTurnAR(map);
+
+		if (count < 0) {
+			return REPLY_ERROR;
+		} else if (count == 0) {
+			return NOT_REVIEW;
 		}
 
 		dto.setTurn(dto.getTurn() + 1);
@@ -148,32 +137,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		dto.setUserIdx(userIdx);
 
 		Integer shelterCheck = mapper.checkShelterUserVR(dto);
-		if (shelterCheck == 0) {// 해당 보호소 관리자인지 확인
-			return NOT_SHELTER_MANAGER;
-		}
-
-		int count = mapper.deleteVolunteerReviewApply(dto);
-		if (count > 0) {
-			return DELETE_OK;
-		} else {
-			return REPLY_ERROR;
-		}
-	}
-
-	@Override
-	public int updateTurnAR(int ref, int turn) {
-
-		Map<String, Integer> map = new HashMap<>();
-		map.put("ref", ref);
-		map.put("turn", turn);
-
-		int count = mapper.updateTurnAR(map);
-
-		if (count > 0) {
-			return UPDATE_OK;
-		} else if (count == 0) {// 리뷰글이 있는지 확인
-			return NOT_REVIEW;
-		} else {
+		if (shelterCheck == 0) {// 해당 보호소 관리자인지 확인 
 			return REPLY_ERROR;
 		}
 	}
@@ -181,10 +145,16 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	@Override
 	public int addAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx) {
 
-		int turnResult = updateTurnAR(dto.getRef(), dto.getTurn());
+		Map<String, Integer> map = new HashMap<>();
+		map.put("ref", dto.getRef());
+		map.put("turn", dto.getTurn());
 
-		if (turnResult != UPDATE_OK) {
-			return turnResult;
+		int count = mapper.updateTurnAR(map);
+
+		if (count < 0) {
+			return REPLY_ERROR;
+		} else if (count == 0) {// 리뷰글이 있는지 확인
+			return NOT_REVIEW;
 		}
 
 		dto.setTurn(dto.getTurn() + 1);

@@ -147,17 +147,17 @@ WHERE
 	IDX = #{reviewIdx}
 </select>
 
-<select id="checkShelterUserVR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.AllCheckRequestDTO">
+<select id="checkShelterUserVR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
 SELECT
 	S.USER_IDX
 FROM
-	VOLUNTEER_REVIEWS R
+	VOLUNTEER_REVIEWS VR
 JOIN VOLUNTEERS V ON 
-	R.VOLUNTEER_IDX = V.IDX
+	VR.VOLUNTEER_IDX = V.IDX
 JOIN SHELTERS S ON 
 	V.USER_IDX = S.USER_IDX
 WHERE
-	R.IDX = #{reviewIdx}
+	VR.IDX = #{reviewIdx}
 	AND S.USER_IDX = #{userIdx}	
 </select>
 
@@ -191,7 +191,7 @@ WHERE
 	IDX = #{reviewIdx}
 </select>
 
-<select id="checkShelterUserAR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.AllCheckRequestDTO">
+<select id="checkShelterUserAR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
 SELECT
 	S.USER_IDX
 FROM
