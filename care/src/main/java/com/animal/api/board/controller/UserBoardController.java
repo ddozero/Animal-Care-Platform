@@ -24,9 +24,10 @@ import com.animal.api.common.model.OkResponseDTO;
 
 /**
  * @author consgary
- * @since 2025.06.23
+ * @since 2025.06.24
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
  * @see com.animal.api.board.model.request.BoardSearchRequestDTO
+ * @see com.animal.api.board.model.request.BoardWriteRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -65,6 +66,13 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 게시판 글 등록
+	 * 
+	 * @param dto     글 등록 폼
+	 * @param session 로그인 검증용
+	 * @return 글 등록 성공,실패 메세지
+	 */
 	@PostMapping
 	public ResponseEntity<?> addBoard(@Valid @RequestBody BoardWriteRequestDTO dto, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
