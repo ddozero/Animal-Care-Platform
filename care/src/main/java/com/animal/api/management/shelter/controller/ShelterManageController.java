@@ -349,7 +349,15 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 삭제 실패"));
 		}
 	}
-
+	
+	/**
+	 * 해당 보호시설 게시판 글 목록 조회 메서드 
+	 * 
+	 * @param cp 페이지번호
+	 * @param session 로그인 검증 세션 
+	 * 
+	 * @return 해당 보호시설 게시판 목록
+	 */
 	@GetMapping("/board")
 	public ResponseEntity<?> getShelterboardList(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
@@ -376,7 +384,15 @@ public class ShelterManageController {
 					.body(new OkResponseDTO<List<ShelterBoardResponseDTO>>(200, "보호소 게시판 목록 조회 성공", boardLists));
 		}
 	}
-
+	
+	/**
+	 * 해당 보호시설 게시판 상세정보 조회 메서드 
+	 * 
+	 * @param idx 게시판 번호 
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 해당 보호시설 게시판 상세 정보 
+	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getShelterBoardDetail(@PathVariable int idx, HttpSession session) {
 
