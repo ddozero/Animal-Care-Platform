@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.animal.api.mypage.information.screen.model.response.RecentActivityDTO;
+
 @Mapper
 public interface InformationScreenMapper {
 
@@ -18,5 +20,5 @@ public interface InformationScreenMapper {
     int sumDonations(@Param("userIdx") int userIdx);
 
     // 최근 활동 내역 (문자 리스트)
-    List<String> getRecentActivities(@Param("userIdx") int userIdx);
+    List<RecentActivityDTO> selectRecentActivities(@Param("userIdx") int userIdx);
 }
