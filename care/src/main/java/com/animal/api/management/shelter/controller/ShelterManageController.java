@@ -197,8 +197,8 @@ public class ShelterManageController {
 	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 수정 메서드
 	 * 
 	 * @param reviewIdx 봉사 리뷰 글 번호
-	 * @param dto 봉사 리뷰
-	 * @param session 로그인 검증 세션 
+	 * @param dto       봉사 리뷰
+	 * @param session   로그인 검증 세션
 	 * 
 	 * @return 해당 보호시설 봉사 리뷰글 답글 수정
 	 */
@@ -261,7 +261,7 @@ public class ShelterManageController {
 	 * @param dto     입양 리뷰 답변글
 	 * @param session 로그인 검증 세션
 	 * 
-	 * @return 해당 보호시설 입양 리뷰글 답글 
+	 * @return 해당 보호시설 입양 리뷰글 답글
 	 */
 	@PostMapping("/reviews/adoption")
 	public ResponseEntity<?> addAdoptionReviewApply(@Valid @RequestBody ManageAdoptionReplyRequestDTO dto,
@@ -286,13 +286,13 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 등록 실패"));
 		}
 	}
-	
+
 	/**
 	 * 해당 보호시설 입양 리뷰글에 대한 답글 수정 메서드
 	 * 
 	 * @param reviewIdx 입양 리뷰 글 번호
-	 * @param dto 입양 리뷰 
-	 * @param session 로그인 검증 세션 
+	 * @param dto       입양 리뷰
+	 * @param session   로그인 검증 세션
 	 * 
 	 * @return 해당 보호시설 입양 리뷰글 답글 수정
 	 */
@@ -317,6 +317,26 @@ public class ShelterManageController {
 					.body(new ErrorResponseDTO(403, "답글을 작성한 담당 보호소 관리자가 아님"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 수정 실패"));
+		}
+	}
+	
+	@DeleteMapping("/reviews/adoption/{reviewIdx}")
+	public ResponseEntity<?> deleteAdoptionReviewApply(@PathVariable int reviewIdx, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+
+		int result = shelterService.deleteAdoptionReviewApply(userIdx, reviewIdx);
+
+		if (result == shelterService.DELETE_OK) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "입양 리뷰 답글 삭제 성공", null));
+		} else if (result == shelterService.NOT_REVIEW) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없음"));
+		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(400, "답글을 작성한 보호소 관리자가 아님"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 삭제 실패"));
 		}
 	}
 
