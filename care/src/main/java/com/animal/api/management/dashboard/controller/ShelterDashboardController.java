@@ -19,6 +19,14 @@ import com.animal.api.management.dashboard.model.response.ShelterViewDashboardRe
 import com.animal.api.management.dashboard.model.response.ShelterVolunteerDashboardResponseDTO;
 import com.animal.api.management.dashboard.service.ShelterDashboardService;
 
+/**
+ * 
+ * @author Rege-97
+ * @since 2025-06-24
+ * @see com.animal.api.management.dashboard.model.response.ShelterAnimalDashboardResponseDTO
+ * @see com.animal.api.management.dashboard.model.response.ShelterViewDashboardResponseDTO
+ * @see com.animal.api.management.dashboard.model.response.ShelterVolunteerDashboardResponseDTO
+ */
 @RestController
 @RequestMapping("/api/management/dashboards")
 public class ShelterDashboardController {
@@ -26,6 +34,12 @@ public class ShelterDashboardController {
 	@Autowired
 	private ShelterDashboardService service;
 
+	/**
+	 * 보호시설 관리페이지에서 봉사완료에 대한 통계 조회 메서드
+	 * 
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 최근 6개월의 봉사 통계데이터
+	 */
 	@GetMapping("/volunteers")
 	public ResponseEntity<?> getVolunteerDashboard(HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
@@ -50,6 +64,12 @@ public class ShelterDashboardController {
 		}
 	}
 
+	/**
+	 * 보호시설 관리페이지에서 유기동물에 대한 통계 조회 메서드
+	 * 
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 올해의 유기동물 통계데이터
+	 */
 	@GetMapping("/animals")
 	public ResponseEntity<?> getAnimalDashboard(HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
@@ -72,6 +92,12 @@ public class ShelterDashboardController {
 		}
 	}
 
+	/**
+	 * 보호시설 관리페이지에서 게시글 조회수에 대한 통계 조회 메서드
+	 * 
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 최근 6개월의 조회수 통계데이터
+	 */
 	@GetMapping("/views")
 	public ResponseEntity<?> getViewDashboard(HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
