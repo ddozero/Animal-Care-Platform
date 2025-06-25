@@ -100,8 +100,9 @@ public class UserBoardServiceImple implements UserBoardService {
 	@Override
 	public int updateBoard(BoardUpdateRequestDTO dto) {
 		int result = mapper.updateBoard(dto);
+		BoardDetailResponseDTO boardDetail = mapper.getBoardDetail(dto.getIdx());
 
-		if (result > 0) {
+		if (result > 0 && boardDetail.getIdx() == dto.getIdx()) {
 			return POST_SUCCESS;
 		} else {
 			return ERROR;
