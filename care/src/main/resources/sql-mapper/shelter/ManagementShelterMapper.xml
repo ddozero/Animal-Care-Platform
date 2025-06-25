@@ -334,4 +334,38 @@ VALUES(
 	0)
 </insert>
  
+<select id = "checkShelterBoard" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+	AND BOARD_TYPE_IDX = 3 
+</select>
+
+<select id="checkUserBoard" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
+SELECT
+	USER_IDX
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+</select>
+
+<update id= "updateShelterBoard" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
+UPDATE
+	BOARDS B
+SET
+	TITLE = #{title},
+	CONTENT = #{content}
+WHERE
+	IDX = #{idx}
+	AND B.USER_IDX = #{userIdx}
+	AND B.BOARD_TYPE_IDX = 3
+</update>
+
+ 
+ 
  </mapper>
