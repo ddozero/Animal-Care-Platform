@@ -158,12 +158,16 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
 
-		int result = service.updateBoard(dto);
+		int result = service.updateBoard(dto, idx);
 
 		if (result == service.POST_SUCCESS) {
 			Integer boardIdx = dto.getIdx();
+			Map<String, Integer> map = new HashMap();
+			map.put("createdIdx", boardIdx);
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new OkResponseDTO<Integer>(200, "게시판 글 수정 성공", boardIdx));
+					.body(new OkResponseDTO<Map<String, Integer>>(200, "게시판 글 수정 성공", map));
+		} else if (result == service.NOT_OWNED_BOARD) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "본인이 작성한 글이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 수정 실패"));
 		}

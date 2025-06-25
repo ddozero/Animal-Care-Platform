@@ -140,4 +140,13 @@ WHERE
 	IDX = #{idx}
 	AND USER_IDX = #{userIdx}
 </update>
+
+<select id="checkMyBoard" parameterType="int">
+SELECT
+	USER_IDX
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</select>
 </mapper>

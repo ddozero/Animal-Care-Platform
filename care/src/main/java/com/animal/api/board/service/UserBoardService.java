@@ -22,6 +22,7 @@ public interface UserBoardService {
 	static int LEV_NOT_FOUND = 10;
 	static int TURN_NOT_FOUND = 11;
 	static int UPLOAD_SUCCESS = 12;
+	static int NOT_OWNED_BOARD = 13;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
@@ -34,5 +35,5 @@ public interface UserBoardService {
 
 	public BoardDetailResponseDTO getBoardDetail(int idx);
 
-	public int updateBoard(BoardUpdateRequestDTO dto);
+	public int updateBoard(BoardUpdateRequestDTO dto, int idx);
 }
