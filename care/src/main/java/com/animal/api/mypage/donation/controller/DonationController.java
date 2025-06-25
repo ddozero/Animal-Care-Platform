@@ -49,7 +49,7 @@ public class DonationController {
 		
 		if( list == null || list.size()== 0 ) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new OkResponseDTO<List<DonationListResponseDTO>>(400, "나의 기부 내역이 없습니다", null));
+					.body(new OkResponseDTO<List<DonationListResponseDTO>>(404, "나의 기부 내역이 없습니다", null));
 		}
 
 		return ResponseEntity.status(HttpStatus.OK)
