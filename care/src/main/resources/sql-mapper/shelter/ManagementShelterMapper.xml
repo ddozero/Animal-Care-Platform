@@ -313,8 +313,10 @@ WHERE
 </update>
 
 <select id = "getMaxRef" resultType="int">
-
-
+SELECT
+	IFNULL(MAX(REF), 0)
+FROM
+	BOARDS
 </select>
 
 <insert id="addshelterBoard" parameterType="">
