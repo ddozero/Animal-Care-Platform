@@ -56,12 +56,7 @@ public class AdoptionController {
 
 		List<AdoptionListResponseDTO> list = adoptionService.getAdoptionListByUserIdx(loginUser.getIdx());
 		
-		if( list == null || list.size()== 0 ) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new OkResponseDTO<List<DonationListResponseDTO>>(404, "나의 입양 내역이 없습니다", null));
-		}
-		
-		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "내 입양 내역 조회 성공", list));
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, list == null || list.isEmpty() ? "나의 봉사 내역이 없습니다" : "봉사 내역 조회 성공", list));
 	}
 
 	/**
