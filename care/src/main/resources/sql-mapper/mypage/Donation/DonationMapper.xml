@@ -5,4 +5,26 @@
 
 <mapper namespace="com.animal.api.mypage.donation.mapper.DonationMapper">
 
+	<select id="findDonationListByUserIdx" resultType="com.animal.api.mypage.donation.model.response.DonationListResponseDTO">
+        SELECT
+            D.IDX AS donationIdx,
+            D.NAME AS donationName,
+            DS.NAME AS donationStatusText,
+            DATE_FORMAT(D.START_DATE, '%Y-%m-%d') AS startDate,
+            DATE_FORMAT(D.END_DATE, '%Y-%m-%d') AS endDate,
+            D.AMOUNT,
+            D.COMPLETION_AMOUNT AS completionAmount,
+            D.COMPLETION_RATE AS completionRate,
+            D.SPONSOR,
+            DATE_FORMAT(D.CREATED_AT, '%Y-%m-%d %H:%i:%s') AS createdAt
+        FROM DONATIONS D
+        JOIN DONATION_STATUS DS ON D.DONATION_STATUS_IDX = DS.IDX
+        WHERE D.IDX IN (
+            SELECT DONATION_IDX
+            FROM DONATION_DETAILS
+            WHERE USER_IDX = #{userIdx}
+        )
+        ORDER BY D.CREATED_AT DESC	
+	</select>
+	
 </mapper>
