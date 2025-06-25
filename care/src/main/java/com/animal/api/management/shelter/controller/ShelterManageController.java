@@ -490,6 +490,14 @@ public class ShelterManageController {
 		}
 	}
 
+	/**
+	 * 해당 보호시설 게시물 삭제 메서드
+	 * 
+	 * @param idx     게시물 번호
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 보호시설 게시물 삭제 여부
+	 */
 	@DeleteMapping("/boards/{idx}")
 	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int idx, HttpSession session) {
 
