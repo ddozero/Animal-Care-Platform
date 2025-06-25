@@ -440,7 +440,7 @@ public class ShelterManageController {
 	}
 
 	/**
-	 * 해당 보호시설 게시물 등록 시 파일 업로드
+	 * 해당 보호시설 게시물 등록 시 파일 업로드 메서드 
 	 * 
 	 * @param files 업로드 한 파일
 	 * @param idx   게시물 등록시 생성되는 번호
@@ -459,7 +459,15 @@ public class ShelterManageController {
 	}
 
 	
-	
+	/**
+	 * 해당 보호시설 게시물 수정 메서드 
+	 * 
+	 * @param idx 게시물 번호
+	 * @param dto 보호시설 게시판
+	 * @param session 로그인 검증 세션 
+	 * 
+	 * @return 보호시설 게시물 수정 여부 
+	 */
 	@PutMapping("/boards/{idx}")
 	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int idx,
 			@Valid @RequestBody ShelterBoardRequestDTO dto, HttpSession session) {
