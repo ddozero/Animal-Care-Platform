@@ -1,6 +1,7 @@
 package com.animal.api.board.model.response;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -21,4 +22,5 @@ public class BoardDetailResponseDTO {
 	private Timestamp createdAt;
 	private int views;
 	private int likeCount;
+	private List<String> filePaths;
 }
