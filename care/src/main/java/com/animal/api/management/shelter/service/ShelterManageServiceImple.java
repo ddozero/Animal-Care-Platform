@@ -266,16 +266,16 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 
 	@Override
-	public int addShelterBoard(ShelterBoardRequestDTO dto) {
-		
+	public int addShelterBoard(ShelterBoardRequestDTO dto, int userIdx) {
+
 		int ref = mapper.getMaxRef();
 		dto.setRef(ref + 1);
 
-		int result = mapper.addShelterBoard(dto);
-		
-		if(result == 1) {
+		int result = mapper.addShelterBoard(dto, userIdx);
+
+		if (result == 1) {
 			return WRITE_OK;
-		}else {
+		} else {
 			return WRITE_ERROR;
 		}
 	}

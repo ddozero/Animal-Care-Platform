@@ -24,6 +24,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
+import com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -349,12 +350,12 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 삭제 실패"));
 		}
 	}
-	
+
 	/**
-	 * 해당 보호시설 게시판 글 목록 조회 메서드 
+	 * 해당 보호시설 게시판 글 목록 조회 메서드
 	 * 
-	 * @param cp 페이지번호
-	 * @param session 로그인 검증 세션 
+	 * @param cp      페이지번호
+	 * @param session 로그인 검증 세션
 	 * 
 	 * @return 해당 보호시설 게시판 목록
 	 */
@@ -384,16 +385,16 @@ public class ShelterManageController {
 					.body(new OkResponseDTO<List<ShelterBoardResponseDTO>>(200, "보호소 게시판 목록 조회 성공", boardLists));
 		}
 	}
-	
+
 	/**
-	 * 해당 보호시설 게시판 상세정보 조회 메서드 
+	 * 해당 보호시설 게시판 상세정보 조회 메서드
 	 * 
-	 * @param idx 게시판 번호 
+	 * @param idx     게시판 번호
 	 * @param session 로그인 검증 세션
 	 * 
-	 * @return 해당 보호시설 게시판 상세 정보 
+	 * @return 해당 보호시설 게시판 상세 정보
 	 */
-	@GetMapping("boards/{idx}")
+	@GetMapping("/boards/{idx}")
 	public ResponseEntity<?> getShelterBoardDetail(@PathVariable int idx, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
@@ -407,6 +408,25 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "삭제되거나 없는 게시물"));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<ShelterBoardResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
+		}
+	}
+
+	@PostMapping("/boards")
+	public ResponseEntity<?> addShelterBoard(@Valid @RequestBody ShelterBoardRequestDTO dto, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+		int userIdx = loginUser.getIdx();
+
+		int result = shelterService.addShelterBoard(dto, userIdx);
+
+		if (result == shelterService.WRITE_OK) {
+			Integer boardIdx = dto.getBoardIdx();
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Integer>(201, "게시물 등록 완료", boardIdx));
+		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아님"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 등록 실패"));
 		}
 	}
 

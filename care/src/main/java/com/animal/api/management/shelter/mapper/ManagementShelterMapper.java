@@ -61,7 +61,9 @@ public interface ManagementShelterMapper {
 	
 	public int getMaxRef(); //게시판 ref값 설정
 	
-	public int addShelterBoard(ShelterBoardRequestDTO dto);
+	public int addShelterBoard(@Param("dto") ShelterBoardRequestDTO dto, @Param("userIdx")int userIdx);
+	
+	
 	
 
 }

@@ -48,6 +48,7 @@ public interface ShelterManageService {
 	
 	public int addBoardViewCount(int idx);
 	
-	public int addShelterBoard(ShelterBoardRequestDTO dto);
+	public int addShelterBoard(ShelterBoardRequestDTO dto, int userIdx);
+	
 
 }
