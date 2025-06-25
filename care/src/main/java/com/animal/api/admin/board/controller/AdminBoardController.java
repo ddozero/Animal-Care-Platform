@@ -106,16 +106,20 @@ public class AdminBoardController {
 	}
 
 	@GetMapping("/notices")
-	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp,
+	public ResponseEntity<?> getNoticeList(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			@RequestParam(value = "title", required = false) String title,
-			@RequestParam(value = "content", required = false) String content) {
+			@RequestParam(value = "content", required = false) String content, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
 
 		int listSize = 5;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
-		}
 
 		List<UserNoticeResponseDTO> noticeAllList = null;
 
@@ -132,6 +136,28 @@ public class AdminBoardController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList));
+		}
+	}
+
+	@GetMapping("/notices/{idx}")
+	public ResponseEntity<?> getNoticeDetail(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		int result = userSupportService.addNoticeViewCount(idx);
+		UserNoticeResponseDTO dto = userSupportService.getNoticeDetail(idx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "삭제되거나 없는 게시물"));
+		} else {
+			return ResponseEntity.ok(new OkResponseDTO<UserNoticeResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}
 	}
 
