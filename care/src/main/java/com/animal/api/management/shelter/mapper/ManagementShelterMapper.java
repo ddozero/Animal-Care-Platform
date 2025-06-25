@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
+import com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -57,5 +58,10 @@ public interface ManagementShelterMapper {
 	public ShelterBoardResponseDTO getShelterBoardDetail(@Param("idx")int idx, @Param("userIdx")int userIdx);
 	
 	public int updateBoardViews(int idx);
+	
+	public int getMaxRef(); //게시판 ref값 설정
+	
+	public int addShelterBoard(ShelterBoardRequestDTO dto);
+	
 
 }

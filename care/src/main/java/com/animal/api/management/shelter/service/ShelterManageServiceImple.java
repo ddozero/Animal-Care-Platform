@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.animal.api.management.shelter.mapper.ManagementShelterMapper;
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
+import com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -257,11 +258,26 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 		return dto;
 	}
-	
+
 	@Override
 	public int addBoardViewCount(int idx) {
 		int count = mapper.updateBoardViews(idx);
 		return count;
+	}
+
+	@Override
+	public int addShelterBoard(ShelterBoardRequestDTO dto) {
+		
+		int ref = mapper.getMaxRef();
+		dto.setRef(ref + 1);
+
+		int result = mapper.addShelterBoard(dto);
+		
+		if(result == 1) {
+			return WRITE_OK;
+		}else {
+			return WRITE_ERROR;
+		}
 	}
 
 }

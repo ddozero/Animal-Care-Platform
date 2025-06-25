@@ -319,7 +319,7 @@ FROM
 	BOARDS
 </select>
 
-<insert id="addshelterBoard" parameterType="">
+<insert id="addShelterBoard" parameterType="">
 INSERT
 	INTO
 	BOARDS(USER_IDX, BOARD_TYPE_IDX, TITLE, CONTENT, REF, LEV, TURN)

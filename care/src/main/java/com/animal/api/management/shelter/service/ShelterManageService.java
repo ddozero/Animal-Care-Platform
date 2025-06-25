@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
+import com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -17,6 +18,9 @@ public interface ShelterManageService {
 	public static int NOT_REVIEW = -1;
 	public static int UPDATE_OK = 0;
 	public static int DELETE_OK = 1;
+	
+	public static int WRITE_OK = 2;
+	public static int WRITE_ERROR = -4;
 	
 	public AllManageShelterResponseDTO getShelterInfo(int idx);
 
@@ -43,5 +47,7 @@ public interface ShelterManageService {
 	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx);
 	
 	public int addBoardViewCount(int idx);
+	
+	public int addShelterBoard(ShelterBoardRequestDTO dto);
 
 }
