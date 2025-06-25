@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class AdoptionDetailResponseDTO {
     private String animalName; 		 // 유기동물 이름
     private String statusText;  	 // 입양 신청 상태 텍스트
+    private int breedIdx;            // 품종 번호
     private String breed; 			 // 품종 이름
     private String gender; 			 // 성별
     private int age; 				 // 나이

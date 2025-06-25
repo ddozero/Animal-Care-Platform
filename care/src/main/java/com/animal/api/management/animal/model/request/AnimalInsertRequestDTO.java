@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnimalInsertRequestDTO {
-	@NotNull(message = "유저 IDX는 필수입니다.")
+	// 서비스에서 세팅
 	private Integer userIdx;
 
 	@NotNull(message = "입양 상태 IDX는 필수입니다.")

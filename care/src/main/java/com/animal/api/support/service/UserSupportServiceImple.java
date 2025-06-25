@@ -19,6 +19,12 @@ public class UserSupportServiceImple implements UserSupportService {
 
 	@Override
 	public List<UserNoticeResponseDTO> getAllNotice(int listSize, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
+		
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);

@@ -1,5 +1,8 @@
 package com.animal.api.admin.board.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.animal.api.admin.board.model.request.NoticeInsertRequestDTO;
 import com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO;
 
 public interface AdminBoardService {
@@ -14,4 +17,8 @@ public interface AdminBoardService {
 	public int updateNotice(NoticeUpdateRequestDTO dto, int idx);
 
 	public int deleteNotice(int idx);
+
+	public int insertNotice(NoticeInsertRequestDTO dto, int userIdx);
+
+	public int uploadNoticeFiles(MultipartFile[] files, int idx);
 }

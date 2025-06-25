@@ -102,6 +102,7 @@ LIMIT #{listSize} OFFSET #{cp}
 <select id="getAnimalDetail" parameterType="int" resultType="com.animal.api.animal.model.response.AnimalDetailResponseDTO">
 SELECT
 	A.IDX,
+	S.USER_IDX,
 	A.NAME,
 	A.GENDER,
 	A.AGE,

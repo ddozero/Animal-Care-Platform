@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.aop.util.SessionUtils;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.mypage.donation.model.response.DonationListResponseDTO;
 import com.animal.api.mypage.volunteers.model.request.VolunteerReviewWriteRequestDTO;
 import com.animal.api.mypage.volunteers.model.response.VolunteerDetailResponseDTO;
 import com.animal.api.mypage.volunteers.model.response.VolunteerListResponseDTO;
@@ -52,6 +53,11 @@ public class VolunteerController {
 
 		List<VolunteerListResponseDTO> list = volunteerService.getVolunteerListByUserIdx(loginUser.getIdx());
 
+		if( list == null || list.size()== 0 ) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new OkResponseDTO<List<DonationListResponseDTO>>(404, "나의 봉사 내역이 없습니다", null));
+		}
+		
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new OkResponseDTO<List<VolunteerListResponseDTO>>(200, "내 봉사 내역 조회 성공", list));
 	}
@@ -108,7 +114,7 @@ public class VolunteerController {
 		
 		boolean success = volunteerService.writeVolunteerReview(loginUser.getIdx(), dto, image);
 
-		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "후기 작성 완료", success));
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "봉사 후기 작성 완료", success));
 	}
 
 }
