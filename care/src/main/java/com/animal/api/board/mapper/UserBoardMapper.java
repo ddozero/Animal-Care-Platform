@@ -21,4 +21,6 @@ public interface UserBoardMapper {
 	public int addBoard(BoardWriteRequestDTO dto);
 
 	public BoardDetailResponseDTO getBoardDetail(int idx);
+
+	public int updateBoardViews(int idx);
 }

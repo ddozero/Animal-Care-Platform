@@ -83,9 +83,17 @@ public class UserBoardServiceImple implements UserBoardService {
 
 	@Override
 	public BoardDetailResponseDTO getBoardDetail(int idx) {
-		BoardDetailResponseDTO boardDetail = mapper.getBoardDetail(idx);
+		int result = mapper.updateBoardViews(idx);
 
-		return boardDetail;
+		if (result > 0) {
+			BoardDetailResponseDTO boardDetail = mapper.getBoardDetail(idx);
+			if (boardDetail != null) {
+				boardDetail.setFilePaths(fileManager.getFilePath("boards", idx));
+			}
+			return boardDetail;
+		} else {
+			return null;
+		}
 	}
 
 }
