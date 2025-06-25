@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
@@ -31,6 +32,8 @@ import com.animal.api.management.animal.model.response.AdoptionConsultDetailResp
 import com.animal.api.management.animal.model.response.AdoptionConsultListResponseDTO;
 import com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO;
 import com.animal.api.management.animal.service.ShelterAnimalsService;
+import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
+import com.animal.api.shelter.service.UserShelterService;
 
 /**
  * 보호시설의 관리 페이지에서 유기동물에 관련되어 있는 컨트롤러 클래스
@@ -49,7 +52,69 @@ import com.animal.api.management.animal.service.ShelterAnimalsService;
 public class ShelterAnimalsController {
 
 	@Autowired
-	private ShelterAnimalsService service;
+	private ShelterAnimalsService shelterAnimalsService;
+	@Autowired
+	private UserShelterService userShelterService;
+
+	/**
+	 * 보호시설의 상세정보에서 해당 보호시설의 유기동물들을 조회
+	 * 
+	 * @param idx            보호시설의 idx
+	 * @param cp             봉사 컨텐츠의 현재 페이지
+	 * @param type           동물 유형
+	 * @param breed          동물 품종
+	 * @param gender         동물 성별
+	 * @param neuter         중성화 여부
+	 * @param age            동물 나이
+	 * @param adoptionStatus 입양 상태
+	 * @param personality    동물 성격
+	 * @param size           동물 크기
+	 * @param name           동물 이름
+	 * @param session        로그인 정보 검증을 위한 세션
+	 * @return 해당 보호시설의 유기동물 리스트
+	 */
+	@GetMapping
+	public ResponseEntity<?> getAllShelterAnimals(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "breed", required = false) String breed,
+			@RequestParam(value = "gender", required = false) String gender,
+			@RequestParam(value = "neuter", defaultValue = "0") int neuter,
+			@RequestParam(value = "age", defaultValue = "0") int age,
+			@RequestParam(value = "adoptionStatus", required = false) String adoptionStatus,
+			@RequestParam(value = "personality", required = false) String personality,
+			@RequestParam(value = "size", defaultValue = "0") int size,
+			@RequestParam(value = "name", required = false) String name, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+
+		int listSize = 3;
+
+		List<ShelterAnimalsResponseDTO> animalList = null;
+
+		if (type != null || breed != null || gender != null || neuter != 0 || age != 0 || adoptionStatus != null
+				|| personality != null || size != 0 || name != null) {
+			animalList = userShelterService.searchShelterAnimals(loginUser.getIdx(), listSize, cp, type, breed, gender, neuter, age,
+					adoptionStatus, personality, size, name);
+		} else {
+			animalList = userShelterService.getAllShelterAnimals(listSize, cp, loginUser.getIdx());
+		}
+
+		if (animalList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+		} else if (animalList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList));
+		}
+	}
 
 	/**
 	 * 유기동물 등록 시 내 보호시설 확인 메서드
@@ -69,7 +134,7 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		AnimalAddShelterInfoResponseDTO dto = service.getShelterProfile(loginUser.getIdx());
+		AnimalAddShelterInfoResponseDTO dto = shelterAnimalsService.getShelterProfile(loginUser.getIdx());
 
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 보호시설을 찾을 수 없습니다."));
@@ -98,9 +163,9 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int result = service.insertAnimal(dto, loginUser.getIdx());
+		int result = shelterAnimalsService.insertAnimal(dto, loginUser.getIdx());
 
-		if (result == service.POST_SUCCESS) {
+		if (result == shelterAnimalsService.POST_SUCCESS) {
 			Map<String, Integer> map = new HashMap<String, Integer>();
 			map.put("createdIdx", dto.getIdx());
 			return ResponseEntity.status(HttpStatus.CREATED)
@@ -119,8 +184,8 @@ public class ShelterAnimalsController {
 	 */
 	@PostMapping("/upload/{idx}")
 	public ResponseEntity<?> uploadAnimalImage(MultipartFile[] files, @PathVariable int idx) {
-		int result = service.uploadAnimalImage(files, idx);
-		if (result == service.UPLOAD_SUCCESS) {
+		int result = shelterAnimalsService.uploadAnimalImage(files, idx);
+		if (result == shelterAnimalsService.UPLOAD_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "이미지 업로드 성공", null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미지 업로드 실패"));
@@ -148,14 +213,14 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int result = service.updateAnimal(dto, animalIdx, loginUser.getIdx());
+		int result = shelterAnimalsService.updateAnimal(dto, animalIdx, loginUser.getIdx());
 
-		if (result == service.UPDATE_SUCCESS) {
+		if (result == shelterAnimalsService.UPDATE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "유기동물 수정 성공", null));
-		} else if (result == service.NOT_ANIMAL) {
+		} else if (result == shelterAnimalsService.NOT_ANIMAL) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 삭제되었습니다."));
-		} else if (result == service.NOT_OWNED_ANIMAL) {
+		} else if (result == shelterAnimalsService.NOT_OWNED_ANIMAL) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 수정 실패"));
@@ -181,14 +246,14 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int result = service.deleteAnimal(animalIdx, loginUser.getIdx());
+		int result = shelterAnimalsService.deleteAnimal(animalIdx, loginUser.getIdx());
 
-		if (result == service.DELETE_SUCCESS) {
+		if (result == shelterAnimalsService.DELETE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "유기동물 삭제 성공", null));
-		} else if (result == service.NOT_ANIMAL) {
+		} else if (result == shelterAnimalsService.NOT_ANIMAL) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 이미 삭제되었습니다."));
-		} else if (result == service.NOT_OWNED_ANIMAL) {
+		} else if (result == shelterAnimalsService.NOT_OWNED_ANIMAL) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 삭제 실패"));
@@ -217,8 +282,8 @@ public class ShelterAnimalsController {
 
 		int listSize = 3;
 
-		List<AdoptionConsultListResponseDTO> consultList = service.getAdoptionConsultList(loginUser.getIdx(), listSize,
-				cp);
+		List<AdoptionConsultListResponseDTO> consultList = shelterAnimalsService
+				.getAdoptionConsultList(loginUser.getIdx(), listSize, cp);
 
 		if (consultList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청 입니다."));
@@ -249,7 +314,7 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		AdoptionConsultDetailResponseDTO dto = service.getAdoptionConsultDetail(idx);
+		AdoptionConsultDetailResponseDTO dto = shelterAnimalsService.getAdoptionConsultDetail(idx);
 
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 상담 신청을 찾을 수 없습니다."));
@@ -282,13 +347,13 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int result = service.updateAdoptionConsultStatus(dto, loginUser.getIdx(), consultIdx);
+		int result = shelterAnimalsService.updateAdoptionConsultStatus(dto, loginUser.getIdx(), consultIdx);
 
-		if (result == service.UPDATE_SUCCESS) {
+		if (result == shelterAnimalsService.UPDATE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "상태 변경 성공", null));
-		} else if (result == service.NOT_CONSULT) {
+		} else if (result == shelterAnimalsService.NOT_CONSULT) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 상담 신청을 찾을 수 없습니다."));
-		} else if (result == service.NOT_OWNED_CONSULT) {
+		} else if (result == shelterAnimalsService.NOT_OWNED_CONSULT) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN)
 					.body(new ErrorResponseDTO(403, "로그인한 보호시설의 상담신청이 아닙니다."));
 		} else {
