@@ -84,16 +84,17 @@ public class VolunteerServiceImple implements VolunteerService {
         volunteerMapper.insertVolunteerReview(review); // review.getIdx() 생성됨
         volunteerMapper.updateVolunteerReviewRef(review.getIdx()); // ref에 idx 업데이트
 
-        // 5. 이미지가 있으면 저장
-        if (image != null && !image.isEmpty()) {
-            fileManager.uploadImages("volunteerReviews", volunteerRequestIdx, new MultipartFile[]{image});
-        }
 
-        // 6. 포인트 지급
+        // 5. 포인트 지급
         volunteerMapper.grantVolunteerReviewPoint(userIdx);
-        // 7. 사용자 포인트 증가
+        // 6. 사용자 포인트 증가
         volunteerMapper.increaseUserPoint(userIdx);
 
+        // 7. 이미지가 있으면 저장
+        if (image != null && !image.isEmpty()) {
+        	fileManager.uploadImages("volunteerReviews", volunteerRequestIdx, new MultipartFile[]{image});
+        }
+        
         return true;
     }
 

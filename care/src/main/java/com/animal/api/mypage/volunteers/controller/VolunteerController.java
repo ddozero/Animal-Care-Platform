@@ -26,7 +26,7 @@ import com.animal.api.mypage.volunteers.service.VolunteerService;
 /**
  * 마이페이지 봉사내역 컨트롤러
  * 
- * @author Whistler
+ * @author Whistler95
  * @since 2025-06-24
  */
 @RestController
