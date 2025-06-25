@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.animal.api.common.util.FileManager;
 import com.animal.api.support.mapper.UserSupportMapper;
 import com.animal.api.support.model.request.SearchNoticeRequestDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
@@ -17,6 +18,9 @@ public class UserSupportServiceImple implements UserSupportService {
 	@Autowired
 	private UserSupportMapper mapper;
 
+	@Autowired
+	private FileManager fileManager;
+
 	@Override
 	public List<UserNoticeResponseDTO> getAllNotice(int listSize, int cp) {
 		if (cp == 0) {
@@ -24,7 +28,7 @@ public class UserSupportServiceImple implements UserSupportService {
 		} else {
 			cp = (cp - 1) * listSize;
 		}
-		
+
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
@@ -37,7 +41,18 @@ public class UserSupportServiceImple implements UserSupportService {
 
 	@Override
 	public UserNoticeResponseDTO getNoticeDetail(int idx) {
+
 		UserNoticeResponseDTO dto = mapper.getNoticeDetail(idx);
+		if (dto == null) {
+			return null;
+		}
+
+		int result = mapper.updateNoticeViews(idx);
+
+		if (result > 0) {
+			dto.setFilePaths(fileManager.getFilePath("boards", idx));
+		}
+
 		if (dto != null && dto.getContent() != null) {
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		}
@@ -51,12 +66,6 @@ public class UserSupportServiceImple implements UserSupportService {
 		List<UserNoticeResponseDTO> searchNoticeList = mapper.searchAllNotice(dto);
 
 		return searchNoticeList;
-	}
-
-	@Override
-	public int addNoticeViewCount(int idx) {
-		int count = mapper.updateNoticeViews(idx);
-		return count;
 	}
 
 }
