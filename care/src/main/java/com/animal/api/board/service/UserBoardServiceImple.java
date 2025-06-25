@@ -87,6 +87,9 @@ public class UserBoardServiceImple implements UserBoardService {
 
 		if (result > 0) {
 			BoardDetailResponseDTO boardDetail = mapper.getBoardDetail(idx);
+			if (boardDetail != null) {
+				boardDetail.setFilePaths(fileManager.getFilePath("boards", idx));
+			}
 			return boardDetail;
 		} else {
 			return null;
