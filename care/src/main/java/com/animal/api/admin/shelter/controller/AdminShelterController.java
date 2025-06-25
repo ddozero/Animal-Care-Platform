@@ -18,6 +18,13 @@ import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.service.UserShelterService;
 
+/**
+ * 사이트 관리자 페이지 내의 보호시설 관리 페이지 컨트롤러
+ * 
+ * @author Rege-97
+ * @since 2025-06-25
+ * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
+ */
 @RestController
 @RequestMapping("/api/admin/shelters")
 public class AdminShelterController {
@@ -32,7 +39,7 @@ public class AdminShelterController {
 	 * @param shelterName    검색된 보호소 이름
 	 * @param shelterAddress 선택된 보호소 주소
 	 * @param shelterType    선택된 보호소 타입
-	 * @param session 로그인 검증을 위한 세션
+	 * @param session        로그인 검증을 위한 세션
 	 * 
 	 * @return 조회된 보호소의 리스트
 	 */
