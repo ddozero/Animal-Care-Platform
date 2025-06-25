@@ -14,7 +14,8 @@ import com.animal.api.management.shelter.model.response.ManageVolunteerReviewRes
 import com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO;
 
 public interface ShelterManageService {
-
+	
+	public static int NOT_EXIST_BOARD = -4;
 	public static int NOT_SHELTER_MANAGER = -3;
 	public static int NOT_REVIEW = -2;
 	public static int ERROR = -1;
@@ -22,6 +23,7 @@ public interface ShelterManageService {
 	public static int DELETE_OK = 1;
 	public static int WRITE_OK = 2;
 	public static int UPLOAD_OK = 3;
+	
 
 	// 보호시설 기본정보
 	public AllManageShelterResponseDTO getShelterInfo(int idx);
@@ -55,5 +57,7 @@ public interface ShelterManageService {
 	public int addShelterBoard(ShelterBoardRequestDTO dto, int userIdx);
 
 	public int uploadBoardFile(MultipartFile[] files, int idx);
+	
+	public int updateShelterBoard(ShelterBoardRequestDTO dto);
 
 }

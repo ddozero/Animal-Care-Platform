@@ -344,7 +344,7 @@ WHERE
 	AND BOARD_TYPE_IDX = 3 
 </select>
 
-<select id="checkUserBoard" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
+<select id="checkWriter" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
 SELECT
 	USER_IDX
 FROM
