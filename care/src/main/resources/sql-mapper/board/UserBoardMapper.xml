@@ -121,7 +121,16 @@ GROUP BY
 	B.VIEWS
 </select>
 
-<update id="updateBoardViews" parameterType="com.animal.api.board.model.request.BoardUpdateRequestDTO">
+<update id="updateBoardViews" parameterType="int">
+UPDATE
+	BOARDS
+SET
+	VIEWS = VIEWS + 1
+WHERE
+	IDX = #{idx} 
+</update>
+
+<update id="updateBoard" parameterType="com.animal.api.board.model.request.BoardUpdateRequestDTO">
 UPDATE
 	BOARDS
 SET
