@@ -137,6 +137,13 @@ public class AdminBoardController {
 		}
 	}
 
+	/**
+	 * 공지사항 등록 또는 수정 시 첨부파일 업로드 메서드
+	 * 
+	 * @param idx   게시글 번호
+	 * @param files 첨부파일
+	 * @return 성공 또는 실패 메세지
+	 */
 	@PostMapping("/notices/upload/{idx}")
 	public ResponseEntity<?> uploadNoticeFiles(@PathVariable int idx, MultipartFile[] files) {
 		int result = service.uploadNoticeFiles(files, idx);
