@@ -25,4 +25,5 @@ public class ShelterBoardResponseDTO {
 	private int lev;
 	private int turn;
 	
+	
 }

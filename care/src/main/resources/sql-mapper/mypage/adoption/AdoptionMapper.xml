@@ -22,6 +22,7 @@
 
     <!-- 2. 상세 조회 -->
     <select id="findAdoptionDetailByConsultIdx" resultType="com.animal.api.mypage.adoption.model.response.AdoptionDetailResponseDTO">
+
 		SELECT
 		    A.NAME AS animalName,
 		    AB.NAME AS breed,
@@ -42,6 +43,7 @@
 		LEFT JOIN USERS U ON A.USER_IDX = U.IDX
 		LEFT JOIN SHELTERS S ON U.IDX = S.USER_IDX
 		WHERE AC.IDX = #{adoptionConsultIdx};
+
     </select>
 
     <!-- 3. 입양 완료 상태인지 확인 -->

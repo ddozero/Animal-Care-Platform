@@ -309,8 +309,29 @@ UPDATE
 SET
 	VIEWS = VIEWS + 1
 WHERE
-	IDX = #{idx}
+	IDX = #{boardIdx}
 </update>
 
+
+<select id = "getMaxRef" resultType="int">
+SELECT
+	IFNULL(MAX(REF), 0)
+FROM
+	BOARDS
+</select>
+
+<insert id="addShelterBoard" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO" useGeneratedKeys="true" keyProperty="dto.idx">
+INSERT
+	INTO
+	BOARDS(USER_IDX, BOARD_TYPE_IDX, TITLE, CONTENT, REF, LEV, TURN)
+VALUES(
+	#{userIdx},
+	3,
+	#{dto.title},
+	#{dto.content},
+	#{dto.ref},
+	0,
+	0)
+</insert>
  
  </mapper>

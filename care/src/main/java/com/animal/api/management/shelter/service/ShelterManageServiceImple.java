@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.common.util.FileManager;
 import com.animal.api.management.shelter.mapper.ManagementShelterMapper;
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
+import com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
@@ -24,6 +27,9 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	@Autowired
 	private ManagementShelterMapper mapper;
+
+	@Autowired
+	private FileManager fileManager;
 
 	@Override
 	public AllManageShelterResponseDTO getShelterInfo(int idx) {
@@ -75,7 +81,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		int count = mapper.updateTurnAR(map);
 
 		if (count < 0) {
-			return REPLY_ERROR;
+			return ERROR;
 		} else if (count == 0) {
 			return NOT_REVIEW;
 		}
@@ -96,7 +102,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		if (result > 0) {
 			return UPDATE_OK;
 		} else {
-			return REPLY_ERROR;
+			return ERROR;
 		}
 	}
 
@@ -121,7 +127,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		if (count > 0) {
 			return UPDATE_OK;
 		} else {
-			return REPLY_ERROR;
+			return ERROR;
 		}
 	}
 
@@ -146,7 +152,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		if (count > 0) {
 			return DELETE_OK;
 		} else {
-			return REPLY_ERROR;
+			return ERROR;
 		}
 	}
 
@@ -160,7 +166,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		int count = mapper.updateTurnAR(map);
 
 		if (count < 0) {
-			return REPLY_ERROR;
+			return ERROR;
 		} else if (count == 0) {// 리뷰글이 있는지 확인
 			return NOT_REVIEW;
 		}
@@ -180,7 +186,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		if (result > 0) {
 			return UPDATE_OK;
 		} else {
-			return REPLY_ERROR;
+			return ERROR;
 		}
 	}
 
@@ -205,7 +211,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		if (count > 0) {
 			return UPDATE_OK;
 		} else {
-			return REPLY_ERROR;
+			return ERROR;
 		}
 	}
 
@@ -230,7 +236,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		if (count > 0) {
 			return DELETE_OK;
 		} else {
-			return REPLY_ERROR;
+			return ERROR;
 		}
 	}
 
@@ -257,11 +263,38 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 		return dto;
 	}
-	
+
 	@Override
 	public int addBoardViewCount(int idx) {
 		int count = mapper.updateBoardViews(idx);
 		return count;
+	}
+
+	@Override
+	public int addShelterBoard(ShelterBoardRequestDTO dto, int userIdx) {
+
+		int ref = mapper.getMaxRef();
+		dto.setRef(ref + 1);
+
+		int result = mapper.addShelterBoard(dto, userIdx);
+
+		if (result == 1) {
+			return WRITE_OK;
+		} else {
+			return ERROR;
+		}
+	}
+
+	@Override
+	public int uploadBoardFile(MultipartFile[] files, int idx) {
+
+		boolean result = fileManager.uploadFiles("boards", idx, files);
+
+		if (result) {
+			return UPLOAD_OK;
+		} else {
+			return ERROR;
+		}
 	}
 
 }
