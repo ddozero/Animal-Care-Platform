@@ -316,7 +316,27 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		} else {
 			return ERROR;
 		}
+	}
+	
+	@Override
+	public int deleteShelterBoard(ShelterBoardRequestDTO dto) {
+		
+		int boardCheck = mapper.checkShelterBoard(dto.getIdx());
+		if (boardCheck == 0) {
+			return NOT_EXIST_BOARD;
+		}
 
+		Integer userCheck = mapper.checkWriter(dto);
+		if (userCheck == null || userCheck == 0) {
+			return NOT_SHELTER_MANAGER;
+		}
+
+		int result = mapper.deleteShelterBoard(dto);
+		if (result == 1) {
+			return DELETE_OK;
+		} else {
+			return ERROR;
+		}
 	}
 
 }
