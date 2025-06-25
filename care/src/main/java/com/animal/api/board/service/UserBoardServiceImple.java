@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.board.mapper.UserBoardMapper;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
+import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
@@ -96,4 +97,14 @@ public class UserBoardServiceImple implements UserBoardService {
 		}
 	}
 
+	@Override
+	public int updateBoard(BoardUpdateRequestDTO dto) {
+		int result = mapper.updateBoard(dto);
+
+		if (result > 0) {
+			return POST_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
 }
