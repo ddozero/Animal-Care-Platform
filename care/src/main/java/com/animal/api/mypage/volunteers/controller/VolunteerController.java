@@ -108,7 +108,7 @@ public class VolunteerController {
 		
 		boolean success = volunteerService.writeVolunteerReview(loginUser.getIdx(), dto, image);
 
-		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "후기 작성 완료", success));
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "봉사 후기 작성 완료", success));
 	}
 
 }
