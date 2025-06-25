@@ -13,5 +13,6 @@ public class AdoptionListResponseDTO {
     private String animalName;      // 유기동물 이름
     private String statusText;      // 입양 상담 상태 텍스트
     private int animalIdx;          // 유기동물 고유 번호 (상세 이동용)
+    private String appliedAt;       // 신청일시
     private String imagePath;       // 유기동물 대표 이미지 경로 (FileManager 이용해서 서비스에서 주입)
 }
