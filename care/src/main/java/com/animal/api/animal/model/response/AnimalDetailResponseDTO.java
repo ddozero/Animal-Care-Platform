@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AnimalDetailResponseDTO {
 	private int idx;
+	private int userIdx;
 	private String name;
 	private char gender;
 	private int age;
