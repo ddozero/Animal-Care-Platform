@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShelterBoardRequestDTO {
-
-	private int boardIdx;
-
+	
+	private Integer userIdx;
+	
 	@NotBlank(message = "제목 입력은 필수입니다.")
 	private String title;
 
@@ -21,5 +21,7 @@ public class ShelterBoardRequestDTO {
 	private String content;
 
 	private int ref;
+	
+	private int idx; //DB 등록시 생성되는 idx 값
 
 }

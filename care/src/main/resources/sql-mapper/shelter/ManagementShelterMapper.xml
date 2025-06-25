@@ -312,14 +312,6 @@ WHERE
 	IDX = #{boardIdx}
 </update>
 
-<select id = "checkWriteUser" resultType="Integer">
-select
-	IDX
-from
-	USERS U
-where
-	IDX = #{userIdx}
-</select> 
 
 <select id = "getMaxRef" resultType="int">
 SELECT
@@ -328,7 +320,7 @@ FROM
 	BOARDS
 </select>
 
-<insert id="addShelterBoard" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
+<insert id="addShelterBoard" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO" useGeneratedKeys="true" keyProperty="dto.idx">
 INSERT
 	INTO
 	BOARDS(USER_IDX, BOARD_TYPE_IDX, TITLE, CONTENT, REF, LEV, TURN)

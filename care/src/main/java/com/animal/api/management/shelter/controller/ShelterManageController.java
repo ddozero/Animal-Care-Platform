@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
@@ -420,13 +421,24 @@ public class ShelterManageController {
 		int result = shelterService.addShelterBoard(dto, userIdx);
 
 		if (result == shelterService.WRITE_OK) {
-			Integer boardIdx = dto.getBoardIdx();
+			Integer createdIdx = dto.getIdx();
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new OkResponseDTO<Integer>(201, "게시물 등록 완료", boardIdx));
+					.body(new OkResponseDTO<Integer>(201, "게시물 등록 완료", createdIdx));
 		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아님"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 등록 실패"));
+		}
+	}
+
+	@PostMapping("/boards/upload/{idx}")
+	public ResponseEntity<?> uploadBoardFile(MultipartFile[] files, @PathVariable int idx) {
+
+		int result = shelterService.uploadBoardFile(files, idx);
+		if (result == shelterService.UPLOAD_OK) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "파일 업로드 실패"));
 		}
 	}
 
