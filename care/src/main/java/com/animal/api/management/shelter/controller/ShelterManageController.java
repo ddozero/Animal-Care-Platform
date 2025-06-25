@@ -411,7 +411,15 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<ShelterBoardResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}
 	}
-
+	
+	/**
+	 * 해당 보호시설 게시물 등록 메서드 
+	 * 
+	 * @param dto 보호시설 게시판 
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 해당 보호시설 게시물 
+	 */
 	@PostMapping("/boards")
 	public ResponseEntity<?> addShelterBoard(@Valid @RequestBody ShelterBoardRequestDTO dto, HttpSession session) {
 
@@ -430,7 +438,15 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 등록 실패"));
 		}
 	}
-
+	
+	/**
+	 * 해당 보호시설 게시물 등록 시 파일 업로드
+	 * 
+	 * @param files 업로드 한 파일 
+	 * @param idx 게시물 등록시 생성되는 번호
+	 * 
+	 * @return 파일 업로드 성공 여부
+	 */
 	@PostMapping("/boards/upload/{idx}")
 	public ResponseEntity<?> uploadBoardFile(MultipartFile[] files, @PathVariable int idx) {
 
