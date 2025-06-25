@@ -297,4 +297,26 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 	}
 
+	@Override
+	public int updateShelterBoard(ShelterBoardRequestDTO dto) {
+
+		int boardCheck = mapper.checkShelterBoard(dto.getIdx());
+		if (boardCheck == 0) {
+			return NOT_EXIST_BOARD;
+		}
+
+		Integer userCheck = mapper.checkWriter(dto);
+		if (userCheck == null || userCheck == 0) {
+			return NOT_SHELTER_MANAGER;
+		}
+
+		int result = mapper.updateShelterBoard(dto);
+		if (result == 1) {
+			return UPDATE_OK;
+		} else {
+			return ERROR;
+		}
+
+	}
+
 }

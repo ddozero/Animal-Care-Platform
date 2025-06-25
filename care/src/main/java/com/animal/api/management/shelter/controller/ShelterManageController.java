@@ -411,14 +411,14 @@ public class ShelterManageController {
 			return ResponseEntity.ok(new OkResponseDTO<ShelterBoardResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}
 	}
-	
+
 	/**
-	 * 해당 보호시설 게시물 등록 메서드 
+	 * 해당 보호시설 게시물 등록 메서드
 	 * 
-	 * @param dto 보호시설 게시판 
+	 * @param dto     보호시설 게시판
 	 * @param session 로그인 검증 세션
 	 * 
-	 * @return 해당 보호시설 게시물 
+	 * @return 해당 보호시설 게시물
 	 */
 	@PostMapping("/boards")
 	public ResponseEntity<?> addShelterBoard(@Valid @RequestBody ShelterBoardRequestDTO dto, HttpSession session) {
@@ -438,12 +438,12 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 등록 실패"));
 		}
 	}
-	
+
 	/**
-	 * 해당 보호시설 게시물 등록 시 파일 업로드
+	 * 해당 보호시설 게시물 등록 시 파일 업로드 메서드
 	 * 
-	 * @param files 업로드 한 파일 
-	 * @param idx 게시물 등록시 생성되는 번호
+	 * @param files 업로드 한 파일
+	 * @param idx   게시물 등록시 생성되는 번호
 	 * 
 	 * @return 파일 업로드 성공 여부
 	 */
@@ -455,6 +455,38 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드 성공", null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "파일 업로드 실패"));
+		}
+	}
+
+	/**
+	 * 해당 보호시설 게시물 수정 메서드
+	 * 
+	 * @param idx     게시물 번호
+	 * @param dto     보호시설 게시판
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 보호시설 게시물 수정 여부
+	 */
+	@PutMapping("/boards/{idx}")
+	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int idx,
+			@Valid @RequestBody ShelterBoardRequestDTO dto, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+		int userIdx = loginUser.getIdx();
+
+		dto.setUserIdx(userIdx);
+		dto.setIdx(idx);
+
+		int result = shelterService.updateShelterBoard(dto);
+
+		if (result == shelterService.UPDATE_OK) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "게시글 수정 성공", null));
+		} else if (result == shelterService.NOT_EXIST_BOARD) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글을 찾을 수 없음"));
+		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "게시물을 작성한 담당자가 아님"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시글 수정 실패"));
 		}
 	}
 
