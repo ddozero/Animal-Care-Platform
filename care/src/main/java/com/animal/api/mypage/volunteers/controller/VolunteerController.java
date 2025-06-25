@@ -54,8 +54,8 @@ public class VolunteerController {
 		List<VolunteerListResponseDTO> list = volunteerService.getVolunteerListByUserIdx(loginUser.getIdx());
 
 		if( list == null || list.size()== 0 ) {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<DonationListResponseDTO>>(200, "나의 봉사 내역이 없습니다", null));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new OkResponseDTO<List<DonationListResponseDTO>>(400, "나의 봉사 내역이 없습니다", null));
 		}
 		
 		return ResponseEntity.status(HttpStatus.OK)
