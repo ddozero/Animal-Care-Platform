@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
+import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
-import com.animal.api.common.util.FileManager;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
@@ -28,7 +29,7 @@ import com.animal.api.shelter.service.UserShelterService;
  * 사용자 기준 보호시설 관련 컨트롤러 클래스
  * 
  * @author Rege-97
- * @since 2025-06-21
+ * @since 2025-06-25
  * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO
@@ -37,13 +38,16 @@ import com.animal.api.shelter.service.UserShelterService;
  * @see com.animal.api.shelter.model.response.ShelterDetailResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO
+ * @see com.animal.api.animal.model.response.AnimalDetailResponseDTO
  */
 @RestController
 @RequestMapping("/api/shelters")
 public class UserShelterController {
 
 	@Autowired
-	private UserShelterService service;
+	private UserShelterService userShelterService;
+	@Autowired
+	private UserAnimalService userAnimalService;
 
 	/**
 	 * 보호시설 조회 메서드
@@ -64,9 +68,9 @@ public class UserShelterController {
 		List<AllShelterListResponseDTO> shelterList = null;
 
 		if (shelterName != null || shelterAddress != null || shelterType != null) {
-			shelterList = service.searchShelters(listSize, cp, shelterName, shelterAddress, shelterType);
+			shelterList = userShelterService.searchShelters(listSize, cp, shelterName, shelterAddress, shelterType);
 		} else {
-			shelterList = service.getAllShelters(listSize, cp);
+			shelterList = userShelterService.getAllShelters(listSize, cp);
 		}
 
 		if (shelterList == null) {
@@ -87,7 +91,7 @@ public class UserShelterController {
 	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getShelterDetail(@PathVariable int idx) {
-		ShelterDetailResponseDTO dto = service.getShelterDetail(idx);
+		ShelterDetailResponseDTO dto = userShelterService.getShelterDetail(idx);
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 보호시설이 존재하지 않습니다."));
 		} else {
@@ -107,7 +111,7 @@ public class UserShelterController {
 	public ResponseEntity<?> getShelterVolunteers(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
-		List<ShelterVolunteersResponseDTO> volunteerList = service.getShelterVolunteers(listSize, cp, idx);
+		List<ShelterVolunteersResponseDTO> volunteerList = userShelterService.getShelterVolunteers(listSize, cp, idx);
 
 		if (volunteerList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
@@ -153,10 +157,10 @@ public class UserShelterController {
 
 		if (type != null || breed != null || gender != null || neuter != 0 || age != 0 || adoptionStatus != null
 				|| personality != null || size != 0 || name != null) {
-			animalList = service.searchShelterAnimals(idx, listSize, cp, type, breed, gender, neuter, age,
+			animalList = userShelterService.searchShelterAnimals(idx, listSize, cp, type, breed, gender, neuter, age,
 					adoptionStatus, personality, size, name);
 		} else {
-			animalList = service.getAllShelterAnimals(listSize, cp, idx);
+			animalList = userShelterService.getAllShelterAnimals(listSize, cp, idx);
 		}
 
 		if (animalList == null) {
@@ -166,6 +170,26 @@ public class UserShelterController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList));
+		}
+	}
+
+	/**
+	 * 보호시설 페이지에서 유기동물의 상세 정보를 조회하는 메서드
+	 * 
+	 * @param shelterIdx 보호시설의 idx
+	 * @param animalIdx  유기동물 관리번호
+	 * @return 유기동물 정보
+	 */
+	@GetMapping("/{shelterIdx}/animals/{animalIdx}")
+	public ResponseEntity<?> getAnimalDetail(@PathVariable int shelterIdx, @PathVariable int animalIdx) {
+		AnimalDetailResponseDTO dto = userAnimalService.getAnimalDetail(animalIdx);
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 동물이 존재하지 않습니다."));
+		} else if (dto.getUserIdx() != shelterIdx) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 동물이 아닙니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<AnimalDetailResponseDTO>(200, "조회 성공", dto));
 		}
 	}
 
@@ -181,7 +205,7 @@ public class UserShelterController {
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
 
-		List<ShelterBoardListResponseDTO> boardList = service.getShelterBoards(listSize, cp, idx);
+		List<ShelterBoardListResponseDTO> boardList = userShelterService.getShelterBoards(listSize, cp, idx);
 
 		if (boardList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
@@ -202,7 +226,7 @@ public class UserShelterController {
 	 */
 	@GetMapping("/{userIdx}/boards/{boardIdx}")
 	public ResponseEntity<?> getShelterBoardDetail(@PathVariable int userIdx, @PathVariable int boardIdx) {
-		ShelterBoardDetailResponseDTO dto = service.getShelterBoardDetail(boardIdx);
+		ShelterBoardDetailResponseDTO dto = userShelterService.getShelterBoardDetail(boardIdx);
 
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 글이 존재하지 않습니다."));
@@ -225,7 +249,8 @@ public class UserShelterController {
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
 
-		List<ShelterVolunteerReviewResponseDTO> reviewList = service.getShelterVolunteerReviews(listSize, cp, idx);
+		List<ShelterVolunteerReviewResponseDTO> reviewList = userShelterService.getShelterVolunteerReviews(listSize, cp,
+				idx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
@@ -249,7 +274,8 @@ public class UserShelterController {
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
 
-		List<ShelterAdoptionReviewResponseDTO> reviewList = service.getShelterAdoptionReviews(listSize, cp, idx);
+		List<ShelterAdoptionReviewResponseDTO> reviewList = userShelterService.getShelterAdoptionReviews(listSize, cp,
+				idx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
