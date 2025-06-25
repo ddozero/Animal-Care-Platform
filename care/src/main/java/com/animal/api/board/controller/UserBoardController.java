@@ -1,6 +1,8 @@
 package com.animal.api.board.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -95,8 +97,10 @@ public class UserBoardController {
 
 		if (result == service.POST_SUCCESS) {
 			Integer boardIdx = dto.getIdx();
+			Map<String, Integer> map = new HashMap();
+			map.put("createdIdx", boardIdx);
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new OkResponseDTO<Integer>(201, "게시판 글 등록 성공", boardIdx));
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "게시판 글 등록 성공", map));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 등록 실패"));
 		}
