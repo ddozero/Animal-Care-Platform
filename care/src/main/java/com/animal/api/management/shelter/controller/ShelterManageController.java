@@ -402,7 +402,6 @@ public class ShelterManageController {
 
 		int userIdx = loginUser.getIdx();
 
-		int result = shelterService.addBoardViewCount(idx);
 		ShelterBoardResponseDTO dto = shelterService.getShelterBoardDetail(idx, userIdx);
 
 		if (dto == null) {

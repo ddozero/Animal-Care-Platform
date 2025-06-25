@@ -52,8 +52,6 @@ public interface ShelterManageService {
 	// 보호시설 게시판
 	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx);
 
-	public int addBoardViewCount(int idx);
-
 	public int addShelterBoard(ShelterBoardRequestDTO dto, int userIdx);
 
 	public int uploadBoardFile(MultipartFile[] files, int idx);
