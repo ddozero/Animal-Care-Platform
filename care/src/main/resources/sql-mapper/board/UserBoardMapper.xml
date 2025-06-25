@@ -141,7 +141,7 @@ WHERE
 	AND USER_IDX = #{userIdx}
 </update>
 
-<select id="checkMyBoard" parameterType="int">
+<select id="checkMyBoard" parameterType="int" resultType="Integer">
 SELECT
 	USER_IDX
 FROM

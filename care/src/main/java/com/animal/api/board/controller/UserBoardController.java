@@ -168,6 +168,8 @@ public class UserBoardController {
 					.body(new OkResponseDTO<Map<String, Integer>>(200, "게시판 글 수정 성공", map));
 		} else if (result == service.NOT_OWNED_BOARD) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "본인이 작성한 글이 아닙니다."));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글이 존재 하지 않습니다"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 수정 실패"));
 		}

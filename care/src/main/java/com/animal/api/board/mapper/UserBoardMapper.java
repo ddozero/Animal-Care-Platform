@@ -26,6 +26,6 @@ public interface UserBoardMapper {
 	public int updateBoardViews(int idx);
 
 	public int updateBoard(BoardUpdateRequestDTO dto);
-	
-	public int checkMyBoard(int idx);
+
+	public Integer checkMyBoard(int idx);
 }

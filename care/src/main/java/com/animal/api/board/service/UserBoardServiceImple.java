@@ -99,8 +99,10 @@ public class UserBoardServiceImple implements UserBoardService {
 
 	@Override
 	public int updateBoard(BoardUpdateRequestDTO dto, int idx) {
-		int userIdx = mapper.checkMyBoard(idx);
-		if (userIdx != dto.getUserIdx()) {
+		Integer userIdx = mapper.checkMyBoard(idx);
+		if (userIdx == null) {
+			return BOARD_NOT_FOUND;
+		} else if (userIdx != dto.getUserIdx()) {
 			return NOT_OWNED_BOARD;
 		}
 
