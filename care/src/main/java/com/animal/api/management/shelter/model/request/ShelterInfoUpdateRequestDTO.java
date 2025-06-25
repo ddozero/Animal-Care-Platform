@@ -24,7 +24,7 @@ public class ShelterInfoUpdateRequestDTO {
 	private String tel;
 	
 	@NotNull(message = "우편번호 작성은 필수입니다.")
-	private int zipCode;
+	private Integer zipCode;
 	
 	@NotBlank(message = "주소 작성은 필수입니다.")
 	private String address;

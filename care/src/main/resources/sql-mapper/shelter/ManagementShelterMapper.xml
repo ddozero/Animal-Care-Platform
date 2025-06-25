@@ -312,5 +312,16 @@ WHERE
 	IDX = #{idx}
 </update>
 
+<select id = "getMaxRef" resultType="int">
+
+
+</select>
+
+<insert id="addshelterBoard" parameterType="">
+INSERT
+	INTO
+	BOARDS(USER_IDX, BOARD_TYPE_IDX, TITLE, CONTENT, REF, LEV, TURN)
+VALUES(#{USERIDX},3,#{TITLE},#{CONTENT},#{REF},0,0)
+</insert>
  
  </mapper>
