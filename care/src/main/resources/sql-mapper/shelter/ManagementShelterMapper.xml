@@ -256,5 +256,61 @@ WHERE
 AND 
 	USER_IDX = #{userIdx}
 </delete>
+
+<select id="getShelterBoardList" resultType="com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO">
+SELECT 
+	IDX,
+	USER_IDX,
+	BOARD_TYPE_IDX,
+	TITLE,
+	CONTENT,
+	CREATED_AT,
+	VIEWS,
+	REF,
+	LEV,
+	TURN
+FROM
+	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 3
+AND
+	USER_IDX = #{userIdx}
+ORDER BY
+	IDX DESC
+LIMIT
+#{listSize} OFFSET #{cp}
+</select>
+
+<select id="getShelterBoardDetail" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO">
+SELECT 
+	IDX,
+	USER_IDX,
+	BOARD_TYPE_IDX,
+	TITLE,
+	CONTENT,
+	CREATED_AT,
+	VIEWS,
+	REF,
+	LEV,
+	TURN
+FROM
+	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 3
+AND
+	USER_IDX = #{userIdx}
+AND 
+	IDX = #{idx}
+</select>
+
+<update id="updateBoardViews" parameterType="int">
+UPDATE
+	BOARDS
+SET
+	VIEWS = VIEWS + 1
+WHERE
+	IDX = #{idx}
+</update>
+
  
  </mapper>

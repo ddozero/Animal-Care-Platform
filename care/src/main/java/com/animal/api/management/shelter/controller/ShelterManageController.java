@@ -28,7 +28,9 @@ import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestD
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
+import com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO;
 import com.animal.api.management.shelter.service.ShelterManageService;
+import com.animal.api.support.model.response.UserNoticeResponseDTO;
 
 /**
  * 보호시설 관리자 페이지의 보호시설관리 관련 컨트롤러 클래스
@@ -319,12 +321,12 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 수정 실패"));
 		}
 	}
-	
+
 	/**
-	 * 해당 보호시설 입양 리뷰글에 대한 답글 삭제 메서드 
+	 * 해당 보호시설 입양 리뷰글에 대한 답글 삭제 메서드
 	 * 
-	 * @param reviewIdx 입양 리뷰 글 번호 
-	 * @param session 로그인 검증 세션
+	 * @param reviewIdx 입양 리뷰 글 번호
+	 * @param session   로그인 검증 세션
 	 * 
 	 * @return 해당 보호시설 입양 리뷰글 답글 삭제
 	 */
@@ -345,6 +347,66 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(400, "답글을 작성한 보호소 관리자가 아님"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글 삭제 실패"));
+		}
+	}
+	
+	/**
+	 * 해당 보호시설 게시판 글 목록 조회 메서드 
+	 * 
+	 * @param cp 페이지번호
+	 * @param session 로그인 검증 세션 
+	 * 
+	 * @return 해당 보호시설 게시판 목록
+	 */
+	@GetMapping("/boards")
+	public ResponseEntity<?> getShelterboardList(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+
+		int listSize = 5;
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
+
+		List<ShelterBoardResponseDTO> boardLists = shelterService.getShelterBoardList(userIdx, listSize, cp);
+
+		if (boardLists == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+		} else if (boardLists.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterBoardResponseDTO>>(200, "보호소 게시판 목록 조회 성공", boardLists));
+		}
+	}
+	
+	/**
+	 * 해당 보호시설 게시판 상세정보 조회 메서드 
+	 * 
+	 * @param idx 게시판 번호 
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 해당 보호시설 게시판 상세 정보 
+	 */
+	@GetMapping("boards/{idx}")
+	public ResponseEntity<?> getShelterBoardDetail(@PathVariable int idx, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+
+		int userIdx = loginUser.getIdx();
+
+		int result = shelterService.addBoardViewCount(idx);
+		ShelterBoardResponseDTO dto = shelterService.getShelterBoardDetail(idx, userIdx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "삭제되거나 없는 게시물"));
+		} else {
+			return ResponseEntity.ok(new OkResponseDTO<ShelterBoardResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}
 	}
 

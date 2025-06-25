@@ -12,19 +12,22 @@ import com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestD
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO;
 import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
+import com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO;
 
 @Mapper
 public interface ManagementShelterMapper {
-
+	
+	//보호시설 기본정보
 	public AllManageShelterResponseDTO getShelterInfo(int userIdx);
 
 	public int updateSheterInfo(ShelterInfoUpdateRequestDTO dto);
-
+	
+	//보호시설 리뷰
 	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(Map map);
 
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(Map map);
 
-	public int updateTurnVR(ManageVolunteerReplyRequestDTO dto);
+	public int updateTurnVR(ManageVolunteerReplyRequestDTO dto); //VolunteerReview 순번
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 
@@ -36,7 +39,7 @@ public interface ManagementShelterMapper {
 
 	public Integer checkShelterUserVR(ManageVolunteerReplyRequestDTO dto);
 
-	public int updateTurnAR(Map map);
+	public int updateTurnAR(Map map); //AdoptionReview 순번
 
 	public Integer checkAdoptionReview(@Param("reviewIdx") int reviewIdx);
 
@@ -47,5 +50,12 @@ public interface ManagementShelterMapper {
 	public int updateAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto);
 	
 	public int deleteAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto);
+	
+	//보호시설 게시판
+	public List<ShelterBoardResponseDTO> getShelterBoardList(Map map);
+	
+	public ShelterBoardResponseDTO getShelterBoardDetail(@Param("idx")int idx, @Param("userIdx")int userIdx);
+	
+	public int updateBoardViews(int idx);
 
 }
