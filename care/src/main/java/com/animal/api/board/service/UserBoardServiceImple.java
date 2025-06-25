@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.board.mapper.UserBoardMapper;
+import com.animal.api.board.model.request.BoardDeleteRequestDTO;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
@@ -107,10 +108,28 @@ public class UserBoardServiceImple implements UserBoardService {
 		}
 
 		int result = mapper.updateBoard(dto);
-		BoardDetailResponseDTO boardDetail = mapper.getBoardDetail(dto.getIdx());
 
 		if (result > 0) {
 			return POST_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
+
+	@Override
+	public int deleteBoard(BoardDeleteRequestDTO dto, int idx) {
+		Integer userIdx = mapper.checkMyBoard(idx);
+		if (userIdx == null) {
+			return BOARD_NOT_FOUND;
+		} else if (userIdx != dto.getUserIdx()) {
+			return NOT_OWNED_BOARD;
+		}
+
+		int result = mapper.deleteBoard(dto);
+
+		if (result > 0) {
+			fileManager.deleteFolder("boards", idx);
+			return DELETE_SUCCESS;
 		} else {
 			return ERROR;
 		}
