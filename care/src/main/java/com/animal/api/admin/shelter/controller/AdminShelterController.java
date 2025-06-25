@@ -196,6 +196,10 @@ public class AdminShelterController {
 
 		AnimalDetailResponseDTO dto = userAnimalService.getAnimalDetail(animalIdx);
 
+		if (dto.getUserIdx() != shelterIdx) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 동물이 아닙니다."));
+		}
+
 		if (dto == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 동물이 존재하지 않습니다."));
 		} else {
