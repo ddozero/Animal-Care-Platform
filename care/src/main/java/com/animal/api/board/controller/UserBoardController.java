@@ -41,6 +41,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
  * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  * @see com.animal.api.board.model.request.BoardUpdateRequestDTO
+ * @see com.animal.api.board.model.request.BoardDeleteRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -177,6 +178,14 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 게시글 삭제
+	 * 
+	 * @param idx     게시판 번호
+	 * @param dto     게시글 번호,회원 번호
+	 * @param session 로그인 검증용 세션
+	 * @return 성공,실패 메세지
+	 */
 	@DeleteMapping("/{idx}")
 	public ResponseEntity<?> deleteBoard(@PathVariable int idx, @Valid @RequestBody BoardDeleteRequestDTO dto,
 			HttpSession session) {
