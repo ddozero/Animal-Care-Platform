@@ -53,6 +53,9 @@ public class AdminBoardServiceImple implements AdminBoardService {
 		int result = mapper.deleteNotice(idx);
 
 		result = result > 0 ? DELETE_SUCCESS : ERROR;
+		if (result == DELETE_SUCCESS) {	// 게시글 삭제 시 파일도 같이 삭제
+			fileManager.deleteFolder("boards", idx);
+		}
 		return result;
 	}
 

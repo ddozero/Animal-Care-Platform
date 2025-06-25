@@ -40,6 +40,10 @@ import com.animal.api.support.service.UserSupportService;
  * @since 2025-06-25
  * @see com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO
  * @see com.animal.api.admin.board.model.request.NoticeInsertRequestDTO
+ * @see com.animal.api.board.model.response.AllBoardListResponseDTO
+ * @see com.animal.api.board.model.response.BoardDetailResponseDTO
+ * @see com.animal.api.support.model.response.UserNoticeResponseDTO
+ * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  */
 @RestController
 @RequestMapping("/api/admin/boards")
