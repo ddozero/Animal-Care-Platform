@@ -56,6 +56,15 @@ public class AdminBoardController {
 	@Autowired
 	private UserSupportService userSupportService;
 
+	/**
+	 * 사이트 관리 페이지의 게시판 리스트 조회
+	 * 
+	 * @param cp      현재 페이지
+	 * @param type    검색조건
+	 * @param keyword 검색어
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 조회된 게시글 리스트
+	 */
 	@GetMapping
 	public ResponseEntity<?> getBoardList(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			@RequestParam(value = "type", required = false) String type,
@@ -87,6 +96,13 @@ public class AdminBoardController {
 		}
 	}
 
+	/**
+	 * 사이트 관리 페이지의 게시글 상세정보
+	 * 
+	 * @param idx     게시글 번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 해당 게시글의 상세정보
+	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getBoardDetail(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
@@ -109,6 +125,15 @@ public class AdminBoardController {
 		}
 	}
 
+	/**
+	 * 사이트 관리 페이지의 공지사항 조회
+	 * 
+	 * @param cp      현재 페이지
+	 * @param title   글 제목
+	 * @param content 본문 내용
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 조회된 공지사항 리스트
+	 */
 	@GetMapping("/notices")
 	public ResponseEntity<?> getNoticeList(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			@RequestParam(value = "title", required = false) String title,
@@ -143,6 +168,13 @@ public class AdminBoardController {
 		}
 	}
 
+	/**
+	 * 사이트 관리 페이지에서의 공지사항 상세정보
+	 * 
+	 * @param idx     게시글 번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 조회된 공지사항 상세정보
+	 */
 	@GetMapping("/notices/{idx}")
 	public ResponseEntity<?> getNoticeDetail(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
