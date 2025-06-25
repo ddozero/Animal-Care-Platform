@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.admin.board.mapper.AdminBoardMapper;
+import com.animal.api.admin.board.model.request.NoticeInsertRequestDTO;
 import com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO;
 
 @Service
@@ -17,8 +18,8 @@ public class AdminBoardServiceImple implements AdminBoardService {
 	@Override
 	public int updateNotice(NoticeUpdateRequestDTO dto, int idx) {
 		Integer boardTypeIdx = mapper.checkBoardType(idx);
-		
-		if(boardTypeIdx==null) {
+
+		if (boardTypeIdx == null) {
 			return NOTICE_NOT_FOUND;
 		}
 
@@ -40,7 +41,7 @@ public class AdminBoardServiceImple implements AdminBoardService {
 		if (boardTypeIdx == null) {
 			return NOTICE_NOT_FOUND;
 		}
-		
+
 		if (boardTypeIdx != 1) { // 공지사항인지 확인
 			return NOT_NOTICE;
 		}
@@ -48,6 +49,15 @@ public class AdminBoardServiceImple implements AdminBoardService {
 		int result = mapper.deleteNotice(idx);
 
 		result = result > 0 ? DELETE_SUCCESS : ERROR;
+		return result;
+	}
+
+	@Override
+	public int insertNotice(NoticeInsertRequestDTO dto, int userIdx) {
+		dto.setUserIdx(userIdx);
+		int result = mapper.insertNotice(dto);
+
+		result = result > 0 ? POST_SUCCESS : ERROR;
 		return result;
 	}
 }
