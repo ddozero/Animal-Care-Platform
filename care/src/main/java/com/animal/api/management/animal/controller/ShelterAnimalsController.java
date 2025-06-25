@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
@@ -55,6 +56,8 @@ public class ShelterAnimalsController {
 	private ShelterAnimalsService shelterAnimalsService;
 	@Autowired
 	private UserShelterService userShelterService;
+	@Autowired
+	private UserAnimalService userAnimalService;
 
 	/**
 	 * 보호시설의 상세정보에서 해당 보호시설의 유기동물들을 조회
@@ -100,8 +103,8 @@ public class ShelterAnimalsController {
 
 		if (type != null || breed != null || gender != null || neuter != 0 || age != 0 || adoptionStatus != null
 				|| personality != null || size != 0 || name != null) {
-			animalList = userShelterService.searchShelterAnimals(loginUser.getIdx(), listSize, cp, type, breed, gender, neuter, age,
-					adoptionStatus, personality, size, name);
+			animalList = userShelterService.searchShelterAnimals(loginUser.getIdx(), listSize, cp, type, breed, gender,
+					neuter, age, adoptionStatus, personality, size, name);
 		} else {
 			animalList = userShelterService.getAllShelterAnimals(listSize, cp, loginUser.getIdx());
 		}
@@ -113,6 +116,39 @@ public class ShelterAnimalsController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList));
+		}
+	}
+
+	/**
+	 * 유기동물의 상세 정보를 조회하는 메서드
+	 * 
+	 * @param idx     유기동물 관리번호
+	 * @param session 로그인 정보 검증을 위한 세션
+	 * @return 사용자에게 보여줄 유기동물과 보호소 정보
+	 */
+	@GetMapping("/{idx}")
+	public ResponseEntity<?> getAnimalDetail(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+
+		AnimalDetailResponseDTO dto = userAnimalService.getAnimalDetail(idx);
+
+		if (loginUser.getIdx() != dto.getUserIdx()) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
+		}
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 동물이 존재하지 않습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<AnimalDetailResponseDTO>(200, "조회 성공", dto));
 		}
 	}
 
