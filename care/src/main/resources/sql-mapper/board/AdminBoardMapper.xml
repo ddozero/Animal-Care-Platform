@@ -27,4 +27,33 @@ FROM
 WHERE
 	IDX = #{idx}
 </delete>
+<insert id="insertNotice" parameterType="com.animal.api.admin.board.model.request.NoticeInsertRequestDTO" useGeneratedKeys="true" keyProperty="idx">
+INSERT
+	INTO
+	BOARDS (
+  USER_IDX,
+	BOARD_TYPE_IDX,
+	TITLE,
+	CONTENT,
+	VIEWS,
+	REF,
+	LEV,
+	TURN
+)
+SELECT
+	#{userIdx},
+	3,
+	#{title},
+	#{content},
+	0,
+	IFNULL(MAX_REF + 1, 1),
+	0,
+	0
+FROM
+	(
+	SELECT
+		MAX(REF) AS MAX_REF
+	FROM
+		BOARDS) AS sub
+</insert>
 </mapper>
