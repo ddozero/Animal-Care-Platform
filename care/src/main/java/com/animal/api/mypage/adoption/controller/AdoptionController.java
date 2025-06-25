@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,8 +91,9 @@ public class AdoptionController {
 	 * @return 후기 작성 성공 메시지
 	 */
 	@PostMapping("/reviews")
-	public ResponseEntity<?> writeAdoptionReview(@RequestPart("dto") AdoptionReviewWriteRequestDTO dto,
-			@RequestPart(value = "image", required = false) MultipartFile image, HttpServletRequest request) {
+	public ResponseEntity<?> writeAdoptionReview( HttpServletRequest request,
+			@RequestParam("adoptionConsultIdx") int adoptionConsultIdx, @RequestParam("content") String content,
+			@RequestParam(value = "image", required = false) MultipartFile image) {
 
 		LoginResponseDTO loginUser = SessionUtils.getLoginUser(request);
 
@@ -99,8 +101,13 @@ public class AdoptionController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new OkResponseDTO<>(401, "로그인이 필요합니다", null));
 		}
 
-		adoptionService.writeAdoptionReview(loginUser.getIdx(), dto, image);
+		AdoptionReviewWriteRequestDTO dto = new AdoptionReviewWriteRequestDTO();
+		dto.setAdoptionConsultIdx(adoptionConsultIdx);
+		dto.setContent(content);
+		
+		
+	    adoptionService.writeAdoptionReview(loginUser.getIdx(), dto, image);
 
-		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "입양 후기 작성 완료", null));
+		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "입양 후기 작성 완료", true));
 	}
 }

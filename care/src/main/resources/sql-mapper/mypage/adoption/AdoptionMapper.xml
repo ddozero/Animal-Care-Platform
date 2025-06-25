@@ -6,9 +6,10 @@
  <mapper namespace="com.animal.api.mypage.adoption.mapper.AdoptionMapper">
 
     <!-- 1. 입양 내역 리스트 -->
-    <select id="findAdoptionListByUserIdx" resultType="com.animal.api.mypage.adoptions.model.response.AdoptionListResponseDTO">
+    <select id="findAdoptionListByUserIdx" resultType="com.animal.api.mypage.adoption.model.response.AdoptionListResponseDTO">
         SELECT
             AC.IDX AS adoptionConsultIdx,
+            A.IDX AS animalIdx,
             A.NAME AS animalName,
             ACS.NAME AS statusText,
             DATE_FORMAT(AC.CREATED_AT, '%Y-%m-%d %H:%i:%s') AS appliedAt
@@ -20,26 +21,27 @@
     </select>
 
     <!-- 2. 상세 조회 -->
-    <select id="findAdoptionDetailByConsultIdx" resultType="com.animal.api.mypage.adoptions.model.response.AdoptionDetailResponseDTO">
-        SELECT
-            A.NAME AS animalName,
-            AB.NAME AS breed,
-            A.GENDER,
-            A.AGE,
-            A.SIZE,
-            A.NEUTER,
-            AP.NAME AS personality,
-            A.DESCRIPTION,
-            ACS.NAME AS statusText,
-            S.SHELTER_NAME AS shelterName
-        FROM ADOPTION_CONSULTS AC
-        JOIN ANIMALS A ON AC.ANIMAL_IDX = A.IDX
-        JOIN ADOPTION_CONSULT_STATUS ACS ON AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
-        JOIN ANIMAL_BREEDS AB ON A.ANIMAL_BREED_IDX = AB.IDX
-        JOIN ANIMAL_PERSONALITIES AP ON A.ANIMAL_PERSONALITY_IDX = AP.IDX
-        JOIN USERS U ON A.USER_IDX = U.IDX AND U.USER_TYPE_IDX = 2
-        JOIN SHELTERS S ON U.IDX = S.USER_IDX
-        WHERE AC.IDX = #{adoptionConsultIdx}
+    <select id="findAdoptionDetailByConsultIdx" resultType="com.animal.api.mypage.adoption.model.response.AdoptionDetailResponseDTO">
+		SELECT
+		    A.NAME AS animalName,
+		    AB.NAME AS breed,
+		    A.ANIMAL_BREED_IDX AS breedIdx, 
+		    A.GENDER,
+		    A.AGE,
+		    A.SIZE,
+		    A.NEUTER,
+		    AP.NAME AS personality,
+		    A.DESCRIPTION,
+		    ACS.NAME AS statusText,
+		    S.SHELTER_NAME AS shelterName
+		FROM ADOPTION_CONSULTS AC
+		LEFT JOIN ANIMALS A ON AC.ANIMAL_IDX = A.IDX
+		LEFT JOIN ADOPTION_CONSULT_STATUS ACS ON AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+		LEFT JOIN ANIMAL_BREEDS AB ON A.ANIMAL_BREED_IDX = AB.IDX
+		LEFT JOIN ANIMAL_PERSONALITIES AP ON A.ANIMAL_PERSONALITY_IDX = AP.IDX
+		LEFT JOIN USERS U ON A.USER_IDX = U.IDX
+		LEFT JOIN SHELTERS S ON U.IDX = S.USER_IDX
+		WHERE AC.IDX = #{adoptionConsultIdx};
     </select>
 
     <!-- 3. 입양 완료 상태인지 확인 -->
@@ -68,7 +70,7 @@
     </select>
 
     <!-- 6. 후기 등록 -->
-	<insert id="insertAdoptionReview" parameterType="com.animal.api.mypage.adoptions.model.entity.AdoptionReviewEntity" useGeneratedKeys="true" keyProperty="idx">
+	<insert id="insertAdoptionReview" parameterType="com.animal.api.mypage.adoption.model.entity.AdoptionReviewEntity" useGeneratedKeys="true" keyProperty="idx">
 	    INSERT INTO ADOPTION_REVIEWS (
 	        USER_IDX, ANIMAL_IDX, CONTENT, CREATED_AT, REF, LEV, TURN
 	    ) VALUES (
