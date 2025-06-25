@@ -137,6 +137,14 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 게시글 수정
+	 * 
+	 * @param idx     게시판 번호
+	 * @param dto     게시글 수정 폼
+	 * @param session 로그인 검증용
+	 * @return 성공시 메세지와 함께 게시글 idx(파일업로드 활용)/실패시 실패 메세지
+	 */
 	@PutMapping("/{idx}")
 	public ResponseEntity<?> updateBoard(@PathVariable int idx, @Valid @RequestBody BoardUpdateRequestDTO dto,
 			HttpSession session) {
@@ -144,7 +152,9 @@ public class UserBoardController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
+		// 게시글 번호 dto 셋팅
 		dto.setIdx(idx);
+		// 회원 번호 dto 셋팅
 		dto.setUserIdx(loginUser.getIdx());
 
 		int result = service.updateBoard(dto);
@@ -152,11 +162,9 @@ public class UserBoardController {
 		if (result == service.POST_SUCCESS) {
 			Integer boardIdx = dto.getIdx();
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new OkResponseDTO<Integer>(201, "게시판 글 수정 성공", boardIdx));
+					.body(new OkResponseDTO<Integer>(200, "게시판 글 수정 성공", boardIdx));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 수정 실패"));
 		}
-
 	}
-
 }
