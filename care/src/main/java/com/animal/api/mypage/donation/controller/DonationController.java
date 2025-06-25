@@ -46,6 +46,11 @@ public class DonationController {
 		}
 
 		List<DonationListResponseDTO> list = donationService.getMyDonationList(loginUser.getIdx());
+		
+		if( list == null || list.size()== 0 ) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<DonationListResponseDTO>>(200, "나의 기부 내역이 없습니다", null));
+		}
 
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new OkResponseDTO<List<DonationListResponseDTO>>(200, "기부 내역 조회 성공", list));
