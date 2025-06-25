@@ -240,7 +240,7 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 이미 삭제되었습니다."));
 		} else if (result == shelterAnimalService.NOT_OWNED_ANIMAL) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "해당 보호시설의 유기동물이 아닙니다."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 유기동물이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 삭제 실패"));
 		}
