@@ -3,10 +3,12 @@ package com.animal.api.admin.board.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.admin.board.mapper.AdminBoardMapper;
 import com.animal.api.admin.board.model.request.NoticeInsertRequestDTO;
 import com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO;
+import com.animal.api.common.util.FileManager;
 
 @Service
 @Primary
@@ -14,6 +16,8 @@ public class AdminBoardServiceImple implements AdminBoardService {
 
 	@Autowired
 	private AdminBoardMapper mapper;
+	@Autowired
+	private FileManager fileManager;
 
 	@Override
 	public int updateNotice(NoticeUpdateRequestDTO dto, int idx) {
@@ -59,5 +63,17 @@ public class AdminBoardServiceImple implements AdminBoardService {
 
 		result = result > 0 ? POST_SUCCESS : ERROR;
 		return result;
+	}
+
+	@Override
+	public int uploadNoticeFiles(MultipartFile[] files, int idx) {
+		boolean result = fileManager.uploadFiles("boards", idx, files);
+
+		if (result) {
+			return UPLOAD_SUCCESS;
+		} else {
+			mapper.deleteNotice(idx);
+			return ERROR;
+		}
 	}
 }

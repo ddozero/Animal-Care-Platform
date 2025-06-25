@@ -1,5 +1,8 @@
 package com.animal.api.admin.board.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.admin.board.model.request.NoticeInsertRequestDTO;
 import com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO;
@@ -104,7 +108,8 @@ public class AdminBoardController {
 
 	/**
 	 * 관리자 페이지에서 공지사항을 등록하는 메서드
-	 * @param dto 공지사항 입력 폼 데이터
+	 * 
+	 * @param dto     공지사항 입력 폼 데이터
 	 * @param session 로그인 검증을 위한 세션
 	 * @return 성공 또는 실패 메세지
 	 */
@@ -123,10 +128,23 @@ public class AdminBoardController {
 		int result = service.insertNotice(dto, loginAdmin.getIdx());
 
 		if (result == service.POST_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "공지사항 등록 성공", null));
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			map.put("createdIdx", dto.getIdx());
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "공지사항 등록 성공", map));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "공지사항 등록 실패"));
 		}
 	}
-	
+
+	@PostMapping("/notices/upload/{idx}")
+	public ResponseEntity<?> uploadNoticeFiles(@PathVariable int idx, MultipartFile[] files) {
+		int result = service.uploadNoticeFiles(files, idx);
+		if (result == service.UPLOAD_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "첨부파일 업로드 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "첨부파일ㄹ 업로드 실패"));
+		}
+	}
+
 }

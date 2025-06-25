@@ -27,7 +27,7 @@ FROM
 WHERE
 	IDX = #{idx}
 </delete>
-<insert id="insertNotice" parameterType="com.animal.api.admin.board.model.request.NoticeInsertRequestDTO">
+<insert id="insertNotice" parameterType="com.animal.api.admin.board.model.request.NoticeInsertRequestDTO" useGeneratedKeys="true" keyProperty="idx">
 INSERT
 	INTO
 	BOARDS (
