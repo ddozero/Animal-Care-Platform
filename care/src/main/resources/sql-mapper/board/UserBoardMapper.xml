@@ -121,12 +121,14 @@ GROUP BY
 	B.VIEWS
 </select>
 
-<update id="updateBoardViews" parameterType="int">
+<update id="updateBoardViews" parameterType="com.animal.api.board.model.request.BoardUpdateRequestDTO">
 UPDATE
 	BOARDS
 SET
-	VIEWS = VIEWS + 1
+	TITLE =	#{title},
+	CONTENT = #{content}
 WHERE
-	IDX = #{idx} 
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
 </update>
 </mapper>
