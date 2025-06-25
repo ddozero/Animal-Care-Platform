@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
+import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
@@ -134,4 +136,27 @@ public class UserBoardController {
 					.body(new OkResponseDTO<BoardDetailResponseDTO>(200, "게시판 상세 조회 성공", boardDetail));
 		}
 	}
+
+	@PutMapping("/{idx}")
+	public ResponseEntity<?> updateBoard(@PathVariable int idx, @Valid @RequestBody BoardUpdateRequestDTO dto,
+			HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+		dto.setIdx(idx);
+		dto.setUserIdx(loginUser.getIdx());
+
+		int result = service.updateBoard(dto);
+
+		if (result == service.POST_SUCCESS) {
+			Integer boardIdx = dto.getIdx();
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Integer>(201, "게시판 글 수정 성공", boardIdx));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 수정 실패"));
+		}
+
+	}
+
 }
