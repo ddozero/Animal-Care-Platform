@@ -16,17 +16,17 @@ public class AdminShelterServiceImple implements AdminShelterService {
 	private FileManager fileManager;
 
 	@Override
-	public int deleteAnimal(int animalIdx, int userIdx) {
-		Integer checkUserIdx = shelterAnimalsMapper.getAnimalShelter(animalIdx);
+	public int deleteAnimal(int idx) {
+		Integer checkUserIdx = shelterAnimalsMapper.getAnimalShelter(idx);
 		if (checkUserIdx == null) {// 해당 상담신청이 있는지 검증
 			return NOT_ANIMAL;
 		}
 
-		int result = shelterAnimalsMapper.deleteAnimal(animalIdx);
+		int result = shelterAnimalsMapper.deleteAnimal(idx);
 		result = result > 0 ? DELETE_SUCCESS : ERROR;
 
 		if (result == DELETE_SUCCESS) {
-			fileManager.deleteFolder("animals", animalIdx);
+			fileManager.deleteFolder("animals", idx);
 		}
 		return result;
 	}

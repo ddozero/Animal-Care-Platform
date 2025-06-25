@@ -8,5 +8,5 @@ public interface AdminShelterService {
 	public static int NOT_ANIMAL = 5;
 	public static int ERROR = -1;
 	
-	public int deleteAnimal(int animalIdx, int userIdx);
+	public int deleteAnimal(int idx);
 }

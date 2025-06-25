@@ -7,12 +7,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.admin.shelter.service.AdminShelterService;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
@@ -34,6 +36,8 @@ import com.animal.api.shelter.service.UserShelterService;
 @RequestMapping("/api/admin/shelters")
 public class AdminShelterController {
 
+	@Autowired
+	private AdminShelterService adminShelterService;
 	@Autowired
 	private UserShelterService userShelterService;
 	@Autowired
@@ -203,6 +207,37 @@ public class AdminShelterController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<AnimalDetailResponseDTO>(200, "조회 성공", dto));
+		}
+	}
+
+	/**
+	 * 사이트 관리자 페이지에서 유기동물의 데이터를 삭제하는 메서드
+	 * 
+	 * @param idx     유기동물 관리번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
+	@DeleteMapping("/{idx}")
+	public ResponseEntity<?> deleteAnimal(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		int result = adminShelterService.deleteAnimal(idx);
+
+		if (result == adminShelterService.DELETE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "유기동물 삭제 성공", null));
+		} else if (result == adminShelterService.NOT_ANIMAL) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 이미 삭제되었습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 삭제 실패"));
 		}
 	}
 
