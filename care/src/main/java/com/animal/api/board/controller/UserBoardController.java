@@ -1,6 +1,8 @@
 package com.animal.api.board.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
+import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
@@ -29,11 +33,12 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사용자 기준 자유게시판에 관련되어 있는 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.24
+ * @since 2025.06.25
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
  * @see com.animal.api.board.model.request.BoardSearchRequestDTO
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
  * @see com.animal.api.board.model.response.BoardDetailResponseDTO
+ * @see com.animal.api.board.model.request.BoardUpdateRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -92,8 +97,10 @@ public class UserBoardController {
 
 		if (result == service.POST_SUCCESS) {
 			Integer boardIdx = dto.getIdx();
+			Map<String, Integer> map = new HashMap();
+			map.put("createdIdx", boardIdx);
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new OkResponseDTO<Integer>(201, "게시판 글 등록 성공", boardIdx));
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "게시판 글 등록 성공", map));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 등록 실패"));
 		}
@@ -132,6 +139,39 @@ public class UserBoardController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<BoardDetailResponseDTO>(200, "게시판 상세 조회 성공", boardDetail));
+		}
+	}
+
+	/**
+	 * 게시글 수정
+	 * 
+	 * @param idx     게시판 번호
+	 * @param dto     게시글 수정 폼
+	 * @param session 로그인 검증용
+	 * @return 성공시 메세지와 함께 게시글 idx(파일업로드 활용)/실패시 실패 메세지
+	 */
+	@PutMapping("/{idx}")
+	public ResponseEntity<?> updateBoard(@PathVariable int idx, @Valid @RequestBody BoardUpdateRequestDTO dto,
+			HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		int result = service.updateBoard(dto, idx);
+
+		if (result == service.POST_SUCCESS) {
+			Integer boardIdx = dto.getIdx();
+			Map<String, Integer> map = new HashMap();
+			map.put("createdIdx", boardIdx);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Map<String, Integer>>(200, "게시판 글 수정 성공", map));
+		} else if (result == service.NOT_OWNED_BOARD) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "본인이 작성한 글이 아닙니다."));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글이 존재 하지 않습니다"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 수정 실패"));
 		}
 	}
 }

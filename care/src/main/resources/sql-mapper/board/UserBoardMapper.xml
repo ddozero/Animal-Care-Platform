@@ -129,4 +129,24 @@ SET
 WHERE
 	IDX = #{idx} 
 </update>
+
+<update id="updateBoard" parameterType="com.animal.api.board.model.request.BoardUpdateRequestDTO">
+UPDATE
+	BOARDS
+SET
+	TITLE =	#{title},
+	CONTENT = #{content}
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+</update>
+
+<select id="checkMyBoard" parameterType="int" resultType="Integer">
+SELECT
+	USER_IDX
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</select>
 </mapper>
