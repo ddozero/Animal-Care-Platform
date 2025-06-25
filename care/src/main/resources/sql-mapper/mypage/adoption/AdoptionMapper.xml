@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.animal.api.mypage.adoption.mapper.AdoptionMapper">
+
+    <!-- 1. 입양 내역 리스트 -->
+    <select id="findAdoptionListByUserIdx" resultType="com.animal.api.mypage.adoptions.model.response.AdoptionListResponseDTO">
+        SELECT
+            AC.IDX AS adoptionConsultIdx,
+            A.NAME AS animalName,
+            ACS.NAME AS statusText,
+            DATE_FORMAT(AC.CREATED_AT, '%Y-%m-%d %H:%i:%s') AS appliedAt
+        FROM ADOPTION_CONSULTS AC
+        JOIN ANIMALS A ON AC.ANIMAL_IDX = A.IDX
+        JOIN ADOPTION_CONSULT_STATUS ACS ON AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+        WHERE AC.USER_IDX = #{userIdx}
+        ORDER BY AC.CREATED_AT DESC
+    </select>
+
+    <!-- 2. 상세 조회 -->
+    <select id="findAdoptionDetailByConsultIdx" resultType="com.animal.api.mypage.adoptions.model.response.AdoptionDetailResponseDTO">
+        SELECT
+            A.NAME AS animalName,
+            AB.NAME AS breed,
+            A.GENDER,
+            A.AGE,
+            A.SIZE,
+            A.NEUTER,
+            AP.NAME AS personality,
+            A.DESCRIPTION,
+            ACS.NAME AS statusText,
+            S.SHELTER_NAME AS shelterName
+        FROM ADOPTION_CONSULTS AC
+        JOIN ANIMALS A ON AC.ANIMAL_IDX = A.IDX
+        JOIN ADOPTION_CONSULT_STATUS ACS ON AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+        JOIN ANIMAL_BREEDS AB ON A.ANIMAL_BREED_IDX = AB.IDX
+        JOIN ANIMAL_PERSONALITIES AP ON A.ANIMAL_PERSONALITY_IDX = AP.IDX
+        JOIN USERS U ON A.USER_IDX = U.IDX AND U.USER_TYPE_IDX = 2
+        JOIN SHELTERS S ON U.IDX = S.USER_IDX
+        WHERE AC.IDX = #{adoptionConsultIdx}
+    </select>
+
+    <!-- 3. 입양 완료 상태인지 확인 -->
+    <select id="isCompletedAdoptionConsult" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM ADOPTION_CONSULTS
+        WHERE IDX = #{adoptionConsultIdx}
+          AND USER_IDX = #{userIdx}
+          AND ADOPTION_CONSULT_STATUS_IDX = 4
+    </select>
+
+    <!-- 4. 후기 이미 작성했는지 확인 -->
+    <select id="hasAlreadyWrittenAdoptionReview" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM ADOPTION_REVIEWS AR
+        JOIN ADOPTION_CONSULTS AC ON AR.ANIMAL_IDX = AC.ANIMAL_IDX
+        WHERE AC.IDX = #{adoptionConsultIdx}
+          AND AR.USER_IDX = #{userIdx}
+    </select>
+
+    <!-- 5. animal_idx 가져오기 -->
+    <select id="findAnimalIdxByConsultIdx" resultType="int">
+        SELECT ANIMAL_IDX
+        FROM ADOPTION_CONSULTS
+        WHERE IDX = #{adoptionConsultIdx}
+    </select>
+
+    <!-- 6. 후기 등록 -->
+	<insert id="insertAdoptionReview" parameterType="com.animal.api.mypage.adoptions.model.entity.AdoptionReviewEntity" useGeneratedKeys="true" keyProperty="idx">
+	    INSERT INTO ADOPTION_REVIEWS (
+	        USER_IDX, ANIMAL_IDX, CONTENT, CREATED_AT, REF, LEV, TURN
+	    ) VALUES (
+	        #{userIdx},
+	        #{animalIdx},
+	        #{content},
+	        NOW(),
+	        0, 0, 0
+	    )
+	</insert>
+
+    <!-- 7. 생성된 ID로 REF 업데이트 -->
+    <update id="updateAdoptionReviewRef">
+        UPDATE ADOPTION_REVIEWS
+        SET REF = #{idx}
+        WHERE IDX = #{idx}
+    </update>
+
+    <!-- 8. 포인트 지급 -->
+    <insert id="grantAdoptionReviewPoint">
+        INSERT INTO POINT_GRANTS (
+            USER_IDX, POINT_TYPE_IDX
+        ) VALUES (
+            #{userIdx}, 2
+        )
+    </insert>
+    
+    <!-- 9. 사용자 포인트 증가 -->
+    <update id="increaseUserPoint">
+	    UPDATE USERS
+	    SET POINT = POINT + (
+	        SELECT POINT FROM POINT_TYPES WHERE NAME = '입양후기작성'
+	    )
+	    WHERE IDX = #{userIdx}
+	</update>
+ 
+ </mapper>

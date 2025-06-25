@@ -86,8 +86,8 @@
 	    WHERE IDX = #{volunteerRequestIdx}
 	</select>
 	
-	<!-- 4. 후기 등록 ( -->
-	<insert id="insertVolunteerReview" useGeneratedKeys="true" keyProperty="idx">
+	<!-- 4. 후기 등록  -->
+	<insert id="insertVolunteerReview" parameterType="com.animal.api.mypage.volunteers.model.entity.VolunteerReviewEntity" useGeneratedKeys="true" keyProperty="idx">
 	    INSERT INTO VOLUNTEER_REVIEWS (
 	        USER_IDX, VOLUNTEER_IDX, CONTENT, CREATED_AT, REF, LEV, TURN
 	    ) VALUES (
