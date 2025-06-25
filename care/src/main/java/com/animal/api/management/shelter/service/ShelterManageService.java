@@ -60,6 +60,6 @@ public interface ShelterManageService {
 	
 	public int updateShelterBoard(ShelterBoardRequestDTO dto);
 	
-	public int deleteShelterBoard(ShelterBoardRequestDTO dto);
+	public int deleteShelterBoard(ShelterBoardRequestDTO dto, int idx);
 
 }

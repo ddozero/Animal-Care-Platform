@@ -319,7 +319,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 	
 	@Override
-	public int deleteShelterBoard(ShelterBoardRequestDTO dto) {
+	public int deleteShelterBoard(ShelterBoardRequestDTO dto, int idx) {
 		
 		int boardCheck = mapper.checkShelterBoard(dto.getIdx());
 		if (boardCheck == 0) {
@@ -333,6 +333,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 		int result = mapper.deleteShelterBoard(dto);
 		if (result == 1) {
+			fileManager.deleteFolder("boards", idx);
 			return DELETE_OK;
 		} else {
 			return ERROR;

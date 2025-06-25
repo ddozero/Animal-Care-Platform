@@ -500,7 +500,7 @@ public class ShelterManageController {
 		dto.setUserIdx(userIdx);
 		dto.setIdx(idx);
 
-		int result = shelterService.deleteShelterBoard(dto);
+		int result = shelterService.deleteShelterBoard(dto, idx);
 
 		if (result == shelterService.DELETE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "게시글 삭제 성공", null));
