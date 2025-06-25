@@ -24,5 +24,8 @@ public class NoticeInsertRequestDTO {
 	@NotBlank(message = "게시글 본문을 적어주세요.")
 	@Size(max = 2000, message = "본문을 2000자 이내로 정해주세요.")
 	private String content;
+	
+	// 등록 후 나오는 idx 번호
+	int idx;
 
 }

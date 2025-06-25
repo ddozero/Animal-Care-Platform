@@ -25,8 +25,9 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사이트 관리자 페이지의 게시글 관련 기능 클래스
  * 
  * @author Rege-97
- * @since 2025-06-24
- * @see com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO;
+ * @since 2025-06-25
+ * @see com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO
+ * @see com.animal.api.admin.board.model.request.NoticeInsertRequestDTO
  */
 @RestController
 @RequestMapping("/api/admin/boards")
@@ -101,6 +102,12 @@ public class AdminBoardController {
 		}
 	}
 
+	/**
+	 * 관리자 페이지에서 공지사항을 등록하는 메서드
+	 * @param dto 공지사항 입력 폼 데이터
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
 	@PostMapping("/notices")
 	public ResponseEntity<?> insertNotice(@Valid @RequestBody NoticeInsertRequestDTO dto, HttpSession session) {
 		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
@@ -121,4 +128,5 @@ public class AdminBoardController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "공지사항 등록 실패"));
 		}
 	}
+	
 }
