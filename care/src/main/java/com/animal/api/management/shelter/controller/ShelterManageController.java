@@ -358,7 +358,7 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 게시판 목록
 	 */
-	@GetMapping("/board")
+	@GetMapping("/boards")
 	public ResponseEntity<?> getShelterboardList(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
 
@@ -393,7 +393,7 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 게시판 상세 정보 
 	 */
-	@GetMapping("/{idx}")
+	@GetMapping("boards/{idx}")
 	public ResponseEntity<?> getShelterBoardDetail(@PathVariable int idx, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
