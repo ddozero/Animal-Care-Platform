@@ -59,5 +59,7 @@ public interface ShelterManageService {
 	public int uploadBoardFile(MultipartFile[] files, int idx);
 	
 	public int updateShelterBoard(ShelterBoardRequestDTO dto);
+	
+	public int deleteShelterBoard(ShelterBoardRequestDTO dto, int idx);
 
 }
