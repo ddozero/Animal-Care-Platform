@@ -366,6 +366,15 @@ WHERE
 	AND B.BOARD_TYPE_IDX = 3
 </update>
 
+<delete id = "deleteShelterBoard" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
+DELETE
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+	AND BOARD_TYPE_IDX = 3
+</delete>
  
  
  </mapper>
