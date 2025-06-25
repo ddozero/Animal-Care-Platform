@@ -153,10 +153,6 @@ public class UserBoardController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-		// 게시글 번호 dto 셋팅
-		dto.setIdx(idx);
-		// 회원 번호 dto 셋팅
-		dto.setUserIdx(loginUser.getIdx());
 
 		int result = service.updateBoard(dto);
 
