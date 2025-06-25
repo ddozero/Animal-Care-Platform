@@ -149,4 +149,13 @@ FROM
 WHERE
 	IDX = #{idx}
 </select>
+
+<delete id="deleteBoard" parameterType="com.animal.api.board.model.request.BoardDeleteRequestDTO">
+DELETE
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+</delete>
 </mapper>
