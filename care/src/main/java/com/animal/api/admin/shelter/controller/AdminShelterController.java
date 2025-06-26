@@ -48,6 +48,7 @@ import com.animal.api.volunteers.service.UserVolunteersService;
  * @see com.animal.api.shelter.model.response.ShelterDetailResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO
  * @see com.animal.api.volunteers.model.response.AllVolunteersResponseDTO
+ * @see com.animal.api.volunteers.model.request.JoinRejectionMailRequestDTO
  */
 @RestController
 @RequestMapping("/api/admin/shelters")
@@ -400,6 +401,13 @@ public class AdminShelterController {
 		}
 	}
 
+	/**
+	 * 사이트 관리 페이지에서 보호시설 가입 승인 메서드
+	 * 
+	 * @param idx     회원 번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
 	@PutMapping("/requests/{idx}")
 	public ResponseEntity<?> updateShelterJoinRequestStatus(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
@@ -426,6 +434,14 @@ public class AdminShelterController {
 		}
 	}
 
+	/**
+	 * 사이트 관리 페이지에서 보호시설의 가입 승인을 거절할 때 사유를 이메일로 보내는 메서드
+	 * 
+	 * @param idx     회원번호
+	 * @param dto     이메일 입력 폼 데이터
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 이메일 전송 성공 메세지
+	 */
 	@PostMapping("/requests/{idx}")
 	public ResponseEntity<?> ShelterJoinRejection(@PathVariable int idx,
 			@Valid @RequestBody JoinRejectionMailRequestDTO dto, HttpSession session) {
