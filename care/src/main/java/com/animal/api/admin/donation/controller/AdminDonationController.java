@@ -26,6 +26,14 @@ public class AdminDonationController {
 	@Autowired
 	private AdminDonationService adminDonationService;
 	
+	/**
+	 * 사이트 관리 페이지 지원사업 목록 조회
+	 * 
+	 * @param cp 현재 페이지
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 조회된 지원사업 목록
+	 */
 	@GetMapping
 	public ResponseEntity<?> getAdminDonationList(@RequestParam(value = "cp", defaultValue = "") int cp,
 			HttpSession session) {
