@@ -317,7 +317,7 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글 데이터가 존재하지않음"));
 		}
 
-		List<AllBoardCommentsResponseDTO> commentList = service.getBoardComments(boardIdx, listSize, cp);
+		List<AllBoardCommentsResponseDTO> commentList = service.getBoardComments(idx, listSize, cp);
 
 		if (commentList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
