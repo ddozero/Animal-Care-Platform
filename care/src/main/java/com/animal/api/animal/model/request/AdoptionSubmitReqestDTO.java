@@ -23,7 +23,7 @@ public class AdoptionSubmitReqestDTO {
 	// 유저 번호는 로그인 정보로 대체
     private Integer userIdx;
 
-    @NotNull(message = "동물 번호는 필수입니다.")
+    // 서비스에서 세팅
     private Integer animalIdx;
 
     @NotBlank(message = "이름은 필수입니다.")

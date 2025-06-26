@@ -124,11 +124,13 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	}
 
 	@Override
-	public int submitAdoption(AdoptionSubmitReqestDTO dto) {
+	public int submitAdoption(AdoptionSubmitReqestDTO dto, int idx) {
+		
+		dto.setAnimalIdx(idx);
 		// 입양 가능 상태 검사
 		Integer checkStatus = mapper.checkAdoptionStatus(dto.getAnimalIdx());
 		if (checkStatus == null) {
-			return RESERVATION_FAILD;
+			return NOT_FOUND_ANIMAL;
 		}
 
 		if (checkStatus != 1) {
