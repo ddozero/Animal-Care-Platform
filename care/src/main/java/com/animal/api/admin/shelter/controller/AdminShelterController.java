@@ -381,7 +381,7 @@ public class AdminShelterController {
 		ShelterJoinRequestListResponseDTO dto = adminShelterService.getShelterJoinRequestDetail(idx);
 
 		if (dto == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 신청이 존재하지 않습니다."));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 신청이 존재하지 않습니다."));
 		} else if (dto.getStatus() == 1) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미 승인된 계정입니다."));
 		} else if (dto.getStatus() == -1) {
