@@ -38,7 +38,7 @@ public class UserSupportController {
 	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
 	 * @return 사용자에게 보여줄 키워드 검색 목록 조회
 	 */
-	@GetMapping()
+	@GetMapping
 	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "content", required = false) String content) {

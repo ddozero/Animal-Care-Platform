@@ -21,14 +21,14 @@ JOIN DONATION_STATUS DS ON
 	D.IDX = DS.IDX
 ORDER BY
 	D.IDX DESC
-limit ${listSize} OFFSET ${cp}
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 
-<select id="searchAdminDonation" parameterType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
+<select id="searchAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
 SELECT
 	D.IDX,
-	D.NAME,
-	DS.NAME AS STATUS,
+	D.NAME AS name,
+	DS.NAME AS status,
 	D.COMPLETION_AMOUNT,
 	D.AMOUNT,
 	D.COMPLETION_RATE,
@@ -48,7 +48,7 @@ JOIN DONATION_STATUS DS ON
 </where>
 ORDER BY
 	D.IDX DESC
-limit ${listSize} OFFSET ${cp}
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 
 

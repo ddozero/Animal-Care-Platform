@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdminDonationSearchRequestDTO {
 
-	private int cp;
 	private int listSize;
+	private int cp;
 	private String name;
 	private String status;
 

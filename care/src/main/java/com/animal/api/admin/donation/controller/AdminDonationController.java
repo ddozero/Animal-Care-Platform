@@ -45,22 +45,26 @@ public class AdminDonationController {
 	 * @return 조회된 지원사업 목록
 	 */
 	@GetMapping
-	public ResponseEntity<?> getAdminDonationList(@RequestParam(value = "cp", defaultValue = "") int cp,
-			HttpSession session) {
+	public ResponseEntity<?> getAdminDonationList(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "status", required = false) String status, HttpSession session) {
 
 		LoginResponseDTO loginAdmin = shelterUserCheck(session); // 로그인 여부, 관리자 회원 검증
-
 		int userIdx = loginAdmin.getIdx();
 
 		int listSize = 5;
 		if (cp == 0) {
 			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
 		}
+		cp = (cp - 1) * listSize;
 
-		List<AdminAllDonationResponseDTO> donationLists = adminDonationService.getAdminDonationList(listSize, cp,
-				userIdx);
+		List<AdminAllDonationResponseDTO> donationLists = null;
+
+		if (name != null || status != null) {
+			donationLists = adminDonationService.searchAdminDonation(listSize, cp, name, status);
+		} else {
+			donationLists = adminDonationService.getAdminDonationList(listSize, cp, userIdx);
+		}
 
 		if (donationLists == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
@@ -68,7 +72,7 @@ public class AdminDonationController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지 않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AdminAllDonationResponseDTO>>(200, "게시판 조회 성공", donationLists));
+					.body(new OkResponseDTO<List<AdminAllDonationResponseDTO>>(200, "보호시설 목록 조회 성공", donationLists));
 		}
 	}
 
