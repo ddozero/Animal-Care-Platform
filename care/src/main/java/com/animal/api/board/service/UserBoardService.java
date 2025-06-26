@@ -25,6 +25,9 @@ public interface UserBoardService {
 	static int NOT_OWNED_BOARD = 13;
 	static int BOARD_NOT_FOUND = 14;
 	static int DELETE_SUCCESS = 15;
+	static int HEART_SUCCESS = 16;
+	static int HEART_NOT_FOUND = 17;
+	static int ALREADY_HEART = 18;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
@@ -41,5 +44,9 @@ public interface UserBoardService {
 
 	public int deleteBoard(int idx, int userIdx);
 
+	public int checkMyHeart(int userIdx, int boardIdx);
+
 	public int addBoardHeart(int userIdx, int boardIdx);
+
+	public int deleteBoardHeart(int userIdx, int boardIdx);
 }

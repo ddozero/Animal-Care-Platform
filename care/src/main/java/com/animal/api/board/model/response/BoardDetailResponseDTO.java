@@ -23,4 +23,6 @@ public class BoardDetailResponseDTO {
 	private int views;
 	private int likeCount;
 	private List<String> filePaths;
+	// 로그인후 상세페이지 조회시 좋아요 클릭 여부(true:클릭/false:클릭x)
+	private boolean heart;
 }

@@ -31,5 +31,9 @@ public interface UserBoardMapper {
 
 	public int deleteBoard(int idx);
 
+	public Integer checkMyHeart(Map map);
+
 	public int addBoardHeart(Map map);
+
+	public int deleteBoardHeart(Map map);
 }
