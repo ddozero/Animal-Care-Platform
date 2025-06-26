@@ -21,9 +21,35 @@ JOIN DONATION_STATUS DS ON
 	D.IDX = DS.IDX
 ORDER BY
 	D.IDX DESC
-limit ${listSize} OFFSET ${cp}
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 
+<select id="searchAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
+SELECT
+	D.IDX,
+	D.NAME AS name,
+	DS.NAME AS status,
+	D.COMPLETION_AMOUNT,
+	D.AMOUNT,
+	D.COMPLETION_RATE,
+	D.START_DATE,
+	D.END_DATE
+FROM
+	DONATIONS D
+JOIN DONATION_STATUS DS ON
+	D.IDX = DS.IDX
+<where>
+	<if test = "name != null and name !=''">
+	AND D.NAME LIKE '%${name}%'
+	</if>
+	<if test = "status != null and status !=''">
+	AND DS.NAME = #{status}
+	</if>
+</where>
+ORDER BY
+	D.IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
 
 
 </mapper>
