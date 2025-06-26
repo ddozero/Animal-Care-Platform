@@ -51,5 +51,25 @@ ORDER BY
 LIMIT #{listSize} OFFSET #{cp}
 </select>
 
+<select id="getAdminDonationDetail" parameterType="int" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
+SELECT
+	D.IDX,
+	D.NAME,
+	D.START_DATE,
+	D.END_DATE,
+	D.AMOUNT, 
+	D.COMPLETION_AMOUNT, <!--누적금액-->
+	D.COMPLETION_RATE, <!--달성률-->
+	D.SPONSOR, <!--모금단체-->
+	D.SPONSOR_DETAIL, <!--모금액사용처-->
+	D.CONTENT,
+	DS.NAME AS status,
+	D.CREATED_AT
+FROM
+	DONATIONS D
+JOIN DONATION_STATUS DS ON
+	D.DONATION_STATUS_IDX = DS.IDX
+WHERE D.IDX= #{idx}
+</select>
 
 </mapper>

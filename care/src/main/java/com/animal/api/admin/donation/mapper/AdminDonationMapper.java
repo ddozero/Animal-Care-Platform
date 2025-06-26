@@ -10,10 +10,11 @@ import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 
 @Mapper
 public interface AdminDonationMapper {
-	
+
 	public List<AdminAllDonationResponseDTO> getAdminDonationList(Map map);
-	
+
 	public List<AdminAllDonationResponseDTO> searchAdminDonation(AdminDonationSearchRequestDTO dto);
-	
+
+	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx);
 
 }
