@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.admin.donation.mapper.AdminDonationMapper;
+import com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.common.util.FileManager;
 
@@ -32,6 +33,15 @@ public class AdminDonationServiceImple implements AdminDonationService {
 		map.put("idx", idx);
 
 		List<AdminAllDonationResponseDTO> donationList = mapper.getAdminDonationList(map);
+		
+		return donationList;
+	}
+	
+	@Override
+	public List<AdminAllDonationResponseDTO> searchAdminDonation(int listSize, int cp, String name, String status) {
+		
+		AdminDonationSearchRequestDTO dto = new AdminDonationSearchRequestDTO(listSize, cp, name, status);
+		List<AdminAllDonationResponseDTO> donationList = mapper.searchAdminDonation(dto);
 		
 		return donationList;
 	}
