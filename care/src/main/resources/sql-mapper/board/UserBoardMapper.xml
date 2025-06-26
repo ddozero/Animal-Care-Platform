@@ -158,7 +158,7 @@ WHERE
 	IDX = #{idx}
 </delete>
 
-<insert id="addBoardLike" parameterType="Map">
+<insert id="addBoardHeart" parameterType="Map">
 INSERT
 	INTO
 	BOARD_LIKES(USER_IDX, BOARD_IDX, IS_LIKE)
