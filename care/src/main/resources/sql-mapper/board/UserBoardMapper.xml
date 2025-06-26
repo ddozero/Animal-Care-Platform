@@ -157,4 +157,11 @@ FROM
 WHERE
 	IDX = #{idx}
 </delete>
+
+<insert id="addBoardLike" parameterType="Map">
+INSERT
+	INTO
+	BOARD_LIKES(USER_IDX, BOARD_IDX, IS_LIKE)
+VALUES(#{userIdx}, #{boardIdx}, 1)
+</insert>
 </mapper>
