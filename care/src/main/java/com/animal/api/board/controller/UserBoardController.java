@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
-import com.animal.api.board.model.request.BoardDeleteRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
@@ -35,13 +34,12 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사용자 기준 자유게시판에 관련되어 있는 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.25
+ * @since 2025.06.26
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
  * @see com.animal.api.board.model.request.BoardSearchRequestDTO
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
  * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  * @see com.animal.api.board.model.request.BoardUpdateRequestDTO
- * @see com.animal.api.board.model.request.BoardDeleteRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -187,21 +185,21 @@ public class UserBoardController {
 	 * @return 성공,실패 메세지
 	 */
 	@DeleteMapping("/{idx}")
-	public ResponseEntity<?> deleteBoard(@PathVariable int idx, @Valid @RequestBody BoardDeleteRequestDTO dto,
-			HttpSession session) {
+	public ResponseEntity<?> deleteBoard(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
+		int userIdx = loginUser.getIdx();
 
-		int result = service.deleteBoard(dto, idx);
+		int result = service.deleteBoard(idx, userIdx);
 
 		if (result == service.DELETE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "게시판 삭제 성공", null));
-		} else if (result == service.NOT_OWNED_BOARD) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "본인이 작성한 글이 아닙니다."));
 		} else if (result == service.BOARD_NOT_FOUND) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글이 존재 하지 않습니다"));
+		} else if (result == service.NOT_OWNED_BOARD) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "본인의 게시글이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 삭제 실패"));
 		}

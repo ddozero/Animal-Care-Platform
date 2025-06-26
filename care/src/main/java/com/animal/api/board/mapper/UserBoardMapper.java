@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.animal.api.board.model.request.BoardDeleteRequestDTO;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
@@ -30,5 +29,5 @@ public interface UserBoardMapper {
 
 	public Integer checkMyBoard(int idx);
 
-	public int deleteBoard(BoardDeleteRequestDTO dto);
+	public int deleteBoard(int idx);
 }

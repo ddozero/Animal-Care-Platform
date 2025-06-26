@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.animal.api.board.model.request.BoardDeleteRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
@@ -40,5 +39,5 @@ public interface UserBoardService {
 
 	public int updateBoard(BoardUpdateRequestDTO dto, int idx);
 
-	public int deleteBoard(BoardDeleteRequestDTO dto, int idx);
+	public int deleteBoard(int idx, int userIdx);
 }

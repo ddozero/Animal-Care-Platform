@@ -150,12 +150,11 @@ WHERE
 	IDX = #{idx}
 </select>
 
-<delete id="deleteBoard" parameterType="com.animal.api.board.model.request.BoardDeleteRequestDTO">
+<delete id="deleteBoard" parameterType="int">
 DELETE
 FROM
 	BOARDS
 WHERE
 	IDX = #{idx}
-	AND USER_IDX = #{userIdx}
 </delete>
 </mapper>
