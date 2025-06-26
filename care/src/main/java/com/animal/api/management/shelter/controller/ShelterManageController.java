@@ -32,14 +32,20 @@ import com.animal.api.management.shelter.model.response.ManageAdoptionReviewResp
 import com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO;
 import com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO;
 import com.animal.api.management.shelter.service.ShelterManageService;
-import com.animal.api.support.model.response.UserNoticeResponseDTO;
 
 /**
  * 보호시설 관리자 페이지의 보호시설관리 관련 컨트롤러 클래스
  * 
- * @author doyeong
+ * @author ddozero
  * @since 2025-06-21
  * @see com.animal.api.management.shelter.model.response.AllManageShelterDTO
+ * @see com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO
+ * @see com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO
+ * @see com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO
+ * @see com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO
+ * @see com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO
+ * @see com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO
+ * 
  */
 @RestController
 @RequestMapping("/api/management/shelter")
