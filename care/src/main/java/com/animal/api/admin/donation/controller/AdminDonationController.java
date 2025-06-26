@@ -25,7 +25,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @author ddozero
  * @since 2025-06-26
  * @see com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO
- * 
+ *
  */
 
 @RestController
@@ -40,6 +40,8 @@ public class AdminDonationController {
 	 * 사이트 관리 페이지 지원사업 목록 조회 메서드
 	 * 
 	 * @param cp      현재 페이지
+	 * @param name    지원사업명
+	 * @param status  지원사업 상태
 	 * @param session 로그인 검증 세션
 	 * 
 	 * @return 조회된 지원사업 목록
@@ -55,8 +57,9 @@ public class AdminDonationController {
 		int listSize = 5;
 		if (cp == 0) {
 			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
 		}
-		cp = (cp - 1) * listSize;
 
 		List<AdminAllDonationResponseDTO> donationLists = null;
 
