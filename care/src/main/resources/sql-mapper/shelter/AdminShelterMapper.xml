@@ -74,6 +74,7 @@ FROM
 	USERS
 WHERE
 	IDX = #{idx}
+	AND USER_TYPE_IDX = 2
 </select>
 <update id="updateShelterJoinRequestStatus" parameterType="int">
 UPDATE
