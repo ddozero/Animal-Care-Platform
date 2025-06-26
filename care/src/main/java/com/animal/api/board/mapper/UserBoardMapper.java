@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
+import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
 
@@ -36,4 +37,6 @@ public interface UserBoardMapper {
 	public int addBoardHeart(Map map);
 
 	public int deleteBoardHeart(Map map);
+
+	public List<AllBoardCommentsResponseDTO> getBoardComments(Map map);
 }
