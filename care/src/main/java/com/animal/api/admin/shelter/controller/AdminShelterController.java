@@ -35,6 +35,7 @@ import com.animal.api.volunteers.service.UserVolunteersService;
  * 
  * @author Rege-97
  * @since 2025-06-26
+ * @see com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO
  * @see com.animal.api.animal.model.response.AnimalDetailResponseDTO
  * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO
@@ -325,6 +326,13 @@ public class AdminShelterController {
 		}
 	}
 
+	/**
+	 * 사이트 관리 페이지에서 보호시설의 가입 승인 요청 리스트 조회
+	 * 
+	 * @param cp      현재 페이지
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 가입 승인 요청 리스트
+	 */
 	@GetMapping("/requests")
 	public ResponseEntity<?> getShelterJoinRequestList(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
@@ -351,6 +359,13 @@ public class AdminShelterController {
 		}
 	}
 
+	/**
+	 * 사이트 관리 페이지에서 보호시설의 가입 승인 요청 상세정보
+	 * 
+	 * @param idx     회원번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 승인 요청의 상세정보
+	 */
 	@GetMapping("/requests/{idx}")
 	public ResponseEntity<?> getShelterJoinRequestDetail(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
