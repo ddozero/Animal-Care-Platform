@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.animal.api.admin.shelter.service.AdminShelterService;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
@@ -24,7 +23,10 @@ import com.animal.api.management.animal.service.ShelterAnimalsService;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
 import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
 import com.animal.api.shelter.service.UserShelterService;
+import com.animal.api.volunteers.model.response.AllVolunteersResponseDTO;
+import com.animal.api.volunteers.service.UserVolunteersService;
 
 /**
  * 사이트 관리자 페이지 내의 보호시설 관리 페이지 컨트롤러
@@ -43,6 +45,8 @@ public class AdminShelterController {
 	private UserAnimalService userAnimalService;
 	@Autowired
 	private ShelterAnimalsService shelterAnimalService;
+	@Autowired
+	private UserVolunteersService userVolunteerService;
 
 	/**
 	 * 사이트 관리자 페이지의 보호시설 조회 및 검색 메서드
@@ -240,9 +244,75 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new ErrorResponseDTO(404, "해당 유기동물이 존재하지 않거나 이미 삭제되었습니다."));
 		} else if (result == shelterAnimalService.NOT_OWNED_ANIMAL) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 유기동물이 아닙니다."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ErrorResponseDTO(400, "해당 보호시설의 유기동물이 아닙니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "유기동물 삭제 실패"));
+		}
+	}
+
+	/**
+	 * 사이트 관리자 페이지에서 해당 보호시설의 봉사들을 조회
+	 * 
+	 * @param idx     보호시설의 idx
+	 * @param cp      봉사 컨텐츠의 현재 페이지
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 해당 보호시설의 봉사 컨텐츠
+	 */
+	@GetMapping("/{idx}/volunteers")
+	public ResponseEntity<?> getShelterVolunteers(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+		int listSize = 3;
+		List<ShelterVolunteersResponseDTO> volunteerList = userShelterService.getShelterVolunteers(listSize, cp, idx);
+
+		if (volunteerList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+		} else if (volunteerList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterVolunteersResponseDTO>>(200, "조회 성공", volunteerList));
+		}
+	}
+
+	/**
+	 * 사이트 관리자 페이지에서 봉사의 상세 정보를 조회하는 메서드
+	 * 
+	 * @param shelterIdx   보호시설의 idx
+	 * @param volunteeIidx 봉사 번호
+	 * @param session      로그인 검증을 위한 세션
+	 * @return 봉사 상세 정보
+	 */
+
+	@GetMapping("/{shelterIdx}/volunteers/{volunteerIdx}")
+	public ResponseEntity<?> getVolunteersDetail(@PathVariable int shelterIdx, @PathVariable int volunteerIdx,
+			HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+		AllVolunteersResponseDTO dto = userVolunteerService.getVolunteersDetail(volunteerIdx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 봉사가 존재하지 않습니다."));
+		} else if (dto.getUserIdx() != shelterIdx) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 봉사가 아닙니다."));
+		} else {
+			return ResponseEntity.ok(new OkResponseDTO<AllVolunteersResponseDTO>(200, "봉사 상세정보 조회 성공", dto));
 		}
 	}
 
