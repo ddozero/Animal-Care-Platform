@@ -41,6 +41,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
  * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  * @see com.animal.api.board.model.request.BoardUpdateRequestDTO
+ * @see com.animal.api.board.model.response.AllBoardCommentsResponseDTOo
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -300,6 +301,13 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 자유게시판의 게시글 하나의 댓글 전체 조회
+	 * 
+	 * @param idx
+	 * @param cp
+	 * @return 조회 성공시 해당 게시글 댓글 전체 /실패시 메세지
+	 */
 	@GetMapping("/{idx}/comments")
 	public ResponseEntity<?> getBoardComments(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
