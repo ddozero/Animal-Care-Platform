@@ -39,7 +39,10 @@ public class UserAnimalServiceImple implements UserAnimalService {
 
 		if (animalList != null) {
 			for (AllAnimalListResponseDTO dto : animalList) {
-				dto.setImagePath(fileManager.getImagePath("animals", dto.getIdx()).get(0));
+				List<String> imagePaths = fileManager.getImagePath("animals", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
 			}
 		}
 
@@ -58,7 +61,10 @@ public class UserAnimalServiceImple implements UserAnimalService {
 
 		if (animalList != null) {
 			for (AllAnimalListResponseDTO dto : animalList) {
-				dto.setImagePath(fileManager.getImagePath("animals", dto.getIdx()).get(0));
+				List<String> imagePaths = fileManager.getImagePath("animals", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
 			}
 		}
 
@@ -69,7 +75,10 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	public AnimalDetailResponseDTO getAnimalDetail(int idx) {
 		AnimalDetailResponseDTO dto = mapper.getAnimalDetail(idx);
 		if (dto != null) {
-			dto.setImagePath(fileManager.getImagePath("animals", dto.getIdx()).get(0));
+			List<String> imagePaths = fileManager.getImagePath("animals", dto.getIdx());
+			if (imagePaths != null || imagePaths.size() != 0) {
+				dto.setImagePath(imagePaths.get(0));
+			}
 		}
 		return dto;
 	}
@@ -78,7 +87,10 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx) {
 		AdoptionAnimalResponseDTO dto = mapper.getAdoptionInfo(idx);
 		if (dto != null) {
-			dto.setImagePath(fileManager.getImagePath("animals", dto.getIdx()).get(0));
+			List<String> imagePaths = fileManager.getImagePath("animals", dto.getIdx());
+			if (imagePaths != null || imagePaths.size() != 0) {
+				dto.setImagePath(imagePaths.get(0));
+			}
 		}
 		return dto;
 	}
