@@ -72,4 +72,24 @@ JOIN DONATION_STATUS DS ON
 WHERE D.IDX= #{idx}
 </select>
 
+<select id="getAdminDonationUser" parameterType="Map" resultType="com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO">
+SELECT
+	D.IDX,
+	U.NAME,
+	DT.DONATED_AMOUNT AS donatedAmount
+	DT.CREATED_AT AS createdAt
+FROM
+	DONATION_DETAILS DT
+JOIN 
+    DONATIONS D ON
+	DT.DONATION_IDX = D.IDX
+JOIN 
+    USERS U ON
+	DT.USER_IDX = U.IDX
+WHERE
+	DT.DONATION_IDX = #donationIdx
+ORDER BY
+	DT.CREATED_AT DESC;
+</select>
+
 </mapper>
