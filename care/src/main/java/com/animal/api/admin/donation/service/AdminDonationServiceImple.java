@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.animal.api.admin.donation.mapper.AdminDonationMapper;
 import com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
+import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
 import com.animal.api.common.util.FileManager;
 
 @Service
@@ -24,13 +25,13 @@ public class AdminDonationServiceImple implements AdminDonationService {
 	private FileManager fileManager;
 
 	@Override
-	public List<AdminAllDonationResponseDTO> getAdminDonationList(int listSize, int cp, int idx) {
+	public List<AdminAllDonationResponseDTO> getAdminDonationList(int listSize, int cp) {
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
 		map.put("cp", cp);
-		map.put("idx", idx);
+
 
 		List<AdminAllDonationResponseDTO> donationList = mapper.getAdminDonationList(map);
 
@@ -57,6 +58,20 @@ public class AdminDonationServiceImple implements AdminDonationService {
 			}
 		}
 		return dto;
+	}
+	
+	@Override
+	public List<AdminDonationUserResponseDTO> getAdminDonationUser(int listSize, int cp, int idx) {
+		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		map.put("idx", idx);
+		
+		List<AdminDonationUserResponseDTO> userList = mapper.getAdminDonationUser(map);
+		
+		return userList;
 	}
 
 }
