@@ -28,4 +28,6 @@ public interface UserBoardMapper {
 	public int updateBoard(BoardUpdateRequestDTO dto);
 
 	public Integer checkMyBoard(int idx);
+
+	public int deleteBoard(int idx);
 }

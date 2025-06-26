@@ -78,7 +78,10 @@ public class UserBoardServiceImple implements UserBoardService {
 			return UPLOAD_SUCCESS;
 
 		} else {
+
+			mapper.deleteBoard(idx);
 			return ERROR;
+
 		}
 	}
 
@@ -107,10 +110,29 @@ public class UserBoardServiceImple implements UserBoardService {
 		}
 
 		int result = mapper.updateBoard(dto);
-		BoardDetailResponseDTO boardDetail = mapper.getBoardDetail(dto.getIdx());
 
 		if (result > 0) {
 			return POST_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
+
+	@Override
+	public int deleteBoard(int idx, int userIdx) {
+		Integer userIdx2 = mapper.checkMyBoard(idx);// 글 작성자 userIdx 확인
+
+		if (userIdx2 == null) { // 글 작성 여부 검증
+			return BOARD_NOT_FOUND;
+		} else if (userIdx != userIdx2) { // 본인 글 검증
+			return NOT_OWNED_BOARD;
+		}
+
+		int result = mapper.deleteBoard(idx);
+
+		if (result > 0) {
+			fileManager.deleteFolder("boards", idx);
+			return DELETE_SUCCESS;
 		} else {
 			return ERROR;
 		}
