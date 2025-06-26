@@ -88,15 +88,13 @@ public class AdminDonationController {
 		LoginResponseDTO loginAdmin = shelterUserCheck(session); // 로그인 여부, 관리자 회원 검증
 		int userIdx = loginAdmin.getIdx();
 		
-		AdminAllDonationResponseDTO dto = adminDonationService.getAdminDonationDetail(idx);
+		AdminAllDonationResponseDTO dto = adminDonationService.getAdminDonationDetail(idx, userIdx);
 		
 		if (dto == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "데이터가 존재하지 않음"));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<AdminAllDonationResponseDTO>(200, "지원사업 상세 정보 조회 성공", dto));
 		}
-		
-
 	}
 
 	/**

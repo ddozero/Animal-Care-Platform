@@ -8,10 +8,10 @@ import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
 
 public interface AdminDonationService {
-	
+
 	public List<AdminAllDonationResponseDTO> getAdminDonationList(int listSize, int cp, int idx);
-	
+
 	public List<AdminAllDonationResponseDTO> searchAdminDonation(int listSize, int cp, String name, String status);
-	
-	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx);
+
+	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx, int userIdx);
 }

@@ -29,5 +29,6 @@ public class AdminAllDonationResponseDTO {
 	private String sponsor;
 	private String sponsorDetail;
 	private String content;
+	private String imagePath;
 
 }
