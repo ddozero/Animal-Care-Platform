@@ -184,6 +184,15 @@ WHERE
 	AND BOARD_IDX =	#{boardIdx}
 </delete>
 
+<select id="checkBoardExists" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</select>
+
 <select id="getBoardComments" parameterType="Map" resultType="com.animal.api.board.model.response.AllBoardCommentsResponseDTO">
 SELECT
 	BC.IDX,

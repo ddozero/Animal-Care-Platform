@@ -51,5 +51,7 @@ public interface UserBoardService {
 
 	public int deleteBoardHeart(int userIdx, int boardIdx);
 
+	public Integer checkBoardExists(int idx);
+
 	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp);
 }

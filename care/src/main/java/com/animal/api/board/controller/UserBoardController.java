@@ -312,7 +312,12 @@ public class UserBoardController {
 	public ResponseEntity<?> getBoardComments(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
 		int listSize = 3;
-		List<AllBoardCommentsResponseDTO> commentList = service.getBoardComments(idx, listSize, cp);
+		Integer boardIdx = service.checkBoardExists(idx);
+		if (boardIdx == null || boardIdx == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글 데이터가 존재하지않음"));
+		}
+
+		List<AllBoardCommentsResponseDTO> commentList = service.getBoardComments(boardIdx, listSize, cp);
 
 		if (commentList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));

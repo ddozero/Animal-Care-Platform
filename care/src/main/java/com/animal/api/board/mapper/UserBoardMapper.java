@@ -38,5 +38,7 @@ public interface UserBoardMapper {
 
 	public int deleteBoardHeart(Map map);
 
+	public Integer checkBoardExists(int idx);
+
 	public List<AllBoardCommentsResponseDTO> getBoardComments(Map map);
 }
