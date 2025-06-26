@@ -5,7 +5,7 @@
   
 <mapper namespace="com.animal.api.admin.donation.mapper.AdminDonationMapper">
 
-<select id="getAdminDonationLists" parameterType="Map" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
+<select id="getAdminDonationList" parameterType="Map" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
 SELECT
 	D.IDX,
 	D.NAME,
