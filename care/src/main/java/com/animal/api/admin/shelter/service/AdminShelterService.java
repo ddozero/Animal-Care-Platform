@@ -10,6 +10,7 @@ public interface AdminShelterService {
 	static int NOT_REQUEST = 2;
 	static int APPROVED = 3;
 	static int WITHDRAWN = 4;
+	static int NOT_ERROR = 5;
 	static int ERROR = -1;
 
 	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(int listSize, int cp);
@@ -17,4 +18,6 @@ public interface AdminShelterService {
 	public ShelterJoinRequestListResponseDTO getShelterJoinRequestDetail(int idx);
 
 	public int updateShelterJoinRequestStatus(int idx);
+
+	public int ShelterJoinRejection(int idx);
 }
