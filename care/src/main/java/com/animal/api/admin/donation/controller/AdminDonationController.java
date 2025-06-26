@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,18 +20,19 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 
 @RestController
-@RequestMapping("api/admin/donation")
+@RequestMapping("/api/admin/donations")
 public class AdminDonationController {
 
 	@Autowired
 	private AdminDonationService adminDonationService;
-
+	
+	@GetMapping
 	public ResponseEntity<?> getAdminDonationList(@RequestParam(value = "cp", defaultValue = "") int cp,
 			HttpSession session) {
 
-		LoginResponseDTO loginUser = shelterUserCheck(session); // 로그인 여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = shelterUserCheck(session); // 로그인 여부, 관리자 회원 검증
 
-		int userIdx = loginUser.getIdx();
+		int userIdx = loginAdmin.getIdx();
 
 		int listSize = 5;
 		if (cp == 0) {
@@ -61,16 +63,16 @@ public class AdminDonationController {
 	 * @return 관리자 계정으로 로그인 확인
 	 */
 	public LoginResponseDTO shelterUserCheck(HttpSession session) {
-		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
 
-		if (loginUser == null) {
+		if (loginAdmin == null) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 후 이용가능");
 		}
-		if (loginUser.getUserTypeIdx() != 3) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "보호소 사용자만 접근 가능");
+		if (loginAdmin.getUserTypeIdx() != 3) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "관리자 회원만 접근 가능");
 		}
 
-		return loginUser;
+		return loginAdmin;
 	}
 
 }
