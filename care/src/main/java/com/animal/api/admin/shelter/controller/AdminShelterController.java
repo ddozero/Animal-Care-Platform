@@ -32,8 +32,13 @@ import com.animal.api.volunteers.service.UserVolunteersService;
  * 사이트 관리자 페이지 내의 보호시설 관리 페이지 컨트롤러
  * 
  * @author Rege-97
- * @since 2025-06-25
+ * @since 2025-06-26
+ * @see com.animal.api.animal.model.response.AnimalDetailResponseDTO
  * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterDetailResponseDTO
+ * @see com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO
+ * @see com.animal.api.volunteers.model.response.AllVolunteersResponseDTO
  */
 @RestController
 @RequestMapping("/api/admin/shelters")
