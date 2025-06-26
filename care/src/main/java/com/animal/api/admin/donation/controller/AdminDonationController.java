@@ -107,9 +107,18 @@ public class AdminDonationController {
 		}
 	}
 
+	/**
+	 * 사이트 관리자 페이지 지원사업 후원자 목록 조회 메서드
+	 * 
+	 * @param idx     지원사업 번호
+	 * @param cp      현재 페이지
+	 * @param session 로그인 검증 세션
+	 * 	
+	 * @return 지원사업 후원자 목록 조회
+	 */
 	@GetMapping("{idx}/user")
-	public ResponseEntity<?> getAdminDonationUser(@PathVariable int idx, @RequestParam(value = "cp", defaultValue = "0") int cp,
-			HttpSession session) {
+	public ResponseEntity<?> getAdminDonationUser(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp, HttpSession session) {
 
 		LoginResponseDTO loginAdmin = shelterUserCheck(session); // 로그인 여부, 관리자 회원 검증
 
