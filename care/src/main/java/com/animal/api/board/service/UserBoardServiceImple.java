@@ -137,4 +137,62 @@ public class UserBoardServiceImple implements UserBoardService {
 			return ERROR;
 		}
 	}
+
+	@Override
+	public int checkMyHeart(int userIdx, int boardIdx) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("userIdx", userIdx);
+		map.put("boardIdx", boardIdx);
+
+		Integer result = mapper.checkMyHeart(map);
+
+		if (result == null || result == 0) {
+			return HEART_NOT_FOUND;
+		} else {
+			return ALREADY_HEART;
+		}
+	}
+
+	@Override
+	public int addBoardHeart(int userIdx, int boardIdx) {
+
+		if (userIdx < 1) {
+			return IDX_NOT_FOUND;
+		} else if (boardIdx < 1) {
+			return BOARD_NOT_FOUND;
+		}
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("userIdx", userIdx);
+		map.put("boardIdx", boardIdx);
+
+		int result = mapper.addBoardHeart(map);
+
+		if (result > 0) {
+			return HEART_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
+
+	@Override
+	public int deleteBoardHeart(int userIdx, int boardIdx) {
+		if (userIdx < 1) {
+			return IDX_NOT_FOUND;
+		} else if (boardIdx < 1) {
+			return BOARD_NOT_FOUND;
+		}
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("userIdx", userIdx);
+		map.put("boardIdx", boardIdx);
+
+		int result = mapper.deleteBoardHeart(map);
+
+		if (result > 0) {
+			return DELETE_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
 }

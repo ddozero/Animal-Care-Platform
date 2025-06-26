@@ -157,4 +157,30 @@ FROM
 WHERE
 	IDX = #{idx}
 </delete>
+
+<select id="checkMyHeart" parameterType="Map" resultType="Integer">
+SELECT 
+	COUNT(*)
+FROM
+	BOARD_LIKES
+WHERE 
+	USER_IDX = #{userIdx}
+	AND BOARD_IDX = #{boardIdx}
+</select>
+
+<insert id="addBoardHeart" parameterType="Map">
+INSERT
+	INTO
+	BOARD_LIKES(USER_IDX, BOARD_IDX, IS_LIKE)
+VALUES(#{userIdx}, #{boardIdx}, 1)
+</insert>
+
+<delete id="deleteBoardHeart" parameterType="Map">
+DELETE
+FROM
+	BOARD_LIKES
+WHERE
+	USER_IDX = #{userIdx}
+	AND BOARD_IDX =	#{boardIdx}
+</delete>
 </mapper>

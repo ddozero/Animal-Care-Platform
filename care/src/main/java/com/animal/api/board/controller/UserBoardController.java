@@ -204,4 +204,98 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시판 글 삭제 실패"));
 		}
 	}
+
+	/**
+	 * 게시판 상세 정보 조회(로그인후)
+	 * 
+	 * @param idx     게시판 번호
+	 * @param session 로그인 검증용
+	 * @return 게시판 상세조회 성공/실패 메세지,성공시 좋아요 여부
+	 */
+	@GetMapping("/{idx}/auth")
+	public ResponseEntity<?> getBoardDetailAuth(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		int result = service.checkMyHeart(loginUser.getIdx(), idx);
+		BoardDetailResponseDTO boardDetail = service.getBoardDetail(idx);
+
+		if (boardDetail == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시판 상세 데이터가 존재하지않음"));
+		} else {
+			if (result == service.HEART_NOT_FOUND) {
+				boardDetail.setHeart(false);
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new OkResponseDTO<BoardDetailResponseDTO>(200, "게시판 상세 조회 성공", boardDetail));
+			} else {
+				boardDetail.setHeart(true);
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new OkResponseDTO<BoardDetailResponseDTO>(200, "게시판 상세 조회 성공", boardDetail));
+			}
+		}
+
+	}
+
+	/**
+	 * 게시글 좋아요 기능
+	 * 
+	 * @param idx     게시판 번호
+	 * @param session 로그인 검증용
+	 * @return 실패/성공 메세지
+	 */
+	@PostMapping("/{idx}/hearts")
+	public ResponseEntity<?> addBoardHeart(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+		int result = service.checkMyHeart(loginUser.getIdx(), idx);
+		if (result != service.HEART_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "이미 좋아요 한 게시글 입니다."));
+		}
+
+		int result2 = service.addBoardHeart(loginUser.getIdx(), idx);
+
+		if (result2 == service.HEART_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "좋아요 성공", null));
+		} else if (result2 == service.IDX_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "회원 번호가 존재하지않음"));
+		} else if (result2 == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시판 번호가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근:좋아요 실패"));
+		}
+	}
+
+	/**
+	 * 게시글 좋아요 취소 기능
+	 * 
+	 * @param idx     게시글 번호
+	 * @param session 로그인 검증용
+	 * @return 실패/성공 메세지
+	 */
+	@DeleteMapping("/{idx}/hearts")
+	public ResponseEntity<?> deleteBoardHeart(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+		int result = service.checkMyHeart(loginUser.getIdx(), idx);
+		if (result != service.ALREADY_HEART) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "이미 좋아요 취소한 게시글 입니다."));
+		}
+
+		int result2 = service.deleteBoardHeart(loginUser.getIdx(), idx);
+		if (result2 == service.DELETE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "좋아요 삭제 성공", null));
+		} else if (result2 == service.IDX_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "회원 번호가 존재하지않음"));
+		} else if (result2 == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시판 번호가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근:좋아요 삭제 실패"));
+		}
+	}
 }
