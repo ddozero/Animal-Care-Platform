@@ -27,7 +27,8 @@ public class AllVolunteersResponseDTO {
 	private Timestamp createdAt;
 	private String type;
 	private String status;
-	private String sheelter;
+	private int userIdx;
+	private String shelter;
 	private String shelterType;
 
 }
