@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.exception.CustomException;
 import com.animal.api.auth.model.vo.ShelterVO;
 import com.animal.api.auth.model.vo.UserVO;
+import com.animal.api.common.util.FileManager;
 import com.animal.api.signup.mapper.SignupMapper;
 import com.animal.api.signup.model.request.ShelterSignupRequestDTO;
 
@@ -23,11 +25,14 @@ public class ShelterSignupServiceImple implements ShelterSignupService {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private FileManager fileManager;
 
 	//보호시설 사용자 회원가입 Service
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void signupShelter(ShelterSignupRequestDTO dto) {
+	public void signupShelter(ShelterSignupRequestDTO dto, MultipartFile businessFile) {
 
 	    // 1. [USERS] 관련 유효성 검사
 	    if (signupMapper.isDuplicateId(dto.getId()) > 0) {
@@ -58,7 +63,7 @@ public class ShelterSignupServiceImple implements ShelterSignupService {
 	    		if(dto.getShelterBusinessNumber() == null || dto.getShelterBusinessNumber().isBlank()) {
 	    			throw new CustomException(400, "민간 보호소는 사업자 등록 번호가 필요합니다.");
 	    		}
-	    		if(dto.getShelterBusinessFile() == null) {
+	    		if(businessFile == null || businessFile.isEmpty()) {
 	    			throw new CustomException(400, "민간 보호소는 사업자등록증 파일이 필요합니다.");
 	    		}
 	    		break;
@@ -108,7 +113,14 @@ public class ShelterSignupServiceImple implements ShelterSignupService {
 	        shelter.setShelterBusinessNumber(dto.getShelterBusinessNumber());
 	    } else if (dto.getShelterTypeIdx() == 2) { // 민간 사업자 유
 	        shelter.setShelterBusinessNumber(dto.getShelterBusinessNumber());
-	        shelter.setShelterBusinessFile(dto.getShelterBusinessFile());
+	        //파일 업로드
+	        boolean uploaded = fileManager.uploadFiles("shelters", user.getIdx(), new MultipartFile[] { businessFile });
+	        
+	        if(!uploaded) {
+	        	throw new CustomException(500, "파일 업로드에 실패했습니다.");
+	        }
+	        // DB 파일 첨부 여부 컬럼 지정
+	        shelter.setShelterBusinessFile(1);
 	    }
 
 	    // 5. SHELTERS 테이블 insert

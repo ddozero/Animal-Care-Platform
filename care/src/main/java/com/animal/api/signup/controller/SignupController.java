@@ -7,13 +7,17 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.common.aop.email.RequireEmailVerified;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.util.FileManager;
 import com.animal.api.signup.model.request.ShelterSignupRequestDTO;
 import com.animal.api.signup.model.request.UserSignupRequestDTO;
 import com.animal.api.signup.service.ShelterSignupService;
@@ -62,17 +66,20 @@ public class SignupController {
 	}
 	/**
 	 * 보호시설 사용자 회원가입 메서드
+	 * 
 	 * @param ShelterSignupRequestDTO 회원가입 폼
 	 * @Valid ShelterSignupRequestDTO 유효성 검사
+	 * @MultipartFile 민간보호소의 경우 사업자등록증 첨부파일 업로드 
 	 * @RequireEmailVerified 메서드 실행 전 AOP 실행 
 	 * @return 회원가입 요청 완료 
 	 */
     // 보호소 회원가입
     @PostMapping("/shelter")
     @RequireEmailVerified
-    public ResponseEntity<OkResponseDTO<String>> signupShelter(@Valid @RequestBody ShelterSignupRequestDTO dto, HttpServletRequest request) {
+    public ResponseEntity<OkResponseDTO<String>> signupShelter(@Valid @ModelAttribute ShelterSignupRequestDTO dto, 
+    		HttpServletRequest request, @RequestPart(value = "businessFile", required = false) MultipartFile businessFile) {
     	
-        signupService.signupShelter(dto);
+        signupService.signupShelter(dto, businessFile);
         
 		//인증 완료 후 세션 정리
 		HttpSession session = request.getSession(false);
