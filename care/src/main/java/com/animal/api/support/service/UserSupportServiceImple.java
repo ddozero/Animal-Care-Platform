@@ -47,16 +47,18 @@ public class UserSupportServiceImple implements UserSupportService {
 			return null;
 		}
 
-		int result = mapper.updateNoticeViews(idx);
-
-		if (result > 0) {
-			dto.setFilePaths(fileManager.getFilePath("boards", idx));
-		}
+		dto.setFilePaths(fileManager.getFilePath("boards", idx));
 
 		if (dto != null && dto.getContent() != null) {
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		}
 		return dto;
+	}
+
+	@Override
+	public int addNoticeViewCount(int idx) { // 게시판 조회수
+		int count = mapper.updateNoticeViews(idx);
+		return count;
 	}
 
 	@Override

@@ -11,5 +11,7 @@ public interface UserSupportService {
 	public UserNoticeResponseDTO getNoticeDetail(int idx);
 
 	public List<UserNoticeResponseDTO> searchAllNotice(int listSize, int cp, String title, String content);
+	
+	public int addNoticeViewCount(int idx);
 
 }
