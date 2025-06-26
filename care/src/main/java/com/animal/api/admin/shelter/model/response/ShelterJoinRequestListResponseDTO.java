@@ -22,4 +22,6 @@ public class ShelterJoinRequestListResponseDTO {
 	private String shelterAddressDetail;
 	private String shelterEmail;
 	private String shelterBusinessNumber;
+	private int status; // 0 : 요청 / 1 : 승인 / -1 : 탈퇴
+	private String filePath;
 }

@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.animal.api.admin.shelter.mapper.AdminShelterMapper">
-<select id="getShelterJoinRequestList" resultType="com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO">
+<select id="getShelterJoinRequestList" parameterType="Map" resultType="com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO">
 SELECT
 	U.IDX,
 	U.ID,
@@ -19,7 +19,8 @@ SELECT
 	S.SHELTER_ADDRESS,
 	S.SHELTER_ADDRESS_DETAIL,
 	S.SHELTER_EMAIL,
-	S.SHELTER_BUSINESS_NUMBER
+	S.SHELTER_BUSINESS_NUMBER,
+	U.STATUS
 FROM
 	USERS U
 JOIN SHELTERS S
@@ -31,5 +32,8 @@ ON
 WHERE
 	U.STATUS = 0
 	AND U.USER_TYPE_IDX = 2
+ORDER BY
+	IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
 </select>
 </mapper>
