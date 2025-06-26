@@ -258,17 +258,21 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx) {
 
 		ShelterBoardResponseDTO dto = mapper.getShelterBoardDetail(idx, userIdx);
+		
+		if(dto == null) {
+			return null;
+		}
+		
+		mapper.updateBoardViews(idx);
+		dto.setFilePaths(fileManager.getFilePath("boards", idx));
+		
+		
 		if (dto != null && dto.getContent() != null) {
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		}
 		return dto;
 	}
 
-	@Override
-	public int addBoardViewCount(int idx) {
-		int count = mapper.updateBoardViews(idx);
-		return count;
-	}
 
 	@Override
 	public int addShelterBoard(ShelterBoardRequestDTO dto, int userIdx) {

@@ -31,8 +31,8 @@ public class UserSupportController {
 	private UserSupportService supportService;
 
 	/**
-	 * @param cp 현재 페이지 번호
-	 * @param title 사용자가 검색시 입력한 제목
+	 * @param cp      현재 페이지 번호
+	 * @param title   사용자가 검색시 입력한 제목
 	 * @param content 사용자가 검색시 입력한 내용
 	 * 
 	 * @return 사용자에게 보여줄 고객지원 페이지의 공지사항 목록
@@ -67,17 +67,17 @@ public class UserSupportController {
 					.body(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList));
 		}
 	}
-	
+
 	/**
 	 * 사용자 고객지원 페이지의 공지사항 상세내용을 조회하는 메서드
+	 * 
 	 * @param idx 공지사항 관리번호
 	 * @return 사용자에게 보여줄 공지사항 상세내용
 	 */
 
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getNoticeDetail(@PathVariable int idx) {
-		
-		int result = supportService.addNoticeViewCount(idx);
+
 		UserNoticeResponseDTO dto = supportService.getNoticeDetail(idx);
 
 		if (dto == null) {
@@ -86,5 +86,7 @@ public class UserSupportController {
 			return ResponseEntity.ok(new OkResponseDTO<UserNoticeResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}
 	}
+	
+	
 
 }
