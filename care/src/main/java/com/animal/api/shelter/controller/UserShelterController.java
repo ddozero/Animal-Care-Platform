@@ -24,12 +24,14 @@ import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
 import com.animal.api.shelter.service.UserShelterService;
+import com.animal.api.volunteers.model.response.AllVolunteersResponseDTO;
+import com.animal.api.volunteers.service.UserVolunteersService;
 
 /**
  * 사용자 기준 보호시설 관련 컨트롤러 클래스
  * 
  * @author Rege-97
- * @since 2025-06-25
+ * @since 2025-06-26
  * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO
@@ -48,6 +50,8 @@ public class UserShelterController {
 	private UserShelterService userShelterService;
 	@Autowired
 	private UserAnimalService userAnimalService;
+	@Autowired
+	private UserVolunteersService userVolunteerService;
 
 	/**
 	 * 보호시설 조회 메서드
@@ -120,6 +124,27 @@ public class UserShelterController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<ShelterVolunteersResponseDTO>>(200, "조회 성공", volunteerList));
+		}
+	}
+
+	/**
+	 * 보호시설의 상세정보에서 봉사의 상세 정보를 조회하는 메서드
+	 * 
+	 * @param shelterIdx   보호시설의 idx
+	 * @param volunteeIidx 봉사 번호
+	 * @return 봉사 상세 정보
+	 */
+
+	@GetMapping("/{shelterIdx}/volunteers/{volunteerIdx}")
+	public ResponseEntity<?> getVolunteersDetail(@PathVariable int shelterIdx, @PathVariable int volunteerIdx) {
+		AllVolunteersResponseDTO dto = userVolunteerService.getVolunteersDetail(volunteerIdx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 봉사가 존재하지 않습니다."));
+		} else if (dto.getUserIdx() != shelterIdx) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 봉사가 아닙니다."));
+		} else {
+			return ResponseEntity.ok(new OkResponseDTO<AllVolunteersResponseDTO>(200, "봉사 상세정보 조회 성공", dto));
 		}
 	}
 
