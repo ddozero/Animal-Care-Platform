@@ -19,8 +19,18 @@ import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 
+/**
+ * 사이트 관리자 페이지의 게시글 관련 기능 클래스
+ * 
+ * @author ddozero
+ * @since 2025-06-26
+ * @see com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO
+ * 
+ */
+
 @RestController
 @RequestMapping("/api/admin/donations")
+
 public class AdminDonationController {
 
 	@Autowired
