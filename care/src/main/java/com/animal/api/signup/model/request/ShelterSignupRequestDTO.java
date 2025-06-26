@@ -99,6 +99,5 @@ public class ShelterSignupRequestDTO {
     // 조건 분기
     private String shelterEmail; // 공공(1)
     private String shelterBusinessNumber; // 공공(1), 민간유(2)
-    private Integer shelterBusinessFile;  // 공공(1),민간유(2)
 	
 }
