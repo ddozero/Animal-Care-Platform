@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -389,6 +390,32 @@ public class AdminShelterController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<ShelterJoinRequestListResponseDTO>(200, "조회 성공", dto));
+		}
+	}
+
+	@PutMapping("/requests/{idx}")
+	public ResponseEntity<?> updateShelterJoinRequestStatus(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		int result = adminShelterService.updateShelterJoinRequestStatus(idx);
+		if (result == adminShelterService.NOT_REQUEST) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 신청이 존재하지 않습니다."));
+		} else if (result == adminShelterService.APPROVED) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미 승인된 계정입니다."));
+		} else if (result == adminShelterService.WITHDRAWN) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "탈퇴한 계정입니다."));
+		} else if (result == adminShelterService.UPDATE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "상태 변경 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "상태 변경 실패"));
 		}
 	}
 
