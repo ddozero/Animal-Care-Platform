@@ -7,4 +7,6 @@ import com.animal.api.admin.shelter.model.response.ShelterJoinRequestListRespons
 public interface AdminShelterService {
 
 	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(int listSize, int cp);
+	
+	public ShelterJoinRequestListResponseDTO getShelterJoinRequestDetail(int idx);
 }

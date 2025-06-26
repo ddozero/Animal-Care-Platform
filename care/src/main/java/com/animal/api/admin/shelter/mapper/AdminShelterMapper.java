@@ -11,4 +11,6 @@ import com.animal.api.admin.shelter.model.response.ShelterJoinRequestListRespons
 public interface AdminShelterMapper {
 
 	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(Map map);
+
+	public ShelterJoinRequestListResponseDTO getShelterJoinRequestDetail(int idx);
 }

@@ -351,4 +351,30 @@ public class AdminShelterController {
 		}
 	}
 
+	@GetMapping("/requests/{idx}")
+	public ResponseEntity<?> getShelterJoinRequestDetail(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		ShelterJoinRequestListResponseDTO dto = adminShelterService.getShelterJoinRequestDetail(idx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 신청이 존재하지 않습니다."));
+		} else if (dto.getStatus() == 1) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미 승인된 계정입니다."));
+		} else if (dto.getStatus() == -1) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "탈퇴한 계정입니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<ShelterJoinRequestListResponseDTO>(200, "조회 성공", dto));
+		}
+	}
+
 }

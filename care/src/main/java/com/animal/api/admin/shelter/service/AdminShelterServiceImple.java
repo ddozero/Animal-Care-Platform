@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.animal.api.admin.shelter.mapper.AdminShelterMapper;
 import com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO;
-import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.common.util.FileManager;
 
 @Service
@@ -37,9 +36,24 @@ public class AdminShelterServiceImple implements AdminShelterService {
 
 		if (requestList != null) {
 			for (ShelterJoinRequestListResponseDTO dto : requestList) {
-				dto.setFilePath(fileManager.getFilePath("users", dto.getIdx()).get(0));
+				List<String> filePaths = fileManager.getFilePath("users", dto.getIdx());
+				if (filePaths != null || filePaths.size() != 0) {
+					dto.setFilePath(filePaths.get(0));
+				}
 			}
 		}
 		return requestList;
+	}
+
+	@Override
+	public ShelterJoinRequestListResponseDTO getShelterJoinRequestDetail(int idx) {
+		ShelterJoinRequestListResponseDTO dto = mapper.getShelterJoinRequestDetail(idx);
+		if (dto != null) {
+			List<String> filePaths = fileManager.getFilePath("users", dto.getIdx());
+			if (filePaths != null || filePaths.size() != 0) {
+				dto.setFilePath(filePaths.get(0));
+			}
+		}
+		return dto;
 	}
 }
