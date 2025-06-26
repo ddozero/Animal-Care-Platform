@@ -20,7 +20,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 
 /**
- * 사이트 관리자 페이지의 게시글 관련 기능 클래스
+ * 사이트 관리자 페이지의 지원사업 관련 기능 클래스
  * 
  * @author ddozero
  * @since 2025-06-26
@@ -35,11 +35,11 @@ public class AdminDonationController {
 
 	@Autowired
 	private AdminDonationService adminDonationService;
-	
+
 	/**
-	 * 사이트 관리 페이지 지원사업 목록 조회
+	 * 사이트 관리 페이지 지원사업 목록 조회 메서드
 	 * 
-	 * @param cp 현재 페이지
+	 * @param cp      현재 페이지
 	 * @param session 로그인 검증 세션
 	 * 
 	 * @return 조회된 지원사업 목록
@@ -70,7 +70,6 @@ public class AdminDonationController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<AdminAllDonationResponseDTO>>(200, "게시판 조회 성공", donationLists));
 		}
-
 	}
 
 	/**
