@@ -3,9 +3,11 @@ package com.animal.api.animal.service;
 import java.util.List;
 
 import com.animal.api.animal.model.request.AdoptionSubmitReqestDTO;
+import com.animal.api.animal.model.request.SearchConditionsRequestDTO;
 import com.animal.api.animal.model.response.AdoptionAnimalResponseDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 
 public interface UserAnimalService {
 
@@ -14,9 +16,14 @@ public interface UserAnimalService {
 	static int RESERVATION_UNAVAILABLE = 0; // 예약 불가능
 	static int RESERVATION_FAILD = -1; // 에러
 
-	public List<AllAnimalListResponseDTO> getAllAnimals(int listSize, int cp);
+	public List<AllAnimalListResponseDTO> getAllAnimals(int cp);
+	
+	public PageInformationDTO getAllAnimalsPageInfo(int cp);
 
-	public List<AllAnimalListResponseDTO> searchAnimals(int listSize, int cp, String type, String breed, String gender,
+	public List<AllAnimalListResponseDTO> searchAnimals(int cp, String type, String breed, String gender,
+			int neuter, int age, String adoptionStatus, String personality, int size, String name);
+	
+	public PageInformationDTO searchAnimalsPageInfo(int cp, String type, String breed, String gender,
 			int neuter, int age, String adoptionStatus, String personality, int size, String name);
 
 	public AnimalDetailResponseDTO getAnimalDetail(int idx);
