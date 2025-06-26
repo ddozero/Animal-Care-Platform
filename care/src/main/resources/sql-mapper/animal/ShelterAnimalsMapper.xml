@@ -107,6 +107,24 @@ ORDER BY
 	AC.IDX DESC
 LIMIT #{listSize} OFFSET #{cp}
 </select>
+<select id="getAdoptionConsultListTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
+JOIN USERS U 
+ON
+	AC.USER_IDX = U.IDX
+JOIN ADOPTION_CONSULT_STATUS ACS 
+ON
+	AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+WHERE
+	A.USER_IDX = #{idx}
+</select>
+
 <select id="getAdoptionConsultDetail" parameterType="int" resultType="com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO">
 SELECT
 	AC.IDX,

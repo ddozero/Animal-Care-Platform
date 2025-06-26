@@ -25,7 +25,9 @@ import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
@@ -97,16 +99,18 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int listSize = 3;
-
 		List<ShelterAnimalsResponseDTO> animalList = null;
+		PageInformationDTO pageInfo = null;
 
 		if (type != null || breed != null || gender != null || neuter != 0 || age != 0 || adoptionStatus != null
 				|| personality != null || size != 0 || name != null) {
-			animalList = userShelterService.searchShelterAnimals(loginUser.getIdx(), listSize, cp, type, breed, gender,
+			animalList = userShelterService.searchShelterAnimals(loginUser.getIdx(), cp, type, breed, gender, neuter,
+					age, adoptionStatus, personality, size, name);
+			pageInfo = userShelterService.searchShelterAnimalsPageInfo(loginUser.getIdx(), cp, type, breed, gender,
 					neuter, age, adoptionStatus, personality, size, name);
 		} else {
-			animalList = userShelterService.getAllShelterAnimals(listSize, cp, loginUser.getIdx());
+			animalList = userShelterService.getAllShelterAnimals(cp, loginUser.getIdx());
+			pageInfo = userShelterService.getAllShelterAnimalsPageInfo(cp, loginUser.getIdx());
 		}
 
 		if (animalList == null) {
@@ -115,7 +119,7 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList));
+					.body(new OkPageResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList, pageInfo));
 		}
 	}
 
@@ -316,18 +320,17 @@ public class ShelterAnimalsController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		int listSize = 3;
-
 		List<AdoptionConsultListResponseDTO> consultList = shelterAnimalsService
-				.getAdoptionConsultList(loginUser.getIdx(), listSize, cp);
+				.getAdoptionConsultList(loginUser.getIdx(), cp);
+		PageInformationDTO pageInfo = shelterAnimalsService.getAdoptionConsultListPageInfo(loginUser.getIdx(), cp);
 
 		if (consultList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청 입니다."));
 		} else if (consultList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AdoptionConsultListResponseDTO>>(200, "조회 성공", consultList));
+			return ResponseEntity.status(HttpStatus.OK).body(
+					new OkPageResponseDTO<List<AdoptionConsultListResponseDTO>>(200, "조회 성공", consultList, pageInfo));
 		}
 	}
 
