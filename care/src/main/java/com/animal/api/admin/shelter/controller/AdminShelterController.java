@@ -3,6 +3,7 @@ package com.animal.api.admin.shelter.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,10 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.admin.shelter.model.request.JoinRejectionMailRequestDTO;
 import com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO;
 import com.animal.api.admin.shelter.service.AdminShelterService;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
@@ -21,6 +26,7 @@ import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.email.service.EmailService;
 import com.animal.api.management.animal.service.ShelterAnimalsService;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
@@ -42,6 +48,7 @@ import com.animal.api.volunteers.service.UserVolunteersService;
  * @see com.animal.api.shelter.model.response.ShelterDetailResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO
  * @see com.animal.api.volunteers.model.response.AllVolunteersResponseDTO
+ * @see com.animal.api.volunteers.model.request.JoinRejectionMailRequestDTO
  */
 @RestController
 @RequestMapping("/api/admin/shelters")
@@ -57,6 +64,8 @@ public class AdminShelterController {
 	private UserVolunteersService userVolunteerService;
 	@Autowired
 	private AdminShelterService adminShelterService;
+	@Autowired
+	private EmailService emailService;
 
 	/**
 	 * 사이트 관리자 페이지의 보호시설 조회 및 검색 메서드
@@ -389,6 +398,74 @@ public class AdminShelterController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<ShelterJoinRequestListResponseDTO>(200, "조회 성공", dto));
+		}
+	}
+
+	/**
+	 * 사이트 관리 페이지에서 보호시설 가입 승인 메서드
+	 * 
+	 * @param idx     회원 번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
+	@PutMapping("/requests/{idx}")
+	public ResponseEntity<?> updateShelterJoinRequestStatus(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		int result = adminShelterService.updateShelterJoinRequestStatus(idx);
+		if (result == adminShelterService.NOT_REQUEST) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 신청이 존재하지 않습니다."));
+		} else if (result == adminShelterService.APPROVED) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미 승인된 계정입니다."));
+		} else if (result == adminShelterService.WITHDRAWN) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "탈퇴한 계정입니다."));
+		} else if (result == adminShelterService.UPDATE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "상태 변경 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "상태 변경 실패"));
+		}
+	}
+
+	/**
+	 * 사이트 관리 페이지에서 보호시설의 가입 승인을 거절할 때 사유를 이메일로 보내는 메서드
+	 * 
+	 * @param idx     회원번호
+	 * @param dto     이메일 입력 폼 데이터
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 이메일 전송 성공 메세지
+	 */
+	@PostMapping("/requests/{idx}")
+	public ResponseEntity<?> ShelterJoinRejection(@PathVariable int idx,
+			@Valid @RequestBody JoinRejectionMailRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		int result = adminShelterService.ShelterJoinRejection(idx);
+
+		if (result == adminShelterService.NOT_REQUEST) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 신청이 존재하지 않습니다."));
+		} else if (result == adminShelterService.APPROVED) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미 승인된 계정입니다."));
+		} else if (result == adminShelterService.WITHDRAWN) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "탈퇴한 계정입니다."));
+		} else {
+			emailService.sendEmail(dto.getTo(), dto.getSubject(), dto.getText());
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "메일 발송 성공", null));
 		}
 	}
 

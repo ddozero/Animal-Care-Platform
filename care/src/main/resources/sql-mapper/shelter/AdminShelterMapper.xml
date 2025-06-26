@@ -67,4 +67,21 @@ WHERE
 	U.USER_TYPE_IDX = 2
 	AND U.IDX = #{idx}
 </select>
+<select id="checkJoinStatus" parameterType="int" resultType="Integer">
+SELECT
+	STATUS
+FROM
+	USERS
+WHERE
+	IDX = #{idx}
+	AND USER_TYPE_IDX = 2
+</select>
+<update id="updateShelterJoinRequestStatus" parameterType="int">
+UPDATE
+	USERS
+SET
+	STATUS = 1
+WHERE
+	IDX = #{idx}
+</update>
 </mapper>

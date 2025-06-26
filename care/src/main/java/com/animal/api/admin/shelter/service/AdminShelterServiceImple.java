@@ -56,4 +56,36 @@ public class AdminShelterServiceImple implements AdminShelterService {
 		}
 		return dto;
 	}
+
+	@Override
+	public int updateShelterJoinRequestStatus(int idx) {
+		Integer checkStatus = mapper.checkJoinStatus(idx);
+
+		if (checkStatus == null) {
+			return NOT_REQUEST;
+		} else if (checkStatus == 1) {
+			return APPROVED;
+		} else if (checkStatus == -1) {
+			return WITHDRAWN;
+		}
+
+		int result = mapper.updateShelterJoinRequestStatus(idx);
+
+		return result > 0 ? UPDATE_SUCCESS : ERROR;
+	}
+
+	@Override
+	public int ShelterJoinRejection(int idx) {
+		Integer checkStatus = mapper.checkJoinStatus(idx);
+
+		if (checkStatus == null) {
+			return NOT_REQUEST;
+		} else if (checkStatus == 1) {
+			return APPROVED;
+		} else if (checkStatus == -1) {
+			return WITHDRAWN;
+		}
+
+		return NOT_ERROR;
+	}
 }
