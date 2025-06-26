@@ -15,7 +15,6 @@ import com.animal.api.mypage.adoption.model.entity.AdoptionReviewEntity;
 import com.animal.api.mypage.adoption.model.request.AdoptionReviewWriteRequestDTO;
 import com.animal.api.mypage.adoption.model.response.AdoptionDetailResponseDTO;
 import com.animal.api.mypage.adoption.model.response.AdoptionListResponseDTO;
-import com.animal.api.mypage.volunteers.model.response.VolunteerListResponseDTO;
 
 @Service
 @Primary

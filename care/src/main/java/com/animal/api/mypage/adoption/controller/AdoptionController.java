@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +22,6 @@ import com.animal.api.mypage.adoption.model.request.AdoptionReviewWriteRequestDT
 import com.animal.api.mypage.adoption.model.response.AdoptionDetailResponseDTO;
 import com.animal.api.mypage.adoption.model.response.AdoptionListResponseDTO;
 import com.animal.api.mypage.adoption.service.AdoptionService;
-import com.animal.api.mypage.donation.model.response.DonationListResponseDTO;
 
 /**
  * 마이페이지 - 입양 내역 관련 컨트롤러 
