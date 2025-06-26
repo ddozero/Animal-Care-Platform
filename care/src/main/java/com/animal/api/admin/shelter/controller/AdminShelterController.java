@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO;
+import com.animal.api.admin.shelter.service.AdminShelterService;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
@@ -33,6 +35,7 @@ import com.animal.api.volunteers.service.UserVolunteersService;
  * 
  * @author Rege-97
  * @since 2025-06-26
+ * @see com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO
  * @see com.animal.api.animal.model.response.AnimalDetailResponseDTO
  * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
  * @see com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO
@@ -52,6 +55,8 @@ public class AdminShelterController {
 	private ShelterAnimalsService shelterAnimalService;
 	@Autowired
 	private UserVolunteersService userVolunteerService;
+	@Autowired
+	private AdminShelterService adminShelterService;
 
 	/**
 	 * 사이트 관리자 페이지의 보호시설 조회 및 검색 메서드
@@ -318,6 +323,72 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 봉사가 아닙니다."));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<AllVolunteersResponseDTO>(200, "봉사 상세정보 조회 성공", dto));
+		}
+	}
+
+	/**
+	 * 사이트 관리 페이지에서 보호시설의 가입 승인 요청 리스트 조회
+	 * 
+	 * @param cp      현재 페이지
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 가입 승인 요청 리스트
+	 */
+	@GetMapping("/requests")
+	public ResponseEntity<?> getShelterJoinRequestList(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+		int listSize = 3;
+		List<ShelterJoinRequestListResponseDTO> requestList = adminShelterService.getShelterJoinRequestList(listSize,
+				cp);
+
+		if (requestList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+		} else if (requestList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<ShelterJoinRequestListResponseDTO>>(200, "조회 성공", requestList));
+		}
+	}
+
+	/**
+	 * 사이트 관리 페이지에서 보호시설의 가입 승인 요청 상세정보
+	 * 
+	 * @param idx     회원번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 승인 요청의 상세정보
+	 */
+	@GetMapping("/requests/{idx}")
+	public ResponseEntity<?> getShelterJoinRequestDetail(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		ShelterJoinRequestListResponseDTO dto = adminShelterService.getShelterJoinRequestDetail(idx);
+
+		if (dto == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 신청이 존재하지 않습니다."));
+		} else if (dto.getStatus() == 1) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미 승인된 계정입니다."));
+		} else if (dto.getStatus() == -1) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "탈퇴한 계정입니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<ShelterJoinRequestListResponseDTO>(200, "조회 성공", dto));
 		}
 	}
 

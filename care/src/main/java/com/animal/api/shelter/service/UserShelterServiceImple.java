@@ -41,7 +41,10 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<AllShelterListResponseDTO> shelterList = mapper.getAllShelters(map);
 		if (shelterList != null) {
 			for (AllShelterListResponseDTO dto : shelterList) {
-				dto.setImagePath(fileManager.getImagePath("shelters", dto.getIdx()).get(0));
+				List<String> imagePaths = fileManager.getImagePath("shelters", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
 			}
 		}
 		return shelterList;
@@ -57,7 +60,10 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<AllShelterListResponseDTO> shelterList = mapper.searchShelters(request);
 		if (shelterList != null) {
 			for (AllShelterListResponseDTO dto : shelterList) {
-				dto.setImagePath(fileManager.getImagePath("shelters", dto.getIdx()).get(0));
+				List<String> imagePaths = fileManager.getImagePath("shelters", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
 			}
 		}
 		return shelterList;
@@ -67,7 +73,10 @@ public class UserShelterServiceImple implements UserShelterService {
 	public ShelterDetailResponseDTO getShelterDetail(int idx) {
 		ShelterDetailResponseDTO dto = mapper.getShelterDetail(idx);
 		if (dto != null) {
-			dto.setImagePath(fileManager.getImagePath("shelters", dto.getIdx()).get(0));
+			List<String> imagePaths = fileManager.getImagePath("shelters", dto.getIdx());
+			if (imagePaths != null || imagePaths.size() != 0) {
+				dto.setImagePath(imagePaths.get(0));
+			}
 		}
 		return dto;
 	}
@@ -98,7 +107,10 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<ShelterAnimalsResponseDTO> animalList = mapper.getAllShelterAnimals(map);
 		if (animalList != null) {
 			for (ShelterAnimalsResponseDTO dto : animalList) {
-				dto.setImagePath(fileManager.getImagePath("animals", dto.getIdx()).get(0));
+				List<String> imagePaths = fileManager.getImagePath("animals", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
 			}
 		}
 		return animalList;
@@ -116,7 +128,10 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<ShelterAnimalsResponseDTO> animalList = mapper.searchShelterAnimals(request);
 		if (animalList != null) {
 			for (ShelterAnimalsResponseDTO dto : animalList) {
-				dto.setImagePath(fileManager.getImagePath("animals", dto.getIdx()).get(0));
+				List<String> imagePaths = fileManager.getImagePath("animals", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
 			}
 		}
 		return animalList;
@@ -164,7 +179,10 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<ShelterVolunteerReviewResponseDTO> reviewList = mapper.getShelterVolunteerReviews(map);
 		if (reviewList != null) {
 			for (ShelterVolunteerReviewResponseDTO dto : reviewList) {
-				dto.setImagePath(fileManager.getImagePath("volunteerReviews", dto.getIdx()).get(0));
+				List<String> imagePaths = fileManager.getImagePath("volunteerReviews", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
 			}
 		}
 		return reviewList;
@@ -182,7 +200,10 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<ShelterAdoptionReviewResponseDTO> reviewList = mapper.getShelterAdoptionReviews(map);
 		if (reviewList != null) {
 			for (ShelterAdoptionReviewResponseDTO dto : reviewList) {
-				dto.setImagePath(fileManager.getImagePath("adoptionReviews", dto.getIdx()).get(0));
+				List<String> imagePaths = fileManager.getImagePath("adoptionReviews", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
 			}
 		}
 		return reviewList;
