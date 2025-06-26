@@ -40,4 +40,6 @@ public interface UserBoardService {
 	public int updateBoard(BoardUpdateRequestDTO dto, int idx);
 
 	public int deleteBoard(int idx, int userIdx);
+
+	public int addBoardHeart(int userIdx, int boardIdx);
 }

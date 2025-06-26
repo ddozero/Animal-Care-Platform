@@ -137,4 +137,14 @@ public class UserBoardServiceImple implements UserBoardService {
 			return ERROR;
 		}
 	}
+
+	@Override
+	public int addBoardHeart(int userIdx, int boardIdx) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("userIdx", userIdx);
+		map.put("boardIdx", boardIdx);
+		int result = mapper.addBoardHeart(map);
+
+		return result;
+	}
 }
