@@ -45,5 +45,13 @@ public class AdminDonationServiceImple implements AdminDonationService {
 		
 		return donationList;
 	}
+	
+	@Override
+	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx) {
+		
+		AdminAllDonationResponseDTO donationDetail = mapper.getAdminDonationDetail(idx);
+		
+		return donationDetail;
+	}
 
 }

@@ -12,4 +12,6 @@ public interface AdminDonationService {
 	public List<AdminAllDonationResponseDTO> getAdminDonationList(int listSize, int cp, int idx);
 	
 	public List<AdminAllDonationResponseDTO> searchAdminDonation(int listSize, int cp, String name, String status);
+	
+	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx);
 }

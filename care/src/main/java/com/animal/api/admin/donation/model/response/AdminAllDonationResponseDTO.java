@@ -26,7 +26,6 @@ public class AdminAllDonationResponseDTO {
 	private Timestamp startDate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Timestamp endDate;
-	private String sponspr;
 	private String sponsor;
 	private String sponsorDetail;
 	private String content;
