@@ -5,4 +5,69 @@
   
 <mapper namespace="com.animal.api.admin.member.mapper.MemberMapper">
 
+	<select id="selectMember" resultType="com.animal.api.admin.member.model.response.MemberListResponseDTO">
+		SELECT 
+			   U.IDX AS userIdx,
+			   U.ID AS id,
+			   U.NICKNAME AS nickname,
+			   U.EMAIL AS email,
+			   U.USER_TYPE_IDX AS userType,
+			   U.STATUS AS status,
+			   DATE_FORMAT(U.CREATE_AT, '%Y-%m-%d %H:%i:%s') as createdAt,
+			   S.SHELTER_NAME AS sheltername
+		FROM USER U
+		LEFT JOIN SHELTERS S ON U.IDX = S.USER_IDX
+		<where>
+			<if test="keyword != null and keyword != '' and type != null">
+				<choose>
+					<when test="type == 'id'">
+						AND U.ID LIKE CONCAT('%", #{keyword}, '%')
+					</when>
+					<when test="type == 'nickname'">
+						AND U.NICKNAME LIKE CONCAT('%', #{keyword}, '%')
+					</when>
+					<when test="type == 'email'">
+						AND U.EMAIL LIKE CONCAT('%', #{keyword}, '%')
+					</when>
+				</choose>
+			</if>
+			
+			<if test="userType != null">
+				AND U.USER_TYPE_IDX = #{userType}
+			</if>
+			<if test="status != null">
+				AND U.STATUS = #{status}
+			</if>
+		</where>
+		ORDER BY U.IDX DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="countMember" resultType="int">
+		SELECT COUNT(*)
+		FROM USERS U
+		LEFT JOIN SHELTERS S ON U.IDX = S.USER_IDX
+		<where>
+			<if test="keyword != null and keyword != '' and type != nulll">
+				<choose>
+					<when test="type == 'id'">
+						AND U.ID LIKE CONCAT('%", #{keyword}, '%')
+					</when>
+					<when test="type == 'nickname'">
+						AND U.NICKNAME LIKE CONCAT('%', #{keyword}, '%')
+					</when>
+					<when test="type == 'email'">
+						AND U.EMAIL LIKE CONCAT('%', #{keyword}, '%')
+					</when>
+				</choose>
+				
+				<if test="userType != null">
+					AND U.USER_TYPE_IDX = #{userType}
+				</if>
+				<if test="status != null">
+					AND U.STATUS = #{status}
+				</if>
+			</if>
+		</where>
+	</select>
 </mapper>
