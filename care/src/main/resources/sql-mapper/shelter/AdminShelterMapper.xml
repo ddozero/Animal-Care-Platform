@@ -37,6 +37,22 @@ ORDER BY
 	IDX DESC
 LIMIT #{listSize} OFFSET #{cp}
 </select>
+<select id="getShelterJoinRequestListTotalCnt" parameterType="">
+SELECT
+	COUNT(*)
+FROM
+	USERS U
+JOIN SHELTERS S
+ON
+	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST 
+ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+WHERE
+	U.STATUS = 0
+	AND U.USER_TYPE_IDX = 2
+</select>
+
 <select id="getShelterJoinRequestDetail" parameterType="int" resultType="com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO">
 SELECT
 	U.IDX,

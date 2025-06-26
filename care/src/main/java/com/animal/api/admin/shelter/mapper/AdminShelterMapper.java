@@ -12,6 +12,8 @@ public interface AdminShelterMapper {
 
 	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(Map map);
 
+	public int getShelterJoinRequestListTotalCnt();
+
 	public ShelterJoinRequestListResponseDTO getShelterJoinRequestDetail(int idx);
 
 	public Integer checkJoinStatus(int idx);

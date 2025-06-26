@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.animal.api.admin.shelter.mapper.AdminShelterMapper;
 import com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 
 @Service
@@ -20,8 +21,11 @@ public class AdminShelterServiceImple implements AdminShelterService {
 	@Autowired
 	private FileManager fileManager;
 
+	private int listSize = 5;
+	private int pageSize = 5;
+
 	@Override
-	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(int listSize, int cp) {
+	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(int cp) {
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -43,6 +47,16 @@ public class AdminShelterServiceImple implements AdminShelterService {
 			}
 		}
 		return requestList;
+	}
+
+	@Override
+	public PageInformationDTO getShelterJoinRequestListPageInfo(int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getShelterJoinRequestListTotalCnt();
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
