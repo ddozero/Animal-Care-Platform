@@ -15,14 +15,18 @@ import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 public interface UserAnimalMapper {
 	public List<AllAnimalListResponseDTO> getAllAnimals(Map map);
 
+	public int getAllAnimalsTotalCnt();
+
 	public List<AllAnimalListResponseDTO> searchAnimals(SearchConditionsRequestDTO dto);
+
+	public int searchAnimalsTotalCnt(SearchConditionsRequestDTO dto);
 
 	public AnimalDetailResponseDTO getAnimalDetail(int idx);
 
 	public AdoptionAnimalResponseDTO getAdoptionInfo(int idx);
 
 	public Integer checkAdoptionStatus(int idx);
-	
+
 	public Integer checkDuplicateUser(Map map);
 
 	public int submitAdoption(AdoptionSubmitReqestDTO dto);

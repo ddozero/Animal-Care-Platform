@@ -29,10 +29,12 @@ public interface ShelterAnimalsMapper {
 
 	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(Map map);
 
+	public int getAdoptionConsultListTotalCnt(int idx);
+
 	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx);
 
 	public int updateAdoptionConsultStatus(AdoptionConsultStatusRequestDTO dto);
-	
+
 	public Integer checkAdoptionConsultShelter(int idx);
 
 }

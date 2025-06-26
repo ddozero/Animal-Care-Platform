@@ -14,6 +14,7 @@ import com.animal.api.animal.model.request.SearchConditionsRequestDTO;
 import com.animal.api.animal.model.response.AdoptionAnimalResponseDTO;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 
 @Service
@@ -25,8 +26,11 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	@Autowired
 	private FileManager fileManager;
 
+	private int listSize = 5;
+	private int pageSize = 5;
+
 	@Override
-	public List<AllAnimalListResponseDTO> getAllAnimals(int listSize, int cp) {
+	public List<AllAnimalListResponseDTO> getAllAnimals(int cp) {
 
 		cp = changeCurrentPage(cp, listSize);
 
@@ -50,8 +54,18 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	}
 
 	@Override
-	public List<AllAnimalListResponseDTO> searchAnimals(int listSize, int cp, String type, String breed, String gender,
-			int neuter, int age, String adoptionStatus, String personality, int size, String name) {
+	public PageInformationDTO getAllAnimalsPageInfo(int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAllAnimalsTotalCnt();
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
+
+	@Override
+	public List<AllAnimalListResponseDTO> searchAnimals(int cp, String type, String breed, String gender, int neuter,
+			int age, String adoptionStatus, String personality, int size, String name) {
 
 		cp = changeCurrentPage(cp, listSize);
 
@@ -69,6 +83,20 @@ public class UserAnimalServiceImple implements UserAnimalService {
 		}
 
 		return animalList;
+	}
+
+	@Override
+	public PageInformationDTO searchAnimalsPageInfo(int cp, String type, String breed, String gender, int neuter,
+			int age, String adoptionStatus, String personality, int size, String name) {
+		SearchConditionsRequestDTO request = new SearchConditionsRequestDTO(listSize, cp, type, breed, gender, neuter,
+				age, adoptionStatus, personality, size, name);
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.searchAnimalsTotalCnt(request);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+
+		return pageInfo;
 	}
 
 	@Override
@@ -96,11 +124,13 @@ public class UserAnimalServiceImple implements UserAnimalService {
 	}
 
 	@Override
-	public int submitAdoption(AdoptionSubmitReqestDTO dto) {
+	public int submitAdoption(AdoptionSubmitReqestDTO dto, int idx) {
+		
+		dto.setAnimalIdx(idx);
 		// 입양 가능 상태 검사
 		Integer checkStatus = mapper.checkAdoptionStatus(dto.getAnimalIdx());
 		if (checkStatus == null) {
-			return RESERVATION_FAILD;
+			return NOT_FOUND_ANIMAL;
 		}
 
 		if (checkStatus != 1) {

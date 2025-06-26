@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.management.animal.mapper.ShelterAnimalsMapper;
 import com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO;
@@ -26,6 +27,9 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	private ShelterAnimalsMapper mapper;
 	@Autowired
 	private FileManager fileManager;
+
+	private int listSize = 5;
+	private int pageSize = 5;
 
 	@Override
 	public AnimalAddShelterInfoResponseDTO getShelterProfile(int idx) {
@@ -102,7 +106,7 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	}
 
 	@Override
-	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(int idx, int listSize, int cp) {
+	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(int idx, int cp) {
 		cp = changeCurrentPage(cp, listSize);
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -113,6 +117,16 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 		List<AdoptionConsultListResponseDTO> consultList = mapper.getAdoptionConsultList(map);
 
 		return consultList;
+	}
+
+	@Override
+	public PageInformationDTO getAdoptionConsultListPageInfo(int idx, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAdoptionConsultListTotalCnt(idx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override

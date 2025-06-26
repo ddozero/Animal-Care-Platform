@@ -23,7 +23,9 @@ import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 
 /**
  * 사용자 기준 유기동물 관련 컨트롤러 클래스
@@ -68,14 +70,18 @@ public class UserAnimalController {
 			@RequestParam(value = "personality", required = false) String personality,
 			@RequestParam(value = "size", defaultValue = "0") int size,
 			@RequestParam(value = "name", required = false) String name) {
-		int listSize = 3;
+
 		List<AllAnimalListResponseDTO> animalList = null;
+		PageInformationDTO pageInfo = null;
 		if (type != null || breed != null || gender != null || neuter != 0 || age != 0 || adoptionStatus != null
 				|| personality != null || size != 0 || name != null) {
-			animalList = service.searchAnimals(listSize, cp, type, breed, gender, neuter, age, adoptionStatus,
-					personality, size, name);
+			animalList = service.searchAnimals(cp, type, breed, gender, neuter, age, adoptionStatus, personality, size,
+					name);
+			pageInfo = service.searchAnimalsPageInfo(cp, type, breed, gender, neuter, age, adoptionStatus, personality,
+					size, name);
 		} else {
-			animalList = service.getAllAnimals(listSize, cp);
+			animalList = service.getAllAnimals(cp);
+			pageInfo = service.getAllAnimalsPageInfo(cp);
 		}
 
 		if (animalList == null) {
@@ -84,7 +90,7 @@ public class UserAnimalController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllAnimalListResponseDTO>>(200, "조회 성공", animalList));
+					.body(new OkPageResponseDTO<List<AllAnimalListResponseDTO>>(200, "조회성공", animalList, pageInfo));
 		}
 	}
 
@@ -153,15 +159,17 @@ public class UserAnimalController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
 		dto.setUserIdx(loginUser.getIdx());
-		int result = service.submitAdoption(dto);
+		int result = service.submitAdoption(dto, idx);
 
 		if (result == service.RESERVATION_COMPLETED) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "입양 상담 신청 성공", null));
+		} else if (result == service.NOT_FOUND_ANIMAL) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 동물이 존재하지 않습니다."));
 		} else if (result == service.RESERVATION_UNAVAILABLE) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "입양 상담 신청 가능 상태가 아닙니다."));
-		} else if(result == service.RESERVATION_DUPLICATE) {
+		} else if (result == service.RESERVATION_DUPLICATE) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "이미 상담을 신청하였습니다."));
-		}else {
+		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
 		}
 	}

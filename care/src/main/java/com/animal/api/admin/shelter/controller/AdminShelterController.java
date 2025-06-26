@@ -25,12 +25,15 @@ import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.email.service.EmailService;
 import com.animal.api.management.animal.service.ShelterAnimalsService;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
 import com.animal.api.shelter.model.response.ShelterDetailResponseDTO;
+import com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO;
 import com.animal.api.shelter.service.UserShelterService;
 import com.animal.api.volunteers.model.response.AllVolunteersResponseDTO;
@@ -93,13 +96,14 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
 
-		int listSize = 3;
 		List<AllShelterListResponseDTO> shelterList = null;
-
+		PageInformationDTO pageInfo = null;
 		if (shelterName != null || shelterAddress != null || shelterType != null) {
-			shelterList = userShelterService.searchShelters(listSize, cp, shelterName, shelterAddress, shelterType);
+			shelterList = userShelterService.searchShelters(cp, shelterName, shelterAddress, shelterType);
+			pageInfo = userShelterService.searchSheltersPageInfo(cp, shelterName, shelterAddress, shelterType);
 		} else {
-			shelterList = userShelterService.getAllShelters(listSize, cp);
+			shelterList = userShelterService.getAllShelters(cp);
+			pageInfo = userShelterService.getAllSheltersPageInfo(cp);
 		}
 
 		if (shelterList == null) {
@@ -108,7 +112,7 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllShelterListResponseDTO>>(200, "조회 성공", shelterList));
+					.body(new OkPageResponseDTO<List<AllShelterListResponseDTO>>(200, "조회성공", shelterList, pageInfo));
 		}
 	}
 
@@ -179,16 +183,18 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
 
-		int listSize = 3;
-
 		List<ShelterAnimalsResponseDTO> animalList = null;
+		PageInformationDTO pageInfo = null;
 
 		if (type != null || breed != null || gender != null || neuter != 0 || age != 0 || adoptionStatus != null
 				|| personality != null || size != 0 || name != null) {
-			animalList = userShelterService.searchShelterAnimals(idx, listSize, cp, type, breed, gender, neuter, age,
+			animalList = userShelterService.searchShelterAnimals(idx, cp, type, breed, gender, neuter, age,
+					adoptionStatus, personality, size, name);
+			pageInfo = userShelterService.searchShelterAnimalsPageInfo(idx, cp, type, breed, gender, neuter, age,
 					adoptionStatus, personality, size, name);
 		} else {
-			animalList = userShelterService.getAllShelterAnimals(listSize, cp, idx);
+			animalList = userShelterService.getAllShelterAnimals(cp, idx);
+			pageInfo = userShelterService.getAllShelterAnimalsPageInfo(cp, idx);
 		}
 
 		if (animalList == null) {
@@ -197,7 +203,7 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList));
+					.body(new OkPageResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList, pageInfo));
 		}
 	}
 
@@ -290,16 +296,16 @@ public class AdminShelterController {
 		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
-		int listSize = 3;
-		List<ShelterVolunteersResponseDTO> volunteerList = userShelterService.getShelterVolunteers(listSize, cp, idx);
+		List<ShelterVolunteerReviewResponseDTO> reviewList = userShelterService.getShelterVolunteerReviews(cp, idx);
+		PageInformationDTO pageInfo = userShelterService.getShelterVolunteerReviewsPageInfo(cp, idx);
 
-		if (volunteerList == null) {
+		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
-		} else if (volunteerList.size() == 0) {
+		} else if (reviewList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterVolunteersResponseDTO>>(200, "조회 성공", volunteerList));
+			return ResponseEntity.status(HttpStatus.OK).body(
+					new OkPageResponseDTO<List<ShelterVolunteerReviewResponseDTO>>(200, "조회 성공", reviewList, pageInfo));
 		}
 	}
 
@@ -354,9 +360,9 @@ public class AdminShelterController {
 		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
-		int listSize = 3;
-		List<ShelterJoinRequestListResponseDTO> requestList = adminShelterService.getShelterJoinRequestList(listSize,
-				cp);
+
+		List<ShelterJoinRequestListResponseDTO> requestList = adminShelterService.getShelterJoinRequestList(cp);
+		PageInformationDTO pageInfo = adminShelterService.getShelterJoinRequestListPageInfo(cp);
 
 		if (requestList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
@@ -364,7 +370,8 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterJoinRequestListResponseDTO>>(200, "조회 성공", requestList));
+					.body(new OkPageResponseDTO<List<ShelterJoinRequestListResponseDTO>>(200, "조회 성공", requestList,
+							pageInfo));
 		}
 	}
 

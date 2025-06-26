@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.shelter.mapper.UserShelterMapper;
 import com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO;
@@ -30,8 +31,11 @@ public class UserShelterServiceImple implements UserShelterService {
 	@Autowired
 	private FileManager fileManager;
 
+	private int listSize = 5;
+	private int pageSize = 5;
+
 	@Override
-	public List<AllShelterListResponseDTO> getAllShelters(int listSize, int cp) {
+	public List<AllShelterListResponseDTO> getAllShelters(int cp) {
 		cp = changeCurrentPage(cp, listSize);
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -51,8 +55,18 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
-	public List<AllShelterListResponseDTO> searchShelters(int listSize, int cp, String shelterName,
-			String shelterAddress, String shelterType) {
+	public PageInformationDTO getAllSheltersPageInfo(int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAllSheltersTotalCnt();
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
+
+	@Override
+	public List<AllShelterListResponseDTO> searchShelters(int cp, String shelterName, String shelterAddress,
+			String shelterType) {
 		cp = changeCurrentPage(cp, listSize);
 		SearchShelterRequestDTO request = new SearchShelterRequestDTO(listSize, cp, shelterName, shelterAddress,
 				shelterType);
@@ -70,6 +84,19 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
+	public PageInformationDTO searchSheltersPageInfo(int cp, String shelterName, String shelterAddress,
+			String shelterType) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		SearchShelterRequestDTO request = new SearchShelterRequestDTO(listSize, cp, shelterName, shelterAddress,
+				shelterType);
+		int totalCnt = mapper.searchSheltersTotalCnt(request);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
+
+	@Override
 	public ShelterDetailResponseDTO getShelterDetail(int idx) {
 		ShelterDetailResponseDTO dto = mapper.getShelterDetail(idx);
 		if (dto != null) {
@@ -82,7 +109,7 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
-	public List<ShelterVolunteersResponseDTO> getShelterVolunteers(int listSize, int cp, int idx) {
+	public List<ShelterVolunteersResponseDTO> getShelterVolunteers(int cp, int idx) {
 		cp = changeCurrentPage(cp, listSize);
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -96,7 +123,17 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
-	public List<ShelterAnimalsResponseDTO> getAllShelterAnimals(int listSize, int cp, int idx) {
+	public PageInformationDTO getShelterVolunteersPageInfo(int cp, int idx) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getShelterVolunteersTotalCnt(idx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
+
+	@Override
+	public List<ShelterAnimalsResponseDTO> getAllShelterAnimals(int cp, int idx) {
 		cp = changeCurrentPage(cp, listSize);
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -117,9 +154,18 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
-	public List<ShelterAnimalsResponseDTO> searchShelterAnimals(int idx, int listSize, int cp, String type,
-			String breed, String gender, int neuter, int age, String adoptionStatus, String personality, int size,
-			String name) {
+	public PageInformationDTO getAllShelterAnimalsPageInfo(int cp, int idx) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAllShelterAnimalsTotalCnt(idx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
+
+	@Override
+	public List<ShelterAnimalsResponseDTO> searchShelterAnimals(int idx, int cp, String type, String breed,
+			String gender, int neuter, int age, String adoptionStatus, String personality, int size, String name) {
 		cp = changeCurrentPage(cp, listSize);
 
 		SearchShelterAnimalRequestDTO request = new SearchShelterAnimalRequestDTO(idx, listSize, cp, type, breed,
@@ -138,7 +184,21 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
-	public List<ShelterBoardListResponseDTO> getShelterBoards(int listSize, int cp, int idx) {
+	public PageInformationDTO searchShelterAnimalsPageInfo(int idx, int cp, String type, String breed, String gender,
+			int neuter, int age, String adoptionStatus, String personality, int size, String name) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		SearchShelterAnimalRequestDTO request = new SearchShelterAnimalRequestDTO(idx, listSize, cp, type, breed,
+				gender, neuter, age, adoptionStatus, personality, size, name);
+
+		int totalCnt = mapper.searchShelterAnimalsTotalCnt(request);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
+
+	@Override
+	public List<ShelterBoardListResponseDTO> getShelterBoards(int cp, int idx) {
 		cp = changeCurrentPage(cp, listSize);
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -149,6 +209,16 @@ public class UserShelterServiceImple implements UserShelterService {
 		List<ShelterBoardListResponseDTO> boardList = mapper.getShelterBoards(map);
 
 		return boardList;
+	}
+
+	@Override
+	public PageInformationDTO getShelterBoardsPageInfo(int cp, int idx) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getShelterBoardsTotalCnt(idx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
@@ -168,7 +238,7 @@ public class UserShelterServiceImple implements UserShelterService {
 	}
 
 	@Override
-	public List<ShelterVolunteerReviewResponseDTO> getShelterVolunteerReviews(int listSize, int cp, int idx) {
+	public List<ShelterVolunteerReviewResponseDTO> getShelterVolunteerReviews(int cp, int idx) {
 		cp = changeCurrentPage(cp, listSize);
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -187,9 +257,19 @@ public class UserShelterServiceImple implements UserShelterService {
 		}
 		return reviewList;
 	}
+	
+	@Override
+	public PageInformationDTO getShelterVolunteerReviewsPageInfo(int cp, int idx) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getShelterVolunteerReviewsTotalCnt(idx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
 
 	@Override
-	public List<ShelterAdoptionReviewResponseDTO> getShelterAdoptionReviews(int listSize, int cp, int idx) {
+	public List<ShelterAdoptionReviewResponseDTO> getShelterAdoptionReviews(int cp, int idx) {
 		cp = changeCurrentPage(cp, listSize);
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -207,6 +287,16 @@ public class UserShelterServiceImple implements UserShelterService {
 			}
 		}
 		return reviewList;
+	}
+	
+	@Override
+	public PageInformationDTO getShelterAdoptionReviewsPageInfo(int cp, int idx) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getShelterAdoptionReviewsTotalCnt(idx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	// 넘어온 페이지를 쿼리에 넣을 수 있게 가공하는 메서드

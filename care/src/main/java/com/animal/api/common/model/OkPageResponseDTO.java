@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OkResponseDTO<T> {
+public class OkPageResponseDTO<T> {
 	private int status;
-    private String message;
-    private T data;
+	private String message;
+	private T data;
+	private PageInformationDTO pageInfo;
 }

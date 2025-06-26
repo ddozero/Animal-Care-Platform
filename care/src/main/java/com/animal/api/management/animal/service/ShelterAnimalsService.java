@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalInsertRequestDTO;
 import com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO;
@@ -35,7 +36,9 @@ public interface ShelterAnimalsService {
 
 	public int uploadAnimalImage(MultipartFile[] files, int idx);
 
-	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(int idx, int listSize, int cp);
+	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(int idx, int cp);
+
+	public PageInformationDTO getAdoptionConsultListPageInfo(int idx, int cp);
 
 	public AdoptionConsultDetailResponseDTO getAdoptionConsultDetail(int idx);
 

@@ -3,6 +3,7 @@ package com.animal.api.admin.shelter.service;
 import java.util.List;
 
 import com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 
 public interface AdminShelterService {
 
@@ -13,7 +14,9 @@ public interface AdminShelterService {
 	static int NOT_ERROR = 5;
 	static int ERROR = -1;
 
-	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(int listSize, int cp);
+	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(int cp);
+
+	public PageInformationDTO getShelterJoinRequestListPageInfo(int cp);
 
 	public ShelterJoinRequestListResponseDTO getShelterJoinRequestDetail(int idx);
 

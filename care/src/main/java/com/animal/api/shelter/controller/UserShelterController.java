@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.animal.model.response.AnimalDetailResponseDTO;
 import com.animal.api.animal.service.UserAnimalService;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.shelter.model.response.AllShelterListResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO;
 import com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO;
@@ -68,13 +71,14 @@ public class UserShelterController {
 			@RequestParam(value = "shelterName", required = false) String shelterName,
 			@RequestParam(value = "shelterAddress", required = false) String shelterAddress,
 			@RequestParam(value = "shelterType", required = false) String shelterType) {
-		int listSize = 3;
 		List<AllShelterListResponseDTO> shelterList = null;
-
+		PageInformationDTO pageInfo = null;
 		if (shelterName != null || shelterAddress != null || shelterType != null) {
-			shelterList = userShelterService.searchShelters(listSize, cp, shelterName, shelterAddress, shelterType);
+			shelterList = userShelterService.searchShelters(cp, shelterName, shelterAddress, shelterType);
+			pageInfo = userShelterService.searchSheltersPageInfo(cp, shelterName, shelterAddress, shelterType);
 		} else {
-			shelterList = userShelterService.getAllShelters(listSize, cp);
+			shelterList = userShelterService.getAllShelters(cp);
+			pageInfo = userShelterService.getAllSheltersPageInfo(cp);
 		}
 
 		if (shelterList == null) {
@@ -83,7 +87,7 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllShelterListResponseDTO>>(200, "조회 성공", shelterList));
+					.body(new OkPageResponseDTO<List<AllShelterListResponseDTO>>(200, "조회성공", shelterList, pageInfo));
 		}
 	}
 
@@ -114,16 +118,16 @@ public class UserShelterController {
 	@GetMapping("/{idx}/volunteers")
 	public ResponseEntity<?> getShelterVolunteers(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
-		int listSize = 3;
-		List<ShelterVolunteersResponseDTO> volunteerList = userShelterService.getShelterVolunteers(listSize, cp, idx);
+		List<ShelterVolunteersResponseDTO> volunteerList = userShelterService.getShelterVolunteers(cp, idx);
+		PageInformationDTO pageInfo = userShelterService.getShelterVolunteersPageInfo(cp, idx);
 
 		if (volunteerList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
 		} else if (volunteerList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterVolunteersResponseDTO>>(200, "조회 성공", volunteerList));
+			return ResponseEntity.status(HttpStatus.OK).body(
+					new OkPageResponseDTO<List<ShelterVolunteersResponseDTO>>(200, "조회 성공", volunteerList, pageInfo));
 		}
 	}
 
@@ -176,16 +180,19 @@ public class UserShelterController {
 			@RequestParam(value = "personality", required = false) String personality,
 			@RequestParam(value = "size", defaultValue = "0") int size,
 			@RequestParam(value = "name", required = false) String name) {
-		int listSize = 3;
 
 		List<ShelterAnimalsResponseDTO> animalList = null;
+		PageInformationDTO pageInfo = null;
 
 		if (type != null || breed != null || gender != null || neuter != 0 || age != 0 || adoptionStatus != null
 				|| personality != null || size != 0 || name != null) {
-			animalList = userShelterService.searchShelterAnimals(idx, listSize, cp, type, breed, gender, neuter, age,
+			animalList = userShelterService.searchShelterAnimals(idx, cp, type, breed, gender, neuter, age,
+					adoptionStatus, personality, size, name);
+			pageInfo = userShelterService.searchShelterAnimalsPageInfo(idx, cp, type, breed, gender, neuter, age,
 					adoptionStatus, personality, size, name);
 		} else {
-			animalList = userShelterService.getAllShelterAnimals(listSize, cp, idx);
+			animalList = userShelterService.getAllShelterAnimals(cp, idx);
+			pageInfo = userShelterService.getAllShelterAnimalsPageInfo(cp, idx);
 		}
 
 		if (animalList == null) {
@@ -194,7 +201,7 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList));
+					.body(new OkPageResponseDTO<List<ShelterAnimalsResponseDTO>>(200, "조회 성공", animalList, pageInfo));
 		}
 	}
 
@@ -228,9 +235,9 @@ public class UserShelterController {
 	@GetMapping("/{idx}/boards")
 	public ResponseEntity<?> getShelterBoards(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
-		int listSize = 3;
 
-		List<ShelterBoardListResponseDTO> boardList = userShelterService.getShelterBoards(listSize, cp, idx);
+		List<ShelterBoardListResponseDTO> boardList = userShelterService.getShelterBoards(cp, idx);
+		PageInformationDTO pageInfo = userShelterService.getShelterBoardsPageInfo(cp, idx);
 
 		if (boardList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
@@ -238,7 +245,7 @@ public class UserShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterBoardListResponseDTO>>(200, "조회 성공", boardList));
+					.body(new OkPageResponseDTO<List<ShelterBoardListResponseDTO>>(200, "조회 성공", boardList, pageInfo));
 		}
 	}
 
@@ -272,18 +279,16 @@ public class UserShelterController {
 	@GetMapping("/{idx}/reviews/voluntees")
 	public ResponseEntity<?> getShelterVolunteerReviews(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
-		int listSize = 3;
-
-		List<ShelterVolunteerReviewResponseDTO> reviewList = userShelterService.getShelterVolunteerReviews(listSize, cp,
-				idx);
+		List<ShelterVolunteerReviewResponseDTO> reviewList = userShelterService.getShelterVolunteerReviews(cp, idx);
+		PageInformationDTO pageInfo = userShelterService.getShelterVolunteerReviewsPageInfo(cp, idx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
 		} else if (reviewList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterVolunteerReviewResponseDTO>>(200, "조회 성공", reviewList));
+			return ResponseEntity.status(HttpStatus.OK).body(
+					new OkPageResponseDTO<List<ShelterVolunteerReviewResponseDTO>>(200, "조회 성공", reviewList, pageInfo));
 		}
 	}
 
@@ -297,18 +302,16 @@ public class UserShelterController {
 	@GetMapping("/{idx}/reviews/adoptions")
 	public ResponseEntity<?> getShelterAdoptionReviews(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
-		int listSize = 3;
-
-		List<ShelterAdoptionReviewResponseDTO> reviewList = userShelterService.getShelterAdoptionReviews(listSize, cp,
-				idx);
+		List<ShelterAdoptionReviewResponseDTO> reviewList = userShelterService.getShelterAdoptionReviews(cp, idx);
+		PageInformationDTO pageInfo = userShelterService.getShelterAdoptionReviewsPageInfo(cp, idx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
 		} else if (reviewList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterAdoptionReviewResponseDTO>>(200, "조회 성공", reviewList));
+			return ResponseEntity.status(HttpStatus.OK).body(
+					new OkPageResponseDTO<List<ShelterAdoptionReviewResponseDTO>>(200, "조회 성공", reviewList, pageInfo));
 		}
 	}
 
