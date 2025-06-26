@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
+import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
 
@@ -49,4 +50,6 @@ public interface UserBoardService {
 	public int addBoardHeart(int userIdx, int boardIdx);
 
 	public int deleteBoardHeart(int userIdx, int boardIdx);
+
+	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp);
 }
