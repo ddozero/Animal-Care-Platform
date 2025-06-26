@@ -81,7 +81,15 @@ public class AdminDonationController {
 					.body(new OkResponseDTO<List<AdminAllDonationResponseDTO>>(200, "지원사업 목록 조회 성공", donationLists));
 		}
 	}
-
+	
+	/**
+	 * 사이트 관리자 페이지 지원사업 상세정보 조회 메서드 
+	 * 
+	 * @param idx 지원사업 번호
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 지원사업 상세정보 조회
+	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getAdminDonationDetail(@PathVariable int idx, HttpSession session) {
 		
