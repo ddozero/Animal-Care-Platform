@@ -33,17 +33,30 @@ public class AdminDonationServiceImple implements AdminDonationService {
 		map.put("idx", idx);
 
 		List<AdminAllDonationResponseDTO> donationList = mapper.getAdminDonationList(map);
-		
+
 		return donationList;
 	}
-	
+
 	@Override
 	public List<AdminAllDonationResponseDTO> searchAdminDonation(int listSize, int cp, String name, String status) {
-		
+
 		AdminDonationSearchRequestDTO dto = new AdminDonationSearchRequestDTO(listSize, cp, name, status);
 		List<AdminAllDonationResponseDTO> donationList = mapper.searchAdminDonation(dto);
-		
+
 		return donationList;
+	}
+
+	@Override
+	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx, int userIdx) {
+		
+		AdminAllDonationResponseDTO dto = mapper.getAdminDonationDetail(idx);
+		if(dto != null) {
+			List<String> imagePaths = fileManager.getImagePath("donations", dto.getIdx());
+			if (imagePaths != null && !imagePaths.isEmpty()) { //이미지 경로 가져오기
+				dto.setImagePath(imagePaths.get(0));
+			}
+		}
+		return dto;
 	}
 
 }
