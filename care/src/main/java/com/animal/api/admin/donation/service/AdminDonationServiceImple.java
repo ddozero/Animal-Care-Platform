@@ -91,6 +91,11 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public int uploadDonationFiles(MultipartFile[] files, int idx) {
+		
+		Integer donationIdx = mapper.checkDonationIdx(idx);
+		if(donationIdx == null || donationIdx == 0) {
+			return DONATION_NOT_FOUND;
+		}
 
 		boolean result = fileManager.uploadFiles("donations", idx, files);
 
@@ -103,7 +108,12 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public int updateAdminDonation(AdminUpdateRequestDTO dto, int idx) {
-
+		
+		Integer donationIdx = mapper.checkDonationIdx(idx);
+		if(donationIdx == null || donationIdx == 0) {
+			return DONATION_NOT_FOUND;
+		}
+	
 		int result = mapper.updateAdminDonation(dto);
 
 		if (result == 1) {

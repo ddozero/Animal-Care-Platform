@@ -189,6 +189,8 @@ public class AdminDonationController {
 		int result = adminDonationService.uploadDonationFiles(files, idx);
 		if (result == adminDonationService.UPLOAD_OK) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "첨부파일 업로드 성공", null));
+		} else if (result == adminDonationService.DONATION_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "지원사업을 찾을 수 없음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "첨부파일 업로드 실패"));
 		}
@@ -210,6 +212,7 @@ public class AdminDonationController {
 		LoginResponseDTO loginUser = adminUserCheck(session);
 		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
 
+		dto.setIdx(idx);
 		int result = adminDonationService.updateAdminDonation(dto, idx);
 
 		if (result == adminDonationService.UPDATE_OK) {

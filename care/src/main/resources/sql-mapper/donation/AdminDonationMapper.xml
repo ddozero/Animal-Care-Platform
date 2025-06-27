@@ -123,4 +123,13 @@ WHERE
 	IDX = #{idx}
 </update>
 
+<select id = "checkDonationIdx" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	DONATIONS D
+WHERE
+	IDX = #{idx}
+</select>
+
 </mapper>
