@@ -45,5 +45,7 @@ public interface UserBoardMapper {
 
 	public Integer checkBoardCommentExists(int idx);
 
+	public Integer checkMyBoardComment(int idx);
+
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto);
 }
