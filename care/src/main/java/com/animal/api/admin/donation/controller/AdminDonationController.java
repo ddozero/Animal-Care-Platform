@@ -157,9 +157,8 @@ public class AdminDonationController {
 		int result = adminDonationService.addAdminDonation(dto, userIdx);
 
 		if (result == adminDonationService.POST_OK) {
-			Integer donationIdx = dto.getIdx();
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new OkResponseDTO<Integer>(201, "지원사업 등록 완료", donationIdx));
+					.body(new OkResponseDTO<Integer>(201, "지원사업 등록 완료", null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 등록 실패"));
 		}

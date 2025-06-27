@@ -15,15 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminAddDonationRequestDTO {
-
+	
 	private int idx;
-	
-	@NotNull(message = "관리자 번호 입력은 필수입니다.")
-	private Integer userIdx;
-	
+	private int userIdx;
+
 	@NotNull(message = "기부 상태 번호 입력은 필수입니다.")
-	@Min(value = 0, message = "1:대기/2:진행중/3:모금완료/4:완료")
-	@Max(value = 0, message = "1:대기/2:진행중/3:모금완료/4:완료")
+	@Min(value = 1, message = "기부 상태 번호 입력은 필수입니다.1:대기/2:진행중/3:모금완료/4:완료")
+	@Max(value = 4, message = "기부 상태 번호 입력은 필수입니다.1:대기/2:진행중/3:모금완료/4:완료")
 	private Integer statusIdx; // 기부 상태 번호
 	
 	@NotBlank(message = "기부명 입력은 필수입니다.")

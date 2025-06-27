@@ -77,9 +77,8 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public int addAdminDonation(AdminAddDonationRequestDTO dto, int userIdx) {
-
+		
 		dto.setUserIdx(userIdx);
-
 		int result = mapper.addAdminDonation(dto);
 
 		if (result > 0) {

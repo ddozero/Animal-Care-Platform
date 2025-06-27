@@ -107,7 +107,7 @@ INSERT
 	SPONSOR,
 	SPONSOR_DETAIL,
 	CONTENT)
-VALUES(#{userIdx}, #{donationStatusIdx}, '후원 모집', '2025-06-27', '2025-07-01', 70000, 0, 0, '쌍용기업', '후원법인', '후원 부탁드려요');
+VALUES(#{userIdx}, #{statusIdx}, #{name}, #{startDate}, #{endDate}, #{amount}, #{completionAmount}, #{completionRate}, #{sponsor}, #{sponsorDetail}, #{content});
 </insert>
 
 </mapper>
