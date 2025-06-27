@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.admin.donation.mapper.AdminDonationMapper;
+import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
 import com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
@@ -32,7 +33,6 @@ public class AdminDonationServiceImple implements AdminDonationService {
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 
-
 		List<AdminAllDonationResponseDTO> donationList = mapper.getAdminDonationList(map);
 
 		return donationList;
@@ -49,29 +49,44 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx, int userIdx) {
-		
+
 		AdminAllDonationResponseDTO dto = mapper.getAdminDonationDetail(idx);
-		if(dto != null) {
+		if (dto != null) {
 			List<String> imagePaths = fileManager.getImagePath("donations", dto.getIdx());
-			if (imagePaths != null && !imagePaths.isEmpty()) { //이미지 경로 가져오기
+			if (imagePaths != null && !imagePaths.isEmpty()) { // 이미지 경로 가져오기
 				dto.setImagePath(imagePaths.get(0));
 			}
 		}
 		return dto;
 	}
-	
+
 	@Override
 	public List<AdminDonationUserResponseDTO> getAdminDonationUser(int listSize, int cp, int idx) {
-		
+
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		
+
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		map.put("idx", idx);
-		
+
 		List<AdminDonationUserResponseDTO> userList = mapper.getAdminDonationUser(map);
-		
+
 		return userList;
+	}
+
+	@Override
+	public int addAdminDonation(AdminAddDonationRequestDTO dto, int userIdx) {
+
+		dto.setUserIdx(userIdx);
+
+		int result = mapper.addAdminDonation(dto);
+
+		if (result > 0) {
+			return POST_SUCCESS;
+		} else {
+			return ERROR;
+		}
+
 	}
 
 }

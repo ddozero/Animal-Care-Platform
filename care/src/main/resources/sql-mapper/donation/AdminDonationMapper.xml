@@ -92,7 +92,7 @@ ORDER BY
 	DT.CREATED_AT DESC;
 </select>
 
-<insert id="">
+<insert id="addAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO" useGeneratedKeys="true" keyProperty="idx">
 INSERT
 	INTO
 	DONATIONS
