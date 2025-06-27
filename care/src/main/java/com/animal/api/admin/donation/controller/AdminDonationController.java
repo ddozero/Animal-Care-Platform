@@ -64,7 +64,7 @@ public class AdminDonationController {
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "status", required = false) String status, HttpSession session) {
 
-		LoginResponseDTO loginAdmin = shelterUserCheck(session); // 로그인 여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = adminUserCheck(session); // 로그인 여부, 관리자 회원 검증
 
 		int listSize = 5;
 		if (cp == 0) {
@@ -102,7 +102,7 @@ public class AdminDonationController {
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getAdminDonationDetail(@PathVariable int idx, HttpSession session) {
 
-		LoginResponseDTO loginAdmin = shelterUserCheck(session); // 로그인 여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = adminUserCheck(session); // 로그인 여부, 관리자 회원 검증
 		int userIdx = loginAdmin.getIdx();
 
 		AdminAllDonationResponseDTO dto = adminDonationService.getAdminDonationDetail(idx, userIdx);
@@ -127,7 +127,7 @@ public class AdminDonationController {
 	public ResponseEntity<?> getAdminDonationUser(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp, HttpSession session) {
 
-		LoginResponseDTO loginAdmin = shelterUserCheck(session); // 로그인 여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = adminUserCheck(session); // 로그인 여부, 관리자 회원 검증
 
 		int listSize = 5;
 		if (cp == 0) {
@@ -160,7 +160,7 @@ public class AdminDonationController {
 	@PostMapping("/upload")
 	public ResponseEntity<?> addAdminDonation(@Valid @RequestBody AdminAddDonationRequestDTO dto, HttpSession session) {
 
-		LoginResponseDTO loginUser = shelterUserCheck(session);
+		LoginResponseDTO loginUser = adminUserCheck(session);
 		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
 
 		int result = adminDonationService.addAdminDonation(dto, userIdx);
@@ -199,7 +199,7 @@ public class AdminDonationController {
 	 * 
 	 * @return 관리자 계정으로 로그인 확인
 	 */
-	public LoginResponseDTO shelterUserCheck(HttpSession session) {
+	public LoginResponseDTO adminUserCheck(HttpSession session) {
 		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
 
 		if (loginAdmin == null) {
