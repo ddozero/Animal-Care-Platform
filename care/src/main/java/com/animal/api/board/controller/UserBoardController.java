@@ -47,7 +47,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @see com.animal.api.board.model.response.AllBoardCommentsResponseDTO
  * @see com.animal.api.board.model.request.BoardCommentRequestDTO
  * @see com.animal.api.board.model.request.BoardCommentUpdateRequestDTO
- * 
+ * @see com.animal.api.board.model.request.BoardCommentReplyRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -423,7 +423,16 @@ public class UserBoardController {
 		}
 
 	}
-
+	
+	/**
+	 * 댓글의 댓글
+	 * 
+	 * @param idx 게시판 번호
+	 * @param boardCommentIdx 게시판 댓글 번호
+	 * @param dto 댓글의 댓글 입력폼
+	 * @param session 로그인 검증용
+	 * @return 성공/실패 메세지
+	 */
 	@PostMapping("{idx}/comments/{boardCommentIdx}/replies")
 	public ResponseEntity<?> addBoardCommentReply(@PathVariable int idx, @PathVariable int boardCommentIdx,
 			@Valid @RequestBody BoardCommentReplyRequestDTO dto, HttpSession session) {
