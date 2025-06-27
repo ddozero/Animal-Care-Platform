@@ -261,4 +261,17 @@ public class UserBoardServiceImple implements UserBoardService {
 			return ERROR;
 		}
 	}
+
+	@Override
+	public int deleteBoardComment(int boardCommentIdx, int userIdx) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("idx", boardCommentIdx);
+		map.put("userIdx", userIdx);
+		int result = mapper.deleteBoardComment(map);
+		if (result == 1) {
+			return DELETE_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
 }

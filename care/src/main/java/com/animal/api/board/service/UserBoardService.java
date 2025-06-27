@@ -63,4 +63,6 @@ public interface UserBoardService {
 	public int addBoardComment(BoardCommentRequestDTO dto, int idx);
 
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx);
+
+	public int deleteBoardComment(int boardCommentIdx, int userIdx);
 }
