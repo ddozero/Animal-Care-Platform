@@ -59,6 +59,14 @@ public class MemberServiceImple implements MemberService {
 		if(existing != null && existing.getUserType() == 2) {
 			memberMapper.updateShelterMember(dto);
 		}
-			
+	}
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteMember(int userIdx) {
+	    int updated = memberMapper.deleteMember(userIdx);
+	    if (updated == 0) {
+	        throw new CustomException(404, "존재하지 않는 회원입니다.");
+	    }
 	}
 }

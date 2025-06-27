@@ -29,4 +29,6 @@ public interface MemberMapper {
 	int updateMember(MemberUpdateRequestDTO dto);
 	
 	int updateShelterMember(MemberUpdateRequestDTO dto);
+	
+	int deleteMember(@Param("userIdx") int userIdx);
 }

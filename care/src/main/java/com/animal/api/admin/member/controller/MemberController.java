@@ -3,6 +3,7 @@ package com.animal.api.admin.member.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -76,7 +77,7 @@ public class MemberController {
 	 * [관리자 전용] 회원 정보 수정 API
 	 *
 	 * 회원의 기본 정보 및 보호소 정보를 수정합니다.
-	 * 보호소 회원일 경우 shelter 정보도 함께 수정됩니다.
+	 * 보호소 회원일 경우 shelter 정보도 함께 수정됩니다
 	 *
 	 * @param dto 수정 대상 회원 정보
 	 * @return 성공 메시지
@@ -87,5 +88,18 @@ public class MemberController {
 	    return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "회원 정보 수정 완료", null));
 	}
 	
+	/**
+	 * [관리자 전용] 회원 탈퇴 처리 API
+	 *
+	 * 회원의 상태(STATUS)를 -1로 변경하여 탈퇴 처리합니다
+	 *
+	 * @param userIdx 탈퇴할 회원의 PK
+	 * @return 성공 메시지
+	 */
+	@DeleteMapping("/{userIdx}")
+	public ResponseEntity<OkResponseDTO<String>> deleteMember(@PathVariable int userIdx) {
+	    memberService.deleteMember(userIdx);
+	    return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "회원 탈퇴 처리 완료", null));
+	}
 	
 }

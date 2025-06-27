@@ -134,4 +134,10 @@
 	        SHELTER_DESCRIPTION = #{shelterDescription}
 	    WHERE IDX = #{userIdx}
 	</update>
+	
+	<update id="deleteMember">
+	    UPDATE USERS
+	    SET STATUS = -1
+	    WHERE IDX = #{userIdx}
+	</update>
 </mapper>

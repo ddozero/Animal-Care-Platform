@@ -12,4 +12,6 @@ public interface MemberService {
 	MemberDatailResopnseDTO getMemberDetail(int userIdx);
 	
 	void updateMember(MemberUpdateRequestDTO dto);
+	
+	void deleteMember(int userIdx);
 }
