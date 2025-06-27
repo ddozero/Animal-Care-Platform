@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
@@ -41,4 +42,10 @@ public interface UserBoardMapper {
 	public Integer checkBoardExists(int idx);
 
 	public List<AllBoardCommentsResponseDTO> getBoardComments(Map map);
+
+	public Integer checkBoardCommentExists(int idx);
+
+	public Integer checkMyBoardComment(int idx);
+
+	public int updateBoardComment(BoardCommentUpdateRequestDTO dto);
 }

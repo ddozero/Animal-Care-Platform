@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.board.mapper.UserBoardMapper;
+import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
@@ -216,5 +217,31 @@ public class UserBoardServiceImple implements UserBoardService {
 		map.put("cp", cp);
 		List<AllBoardCommentsResponseDTO> commentList = mapper.getBoardComments(map);
 		return commentList;
+	}
+
+	@Override
+	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx) {
+
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
+		if (boardIdx == null || boardIdx == 0) {
+			return BOARD_NOT_FOUND;
+		}
+
+		Integer boardCommentIdx2 = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
+		if (boardCommentIdx2 == null || boardCommentIdx2 == 0) {
+			return COMMENT_NOT_FOUND;
+		}
+
+		Integer userIdx2 = mapper.checkMyBoardComment(boardCommentIdx);// 해당 댓글이 나의 댓글인지 검증
+		if (userIdx != userIdx2) {
+			return NOT_MYCOMMENT;
+		}
+
+		int result = mapper.updateBoardComment(dto);
+		if (result > 0) {
+			return UPDATE_SUCCESS;
+		} else {
+			return ERROR;
+		}
 	}
 }

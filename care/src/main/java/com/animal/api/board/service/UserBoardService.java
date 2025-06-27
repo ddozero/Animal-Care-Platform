@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
@@ -29,6 +30,9 @@ public interface UserBoardService {
 	static int HEART_SUCCESS = 16;
 	static int HEART_NOT_FOUND = 17;
 	static int ALREADY_HEART = 18;
+	static int COMMENT_NOT_FOUND = 19;
+	static int NOT_MYCOMMENT = 20;
+	static int UPDATE_SUCCESS = 21;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
@@ -54,4 +58,6 @@ public interface UserBoardService {
 	public Integer checkBoardExists(int idx);
 
 	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp);
+
+	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx);
 }

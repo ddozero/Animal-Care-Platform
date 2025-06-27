@@ -216,4 +216,33 @@ ORDER BY
 LIMIT
 #{listSize} OFFSET #{cp}
 </select>
+
+<select id="checkBoardCommentExists" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	BOARD_COMMENTS
+WHERE
+	IDX = #{idx}
+</select>
+
+<select id="checkMyBoardComment" parameterType="int" resultType="Integer">
+SELECT
+	USER_IDX
+FROM
+	BOARD_COMMENTS
+WHERE
+	IDX = #{idx}
+</select>
+
+<update id="updateBoardComment" parameterType="com.animal.api.board.model.request.BoardCommentUpdateRequestDTO">
+UPDATE
+	BOARD_COMMENTS
+SET
+	CONTENT = #{content}
+WHERE
+	IDX = #{idx}
+	AND USER_IDX =	#{userIdx}
+	AND BOARD_IDX =	#{boardIdx}	
+</update>
 </mapper>

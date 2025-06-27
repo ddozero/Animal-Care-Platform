@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
+import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
@@ -35,13 +36,14 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사용자 기준 자유게시판에 관련되어 있는 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.26
+ * @since 2025.06.27
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
  * @see com.animal.api.board.model.request.BoardSearchRequestDTO
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
  * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  * @see com.animal.api.board.model.request.BoardUpdateRequestDTO
- * @see com.animal.api.board.model.response.AllBoardCommentsResponseDTOo
+ * @see com.animal.api.board.model.response.AllBoardCommentsResponseDTO
+ * @see com.animal.api.board.model.request.BoardCommentUpdateRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -328,4 +330,36 @@ public class UserBoardController {
 					.body(new OkResponseDTO<List<AllBoardCommentsResponseDTO>>(200, "게시글 댓글 전체 조회 성공", commentList));
 		}
 	}
+
+	/**
+	 * 자유게시판 댓글 수정
+	 * 
+	 * @param idx             게시판 번호
+	 * @param boardCommentIdx 게시판 댓글 번호
+	 * @param dto             댓글 수정폼
+	 * @param session         로그인 검증용
+	 * @return 성공/실패 메세지
+	 */
+	@PutMapping("{idx}/comments/{boardCommentIdx}")
+	public ResponseEntity<?> updateBoardComment(@PathVariable int idx, @PathVariable int boardCommentIdx,
+			@Valid @RequestBody BoardCommentUpdateRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		int result = service.updateBoardComment(dto, idx, boardCommentIdx, loginUser.getIdx());
+		if (result == service.UPDATE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "댓글 수정 성공", null));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글이 존재 하지 않음"));
+		} else if (result == service.COMMENT_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "댓글이 존재 하지 않음"));
+		} else if (result == service.NOT_MYCOMMENT) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "본인의 댓글이 아님"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		}
+	}
+
 }
