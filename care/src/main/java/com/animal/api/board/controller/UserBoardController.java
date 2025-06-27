@@ -38,7 +38,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사용자 기준 자유게시판에 관련되어 있는 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.27
+ * @since 2025.06.28
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
  * @see com.animal.api.board.model.request.BoardSearchRequestDTO
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
@@ -456,6 +456,15 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 게시판 글 답글
+	 * 
+	 * @param idx     게시판 번호
+	 * @param dto     답글 등록 폼
+	 * @param session 로그인 검증용
+	 * @return 답글 등록 성공/실패 메세지
+	 * @return 생성된 idx(게시판 테이블 idx)
+	 */
 	@PostMapping("{idx}/reply")
 	public ResponseEntity<?> addBoardReply(@PathVariable int idx, @Valid @RequestBody BoardWriteRequestDTO dto,
 			HttpSession session) {
