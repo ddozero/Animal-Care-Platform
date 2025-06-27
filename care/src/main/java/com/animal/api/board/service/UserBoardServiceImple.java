@@ -220,30 +220,28 @@ public class UserBoardServiceImple implements UserBoardService {
 	}
 
 	@Override
-	public Integer checkMyBoardComment(int idx) {
-		Integer result = mapper.checkBoardCommentExists(idx);
-		if (result == null || result == 0) {
-			return NOT_MYCOMMENT;
-		} else {
-			return MYCOMMENT;
-		}
-
-	}
-
-	@Override
-	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx) {
+	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx) {
 
 		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
 		if (boardIdx == null || boardIdx == 0) {
 			return BOARD_NOT_FOUND;
 		}
 
-		Integer boardCommentIdx2 = mapper.checkBoardCommentExists(boardCommentIdx);
+		Integer boardCommentIdx2 = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
 		if (boardCommentIdx2 == null || boardCommentIdx2 == 0) {
 			return COMMENT_NOT_FOUND;
 		}
 
-		mapper.updateBoardComment(dto);
-		return 0;
+		Integer userIdx2 = mapper.checkMyBoardComment(boardCommentIdx);// 해당 댓글이 나의 댓글인지 검증
+		if (userIdx != userIdx2) {
+			return NOT_MYCOMMENT;
+		}
+
+		int result = mapper.updateBoardComment(dto);
+		if (result > 0) {
+			return UPDATE_SUCCESS;
+		} else {
+			return ERROR;
+		}
 	}
 }
