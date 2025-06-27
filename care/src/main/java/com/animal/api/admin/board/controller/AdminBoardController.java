@@ -37,7 +37,7 @@ import com.animal.api.support.service.UserSupportService;
  * 사이트 관리자 페이지의 게시글 관련 기능 클래스
  * 
  * @author Rege-97
- * @since 2025-06-25
+ * @since 2025-06-27
  * @see com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO
  * @see com.animal.api.admin.board.model.request.NoticeInsertRequestDTO
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
@@ -122,6 +122,38 @@ public class AdminBoardController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<BoardDetailResponseDTO>(200, "게시판 상세 조회 성공", boardDetail));
+		}
+	}
+
+	/**
+	 * 사이트 관리 페이지의 게시글 삭제
+	 * 
+	 * @param idx     게시글 번호
+	 * @param session 로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
+	@DeleteMapping("/{idx}")
+	public ResponseEntity<?> deleteBoard(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		int result = adminBoardService.deleteBoard(idx);
+
+		if (result == adminBoardService.DELETE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "게시글 삭제 성공", null));
+		} else if (result == adminBoardService.NOMAL_BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "해당 글을 찾을 수 없습니다."));
+		} else if (result == adminBoardService.NOT_NOMAL_BOARD) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 글은 일반게시글이 아닙니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "게시글 삭제 실패"));
 		}
 	}
 

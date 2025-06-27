@@ -12,6 +12,13 @@ FROM
 WHERE
 	IDX = #{idx}
 </select>
+<delete id="deleteBoard" parameterType="int">
+DELETE
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</delete>
 <update id="updateNotice" parameterType="com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO">
 UPDATE
 	BOARDS

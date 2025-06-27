@@ -10,6 +10,8 @@ public interface AdminBoardMapper {
 
 	public Integer checkBoardType(int idx);
 
+	public int deleteBoard(int idx);
+
 	public int updateNotice(NoticeUpdateRequestDTO dto);
 
 	public int deleteNotice(int idx);
