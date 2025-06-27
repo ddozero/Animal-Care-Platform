@@ -226,6 +226,15 @@ WHERE
 	IDX = #{idx}
 </select>
 
+<select id="checkMyBoardComment" parameterType="int" resultType="Integer">
+SELECT
+	USER_IDX
+FROM
+	BOARD_COMMENTS
+WHERE
+	IDX = #{idx}
+</select>
+
 <update id="updateBoardComment" parameterType="com.animal.api.board.model.request.BoardCommentUpdateRequestDTO">
 UPDATE
 	BOARD_COMMENTS
