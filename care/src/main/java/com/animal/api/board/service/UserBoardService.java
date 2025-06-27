@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
@@ -54,4 +55,6 @@ public interface UserBoardService {
 	public Integer checkBoardExists(int idx);
 
 	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp);
+
+	public int updateBoardComment(BoardCommentUpdateRequestDTO dto);
 }
