@@ -92,4 +92,22 @@ ORDER BY
 	DT.CREATED_AT DESC;
 </select>
 
+<insert id="">
+INSERT
+	INTO
+	DONATIONS
+	(USER_IDX,
+	DONATION_STATUS_IDX,
+	NAME,
+	START_DATE,
+	END_DATE,
+	AMOUNT,
+	COMPLETION_AMOUNT,
+	COMPLETION_RATE,
+	SPONSOR,
+	SPONSOR_DETAIL,
+	CONTENT)
+VALUES(#{userIdx}, #{donationStatusIdx}, '후원 모집', '2025-06-27', '2025-07-01', 70000, 0, 0, '쌍용기업', '후원법인', '후원 부탁드려요');
+</insert>
+
 </mapper>
