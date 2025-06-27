@@ -244,8 +244,8 @@ public class UserBoardServiceImple implements UserBoardService {
 			return BOARD_NOT_FOUND;
 		}
 
-		Integer boardCommentIdx2 = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
-		if (boardCommentIdx2 == null || boardCommentIdx2 == 0) {
+		Integer checkboardCommentIdx = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
+		if (checkboardCommentIdx == null || checkboardCommentIdx == 0) {
 			return COMMENT_NOT_FOUND;
 		}
 
@@ -269,8 +269,8 @@ public class UserBoardServiceImple implements UserBoardService {
 			return BOARD_NOT_FOUND;
 		}
 
-		Integer boardCommentIdx2 = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
-		if (boardCommentIdx2 == null || boardCommentIdx2 == 0) {
+		Integer CheckboardCommentIdx = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
+		if (CheckboardCommentIdx == null || CheckboardCommentIdx == 0) {
 			return COMMENT_NOT_FOUND;
 		}
 
