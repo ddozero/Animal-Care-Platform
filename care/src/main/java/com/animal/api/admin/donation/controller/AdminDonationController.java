@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
+import com.animal.api.admin.donation.model.request.AdminUpdateRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
 import com.animal.api.admin.donation.service.AdminDonationService;
@@ -167,7 +169,8 @@ public class AdminDonationController {
 
 		if (result == adminDonationService.POST_OK) {
 			Integer donationIdx = dto.getIdx();
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Integer>(201, "지원사업 등록 완료", donationIdx));
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Integer>(201, "지원사업 등록 완료", donationIdx));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 등록 실패"));
 		}
@@ -189,6 +192,25 @@ public class AdminDonationController {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "첨부파일 업로드 성공", null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "첨부파일 업로드 실패"));
+		}
+	}
+
+
+	@PutMapping("/upload/{idx}")
+	public ResponseEntity<?> updateAdminDonation(@PathVariable int idx, @Valid @RequestBody AdminUpdateRequestDTO dto,
+			HttpSession session) {
+
+		LoginResponseDTO loginUser = adminUserCheck(session);
+		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
+
+		int result = adminDonationService.updateAdminDonation(dto, idx);
+
+		if (result == adminDonationService.UPDATE_OK) {
+			return ResponseEntity.ok(new OkResponseDTO<>(200, "지원사업 수정 성공", null));
+		} else if (result == adminDonationService.DONATION_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "지원사업을 찾을 수 없음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 수정 실패"));
 		}
 	}
 

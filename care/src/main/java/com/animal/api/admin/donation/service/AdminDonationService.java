@@ -19,6 +19,7 @@ public interface AdminDonationService {
 	public static int UPLOAD_OK = 3;
 	public static int DELETE_OK = 4;
 	public static int ERROR = -1;
+	public static int DONATION_NOT_FOUND = -2;
 	
 	public List<AdminAllDonationResponseDTO> getAdminDonationList(int listSize, int cp);
 
@@ -32,6 +33,6 @@ public interface AdminDonationService {
 	
 	public int uploadDonationFiles(MultipartFile[] files, int idx); //파일 업로드
 	
-	public int updateAdminDonation(AdminUpdateRequestDTO dto);
+	public int updateAdminDonation(AdminUpdateRequestDTO dto, int idx);
 	
 }

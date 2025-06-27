@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.animal.api.admin.donation.mapper.AdminDonationMapper;
 import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
 import com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO;
+import com.animal.api.admin.donation.model.request.AdminUpdateRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
 import com.animal.api.common.util.FileManager;
@@ -77,7 +78,7 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public int addAdminDonation(AdminAddDonationRequestDTO dto, int userIdx) {
-		
+
 		dto.setUserIdx(userIdx);
 		int result = mapper.addAdminDonation(dto);
 
@@ -90,11 +91,23 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public int uploadDonationFiles(MultipartFile[] files, int idx) {
-		
+
 		boolean result = fileManager.uploadFiles("donations", idx, files);
-		
+
 		if (result) {
 			return UPLOAD_OK;
+		} else {
+			return ERROR;
+		}
+	}
+
+	@Override
+	public int updateAdminDonation(AdminUpdateRequestDTO dto, int idx) {
+
+		int result = mapper.updateAdminDonation(dto);
+
+		if (result == 1) {
+			return UPDATE_OK;
 		} else {
 			return ERROR;
 		}
