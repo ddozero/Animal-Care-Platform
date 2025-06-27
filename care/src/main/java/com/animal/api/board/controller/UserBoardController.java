@@ -400,9 +400,18 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
 
-		int result = service.deleteBoardComment(boardCommentIdx, idx);
-
-		return null;
+		int result = service.deleteBoardComment(idx, boardCommentIdx, loginUser.getIdx());
+		if (result == service.DELETE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "댓글 수정 성공", null));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글이 존재 하지 않음"));
+		} else if (result == service.COMMENT_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "댓글이 존재 하지 않음"));
+		} else if (result == service.NOT_MYCOMMENT) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "본인의 댓글이 아님"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		}
 
 	}
 

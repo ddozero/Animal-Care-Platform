@@ -64,5 +64,5 @@ public interface UserBoardService {
 
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx);
 
-	public int deleteBoardComment(int boardCommentIdx, int userIdx);
+	public int deleteBoardComment(int idx, int boardCommentIdx, int userIdx);
 }
