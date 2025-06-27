@@ -235,6 +235,13 @@ WHERE
 	IDX = #{idx}
 </select>
 
+<insert id="addBoardComment" parameterType="com.animal.api.board.model.request.BoardCommentRequestDTO">
+INSERT
+	INTO
+	BOARD_COMMENTS(USER_IDX, BOARD_IDX, CONTENT, REF, LEV, TURN)
+VALUES(#{userIdx},2,#{boardIdx},#{content},#{ref},0,0)
+</insert>
+
 <update id="updateBoardComment" parameterType="com.animal.api.board.model.request.BoardCommentUpdateRequestDTO">
 UPDATE
 	BOARD_COMMENTS
