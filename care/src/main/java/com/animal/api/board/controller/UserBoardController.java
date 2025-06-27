@@ -36,13 +36,14 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사용자 기준 자유게시판에 관련되어 있는 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.26
+ * @since 2025.06.27
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
  * @see com.animal.api.board.model.request.BoardSearchRequestDTO
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
  * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  * @see com.animal.api.board.model.request.BoardUpdateRequestDTO
  * @see com.animal.api.board.model.response.AllBoardCommentsResponseDTO
+ * @see com.animal.api.board.model.request.BoardCommentUpdateRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -330,6 +331,15 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 자유게시판 댓글 수정
+	 * 
+	 * @param idx             게시판 번호
+	 * @param boardCommentIdx 게시판 댓글 번호
+	 * @param dto             댓글 수정폼
+	 * @param session         로그인 검증용
+	 * @return 성공/실패 메세지
+	 */
 	@PutMapping("{idx}/comments/{boardCommentIdx}")
 	public ResponseEntity<?> updateBoardComment(@PathVariable int idx, @PathVariable int boardCommentIdx,
 			@Valid @RequestBody BoardCommentUpdateRequestDTO dto, HttpSession session) {
