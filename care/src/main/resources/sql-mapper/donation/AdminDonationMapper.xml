@@ -5,6 +5,15 @@
   
 <mapper namespace="com.animal.api.admin.donation.mapper.AdminDonationMapper">
 
+<select id = "checkDonationIdx" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	DONATIONS D
+WHERE
+	IDX = #{idx}
+</select>
+
 <select id="getAdminDonationList" parameterType="Map" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
 SELECT
 	D.IDX,
@@ -113,6 +122,7 @@ UPDATE
 	DONATIONS
 SET
 	NAME = #{name},
+	DONATION_STATUS_IDX = #{statusIdx},
 	START_DATE = #{startDate},
 	END_DATE = #{endDate},
 	AMOUNT = #{amount},
@@ -123,13 +133,9 @@ WHERE
 	IDX = #{idx}
 </update>
 
-<select id = "checkDonationIdx" parameterType="int" resultType="Integer">
-SELECT
-	COUNT(*)
-FROM
-	DONATIONS D
-WHERE
-	IDX = #{idx}
-</select>
+
+
+
+
 
 </mapper>
