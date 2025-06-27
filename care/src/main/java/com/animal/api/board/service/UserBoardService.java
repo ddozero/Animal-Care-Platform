@@ -30,6 +30,7 @@ public interface UserBoardService {
 	static int HEART_SUCCESS = 16;
 	static int HEART_NOT_FOUND = 17;
 	static int ALREADY_HEART = 18;
+	static int COMMENT_NOT_FOUND = 19;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);

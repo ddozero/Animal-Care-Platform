@@ -219,16 +219,19 @@ public class UserBoardServiceImple implements UserBoardService {
 		return commentList;
 	}
 
-	
 	@Override
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx) {
-		
-		Integer boardIdx=mapper.checkBoardExists(idx); //게시판 존재 여부 검증
-		
-		if(boardIdx==null||boardIdx==0) {
+
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
+		if (boardIdx == null || boardIdx == 0) {
 			return BOARD_NOT_FOUND;
 		}
-		
+
+		Integer boardCommentIdx2 = mapper.checkBoardCommentExists(boardCommentIdx);
+		if (boardCommentIdx2 == null || boardCommentIdx2 == 0) {
+			return COMMENT_NOT_FOUND;
+		}
+
 		mapper.updateBoardComment(dto);
 		return 0;
 	}
