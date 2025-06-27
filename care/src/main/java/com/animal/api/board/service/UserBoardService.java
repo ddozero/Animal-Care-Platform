@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.board.model.request.BoardCommentReplyRequestDTO;
 import com.animal.api.board.model.request.BoardCommentRequestDTO;
 import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
@@ -65,4 +66,6 @@ public interface UserBoardService {
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx);
 
 	public int deleteBoardComment(int idx, int boardCommentIdx, int userIdx);
+
+	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto, int idx, int boardCommentIdx);
 }

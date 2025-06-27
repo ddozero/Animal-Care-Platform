@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.board.mapper.UserBoardMapper;
+import com.animal.api.board.model.request.BoardCommentReplyRequestDTO;
 import com.animal.api.board.model.request.BoardCommentRequestDTO;
 import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
@@ -288,5 +289,11 @@ public class UserBoardServiceImple implements UserBoardService {
 		} else {
 			return ERROR;
 		}
+	}
+	
+	@Override
+	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto, int idx, int boardCommentIdx) {
+		
+		return 0;
 	}
 }
