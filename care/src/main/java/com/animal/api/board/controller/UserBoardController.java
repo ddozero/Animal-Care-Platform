@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
+import com.animal.api.board.model.request.BoardCommentRequestDTO;
 import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
@@ -43,7 +44,9 @@ import com.animal.api.common.model.OkResponseDTO;
  * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  * @see com.animal.api.board.model.request.BoardUpdateRequestDTO
  * @see com.animal.api.board.model.response.AllBoardCommentsResponseDTO
+ * @see com.animal.api.board.model.request.BoardCommentRequestDTO
  * @see com.animal.api.board.model.request.BoardCommentUpdateRequestDTO
+ * 
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -328,6 +331,32 @@ public class UserBoardController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<AllBoardCommentsResponseDTO>>(200, "게시글 댓글 전체 조회 성공", commentList));
+		}
+	}
+
+	/**
+	 * 게시글 댓글 등록
+	 * 
+	 * @param idx     게시판 번호
+	 * @param dto     댓글 등록 폼
+	 * @param session 로그인 검증용
+	 * @return 댓글 등록 성공/실패 메세지
+	 */
+	@PostMapping("/{idx}/comments")
+	public ResponseEntity<?> addBoardComment(@PathVariable int idx, @Valid @RequestBody BoardCommentRequestDTO dto,
+			HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		int result = service.addBoardComment(dto, idx);
+		if (result == service.POST_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "댓글 등록 성공", null));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글 데이터가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		}
 	}
 

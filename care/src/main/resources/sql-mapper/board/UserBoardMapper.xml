@@ -235,6 +235,22 @@ WHERE
 	IDX = #{idx}
 </select>
 
+<select id="getCommentMaxRef" resultType="int">
+SELECT
+	IFNULL(MAX(REF), 0)
+FROM
+	BOARD_COMMENTS
+WHERE 
+	BOARD_IDX = #{boardIdx}
+</select>
+
+<insert id="addBoardComment" parameterType="com.animal.api.board.model.request.BoardCommentRequestDTO">
+INSERT
+	INTO
+	BOARD_COMMENTS(USER_IDX, BOARD_IDX, CONTENT, REF, LEV, TURN)
+VALUES(#{userIdx},#{boardIdx},#{content},#{ref},0,0)
+</insert>
+
 <update id="updateBoardComment" parameterType="com.animal.api.board.model.request.BoardCommentUpdateRequestDTO">
 UPDATE
 	BOARD_COMMENTS
