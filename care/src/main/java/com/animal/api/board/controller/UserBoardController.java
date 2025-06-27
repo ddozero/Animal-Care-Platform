@@ -391,6 +391,14 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 자유게시판 댓글 삭제
+	 * 
+	 * @param idx             게시판 번호
+	 * @param boardCommentIdx 게시판 댓글 번호
+	 * @param session         로그인 검증용
+	 * @return 성공/실패 메세지
+	 */
 	@DeleteMapping("{idx}/comments/{boardCommentIdx}")
 	public ResponseEntity<?> deleteBoardComment(@PathVariable int idx, @PathVariable int boardCommentIdx,
 			HttpSession session) {
