@@ -221,7 +221,11 @@ public class UserBoardServiceImple implements UserBoardService {
 	}
 
 	@Override
-	public int addBoardComment(BoardCommentRequestDTO dto, int idx, int boardCommentIdx, int userIdx) {
+	public int addBoardComment(BoardCommentRequestDTO dto, int idx) {
+		Integer boardIdx = mapper.checkBoardExists(idx);
+		if (boardIdx == null || boardIdx == 0) {
+			return BOARD_NOT_FOUND;
+		}
 		int ref = mapper.getCommentMaxRef(idx);
 		dto.setRef(ref + 1);
 		int result = mapper.addBoardComment(dto);
