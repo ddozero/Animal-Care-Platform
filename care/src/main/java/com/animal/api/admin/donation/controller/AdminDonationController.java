@@ -113,7 +113,7 @@ public class AdminDonationController {
 	 * @param idx     지원사업 번호
 	 * @param cp      현재 페이지
 	 * @param session 로그인 검증 세션
-	 * 	
+	 * 
 	 * @return 지원사업 후원자 목록 조회
 	 */
 	@GetMapping("{idx}/user")
