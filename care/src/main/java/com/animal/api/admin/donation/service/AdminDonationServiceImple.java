@@ -82,7 +82,7 @@ public class AdminDonationServiceImple implements AdminDonationService {
 		int result = mapper.addAdminDonation(dto);
 
 		if (result > 0) {
-			return POST_SUCCESS;
+			return POST_OK;
 		} else {
 			return ERROR;
 		}

@@ -3,20 +3,25 @@ package com.animal.api.admin.donation.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
 import com.animal.api.admin.donation.service.AdminDonationService;
+import com.animal.api.admin.shelter.service.AdminShelterService;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
@@ -138,6 +143,24 @@ public class AdminDonationController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<AdminDonationUserResponseDTO>>(200, "조회 성공", userList));
+		}
+
+	}
+	
+	@PostMapping("/upload")
+	public ResponseEntity<?> addAdminDonation(@Valid @RequestBody AdminAddDonationRequestDTO dto, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
+
+		int result = adminDonationService.addAdminDonation(dto, userIdx);
+
+		if (result == adminDonationService.POST_OK) {
+			Integer donationIdx = dto.getIdx();
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Integer>(201, "지원사업 등록 완료", donationIdx));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 등록 실패"));
 		}
 
 	}
