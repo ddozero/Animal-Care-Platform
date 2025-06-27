@@ -37,6 +37,7 @@ import com.animal.api.support.model.response.UserNoticeResponseDTO;
  * @since 2025-06-27
  * @see com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO
  * @see com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO
+ * @see com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO
  *
  */
 
@@ -165,7 +166,8 @@ public class AdminDonationController {
 		int result = adminDonationService.addAdminDonation(dto, userIdx);
 
 		if (result == adminDonationService.POST_OK) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Integer>(201, "지원사업 등록 완료", null));
+			Integer donationIdx = dto.getIdx();
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Integer>(201, "지원사업 등록 완료", donationIdx));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 등록 실패"));
 		}
