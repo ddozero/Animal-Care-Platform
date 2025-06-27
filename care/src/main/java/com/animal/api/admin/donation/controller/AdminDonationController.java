@@ -184,7 +184,6 @@ public class AdminDonationController {
 	 * 
 	 * @return 지원사업 파일 업로드 성공 여부
 	 */
-
 	@PostMapping("/upload/{idx}")
 	public ResponseEntity<?> uploadNoticeFiles(@PathVariable int idx, MultipartFile[] files) {
 		int result = adminDonationService.uploadDonationFiles(files, idx);
@@ -195,7 +194,15 @@ public class AdminDonationController {
 		}
 	}
 
-
+	/**
+	 * 사이트 관리자 페이지 지원사업 수정 메서드
+	 * 
+	 * @param idx     지원사업 번호
+	 * @param dto     지원사업 수정
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 지원사업 수정 성공 여부
+	 */
 	@PutMapping("/upload/{idx}")
 	public ResponseEntity<?> updateAdminDonation(@PathVariable int idx, @Valid @RequestBody AdminUpdateRequestDTO dto,
 			HttpSession session) {
