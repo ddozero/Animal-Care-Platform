@@ -51,11 +51,15 @@ public class MemberServiceImple implements MemberService {
 	public void updateMember(MemberUpdateRequestDTO dto) {
 		
 		int memberUpdated = memberMapper.updateMember(dto);
+		
 		if(memberUpdated == 0) {
 			throw new CustomException(404, "존재하지 않는 회원입니다.");
 		}
 		
+	    // 1. 기존 유저 정보 가져오기
 		MemberDatailResopnseDTO existing = memberMapper.selectMemberDetail(dto.getUserIdx());
+		
+	    // 2. 보호소 정보가 있다면 업데이트
 		if(existing != null && existing.getUserType() == 2) {
 			memberMapper.updateShelterMember(dto);
 		}
