@@ -6,10 +6,12 @@ import javax.servlet.http.HttpSession;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.animal.api.auth.mapper.AuthMapper;
 import com.animal.api.common.model.OkResponseDTO;
 /**
  * 회원가입 시 이메일 인증 확인 AOP
@@ -19,6 +21,9 @@ import com.animal.api.common.model.OkResponseDTO;
 @Aspect
 @Component
 public class EmailVerificationCheckAspect {
+	
+	@Autowired
+	private AuthMapper authMapper;
 
     /**
      * 이메일 인증이 필요한 컨트롤러 메서드(@RequireEmailVerified)에 대한 AOP 처리
@@ -57,4 +62,3 @@ public class EmailVerificationCheckAspect {
         return joinPoint.proceed();
     }
 }
-

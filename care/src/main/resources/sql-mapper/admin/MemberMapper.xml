@@ -105,7 +105,7 @@
 		WHERE U.IDX = #{userIdx}
 	</select>
 	
-	<update id="updateMember">
+	<update id="updateMember" parameterType="com.animal.api.admin.member.model.request.MemberUpdateRequestDTO">
 	    UPDATE USERS
 	    SET 
 	        NICKNAME = #{nickname},
@@ -117,7 +117,10 @@
 	        ADDRESS = #{address},
 	        ADDRESS_DETAIL = #{addressDetail},
 	        POINT = #{point},
-	        STATUS = #{status}
+	        STATUS = #{status},
+            LOCKED = #{locked},
+	        LOCK_COUNT = #{lockCount},
+	        UPDATED_AT = NOW()
 	    WHERE IDX = #{userIdx}
 	</update>
 	

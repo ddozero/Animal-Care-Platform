@@ -1,5 +1,8 @@
 package com.animal.api.common.exception;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,9 +15,19 @@ import com.animal.api.common.model.ErrorResponseDTO;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(CustomException.class)
-	public ResponseEntity<ErrorResponseDTO> handleCustomException(CustomException e) {
-		ErrorResponseDTO error = new ErrorResponseDTO(e.getStatusCode(), e.getMessage());
-		return ResponseEntity.status(e.getStatusCode()).body(error);
+	public ResponseEntity<Object> handleCustomException(CustomException e) {
+
+	    // 기본 구조 수동 구성
+	    Map<String, Object> error = new LinkedHashMap<>();
+	    error.put("errorCode", e.getStatusCode());
+	    error.put("errorMsg", e.getMessage());
+
+	    // data가 있을 경우만 추가
+	    if (e.getData() != null) {
+	        error.put("data", e.getData());
+	    }
+
+	    return ResponseEntity.status(e.getStatusCode()).body(error);
 	}
 
 	// 기타 예상치 못한 예외도 오류 전가

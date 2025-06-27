@@ -27,7 +27,7 @@ public class MemberDatailResopnseDTO {
 	private String createdAt;
 	private int locked;
 	private int lockCount;
-	private int lockedAt;
+	private String lockedAt;
 	
     // SHELTERS (userType = 2일 때만)
 	private String shelterName;

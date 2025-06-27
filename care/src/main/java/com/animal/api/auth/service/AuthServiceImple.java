@@ -1,5 +1,8 @@
 package com.animal.api.auth.service;
 
+import java.time.LocalDateTime;
+import java.util.Map;
+
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,8 +33,25 @@ public class AuthServiceImple implements AuthService {
 			throw new CustomException(404, "존재하지 않는 아이디입니다");
 		}
 
+		//로그인 잠금 여부 확인
+		if (user.getLocked() == 1) {
+			throw new CustomException(403, "해당 계정은 잠금 상태 입니다. 이메일 인증 후 다시 로그인 해주세요.",Map.of("id", user.getId(), "email", user.getEmail()));
+		}
+		
+		//비밀번호 일치 검사 
 		if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-			throw new CustomException(401, "비밀번호가 일치하지 않습니다");
+			
+			int newCount = user.getLockCount() + 1;
+			
+			if( newCount >= 5 ) {
+				user.setLocked(1);
+				user.setLockedAt(LocalDateTime.now());
+			}
+			
+			user.setLockCount(newCount);
+			authMapper.updateLockInfo(user);
+			
+			throw new CustomException(401, "비밀번호가 일치하지 않습니다.");
 		}
 		
 		if(user.getStatus() == -1) {
@@ -46,6 +66,14 @@ public class AuthServiceImple implements AuthService {
 			throw new CustomException(403, "관리자는 별도의 로그인 경로를 이용해주세요.");
 		}
 		
+		//로그인 성공 시 LOCK 초기화 
+		if(user.getLockCount() > 0 || user.getLocked() == 1) {
+			user.setLockCount(0);
+			user.setLocked(0);
+			user.setLockedAt(null);
+			authMapper.updateLockInfo(user);
+		}
+
 		authMapper.updateLastLoginAt(user.getIdx());
 
 		LoginResponseDTO res = new LoginResponseDTO();
