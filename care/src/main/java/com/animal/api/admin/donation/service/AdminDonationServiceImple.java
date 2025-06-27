@@ -122,5 +122,23 @@ public class AdminDonationServiceImple implements AdminDonationService {
 			return ERROR;
 		}
 	}
+	
+	@Override
+	public int deleteAdminDonation(int idx) {
+		
+		Integer donationIdx = mapper.checkDonationIdx(idx);
+		if(donationIdx == null || donationIdx == 0) {
+			return DONATION_NOT_FOUND;
+		}
+	
+		int result = mapper.deleteAdminDonation(idx);
+		
+		if(result == 1) {
+			fileManager.deleteFolder("donations", idx);
+			return DELETE_OK;
+		}else {
+			return ERROR;
+		}
+	}
 
 }

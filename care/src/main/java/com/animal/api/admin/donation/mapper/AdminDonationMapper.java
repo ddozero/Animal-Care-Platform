@@ -27,5 +27,7 @@ public interface AdminDonationMapper {
 	public int updateAdminDonation(AdminUpdateRequestDTO dto);
 	
 	public Integer checkDonationIdx(int idx);
+	
+	public int deleteAdminDonation(int idx);
 
 }
