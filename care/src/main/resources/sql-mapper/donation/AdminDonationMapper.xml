@@ -102,12 +102,34 @@ INSERT
 	START_DATE,
 	END_DATE,
 	AMOUNT,
-	COMPLETION_AMOUNT,
-	COMPLETION_RATE,
 	SPONSOR,
 	SPONSOR_DETAIL,
 	CONTENT)
-VALUES(#{userIdx}, #{statusIdx}, #{name}, #{startDate}, #{endDate}, #{amount}, #{completionAmount}, #{completionRate}, #{sponsor}, #{sponsorDetail}, #{content});
+VALUES(#{userIdx}, #{statusIdx}, #{name}, #{startDate}, #{endDate}, #{amount}, #{sponsor}, #{sponsorDetail}, #{content});
 </insert>
+
+<update id="updateAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminUpdateRequestDTO">
+UPDATE
+	DONATIONS
+SET
+	NAME = #{name},
+	START_DATE = #{startDate},
+	END_DATE = #{endDate},
+	AMOUNT = #{amount},
+	SPONSOR = #{sponsor},
+	SPONSOR_DETAIL = #{sponsorDetail},
+	CONTENT = #{content}
+WHERE
+	IDX = #{idx}
+</update>
+
+<select id = "checkDonationIdx" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	DONATIONS D
+WHERE
+	IDX = #{idx}
+</select>
 
 </mapper>

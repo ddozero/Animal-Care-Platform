@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
 import com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO;
+import com.animal.api.admin.donation.model.request.AdminUpdateRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
 
@@ -22,5 +23,9 @@ public interface AdminDonationMapper {
 	public List<AdminDonationUserResponseDTO> getAdminDonationUser(Map map);
 	
 	public int addAdminDonation(AdminAddDonationRequestDTO dto);
+	
+	public int updateAdminDonation(AdminUpdateRequestDTO dto);
+	
+	public Integer checkDonationIdx(int idx);
 
 }
