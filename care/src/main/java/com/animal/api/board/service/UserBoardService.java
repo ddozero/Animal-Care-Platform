@@ -31,6 +31,8 @@ public interface UserBoardService {
 	static int HEART_NOT_FOUND = 17;
 	static int ALREADY_HEART = 18;
 	static int COMMENT_NOT_FOUND = 19;
+	static int NOT_MYCOMMENT = 20;
+	static int MYCOMMENT = 21;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
@@ -56,6 +58,8 @@ public interface UserBoardService {
 	public Integer checkBoardExists(int idx);
 
 	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp);
+
+	public Integer checkMyBoardComment(int idx);
 
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx);
 }

@@ -220,6 +220,17 @@ public class UserBoardServiceImple implements UserBoardService {
 	}
 
 	@Override
+	public Integer checkMyBoardComment(int idx) {
+		Integer result = mapper.checkBoardCommentExists(idx);
+		if (result == null || result == 0) {
+			return NOT_MYCOMMENT;
+		} else {
+			return MYCOMMENT;
+		}
+
+	}
+
+	@Override
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx) {
 
 		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
