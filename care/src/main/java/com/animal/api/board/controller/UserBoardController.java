@@ -334,6 +334,14 @@ public class UserBoardController {
 		}
 	}
 
+	/**
+	 * 게시글 댓글 등록
+	 * 
+	 * @param idx     게시판 번호
+	 * @param dto     댓글 등록 폼
+	 * @param session 로그인 검증용
+	 * @return 댓글 등록 성공/실패 메세지
+	 */
 	@PostMapping("/{idx}/comments")
 	public ResponseEntity<?> addBoardComment(@PathVariable int idx, @Valid @RequestBody BoardCommentRequestDTO dto,
 			HttpSession session) {
