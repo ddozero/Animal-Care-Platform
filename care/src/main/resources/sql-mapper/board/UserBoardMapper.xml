@@ -217,6 +217,15 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
+<select id="checkBoardCommentExists" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	BOARD_COMMENTS
+WHERE
+	IDX = #{idx}
+</select>
+
 <update id="updateBoardComment" parameterType="com.animal.api.board.model.request.BoardCommentUpdateRequestDTO">
 UPDATE
 	BOARD_COMMENTS
