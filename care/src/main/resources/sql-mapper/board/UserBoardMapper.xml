@@ -295,7 +295,7 @@ INSERT
 VALUES(#{userIdx},#{boardIdx},#{content},#{ref},1,#{turn})
 </insert>
 
-<select id="checkBoardReplyExists" resultType="int">
+<select id="checkBoardReplyExists" resultType="Integer">
 SELECT
 	COUNT(*)
 FROM
