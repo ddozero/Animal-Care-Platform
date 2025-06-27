@@ -410,7 +410,7 @@ public class UserBoardController {
 
 		int result = service.deleteBoardComment(idx, boardCommentIdx, loginUser.getIdx());
 		if (result == service.DELETE_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "댓글 수정 성공", null));
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "댓글 삭제 성공", null));
 		} else if (result == service.BOARD_NOT_FOUND) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글이 존재 하지 않음"));
 		} else if (result == service.COMMENT_NOT_FOUND) {
