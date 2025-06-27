@@ -261,4 +261,13 @@ WHERE
 	AND USER_IDX =	#{userIdx}
 	AND BOARD_IDX =	#{boardIdx}	
 </update>
+
+<delete id="deleteBoardComment" parameterType="Map">
+DELETE
+FROM
+	BOARD_COMMENTS
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+</delete>
 </mapper>

@@ -244,8 +244,8 @@ public class UserBoardServiceImple implements UserBoardService {
 			return BOARD_NOT_FOUND;
 		}
 
-		Integer boardCommentIdx2 = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
-		if (boardCommentIdx2 == null || boardCommentIdx2 == 0) {
+		Integer checkboardCommentIdx = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
+		if (checkboardCommentIdx == null || checkboardCommentIdx == 0) {
 			return COMMENT_NOT_FOUND;
 		}
 
@@ -257,6 +257,34 @@ public class UserBoardServiceImple implements UserBoardService {
 		int result = mapper.updateBoardComment(dto);
 		if (result > 0) {
 			return UPDATE_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
+
+	@Override
+	public int deleteBoardComment(int idx, int boardCommentIdx, int userIdx) {
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
+		if (boardIdx == null || boardIdx == 0) {
+			return BOARD_NOT_FOUND;
+		}
+
+		Integer CheckboardCommentIdx = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
+		if (CheckboardCommentIdx == null || CheckboardCommentIdx == 0) {
+			return COMMENT_NOT_FOUND;
+		}
+
+		Integer userIdx2 = mapper.checkMyBoardComment(boardCommentIdx);// 해당 댓글이 나의 댓글인지 검증
+		if (userIdx != userIdx2) {
+			return NOT_MYCOMMENT;
+		}
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("idx", boardCommentIdx);
+		map.put("userIdx", userIdx);
+		int result = mapper.deleteBoardComment(map);
+		if (result == 1) {
+			return DELETE_SUCCESS;
 		} else {
 			return ERROR;
 		}

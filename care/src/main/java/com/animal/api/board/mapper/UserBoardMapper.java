@@ -53,4 +53,6 @@ public interface UserBoardMapper {
 	public int addBoardComment(BoardCommentRequestDTO dto);
 
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto);
+
+	public int deleteBoardComment(Map map);
 }
