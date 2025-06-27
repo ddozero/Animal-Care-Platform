@@ -322,8 +322,8 @@ public class UserBoardServiceImple implements UserBoardService {
 	}
 
 	@Override
-	public int addBoardReply(BoardWriteRequestDTO dto) {
-		Integer checkBoardRef = mapper.checkBoardCommentExists(ref);
+	public int addBoardReply(BoardWriteRequestDTO dto, int idx) {
+		Integer checkBoardRef = mapper.checkBoardCommentExists(boardDetail.get);
 
 		if (checkBoardRef > 0) {
 			return REPLY_ALREADY_EXISTS;

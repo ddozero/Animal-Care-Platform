@@ -423,14 +423,14 @@ public class UserBoardController {
 		}
 
 	}
-	
+
 	/**
 	 * 댓글의 댓글
 	 * 
-	 * @param idx 게시판 번호
+	 * @param idx             게시판 번호
 	 * @param boardCommentIdx 게시판 댓글 번호
-	 * @param dto 댓글의 댓글 입력폼
-	 * @param session 로그인 검증용
+	 * @param dto             댓글의 댓글 입력폼
+	 * @param session         로그인 검증용
 	 * @return 성공/실패 메세지
 	 */
 	@PostMapping("{idx}/comments/{boardCommentIdx}/replies")
@@ -454,5 +454,16 @@ public class UserBoardController {
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		}
+	}
+
+	@PostMapping("{idx}/reply")
+	public ResponseEntity<?> addBoardReply(@PathVariable int idx, @Valid @RequestBody BoardWriteRequestDTO dto,
+			HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		return null;
 	}
 }

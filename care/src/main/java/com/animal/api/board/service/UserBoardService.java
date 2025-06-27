@@ -71,5 +71,5 @@ public interface UserBoardService {
 
 	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto, int idx, int boardCommentIdx);
 
-	public int addBoardReply(BoardWriteRequestDTO dto);
+	public int addBoardReply(BoardWriteRequestDTO dto, int idx);
 }
