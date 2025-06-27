@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
+import com.animal.api.board.model.request.BoardCommentReplyRequestDTO;
 import com.animal.api.board.model.request.BoardCommentRequestDTO;
 import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
@@ -421,6 +422,20 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		}
 
+	}
+
+	@PostMapping("{idx}/comments/{boardCommentIdx}/replies")
+	public ResponseEntity<?> addBoardCommentReply(@PathVariable int idx, @PathVariable int boardCommentIdx,
+			BoardCommentReplyRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+		
+		int result=service.addBoardCommentReply(dto, idx, boardCommentIdx);
+		
+		return null;
+		
 	}
 
 }
