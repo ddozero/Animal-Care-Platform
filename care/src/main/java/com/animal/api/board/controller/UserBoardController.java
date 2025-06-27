@@ -391,4 +391,19 @@ public class UserBoardController {
 		}
 	}
 
+	@DeleteMapping("{idx}/comments/{boardCommentIdx}")
+	public ResponseEntity<?> deleteBoardComment(@PathVariable int idx, @PathVariable int boardCommentIdx,
+			HttpSession session) {
+
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		int result = service.deleteBoardComment(boardCommentIdx, idx);
+
+		return null;
+
+	}
+
 }
