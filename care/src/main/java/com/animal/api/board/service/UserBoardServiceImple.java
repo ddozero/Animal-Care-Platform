@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.board.mapper.UserBoardMapper;
+import com.animal.api.board.model.request.BoardCommentReplyRequestDTO;
 import com.animal.api.board.model.request.BoardCommentRequestDTO;
 import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
@@ -285,6 +286,36 @@ public class UserBoardServiceImple implements UserBoardService {
 		int result = mapper.deleteBoardComment(map);
 		if (result == 1) {
 			return DELETE_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
+
+	@Override
+	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto, int idx, int boardCommentIdx) {
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
+		if (boardIdx == null || boardIdx == 0) {
+			return BOARD_NOT_FOUND;
+		}
+
+		Integer CheckboardCommentIdx = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
+		if (CheckboardCommentIdx == null || CheckboardCommentIdx == 0) {
+			return COMMENT_NOT_FOUND;
+		}
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map = mapper.checkCommentRefTurn(boardCommentIdx);
+
+		if (map == null || map.get("REF") == null || map.get("MAXTURN") == null) { // 댓글 REF,MAXTURN 존재 여부 검증
+			return COMMENT_REF_DATA_MISSING;
+		} else {
+			dto.setRef(map.get("REF"));
+			dto.setTurn(map.get("MAXTURN") + 1);
+		}
+
+		int result = mapper.addBoardCommentReply(dto);
+
+		if (result == 1) {
+			return POST_SUCCESS;
 		} else {
 			return ERROR;
 		}

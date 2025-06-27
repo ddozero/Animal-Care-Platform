@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
+import com.animal.api.board.model.request.BoardCommentReplyRequestDTO;
 import com.animal.api.board.model.request.BoardCommentRequestDTO;
 import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
@@ -46,7 +47,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @see com.animal.api.board.model.response.AllBoardCommentsResponseDTO
  * @see com.animal.api.board.model.request.BoardCommentRequestDTO
  * @see com.animal.api.board.model.request.BoardCommentUpdateRequestDTO
- * 
+ * @see com.animal.api.board.model.request.BoardCommentReplyRequestDTO
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -422,5 +423,36 @@ public class UserBoardController {
 		}
 
 	}
+	
+	/**
+	 * 댓글의 댓글
+	 * 
+	 * @param idx 게시판 번호
+	 * @param boardCommentIdx 게시판 댓글 번호
+	 * @param dto 댓글의 댓글 입력폼
+	 * @param session 로그인 검증용
+	 * @return 성공/실패 메세지
+	 */
+	@PostMapping("{idx}/comments/{boardCommentIdx}/replies")
+	public ResponseEntity<?> addBoardCommentReply(@PathVariable int idx, @PathVariable int boardCommentIdx,
+			@Valid @RequestBody BoardCommentReplyRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
 
+		int result = service.addBoardCommentReply(dto, idx, boardCommentIdx);
+		if (result == service.POST_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "댓글의 댓글 등록 성공", null));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글이 존재 하지 않음"));
+		} else if (result == service.COMMENT_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "댓글이 존재 하지 않음"));
+		} else if (result == service.COMMENT_REF_DATA_MISSING) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ErrorResponseDTO(404, "댓글의 ref,turn 값이 존재 하지 않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		}
+	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.board.model.request.BoardCommentReplyRequestDTO;
 import com.animal.api.board.model.request.BoardCommentRequestDTO;
 import com.animal.api.board.model.request.BoardCommentUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
@@ -34,6 +35,7 @@ public interface UserBoardService {
 	static int COMMENT_NOT_FOUND = 19;
 	static int NOT_MYCOMMENT = 20;
 	static int UPDATE_SUCCESS = 21;
+	static int COMMENT_REF_DATA_MISSING = 22;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
@@ -65,4 +67,6 @@ public interface UserBoardService {
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx);
 
 	public int deleteBoardComment(int idx, int boardCommentIdx, int userIdx);
+
+	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto, int idx, int boardCommentIdx);
 }
