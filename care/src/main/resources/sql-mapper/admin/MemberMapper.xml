@@ -13,9 +13,9 @@
 			   U.EMAIL AS email,
 			   U.USER_TYPE_IDX AS userType,
 			   U.STATUS AS status,
-			   DATE_FORMAT(U.CREATE_AT, '%Y-%m-%d %H:%i:%s') as createdAt,
-			   S.SHELTER_NAME AS sheltername
-		FROM USER U
+			   DATE_FORMAT(U.CREATED_AT, '%Y-%m-%d %H:%i:%s') as createdAt,
+			   S.SHELTER_NAME AS shelterName
+		FROM USERS U
 		LEFT JOIN SHELTERS S ON U.IDX = S.USER_IDX
 		<where>
 			<if test="keyword != null and keyword != '' and type != null">
@@ -70,4 +70,68 @@
 			</if>
 		</where>
 	</select>
+	
+	<select id="selectMemberDetail" resultType="com.animal.api.admin.member.model.response.MemberDatailResopnseDTO">
+		SELECT 
+			U.IDX AS userIdx,
+			U.ID AS id,
+			U.EMAIL AS email,
+			U.NAME AS name,
+			U.TEL AS tel,
+			U.POINT AS point,
+			U.GENDER AS gender,
+			U.NICKNAME AS nickname,
+			DATE_FORMAT(U.BIRTH_DATE, '%Y-%m-%d') AS birthDate,
+			U.ZIP_CODE AS zipCode,
+			U.ADDRESS AS address, 
+			U.ADDRESS_DETAIL AS addressDetail,
+			U.USER_TYPE_IDX AS userType,
+			U.STATUS AS status,
+			DATE_FORMAT(U.CREATED_AT, '%Y-%m-%d %H:%i:%s') AS createdAt,
+			U.LOCKED AS locked,
+			U.LOCK_COUNT AS lockCount,
+			DATE_FORMAT(U.LOCKED_AT, '%Y-%m-%d %H:%i:%s') AS lockedAt,
+			
+			S.SHELTER_NAME AS shelterName,
+			S.SHELTER_TEL AS shelterTel,
+			S.SHELTER_PERSON_NAME AS shelterPersonName,
+			S.SHELTER_EMAIL AS shelterEmail,
+			S.SHELTER_BUSINESS_NUMBER AS shelterBusinessNumber,
+			S.SHELTER_ADDRESS AS shelterAddress,
+			S.SHELTER_ADDRESS_DETAIL AS shelterAddressDetail,
+			S.SHELTER_DESCRIPTION AS shelterDescription 
+		FROM USERS U
+		LEFT JOIN SHELTERS S ON U.IDX = S.USER_IDX
+		WHERE U.IDX = #{userIdx}
+	</select>
+	
+	<update id="updateMember">
+	    UPDATE USERS
+	    SET 
+	        NICKNAME = #{nickname},
+	        NAME = #{name},
+	        TEL = #{tel},
+	        GENDER = #{gender},
+	        BIRTH_DATE = #{birthDate},
+	        ZIP_CODE = #{zipCode},
+	        ADDRESS = #{address},
+	        ADDRESS_DETAIL = #{addressDetail},
+	        POINT = #{point},
+	        STATUS = #{status}
+	    WHERE IDX = #{userIdx}
+	</update>
+	
+	<update id="updateShelterMember">
+	    UPDATE SHELTERS
+	    SET
+	        SHELTER_TEL = #{shelterTel},
+	        SHELTER_NAME = #{shelterName},
+	        SHELTER_PERSON_NAME = #{shelterPersonName},
+	        SHELTER_EMAIL = #{shelterEmail},
+	        SHELTER_BUSINESS_NUMBER = #{shelterBusinessNumber},
+	        SHELTER_ADDRESS = #{shelterAddress},
+	        SHELTER_ADDRESS_DETAIL = #{shelterAddressDetail},
+	        SHELTER_DESCRIPTION = #{shelterDescription}
+	    WHERE IDX = #{userIdx}
+	</update>
 </mapper>

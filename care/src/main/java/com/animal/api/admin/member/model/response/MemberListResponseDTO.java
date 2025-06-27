@@ -15,8 +15,8 @@ public class MemberListResponseDTO {
 	private String email;
 	private int userType;  // 1-일반 2-보호소
 	private int status; // 0 정지 1 정상 -1 탈퇴
-	private String creatAt;
+	private String createdAt;
 	
-	private String sheltername;
+	private String shelterName;
 	
 }
