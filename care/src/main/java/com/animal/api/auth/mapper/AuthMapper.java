@@ -23,4 +23,7 @@ public interface AuthMapper {
     
     // 사용자 비밀번호 찾기 조회 
     UserVO findByUserid(@Param("userid") String userid);
+    
+    //로그인 시 잠금 관련 초기화
+    int updateLockInfo(UserVO user);
 }

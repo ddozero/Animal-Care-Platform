@@ -48,7 +48,7 @@ public class EmailCertificationController {
 		String code = String.format("%06d",new Random().nextInt(999999));
 		
         // 2. 이메일 발송
-        String subject = "[Animal Care] 아이디/비밀번호 찾기 인증번호 안내";
+        String subject = "[유기동물 통합 플랫폼] 아이디/비밀번호 찾기 인증번호 안내";
         String body = "인증번호는 [" + code + "] 입니다. 5분 이내로 입력해주세요.";
 
         emailService.sendEmail(email, subject, body);

@@ -42,7 +42,7 @@ public class EmailVerificationController {
 		String code = String.format("%06d", new Random().nextInt(999999));
 		
 		//이메일 발송 내역
-		String subject = "[Animal Care] 이메일 인증번호 안내";
+		String subject = "[유기동물 통합 플랫폼] 이메일 인증번호 안내";
 		String body = "인증번호는 [" + code + "] 입니다. 회원가입 화면에 정확히 입력 바랍니다.";
 		
 		emailService.sendEmail(email, subject, body);

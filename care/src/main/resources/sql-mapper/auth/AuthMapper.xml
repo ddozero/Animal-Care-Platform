@@ -77,6 +77,13 @@
 	      AND STATUS = 1
 	</select>
 
-
+	<update id="updateLockInfo" parameterType="com.animal.api.auth.model.vo.UserVO">
+	    UPDATE USERS
+	    SET LOCKED = #{locked},
+	        LOCK_COUNT = #{lockCount},
+	        LOCKED_AT = #{lockedAt},
+	        UPDATED_AT = NOW()
+	    WHERE ID = #{id}
+	</update>
 
 </mapper>
