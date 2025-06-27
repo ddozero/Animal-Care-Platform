@@ -224,16 +224,24 @@ public class AdminDonationController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 수정 실패"));
 		}
 	}
-	
+
+	/**
+	 * 사이트 관리자 페이지 지원사업 삭제 메서드
+	 * 
+	 * @param idx     지원사업 번호
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 지원사업 삭제 성공 여부
+	 */
 	@DeleteMapping("/upload/{idx}")
-	public ResponseEntity<?> deleteAdminDonation(@PathVariable int idx, HttpSession session){
-		
+	public ResponseEntity<?> deleteAdminDonation(@PathVariable int idx, HttpSession session) {
+
 		LoginResponseDTO loginUser = adminUserCheck(session);
 		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
 
 		int result = adminDonationService.deleteAdminDonation(idx);
-		
-		if(result == adminDonationService.DELETE_OK) {
+
+		if (result == adminDonationService.DELETE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<Void>(200, "지원사업 삭제 성공", null));
 		} else if (result == adminDonationService.DONATION_NOT_FOUND) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "지원사업을 찾을 수 없음"));
@@ -241,7 +249,6 @@ public class AdminDonationController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 삭제 실패"));
 		}
 	}
-	
 
 	/**
 	 * (공통) 로그인 및 괸리자 검증 메서드
