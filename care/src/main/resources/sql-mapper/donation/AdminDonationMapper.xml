@@ -92,4 +92,22 @@ ORDER BY
 	DT.CREATED_AT DESC;
 </select>
 
+<insert id="addAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO" useGeneratedKeys="true" keyProperty="idx">
+INSERT
+	INTO
+	DONATIONS
+	(USER_IDX,
+	DONATION_STATUS_IDX,
+	NAME,
+	START_DATE,
+	END_DATE,
+	AMOUNT,
+	COMPLETION_AMOUNT,
+	COMPLETION_RATE,
+	SPONSOR,
+	SPONSOR_DETAIL,
+	CONTENT)
+VALUES(#{userIdx}, #{statusIdx}, #{name}, #{startDate}, #{endDate}, #{amount}, #{completionAmount}, #{completionRate}, #{sponsor}, #{sponsorDetail}, #{content});
+</insert>
+
 </mapper>

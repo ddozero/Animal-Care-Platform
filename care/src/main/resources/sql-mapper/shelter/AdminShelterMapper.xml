@@ -37,7 +37,7 @@ ORDER BY
 	IDX DESC
 LIMIT #{listSize} OFFSET #{cp}
 </select>
-<select id="getShelterJoinRequestListTotalCnt" parameterType="">
+<select id="getShelterJoinRequestListTotalCnt">
 SELECT
 	COUNT(*)
 FROM

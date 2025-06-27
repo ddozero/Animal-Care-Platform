@@ -3,20 +3,26 @@ package com.animal.api.admin.donation.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
 import com.animal.api.admin.donation.service.AdminDonationService;
+import com.animal.api.admin.shelter.service.AdminShelterService;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
@@ -28,9 +34,10 @@ import com.animal.api.support.model.response.UserNoticeResponseDTO;
  * 사이트 관리자 페이지의 지원사업 관련 기능 클래스
  * 
  * @author ddozero
- * @since 2025-06-26
+ * @since 2025-06-27
  * @see com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO
  * @see com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO
+ * @see com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO
  *
  */
 
@@ -140,6 +147,49 @@ public class AdminDonationController {
 					.body(new OkResponseDTO<List<AdminDonationUserResponseDTO>>(200, "조회 성공", userList));
 		}
 
+	}
+
+	/**
+	 * 사이트 관리자 페이지 지원사업 등록 메서드
+	 * 
+	 * @param dto     지원사업 등록
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 지원사업 등록 성공 여부
+	 */
+	@PostMapping("/upload")
+	public ResponseEntity<?> addAdminDonation(@Valid @RequestBody AdminAddDonationRequestDTO dto, HttpSession session) {
+
+		LoginResponseDTO loginUser = shelterUserCheck(session);
+		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
+
+		int result = adminDonationService.addAdminDonation(dto, userIdx);
+
+		if (result == adminDonationService.POST_OK) {
+			Integer donationIdx = dto.getIdx();
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Integer>(201, "지원사업 등록 완료", donationIdx));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 등록 실패"));
+		}
+	}
+
+	/**
+	 * 사이트 관리자 페이지 지원사업 등록 파일 업로드 메서드
+	 * 
+	 * @param idx   지원사업 번호
+	 * @param files 지원사업 파일 업로드
+	 * 
+	 * @return 지원사업 파일 업로드 성공 여부
+	 */
+
+	@PostMapping("/upload/{idx}")
+	public ResponseEntity<?> uploadNoticeFiles(@PathVariable int idx, MultipartFile[] files) {
+		int result = adminDonationService.uploadDonationFiles(files, idx);
+		if (result == adminDonationService.UPLOAD_OK) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "첨부파일 업로드 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "첨부파일 업로드 실패"));
+		}
 	}
 
 	/**
