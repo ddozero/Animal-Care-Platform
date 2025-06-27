@@ -43,5 +43,7 @@ public interface UserBoardMapper {
 
 	public List<AllBoardCommentsResponseDTO> getBoardComments(Map map);
 
+	public Integer checkBoardCommentExists(int idx);
+
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto);
 }
