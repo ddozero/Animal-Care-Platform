@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
@@ -162,8 +163,18 @@ public class AdminDonationController {
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 등록 실패"));
 		}
-
 	}
+	
+	@PostMapping("/upload/{idx}")
+	public ResponseEntity<?> uploadNoticeFiles(@PathVariable int idx, MultipartFile[] files) {
+		int result = adminDonationService.uploadDonationFiles(files, idx);
+		if (result == adminDonationService.UPLOAD_OK) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "첨부파일 업로드 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "첨부파일 업로드 실패"));
+		}
+	}
+	
 
 	/**
 	 * (공통) 로그인 및 괸리자 검증 메서드

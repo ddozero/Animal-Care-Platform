@@ -15,7 +15,8 @@ public interface AdminDonationService {
 	
 	public static int POST_OK = 1;
 	public static int UPDATE_OK = 2;
-	public static int DELETE_OK = 3;
+	public static int UPLOAD_OK = 3;
+	public static int DELETE_OK = 4;
 	public static int ERROR = -1;
 	
 	public List<AdminAllDonationResponseDTO> getAdminDonationList(int listSize, int cp);
@@ -24,10 +25,10 @@ public interface AdminDonationService {
 
 	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx, int userIdx);
 	
-	//후원자 목록 조회
-	public List<AdminDonationUserResponseDTO> getAdminDonationUser(int listSize, int cp, int idx);
+	public List<AdminDonationUserResponseDTO> getAdminDonationUser(int listSize, int cp, int idx); 	//후원자 목록 조회
 	
 	public int addAdminDonation(AdminAddDonationRequestDTO dto, int userIdx);
 	
-	public int uploadDonationFiles(MultipartFile[] files, int idx);
+	public int uploadDonationFiles(MultipartFile[] files, int idx); //파일 업로드
+	
 }

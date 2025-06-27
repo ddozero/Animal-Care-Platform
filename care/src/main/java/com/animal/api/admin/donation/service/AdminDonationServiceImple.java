@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.admin.donation.mapper.AdminDonationMapper;
 import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
@@ -86,7 +87,18 @@ public class AdminDonationServiceImple implements AdminDonationService {
 		} else {
 			return ERROR;
 		}
+	}
 
+	@Override
+	public int uploadDonationFiles(MultipartFile[] files, int idx) {
+		
+		boolean result = fileManager.uploadFiles("donations", idx, files);
+		
+		if (result) {
+			return UPLOAD_OK;
+		} else {
+			return ERROR;
+		}
 	}
 
 }
