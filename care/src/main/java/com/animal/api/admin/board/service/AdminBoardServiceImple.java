@@ -27,7 +27,7 @@ public class AdminBoardServiceImple implements AdminBoardService {
 			return NOMAL_BOARD_NOT_FOUND;
 		}
 
-		if (boardTypeIdx != 2) { // 공지사항인지 확인
+		if (boardTypeIdx != 2) { // 자유게시판인지 확인
 			return NOT_NOMAL_BOARD;
 		}
 		int result = mapper.deleteBoard(idx);
