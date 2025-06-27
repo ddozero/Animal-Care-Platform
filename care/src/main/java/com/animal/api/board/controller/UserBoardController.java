@@ -426,7 +426,7 @@ public class UserBoardController {
 
 	@PostMapping("{idx}/comments/{boardCommentIdx}/replies")
 	public ResponseEntity<?> addBoardCommentReply(@PathVariable int idx, @PathVariable int boardCommentIdx,
-			BoardCommentReplyRequestDTO dto, HttpSession session) {
+			@Valid @RequestBody BoardCommentReplyRequestDTO dto, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
