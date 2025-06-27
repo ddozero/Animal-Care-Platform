@@ -295,6 +295,15 @@ INSERT
 VALUES(#{userIdx},#{boardIdx},#{content},#{ref},1,#{turn})
 </insert>
 
+<select id="getBoardRef" resultType="Integer">
+SELECT
+	REF
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</select>
+
 <select id="checkBoardReplyExists" resultType="Integer">
 SELECT
 	COUNT(*)

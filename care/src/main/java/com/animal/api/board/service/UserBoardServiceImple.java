@@ -240,7 +240,7 @@ public class UserBoardServiceImple implements UserBoardService {
 	@Override
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx) {
 
-		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시글 존재 여부 검증
 		if (boardIdx == null || boardIdx == 0) {
 			return BOARD_NOT_FOUND;
 		}
@@ -265,7 +265,7 @@ public class UserBoardServiceImple implements UserBoardService {
 
 	@Override
 	public int deleteBoardComment(int idx, int boardCommentIdx, int userIdx) {
-		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시글 존재 여부 검증
 		if (boardIdx == null || boardIdx == 0) {
 			return BOARD_NOT_FOUND;
 		}
@@ -293,7 +293,7 @@ public class UserBoardServiceImple implements UserBoardService {
 
 	@Override
 	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto, int idx, int boardCommentIdx) {
-		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시글 존재 여부 검증
 		if (boardIdx == null || boardIdx == 0) {
 			return BOARD_NOT_FOUND;
 		}
@@ -323,14 +323,26 @@ public class UserBoardServiceImple implements UserBoardService {
 
 	@Override
 	public int addBoardReply(BoardWriteRequestDTO dto, int idx) {
-		Integer checkBoardRef = mapper.checkBoardCommentExists(boardDetail.get);
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시글 존재 여부 검증
+		if (boardIdx == null || boardIdx == 0) {
+			return BOARD_NOT_FOUND;
+		}
 
-		if (checkBoardRef > 0) {
+		Integer getBoardRef = mapper.getBoardRef(idx); // 게시글 REF 존재 여부 검증
+		if (getBoardRef == null || getBoardRef == 0) {
+			return BOARD_REF_DATA_MISSING;
+		}
+
+		Integer checkBoardReplyExists = mapper.checkBoardCommentExists(getBoardRef); // 게시글 답글 존재 여부 확인
+		if (checkBoardReplyExists == 1) {
 			return REPLY_ALREADY_EXISTS;
 		}
+
 		int result = mapper.addBoardReply(dto);
 		if (result == 1) {
 			return POST_SUCCESS;
+		} else {
+			return ERROR;
 		}
 	}
 }

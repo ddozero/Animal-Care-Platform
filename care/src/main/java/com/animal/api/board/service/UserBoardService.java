@@ -37,6 +37,7 @@ public interface UserBoardService {
 	static int UPDATE_SUCCESS = 21;
 	static int COMMENT_REF_DATA_MISSING = 22;
 	static int REPLY_ALREADY_EXISTS = 23;
+	static int BOARD_REF_DATA_MISSING = 24;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);

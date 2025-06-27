@@ -464,6 +464,23 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
 
-		return null;
+		int result = service.addBoardReply(dto, idx);
+
+		if (result == service.POST_SUCCESS) {
+			Integer boardIdx = dto.getIdx();
+			Map<String, Integer> map = new HashMap();
+			map.put("createdIdx", boardIdx);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "게시판 글 등록 성공", map));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "원글이 존재 하지 않음"));
+		} else if (result == service.BOARD_REF_DATA_MISSING) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글의 ref 값이 존재 하지 않음"));
+		} else if (result == service.REPLY_ALREADY_EXISTS) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "이미 답글이 존재"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		}
+
 	}
 }
