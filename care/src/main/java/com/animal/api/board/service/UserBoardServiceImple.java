@@ -290,10 +290,34 @@ public class UserBoardServiceImple implements UserBoardService {
 			return ERROR;
 		}
 	}
-	
+
 	@Override
 	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto, int idx, int boardCommentIdx) {
-		
-		return 0;
+		Integer boardIdx = mapper.checkBoardExists(idx); // 게시판 존재 여부 검증
+		if (boardIdx == null || boardIdx == 0) {
+			return BOARD_NOT_FOUND;
+		}
+
+		Integer CheckboardCommentIdx = mapper.checkBoardCommentExists(boardCommentIdx); // 게시판 댓글 존재 여부 검증
+		if (CheckboardCommentIdx == null || CheckboardCommentIdx == 0) {
+			return COMMENT_NOT_FOUND;
+		}
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map = mapper.checkCommentRefTurn(boardCommentIdx);
+
+		if (map == null || map.get("REF") == null || map.get("MAXTURN") == null) { // 댓글 REF,MAXTURN 존재 여부 검증
+			return COMMENT_REF_DATA_MISSING;
+		} else {
+			dto.setRef(map.get("REF"));
+			dto.setTurn(map.get("MAXTURN") + 1);
+		}
+
+		int result = mapper.addBoardCommentReply(dto);
+
+		if (result == 1) {
+			return POST_SUCCESS;
+		} else {
+			return ERROR;
+		}
 	}
 }

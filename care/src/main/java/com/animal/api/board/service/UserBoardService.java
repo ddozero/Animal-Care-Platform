@@ -35,6 +35,7 @@ public interface UserBoardService {
 	static int COMMENT_NOT_FOUND = 19;
 	static int NOT_MYCOMMENT = 20;
 	static int UPDATE_SUCCESS = 21;
+	static int COMMENT_REF_DATA_MISSING = 22;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);

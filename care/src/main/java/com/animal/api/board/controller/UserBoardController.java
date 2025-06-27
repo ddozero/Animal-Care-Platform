@@ -431,11 +431,19 @@ public class UserBoardController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-		
-		int result=service.addBoardCommentReply(dto, idx, boardCommentIdx);
-		
-		return null;
-		
-	}
 
+		int result = service.addBoardCommentReply(dto, idx, boardCommentIdx);
+		if (result == service.POST_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "댓글의 댓글 등록 성공", null));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글이 존재 하지 않음"));
+		} else if (result == service.COMMENT_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "댓글이 존재 하지 않음"));
+		} else if (result == service.COMMENT_REF_DATA_MISSING) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ErrorResponseDTO(404, "댓글의 ref,turn 값이 존재 하지 않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		}
+	}
 }
