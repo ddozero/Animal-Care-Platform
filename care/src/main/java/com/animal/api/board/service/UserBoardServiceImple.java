@@ -320,4 +320,17 @@ public class UserBoardServiceImple implements UserBoardService {
 			return ERROR;
 		}
 	}
+
+	@Override
+	public int addBoardReply(BoardWriteRequestDTO dto) {
+		Integer checkBoardRef = mapper.checkBoardCommentExists(ref);
+
+		if (checkBoardRef > 0) {
+			return REPLY_ALREADY_EXISTS;
+		}
+		int result = mapper.addBoardReply(dto);
+		if (result == 1) {
+			return POST_SUCCESS;
+		}
+	}
 }
