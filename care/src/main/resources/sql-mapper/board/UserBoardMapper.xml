@@ -183,4 +183,37 @@ WHERE
 	USER_IDX = #{userIdx}
 	AND BOARD_IDX =	#{boardIdx}
 </delete>
+
+<select id="checkBoardExists" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</select>
+
+<select id="getBoardComments" parameterType="Map" resultType="com.animal.api.board.model.response.AllBoardCommentsResponseDTO">
+SELECT
+	BC.IDX,
+	BC.USER_IDX,
+	IFNULL(U.NICKNAME, '탈퇴 회원') AS NICKNAME,
+	BC.BOARD_IDX,
+	BC.CONTENT,
+	BC.CREATED_AT,
+	BC.REF,
+	BC.LEV,
+	BC.TURN
+FROM
+	BOARD_COMMENTS BC
+LEFT JOIN USERS U ON
+	BC.USER_IDX = U.IDX
+WHERE
+	BC.BOARD_IDX = #{boardIdx}
+ORDER BY
+	BC.REF DESC,
+	BC.TURN ASC
+LIMIT
+#{listSize} OFFSET #{cp}
+</select>
 </mapper>

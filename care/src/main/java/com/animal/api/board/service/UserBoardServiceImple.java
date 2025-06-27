@@ -13,6 +13,7 @@ import com.animal.api.board.mapper.UserBoardMapper;
 import com.animal.api.board.model.request.BoardSearchRequestDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
+import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
 import com.animal.api.common.util.FileManager;
@@ -194,5 +195,26 @@ public class UserBoardServiceImple implements UserBoardService {
 		} else {
 			return ERROR;
 		}
+	}
+
+	@Override
+	public Integer checkBoardExists(int idx) {
+		Integer boardIdx = mapper.checkBoardExists(idx);
+		return boardIdx;
+	}
+
+	@Override
+	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		cp = (cp - 1) * listSize;
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("boardIdx", boardIdx);
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+		List<AllBoardCommentsResponseDTO> commentList = mapper.getBoardComments(map);
+		return commentList;
 	}
 }

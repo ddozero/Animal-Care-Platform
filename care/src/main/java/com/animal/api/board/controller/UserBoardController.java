@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.board.model.request.BoardUpdateRequestDTO;
 import com.animal.api.board.model.request.BoardWriteRequestDTO;
+import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
 import com.animal.api.board.service.UserBoardService;
@@ -40,6 +41,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
  * @see com.animal.api.board.model.response.BoardDetailResponseDTO
  * @see com.animal.api.board.model.request.BoardUpdateRequestDTO
+ * @see com.animal.api.board.model.response.AllBoardCommentsResponseDTOo
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -296,6 +298,34 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시판 번호가 존재하지않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근:좋아요 삭제 실패"));
+		}
+	}
+
+	/**
+	 * 자유게시판의 게시글 하나의 댓글 전체 조회
+	 * 
+	 * @param idx
+	 * @param cp
+	 * @return 조회 성공시 해당 게시글 댓글 전체 /실패시 메세지
+	 */
+	@GetMapping("/{idx}/comments")
+	public ResponseEntity<?> getBoardComments(@PathVariable int idx,
+			@RequestParam(value = "cp", defaultValue = "0") int cp) {
+		int listSize = 3;
+		Integer boardIdx = service.checkBoardExists(idx);
+		if (boardIdx == null || boardIdx == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글 데이터가 존재하지않음"));
+		}
+
+		List<AllBoardCommentsResponseDTO> commentList = service.getBoardComments(idx, listSize, cp);
+
+		if (commentList == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		} else if (commentList.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글 댓글 데이터가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<AllBoardCommentsResponseDTO>>(200, "게시글 댓글 전체 조회 성공", commentList));
 		}
 	}
 }
