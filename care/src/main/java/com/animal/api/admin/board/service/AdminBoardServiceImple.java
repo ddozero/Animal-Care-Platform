@@ -20,6 +20,26 @@ public class AdminBoardServiceImple implements AdminBoardService {
 	private FileManager fileManager;
 
 	@Override
+	public int deleteBoard(int idx) {
+		Integer boardTypeIdx = mapper.checkBoardType(idx);
+
+		if (boardTypeIdx == null) {
+			return NOMAL_BOARD_NOT_FOUND;
+		}
+
+		if (boardTypeIdx != 2) { // 공지사항인지 확인
+			return NOT_NOMAL_BOARD;
+		}
+		int result = mapper.deleteBoard(idx);
+
+		result = result > 0 ? DELETE_SUCCESS : ERROR;
+		if (result == DELETE_SUCCESS) { // 게시글 삭제 시 파일도 같이 삭제
+			fileManager.deleteFolder("boards", idx);
+		}
+		return result;
+	}
+
+	@Override
 	public int updateNotice(NoticeUpdateRequestDTO dto, int idx) {
 		Integer boardTypeIdx = mapper.checkBoardType(idx);
 
@@ -53,7 +73,7 @@ public class AdminBoardServiceImple implements AdminBoardService {
 		int result = mapper.deleteNotice(idx);
 
 		result = result > 0 ? DELETE_SUCCESS : ERROR;
-		if (result == DELETE_SUCCESS) {	// 게시글 삭제 시 파일도 같이 삭제
+		if (result == DELETE_SUCCESS) { // 게시글 삭제 시 파일도 같이 삭제
 			fileManager.deleteFolder("boards", idx);
 		}
 		return result;
