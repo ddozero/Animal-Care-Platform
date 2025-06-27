@@ -48,7 +48,7 @@ public interface UserBoardMapper {
 
 	public Integer checkMyBoardComment(int idx);
 
-	public int getCommentMaxRef();
+	public int getCommentMaxRef(int boardIdx);
 
 	public int addBoardComment(BoardCommentRequestDTO dto);
 

@@ -60,7 +60,7 @@ public interface UserBoardService {
 
 	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp);
 
-	public int addBoardComment(BoardCommentRequestDTO dto);
+	public int addBoardComment(BoardCommentRequestDTO dto, int idx, int boardCommentIdx, int userIdx);
 
 	public int updateBoardComment(BoardCommentUpdateRequestDTO dto, int idx, int boardCommentIdx, int userIdx);
 }
