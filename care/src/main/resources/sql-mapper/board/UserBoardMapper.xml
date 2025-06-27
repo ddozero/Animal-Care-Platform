@@ -270,4 +270,28 @@ WHERE
 	IDX = #{idx}
 	AND USER_IDX = #{userIdx}
 </delete>
+
+<select id="checkCommentRefTurn" resultType="Map">
+SELECT
+	BC.REF AS REF,
+	(
+	SELECT
+		MAX(TURN)
+	FROM
+		BOARD_COMMENTS
+	WHERE
+		REF = BC.REF
+    ) AS MAXTURN
+FROM
+	BOARD_COMMENTS BC
+WHERE
+	BC.IDX = #{idx};
+</select>
+
+<insert id="addBoardCommentReply" parameterType="com.animal.api.board.model.request.BoardCommentReplyRequestDTO">
+INSERT
+	INTO
+	BOARD_COMMENTS(USER_IDX, BOARD_IDX, CONTENT, REF, LEV, TURN)
+VALUES(#{userIdx},#{boardIdx},#{content},#{ref},1,#{turn})
+</insert>
 </mapper>
