@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO;
 import com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO;
+import com.animal.api.admin.donation.model.request.AdminUpdateRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
@@ -30,5 +31,7 @@ public interface AdminDonationService {
 	public int addAdminDonation(AdminAddDonationRequestDTO dto, int userIdx);
 	
 	public int uploadDonationFiles(MultipartFile[] files, int idx); //파일 업로드
+	
+	public int updateAdminDonation(AdminUpdateRequestDTO dto);
 	
 }
