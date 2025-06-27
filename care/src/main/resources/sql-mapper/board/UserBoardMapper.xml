@@ -216,4 +216,15 @@ ORDER BY
 LIMIT
 #{listSize} OFFSET #{cp}
 </select>
+
+<update id="updateBoardComment" parameterType="com.animal.api.board.model.request.BoardCommentUpdateRequestDTO">
+UPDATE
+	BOARD_COMMENTS
+SET
+	CONTENT = #{content}
+WHERE
+	IDX = #{idx}
+	AND USER_IDX =	#{userIdx}
+	AND BOARD_IDX =	#{boardIdx}	
+</update>
 </mapper>
