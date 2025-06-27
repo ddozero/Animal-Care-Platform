@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.aop.util.SessionUtils;
 import com.animal.api.common.model.OkResponseDTO;
-import com.animal.api.mypage.donation.model.response.DonationListResponseDTO;
 import com.animal.api.mypage.volunteers.model.request.VolunteerReviewWriteRequestDTO;
 import com.animal.api.mypage.volunteers.model.response.VolunteerDetailResponseDTO;
 import com.animal.api.mypage.volunteers.model.response.VolunteerListResponseDTO;

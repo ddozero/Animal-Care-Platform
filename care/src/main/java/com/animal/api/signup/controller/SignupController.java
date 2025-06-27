@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.common.aop.email.RequireEmailVerified;
 import com.animal.api.common.model.OkResponseDTO;
-import com.animal.api.common.util.FileManager;
 import com.animal.api.signup.model.request.ShelterSignupRequestDTO;
 import com.animal.api.signup.model.request.UserSignupRequestDTO;
 import com.animal.api.signup.service.ShelterSignupService;
