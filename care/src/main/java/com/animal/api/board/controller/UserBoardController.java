@@ -480,7 +480,7 @@ public class UserBoardController {
 			Map<String, Integer> map = new HashMap();
 			map.put("createdIdx", boardIdx);
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new OkResponseDTO<Map<String, Integer>>(201, "게시판 글 등록 성공", map));
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "게시판 답글 등록 성공", map));
 		} else if (result == service.BOARD_NOT_FOUND) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "원글이 존재 하지 않음"));
 		} else if (result == service.BOARD_REF_DATA_MISSING) {

@@ -331,9 +331,11 @@ public class UserBoardServiceImple implements UserBoardService {
 		Integer getBoardRef = mapper.getBoardRef(idx); // 게시글 REF 존재 여부 검증
 		if (getBoardRef == null || getBoardRef == 0) {
 			return BOARD_REF_DATA_MISSING;
+		} else {
+			dto.setRef(getBoardRef);
 		}
 
-		Integer checkBoardReplyExists = mapper.checkBoardCommentExists(getBoardRef); // 게시글 답글 존재 여부 확인
+		Integer checkBoardReplyExists = mapper.checkBoardReplyExists(getBoardRef); // 게시글 답글 존재 여부 확인
 		if (checkBoardReplyExists == 1) {
 			return REPLY_ALREADY_EXISTS;
 		}
