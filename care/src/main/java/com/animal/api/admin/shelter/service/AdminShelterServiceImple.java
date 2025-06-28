@@ -32,7 +32,7 @@ public class AdminShelterServiceImple implements AdminShelterService {
 			return NOT_FOUND_VOLUNTEER;
 		}
 
-		if (volunteerIdx != shelterIdx) { // 해당 보호시설의 봉사인지 확인
+		if (userIdx != shelterIdx) { // 해당 보호시설의 봉사인지 확인
 			return NOT_OWNED_VOLUNTEER;
 		}
 		int result = mapper.deleteVolunteer(volunteerIdx);

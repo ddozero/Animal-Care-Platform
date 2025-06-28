@@ -43,7 +43,7 @@ import com.animal.api.volunteers.service.UserVolunteersService;
  * 사이트 관리자 페이지 내의 보호시설 관리 페이지 컨트롤러
  * 
  * @author Rege-97
- * @since 2025-06-26
+ * @since 2025-06-27
  * @see com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO
  * @see com.animal.api.animal.model.response.AnimalDetailResponseDTO
  * @see com.animal.api.shelter.model.response.AllShelterListResponseDTO
@@ -296,8 +296,8 @@ public class AdminShelterController {
 		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
-		List<ShelterVolunteerReviewResponseDTO> reviewList = userShelterService.getShelterVolunteerReviews(cp, idx);
-		PageInformationDTO pageInfo = userShelterService.getShelterVolunteerReviewsPageInfo(cp, idx);
+		List<ShelterVolunteersResponseDTO> reviewList = userShelterService.getShelterVolunteers(cp, idx);
+		PageInformationDTO pageInfo = userShelterService.getShelterVolunteersPageInfo(cp, idx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
@@ -305,7 +305,7 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "조회된 데이터가 없습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new OkPageResponseDTO<List<ShelterVolunteerReviewResponseDTO>>(200, "조회 성공", reviewList, pageInfo));
+					new OkPageResponseDTO<List<ShelterVolunteersResponseDTO>>(200, "조회 성공", reviewList, pageInfo));
 		}
 	}
 
@@ -338,6 +338,41 @@ public class AdminShelterController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 봉사가 아닙니다."));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<AllVolunteersResponseDTO>(200, "봉사 상세정보 조회 성공", dto));
+		}
+	}
+
+	/**
+	 * 사이트 관리자 페이지에서 봉사컨텐츠를 삭제하는 메서드
+	 * 
+	 * @param shelterIdx   보호시설의 idx
+	 * @param volunteerIdx 본사 번호
+	 * @param session      로그인 검증을 위한 세션
+	 * @return 성공 또는 실패 메세지
+	 */
+	@DeleteMapping("/{shelterIdx}/volunteers/{volunteerIdx}")
+	public ResponseEntity<?> deleteVolunteer(@PathVariable int volunteerIdx, @PathVariable int shelterIdx,
+			HttpSession session) {
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+
+		int result = adminShelterService.deleteVolunteer(volunteerIdx, shelterIdx);
+
+		if (result == adminShelterService.DELETE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "봉사 삭제 성공", null));
+		} else if (result == adminShelterService.NOT_FOUND_VOLUNTEER) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ErrorResponseDTO(404, "해당 봉사가 존재하지 않거나 이미 삭제되었습니다."));
+		} else if (result == adminShelterService.NOT_OWNED_VOLUNTEER) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "해당 보호시설의 봉사가 아닙니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "봉사 삭제 실패"));
 		}
 	}
 
