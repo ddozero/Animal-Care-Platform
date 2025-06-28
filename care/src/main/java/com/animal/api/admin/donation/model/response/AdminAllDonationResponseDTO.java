@@ -1,6 +1,7 @@
 package com.animal.api.admin.donation.model.response;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -29,6 +30,6 @@ public class AdminAllDonationResponseDTO {
 	private String sponsor;
 	private String sponsorDetail;
 	private String content;
-	private String imagePath;
+	private List<String> imagePaths;
 
 }
