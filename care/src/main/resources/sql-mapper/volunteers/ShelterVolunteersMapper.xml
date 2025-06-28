@@ -4,4 +4,36 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.animal.api.management.volunteers.mapper.ShelterVolunteersMappper">
+<select id="getShelterAllVolunteers" parameterType="Map" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	V.VOLUNTEER_DATE,
+	V.TIME,
+	V.LOCATION,
+	V.CAPACITY,
+	(
+	SELECT
+		COUNT(*)
+	FROM
+		VOLUNTEER_REQUESTS VR
+	WHERE
+		VR.VOLUNTEER_IDX = V.IDX
+    ) AS APPLICANTS,
+	V.AGE_TARGET,
+	V.CREATED_AT,
+	VT.NAME AS VOLUNTEERTYPE,
+	VS.NAME AS VOLUNTEERSTATUS
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_TYPES VT ON
+	V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+WHERE
+	V.USER_IDX = #{userIdx}
+ORDER BY
+	V.CREATED_AT DESC
+LIMIT #{listSize} OFFSET #{cp};
+</select>
 </mapper>
