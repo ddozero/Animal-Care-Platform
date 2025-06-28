@@ -25,6 +25,26 @@ public class AdminShelterServiceImple implements AdminShelterService {
 	private int pageSize = 5;
 
 	@Override
+	public int deleteVolunteer(int volunteerIdx, int shelterIdx) {
+		Integer userIdx = mapper.checkShelterVolunteer(volunteerIdx);
+
+		if (userIdx == null) {
+			return NOT_FOUND_VOLUNTEER;
+		}
+
+		if (userIdx != shelterIdx) { // 해당 보호시설의 봉사인지 확인
+			return NOT_OWNED_VOLUNTEER;
+		}
+		int result = mapper.deleteVolunteer(volunteerIdx);
+
+		result = result > 0 ? DELETE_SUCCESS : ERROR;
+		if (result == DELETE_SUCCESS) { // 봉사 삭제 시 파일도 같이 삭제
+			fileManager.deleteFolder("volunteers", volunteerIdx);
+		}
+		return result;
+	}
+
+	@Override
 	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(int cp) {
 		if (cp == 0) {
 			cp = 1;
