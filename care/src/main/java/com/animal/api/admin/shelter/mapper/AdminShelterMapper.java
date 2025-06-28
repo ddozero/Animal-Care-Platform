@@ -10,6 +10,10 @@ import com.animal.api.admin.shelter.model.response.ShelterJoinRequestListRespons
 @Mapper
 public interface AdminShelterMapper {
 
+	public Integer checkShelterVolunteer(int idx);
+
+	public int deleteVolunteer(int idx);
+
 	public List<ShelterJoinRequestListResponseDTO> getShelterJoinRequestList(Map map);
 
 	public int getShelterJoinRequestListTotalCnt();
