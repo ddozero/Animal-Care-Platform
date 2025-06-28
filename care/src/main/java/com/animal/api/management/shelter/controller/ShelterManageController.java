@@ -93,11 +93,29 @@ public class ShelterManageController {
 
 		int userIdx = loginUser.getIdx();
 		dto.setIdx(userIdx);
-		int count = shelterService.updateShelterInfo(dto,userIdx);
+		int count = shelterService.updateShelterInfo(dto, userIdx);
 		if (count > 0) {
 			return ResponseEntity.ok(new OkResponseDTO<ShelterInfoUpdateRequestDTO>(200, "기본정보 수정 성공", dto));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "기본정보 수정 실패"));
+		}
+	}
+	
+	/**
+	 * 보호시설 기본정보 수정 시 파일 업로드 (사업자등록증 및 이미지)
+	 * 
+	 * @param idx 보호시설 번호
+	 * @param files 업로드 파일 
+	 * 
+	 * @return 보호시설 info 파일 업로드 성공 여부
+	 */
+	@PostMapping("/upload/{idx}")
+	public ResponseEntity<?> uploadShelterInfoFiles(@PathVariable int idx, MultipartFile[] files) {
+		int result = shelterService.uploadShelterFile(files, idx);
+		if (result == shelterService.UPLOAD_OK) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "지원사업을 찾을 수 없음"));
 		}
 	}
 

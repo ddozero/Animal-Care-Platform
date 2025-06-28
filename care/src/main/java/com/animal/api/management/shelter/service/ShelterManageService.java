@@ -30,7 +30,7 @@ public interface ShelterManageService {
 
 	public int updateShelterInfo(ShelterInfoUpdateRequestDTO dto, int userIdx);
 	
-	public int uplodShelterFile(MultipartFile[] files, int idx);
+	public int uploadShelterFile(MultipartFile[] files, int idx);
 
 	// 보호시설 리뷰
 	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int listSize, int cp, int idx);
