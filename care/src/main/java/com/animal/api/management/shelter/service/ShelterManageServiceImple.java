@@ -35,6 +35,8 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	public AllManageShelterResponseDTO getShelterInfo(int idx) {
 		AllManageShelterResponseDTO dto = mapper.getShelterInfo(idx);
 		if (dto != null && dto.getDescription() != null) {
+			dto.setImagePaths(fileManager.getImagePath("shelters", idx));
+			dto.setFilePaths(fileManager.getFilePath("shelters", idx)); //사업자등록증 조회
 			dto.setDescription(dto.getDescription().replaceAll("\n", "<br>"));
 		}
 		return dto;
