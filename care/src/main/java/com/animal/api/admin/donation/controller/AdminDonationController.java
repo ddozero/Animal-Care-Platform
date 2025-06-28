@@ -160,7 +160,7 @@ public class AdminDonationController {
 	 * 
 	 * @return 지원사업 등록 성공 여부
 	 */
-	@PostMapping("/upload")
+	@PostMapping
 	public ResponseEntity<?> addAdminDonation(@Valid @RequestBody AdminAddDonationRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = adminUserCheck(session);
@@ -206,7 +206,7 @@ public class AdminDonationController {
 	 * 
 	 * @return 지원사업 수정 성공 여부
 	 */
-	@PutMapping("/upload/{idx}")
+	@PutMapping("/{idx}")
 	public ResponseEntity<?> updateAdminDonation(@PathVariable int idx, @Valid @RequestBody AdminUpdateRequestDTO dto,
 			HttpSession session) {
 
@@ -233,7 +233,7 @@ public class AdminDonationController {
 	 * 
 	 * @return 지원사업 삭제 성공 여부
 	 */
-	@DeleteMapping("/upload/{idx}")
+	@DeleteMapping("/{idx}")
 	public ResponseEntity<?> deleteAdminDonation(@PathVariable int idx, HttpSession session) {
 
 		LoginResponseDTO loginUser = adminUserCheck(session);
