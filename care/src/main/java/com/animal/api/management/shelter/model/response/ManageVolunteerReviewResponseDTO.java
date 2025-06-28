@@ -1,6 +1,7 @@
 package com.animal.api.management.shelter.model.response;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -26,5 +27,6 @@ public class ManageVolunteerReviewResponseDTO {
 	private int ref;
 	private int lev;
 	private int turn;
+	private List<String> imagePaths;
 
 }

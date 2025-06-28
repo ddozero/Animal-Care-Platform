@@ -141,8 +141,9 @@ public class ShelterManageController {
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
-
-		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(listSize, cp, userIdx);
+		
+		ManageVolunteerReviewResponseDTO dto = new ManageVolunteerReviewResponseDTO();
+		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(dto, listSize, cp, userIdx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
@@ -175,8 +176,9 @@ public class ShelterManageController {
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
-
-		List<ManageAdoptionReviewResponseDTO> reviewList = shelterService.getAdoptionReview(listSize, cp, userIdx);
+		
+		ManageAdoptionReviewResponseDTO dto = new ManageAdoptionReviewResponseDTO();
+		List<ManageAdoptionReviewResponseDTO> reviewList = shelterService.getAdoptionReview(dto, listSize, cp, userIdx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
