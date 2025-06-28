@@ -28,7 +28,9 @@ public interface ShelterManageService {
 	// 보호시설 기본정보
 	public AllManageShelterResponseDTO getShelterInfo(int idx);
 
-	public int updateSheterInfo(ShelterInfoUpdateRequestDTO dto);
+	public int updateShelterInfo(ShelterInfoUpdateRequestDTO dto, int userIdx);
+	
+	public int uplodShelterFile(MultipartFile[] files, int idx);
 
 	// 보호시설 리뷰
 	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int listSize, int cp, int idx);

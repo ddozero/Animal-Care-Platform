@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class ShelterInfoUpdateRequestDTO {
 	
 	private int idx;
+	private int userIdx;
 	
 	@NotBlank(message = "보호소 이름 작성은 필수입니다.")
 	private String shelterName;

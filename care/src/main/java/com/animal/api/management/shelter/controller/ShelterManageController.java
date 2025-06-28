@@ -93,10 +93,9 @@ public class ShelterManageController {
 
 		int userIdx = loginUser.getIdx();
 		dto.setIdx(userIdx);
-		int count = shelterService.updateSheterInfo(dto);
+		int count = shelterService.updateShelterInfo(dto,userIdx);
 		if (count > 0) {
-			AllManageShelterResponseDTO responseDto = shelterService.getShelterInfo(userIdx);
-			return ResponseEntity.ok(new OkResponseDTO<AllManageShelterResponseDTO>(200, "기본정보 수정 성공", responseDto));
+			return ResponseEntity.ok(new OkResponseDTO<ShelterInfoUpdateRequestDTO>(200, "기본정보 수정 성공", dto));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "기본정보 수정 실패"));
 		}

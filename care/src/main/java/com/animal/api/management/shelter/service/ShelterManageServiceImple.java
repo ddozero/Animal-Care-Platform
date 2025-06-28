@@ -43,9 +43,20 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 
 	@Override
-	public int updateSheterInfo(ShelterInfoUpdateRequestDTO dto) {
+	public int updateShelterInfo(ShelterInfoUpdateRequestDTO dto, int userIdx) {
 		int count = mapper.updateSheterInfo(dto);
 		return count;
+	}
+	
+	@Override
+	public int uplodShelterFile(MultipartFile[] files, int idx) { //보호시설 info 수정 파일업로드
+		boolean result = fileManager.uploadFiles("shelters", idx, files);
+
+		if (result) {
+			return UPLOAD_OK;
+		} else {
+			return ERROR;
+		}
 	}
 
 	@Override
@@ -292,7 +303,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 
 	@Override
-	public int uploadBoardFile(MultipartFile[] files, int idx) {
+	public int uploadBoardFile(MultipartFile[] files, int idx) { //보호시설 게시판 파일 업로드
 
 		boolean result = fileManager.uploadFiles("boards", idx, files);
 
@@ -345,5 +356,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return ERROR;
 		}
 	}
+	
+
 
 }
