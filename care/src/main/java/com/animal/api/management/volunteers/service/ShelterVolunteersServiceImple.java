@@ -23,16 +23,18 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 	private FileManager fileManager;
 
 	@Override
-	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int listSize, int cp, int userIdx) {
+	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int userIdx, int listSize, int cp) {
 		if (cp == 0) {
 			cp = 1;
 		}
 		cp = (cp - 1) * listSize;
 		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("userIdx", userIdx);
 		map.put("listSize", listSize);
 		map.put("cp", cp);
-		List<ShelterVolunteersListResponseDTO> volunteersList = mapper.getShelterAllVolunteers(null);
 
-		return volunteersList;
+		List<ShelterVolunteersListResponseDTO> shelterVolunteersList = mapper.getShelterAllVolunteers(map);
+
+		return shelterVolunteersList;
 	}
 }
