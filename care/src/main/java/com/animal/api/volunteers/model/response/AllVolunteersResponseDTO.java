@@ -1,6 +1,7 @@
 package com.animal.api.volunteers.model.response;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -30,5 +31,7 @@ public class AllVolunteersResponseDTO {
 	private int userIdx;
 	private String shelter;
 	private String shelterType;
+	private List<String> imagePaths;
+	private List<String> filePaths;
 
 }

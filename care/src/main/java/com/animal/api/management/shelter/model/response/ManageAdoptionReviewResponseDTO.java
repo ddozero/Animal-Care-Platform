@@ -1,6 +1,7 @@
 package com.animal.api.management.shelter.model.response;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ManageAdoptionReviewResponseDTO {
-
+	
 	private int reviewIdx;
 	private int userIdx;
 	private int shelterIdx;
@@ -25,5 +26,6 @@ public class ManageAdoptionReviewResponseDTO {
 	private int ref;
 	private int lev;
 	private int turn;
+	private String imagePaths;
 
 }

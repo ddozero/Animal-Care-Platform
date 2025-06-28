@@ -55,8 +55,8 @@ public class AdminDonationServiceImple implements AdminDonationService {
 		AdminAllDonationResponseDTO dto = mapper.getAdminDonationDetail(idx);
 		if (dto != null) {
 			List<String> imagePaths = fileManager.getImagePath("donations", dto.getIdx());
-			if (imagePaths != null && !imagePaths.isEmpty()) { // 이미지 경로 가져오기
-				dto.setImagePath(imagePaths.get(0));
+			if (imagePaths != null || imagePaths.size() != 0) { // 이미지 경로 가져오기
+				dto.setImagePaths(imagePaths);
 			}
 		}
 		return dto;
