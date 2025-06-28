@@ -5,10 +5,13 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
 
 @Mapper
 public interface ShelterVolunteersMappper {
 
 	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(Map map);
+
+	public int addShelterVolunteer(ShelterVolunteersInsertDTO dto);
 }
