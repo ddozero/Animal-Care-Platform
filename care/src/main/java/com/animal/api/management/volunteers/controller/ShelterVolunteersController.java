@@ -32,6 +32,7 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * @author consgary
  * @since 2025.06.28
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO
+ * @see com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO
  */
 
 @RestController
@@ -73,7 +74,14 @@ public class ShelterVolunteersController {
 					200, "보호시설에 등록된 봉사 조회 성공", shelterVolunteersList));
 		}
 	}
-	
+
+	/**
+	 * 봉사 등록
+	 * 
+	 * @param dto     봉사 등록폼
+	 * @param session 로그인 검증용 세션
+	 * @return 성공시 메세지와 함께 게시글 idx(이미지업로드 활용)/실패시 실패 메세지
+	 */
 	@PostMapping
 	public ResponseEntity<?> addShelterVolunteer(@Valid @RequestBody ShelterVolunteersInsertDTO dto,
 			HttpSession session) {
@@ -96,10 +104,17 @@ public class ShelterVolunteersController {
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new OkResponseDTO<Map<String, Integer>>(201, "봉사 등록 성공", map));
 		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "봉사 등록 실패"));
 		}
 	}
 
+	/**
+	 * 봉사 대표 이미지 업로드
+	 * 
+	 * @param files 프론트에서 받은 이미지
+	 * @param idx   봉사 등록 되면서 생긴 번호
+	 * @return 업로드 성공 또는 실패 메세지
+	 */
 	@PostMapping("/upload/{idx}")
 	public ResponseEntity<?> uploadShelterVolunteerImage(MultipartFile[] files, @PathVariable int idx) {
 		int result = service.uploadShelterVolunteerImage(files, idx);
