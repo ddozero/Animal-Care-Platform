@@ -36,7 +36,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		AllManageShelterResponseDTO dto = mapper.getShelterInfo(idx);
 		if (dto != null && dto.getDescription() != null) {
 			dto.setImagePaths(fileManager.getImagePath("shelters", idx));
-			dto.setFilePaths(fileManager.getFilePath("shelters", idx)); //사업자등록증 조회
+			dto.setFilePaths(fileManager.getFilePath("shelters", idx)); // 사업자등록증 조회
 			dto.setDescription(dto.getDescription().replaceAll("\n", "<br>"));
 		}
 		return dto;
@@ -47,11 +47,11 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		int count = mapper.updateSheterInfo(dto);
 		return count;
 	}
-	
+
 	@Override
-	public int uploadShelterFile(MultipartFile[] files, int idx) { //보호시설 info 수정 파일업로드
+	public int uploadShelterFile(MultipartFile[] files, int idx) { // 보호시설 info 수정 파일업로드
 		boolean result = fileManager.uploadFiles("shelters", idx, files);
-		
+
 		if (result) {
 			return UPLOAD_OK;
 		} else {
@@ -59,30 +59,46 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 	}
 
-	//// 보호시설 리뷰 
+	//// 보호시설 리뷰
 	@Override
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(ManageVolunteerReviewResponseDTO dto, int listSize, int cp, int idx) {
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int listSize, int cp, int idx) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		map.put("idx", idx);
-		dto.setImagePaths(fileManager.getImagePath("volunteerReviews", idx));
 
 		List<ManageVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReview(map);
+
+		if (reviewLists != null) {
+			for (ManageVolunteerReviewResponseDTO dto : reviewLists) { // 이미지 경로 가져오기
+				List<String> imagePaths = fileManager.getImagePath("volunteerReviews", dto.getReviewIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePaths(imagePaths.get(0));
+				}
+			}
+		}
 		return reviewLists;
 	}
 
 	@Override
-	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(ManageAdoptionReviewResponseDTO dto, int listSize, int cp, int idx) {
+	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int listSize, int cp, int idx) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		map.put("idx", idx);
-		dto.setImagePaths(fileManager.getImagePath("adoptionReviews", idx));
-		
+
 		List<ManageAdoptionReviewResponseDTO> reviewLists = mapper.getAdoptionReview(map);
+
+		if (reviewLists != null) {
+			for (ManageAdoptionReviewResponseDTO dto : reviewLists) { // 이미지 경로 가져오기
+				List<String> imagePaths = fileManager.getImagePath("adoptionReviews", dto.getReviewIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePaths(imagePaths.get(0));
+				}
+			}
+		}
 		return reviewLists;
 	}
 
@@ -255,8 +271,8 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return ERROR;
 		}
 	}
-	
-	//// 보호시설 게시판 
+
+	//// 보호시설 게시판
 	@Override
 	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int listSize, int cp) {
 
@@ -275,21 +291,20 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx) {
 
 		ShelterBoardResponseDTO dto = mapper.getShelterBoardDetail(idx, userIdx);
-		
-		if(dto == null) {
+
+		if (dto == null) {
 			return null;
 		}
-		
+
 		mapper.updateBoardViews(idx);
 		dto.setFilePaths(fileManager.getFilePath("boards", idx));
 		dto.setImagePaths(fileManager.getImagePath("shelters", idx));
-		
+
 		if (dto != null && dto.getContent() != null) {
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		}
 		return dto;
 	}
-
 
 	@Override
 	public int addShelterBoard(ShelterBoardRequestDTO dto, int userIdx) {
@@ -307,7 +322,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 
 	@Override
-	public int uploadBoardFile(MultipartFile[] files, int idx) { //보호시설 게시판 파일 업로드
+	public int uploadBoardFile(MultipartFile[] files, int idx) { // 보호시설 게시판 파일 업로드
 
 		boolean result = fileManager.uploadFiles("boards", idx, files);
 
@@ -338,10 +353,10 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return ERROR;
 		}
 	}
-	
+
 	@Override
 	public int deleteShelterBoard(ShelterBoardRequestDTO dto, int idx) {
-		
+
 		int boardCheck = mapper.checkShelterBoard(dto.getIdx());
 		if (boardCheck == 0) {
 			return NOT_EXIST_BOARD;
@@ -360,7 +375,5 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return ERROR;
 		}
 	}
-	
-
 
 }

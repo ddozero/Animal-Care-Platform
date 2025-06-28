@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ManageAdoptionReviewResponseDTO {
-
+	
 	private int reviewIdx;
 	private int userIdx;
 	private int shelterIdx;
@@ -26,6 +26,6 @@ public class ManageAdoptionReviewResponseDTO {
 	private int ref;
 	private int lev;
 	private int turn;
-	private List<String> imagePaths;
+	private String imagePaths;
 
 }
