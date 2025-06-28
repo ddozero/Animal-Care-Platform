@@ -60,4 +60,10 @@ public interface UserBoardMapper {
 	public Map checkCommentRefTurn(int idx);
 
 	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto);
+
+	public Integer getBoardRef(int idx);
+
+	public Integer checkBoardReplyExists(int ref);
+
+	public int addBoardReply(BoardWriteRequestDTO dto);
 }

@@ -294,4 +294,29 @@ INSERT
 	BOARD_COMMENTS(USER_IDX, BOARD_IDX, CONTENT, REF, LEV, TURN)
 VALUES(#{userIdx},#{boardIdx},#{content},#{ref},1,#{turn})
 </insert>
+
+<select id="getBoardRef" resultType="Integer">
+SELECT
+	REF
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</select>
+
+<select id="checkBoardReplyExists" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS
+WHERE
+	REF = #{ref} AND LEV = 1;
+</select>
+
+<insert id="addBoardReply" parameterType="com.animal.api.board.model.request.BoardWriteRequestDTO" useGeneratedKeys="true" keyProperty="idx">
+INSERT
+	INTO
+	BOARDS(USER_IDX, BOARD_TYPE_IDX, TITLE, CONTENT, REF, LEV, TURN)
+VALUES(#{userIdx},2,#{title},#{content},#{ref},1,1)
+</insert>
 </mapper>

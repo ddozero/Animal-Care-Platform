@@ -36,6 +36,8 @@ public interface UserBoardService {
 	static int NOT_MYCOMMENT = 20;
 	static int UPDATE_SUCCESS = 21;
 	static int COMMENT_REF_DATA_MISSING = 22;
+	static int REPLY_ALREADY_EXISTS = 23;
+	static int BOARD_REF_DATA_MISSING = 24;
 	static int ERROR = -1;
 
 	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
@@ -69,4 +71,6 @@ public interface UserBoardService {
 	public int deleteBoardComment(int idx, int boardCommentIdx, int userIdx);
 
 	public int addBoardCommentReply(BoardCommentReplyRequestDTO dto, int idx, int boardCommentIdx);
+
+	public int addBoardReply(BoardWriteRequestDTO dto, int idx);
 }

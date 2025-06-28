@@ -38,7 +38,7 @@ import com.animal.api.common.model.OkResponseDTO;
  * 사용자 기준 자유게시판에 관련되어 있는 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.27
+ * @since 2025.06.28
  * @see com.animal.api.board.model.response.AllBoardListResponseDTO
  * @see com.animal.api.board.model.request.BoardSearchRequestDTO
  * @see com.animal.api.board.model.request.BoardWriteRequestDTO
@@ -423,14 +423,14 @@ public class UserBoardController {
 		}
 
 	}
-	
+
 	/**
 	 * 댓글의 댓글
 	 * 
-	 * @param idx 게시판 번호
+	 * @param idx             게시판 번호
 	 * @param boardCommentIdx 게시판 댓글 번호
-	 * @param dto 댓글의 댓글 입력폼
-	 * @param session 로그인 검증용
+	 * @param dto             댓글의 댓글 입력폼
+	 * @param session         로그인 검증용
 	 * @return 성공/실패 메세지
 	 */
 	@PostMapping("{idx}/comments/{boardCommentIdx}/replies")
@@ -454,5 +454,42 @@ public class UserBoardController {
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		}
+	}
+
+	/**
+	 * 게시판 글 답글
+	 * 
+	 * @param idx     게시판 번호
+	 * @param dto     답글 등록 폼
+	 * @param session 로그인 검증용
+	 * @return 답글 등록 성공/실패 메세지
+	 * @return 생성된 idx(게시판 테이블 idx)
+	 */
+	@PostMapping("{idx}/reply")
+	public ResponseEntity<?> addBoardReply(@PathVariable int idx, @Valid @RequestBody BoardWriteRequestDTO dto,
+			HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		int result = service.addBoardReply(dto, idx);
+
+		if (result == service.POST_SUCCESS) {
+			Integer boardIdx = dto.getIdx();
+			Map<String, Integer> map = new HashMap();
+			map.put("createdIdx", boardIdx);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "게시판 답글 등록 성공", map));
+		} else if (result == service.BOARD_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "원글이 존재 하지 않음"));
+		} else if (result == service.BOARD_REF_DATA_MISSING) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글의 ref 값이 존재 하지 않음"));
+		} else if (result == service.REPLY_ALREADY_EXISTS) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "이미 답글이 존재"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
+		}
+
 	}
 }
