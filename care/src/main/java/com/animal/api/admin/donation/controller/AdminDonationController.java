@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -159,7 +160,7 @@ public class AdminDonationController {
 	 * 
 	 * @return 지원사업 등록 성공 여부
 	 */
-	@PostMapping("/upload")
+	@PostMapping
 	public ResponseEntity<?> addAdminDonation(@Valid @RequestBody AdminAddDonationRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = adminUserCheck(session);
@@ -205,7 +206,7 @@ public class AdminDonationController {
 	 * 
 	 * @return 지원사업 수정 성공 여부
 	 */
-	@PutMapping("/upload/{idx}")
+	@PutMapping("/{idx}")
 	public ResponseEntity<?> updateAdminDonation(@PathVariable int idx, @Valid @RequestBody AdminUpdateRequestDTO dto,
 			HttpSession session) {
 
@@ -216,11 +217,36 @@ public class AdminDonationController {
 		int result = adminDonationService.updateAdminDonation(dto, idx);
 
 		if (result == adminDonationService.UPDATE_OK) {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "지원사업 수정 성공", null));
+			return ResponseEntity.ok(new OkResponseDTO<Void>(200, "지원사업 수정 성공", null));
 		} else if (result == adminDonationService.DONATION_NOT_FOUND) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "지원사업을 찾을 수 없음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 수정 실패"));
+		}
+	}
+
+	/**
+	 * 사이트 관리자 페이지 지원사업 삭제 메서드
+	 * 
+	 * @param idx     지원사업 번호
+	 * @param session 로그인 검증 세션
+	 * 
+	 * @return 지원사업 삭제 성공 여부
+	 */
+	@DeleteMapping("/{idx}")
+	public ResponseEntity<?> deleteAdminDonation(@PathVariable int idx, HttpSession session) {
+
+		LoginResponseDTO loginUser = adminUserCheck(session);
+		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
+
+		int result = adminDonationService.deleteAdminDonation(idx);
+
+		if (result == adminDonationService.DELETE_OK) {
+			return ResponseEntity.ok(new OkResponseDTO<Void>(200, "지원사업 삭제 성공", null));
+		} else if (result == adminDonationService.DONATION_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "지원사업을 찾을 수 없음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 삭제 실패"));
 		}
 	}
 

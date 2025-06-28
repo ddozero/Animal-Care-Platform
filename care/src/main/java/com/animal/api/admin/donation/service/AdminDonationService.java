@@ -35,4 +35,6 @@ public interface AdminDonationService {
 	
 	public int updateAdminDonation(AdminUpdateRequestDTO dto, int idx);
 	
+	public int deleteAdminDonation(int idx);
+	
 }
