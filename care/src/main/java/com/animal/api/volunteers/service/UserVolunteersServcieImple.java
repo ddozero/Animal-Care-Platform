@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.animal.api.common.util.FileManager;
 import com.animal.api.volunteers.mapper.UserVolunteersMapper;
 import com.animal.api.volunteers.model.request.VolunteersSubmitRequestDTO;
 import com.animal.api.volunteers.model.response.AllVolunteersResponseDTO;
@@ -20,6 +21,9 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 
 	@Autowired
 	private UserVolunteersMapper mapper;
+	
+	@Autowired
+	private FileManager fileManager;
 
 	@Override
 	public List<AllVolunteersResponseDTO> getAllVolunteers(int listSize, int cp) {
@@ -36,6 +40,8 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	public AllVolunteersResponseDTO getVolunteersDetail(int idx) {
 		AllVolunteersResponseDTO dto = mapper.getVolunteersDetail(idx);
 		if (dto != null && dto.getContent() != null) {
+			dto.setImagePaths(fileManager.getImagePath("volunteers", idx));
+			dto.setFilePaths(fileManager.getFilePath("volunteers", idx));
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		}
 		return dto;

@@ -31,6 +31,8 @@ import com.google.protobuf.Service;
  * @author doyeong
  * @since 2025-06-20
  * @see com.animal.api.support.model.response.VolunteersListResponseDTO;
+ * @see com.animal.api.support.model.response.AllVolunteersResponseDTO;
+ * @see com.animal.api.support.model.response.VolunteersSubmitRequestDTO
  */
 @RestController
 @RequestMapping("/api/volunteers")
