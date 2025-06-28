@@ -87,6 +87,7 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 		int result = mapper.submitVolunteers(dto);
 
 		if (result > 0) {
+			mapper.updateApplicants(dto);
 			return SUBMIT_OK;
 		} else {
 			return SUBMIT_ERROR;
