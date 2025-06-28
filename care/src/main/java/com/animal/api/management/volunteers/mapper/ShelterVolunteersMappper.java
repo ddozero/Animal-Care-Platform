@@ -9,5 +9,6 @@ import com.animal.api.management.volunteers.model.response.ShelterVolunteersList
 
 @Mapper
 public interface ShelterVolunteersMappper {
+
 	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(Map map);
 }

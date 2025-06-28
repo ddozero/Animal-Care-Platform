@@ -28,6 +28,7 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 			cp = 1;
 		}
 		cp = (cp - 1) * listSize;
+
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("userIdx", userIdx);
 		map.put("listSize", listSize);
