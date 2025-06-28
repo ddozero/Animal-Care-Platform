@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.common.util.FileManager;
 import com.animal.api.management.volunteers.mapper.ShelterVolunteersMappper;
@@ -48,6 +49,16 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 			return POST_SUCCESS;
 		} else {
 			return ERROR;
+		}
+	}
+
+	@Override
+	public int uploadShelterVolunteerImage(MultipartFile[] files, int idx) {
+		boolean result = fileManager.uploadImages("volunteers", idx, files);
+		if (result) {
+			return UPLOAD_SUCCESS;
+		} else {
+			return UPLOAD_FAIL;
 		}
 	}
 }

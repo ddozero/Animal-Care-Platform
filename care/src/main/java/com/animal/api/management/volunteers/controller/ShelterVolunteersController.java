@@ -1,6 +1,8 @@
 package com.animal.api.management.volunteers.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -9,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
@@ -69,7 +73,7 @@ public class ShelterVolunteersController {
 					200, "보호시설에 등록된 봉사 조회 성공", shelterVolunteersList));
 		}
 	}
-
+	
 	@PostMapping
 	public ResponseEntity<?> addShelterVolunteer(@Valid @RequestBody ShelterVolunteersInsertDTO dto,
 			HttpSession session) {
@@ -86,9 +90,24 @@ public class ShelterVolunteersController {
 		int result = service.addShelterVolunteer(dto);
 
 		if (result == service.POST_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "봉사 등록 성공", null));
+			Integer volunteerIdx = dto.getIdx();
+			Map<String, Integer> map = new HashMap();
+			map.put("createdIdx", volunteerIdx);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "봉사 등록 성공", map));
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
 		}
 	}
+
+	@PostMapping("/upload/{idx}")
+	public ResponseEntity<?> uploadShelterVolunteerImage(MultipartFile[] files, @PathVariable int idx) {
+		int result = service.uploadShelterVolunteerImage(files, idx);
+		if (result == service.UPLOAD_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "이미지 업로드 성공", null));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "이미지 업로드 실패"));
+		}
+	}
+
 }
