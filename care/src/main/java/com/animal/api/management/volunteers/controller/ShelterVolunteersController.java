@@ -36,12 +36,13 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * 보호시설 기준 봉사 관련 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.29
+ * @since 2025.06.30
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO
+ * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO
  */
 
 @RestController
@@ -264,6 +265,14 @@ public class ShelterVolunteersController {
 		}
 	}
 
+	/**
+	 * 봉사 신청서 상세 조회
+	 * 
+	 * @param volunteerIdx   봉사 번호
+	 * @param applicationIdx 봉사 신청 번호
+	 * @param session        로그인,보호소 검증용 세션
+	 * @return 성공시 봉사 신청한 신청서 상세정보와 메세지/실패시 메세지
+	 */
 	@GetMapping("{volunteerIdx}/applications/{applicationIdx}")
 	public ResponseEntity<?> getShelterVolunteerApplicationDetail(@PathVariable int volunteerIdx,
 			@PathVariable int applicationIdx, HttpSession session) {
