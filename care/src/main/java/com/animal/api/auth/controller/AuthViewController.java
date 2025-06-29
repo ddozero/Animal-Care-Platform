@@ -7,19 +7,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AuthViewController {
 
 	//메인 페이지
-	@GetMapping("/index.do")
+	@GetMapping("/index")
 	public String indexPage() {
 		return "common/index/index";
 	}
 		
 	//로그인 페이지
-	@GetMapping("/login.do")
+	@GetMapping("/login")
 	public String loginPage() {
 		return "user/auth/login/login";
 	}
 	
 	//회원가입 유형선택 페이지
-	@GetMapping("signup.do")
+	@GetMapping("signup")
 	public String signup() {
 		return "user/auth/signup/signupTypeSelect";
 	}

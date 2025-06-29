@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
+마이페이지 메인 화면
 </body>
 </html>
