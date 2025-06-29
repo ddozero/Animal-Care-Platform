@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
@@ -35,6 +37,7 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO
+ * @see com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO
  */
 
 @RestController
@@ -151,6 +154,43 @@ public class ShelterVolunteersController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<ShelterVolunteerDetailResponseDTO>(200, "봉사 상세 조회 성공", volunteerDetail));
+		}
+	}
+
+	/**
+	 * 봉사 수정 기능
+	 * 
+	 * @param idx     봉사 번호
+	 * @param dto     봉사 수정폼
+	 * @param session 로그인,보호소 검증용 세션
+	 * @return 성공시 메세지와 함께 게시글 idx(이미지업로드 활용)/실패시 실패 메세지
+	 */
+	@PutMapping("{idx}")
+	public ResponseEntity<?> updateShelterVolunteer(@PathVariable int idx,
+			@Valid @RequestBody ShelterVolunteerUpdateRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+
+		int result = service.updateShelterVolunteer(dto, idx);
+
+		if (result == service.UPDATE_SUCCESS) {
+			Integer volunteerIdx = dto.getVolunteerIdx();
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			map.put("createIdx", volunteerIdx);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "봉사  수정 성공", map));
+		} else if (result == service.NOT_OWNED_VOLUNTEER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "로그인한 봉사시설의 봉사가 아닙니다."));
+		} else if (result == service.VOLUNTEER_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사가 존재 하지 않습니다"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "봉사 수정 실패"));
 		}
 	}
 }

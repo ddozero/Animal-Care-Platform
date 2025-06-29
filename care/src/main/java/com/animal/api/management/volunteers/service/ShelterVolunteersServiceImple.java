@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.common.util.FileManager;
 import com.animal.api.management.volunteers.mapper.ShelterVolunteersMappper;
+import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
@@ -73,5 +74,23 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 			}
 		}
 		return volunteerDetail;
+	}
+
+	@Override
+	public int updateShelterVolunteer(ShelterVolunteerUpdateRequestDTO dto, int volunteerIdx) {
+		Integer userIdx = mapper.checkMyVolunteer(volunteerIdx);
+		if (userIdx == null || userIdx == 0) {
+			return VOLUNTEER_NOT_FOUND;
+		} else if (userIdx != dto.getUserIdx()) {
+			return NOT_OWNED_VOLUNTEER;
+		}
+
+		int result = mapper.updateShelterVolunteer(dto);
+
+		if (result == 1) {
+			return UPDATE_SUCCESS;
+		} else {
+			return ERROR;
+		}
 	}
 }
