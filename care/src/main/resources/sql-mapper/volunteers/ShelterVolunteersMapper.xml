@@ -60,4 +60,31 @@ VALUES (
 #{ageTarget}
 )
 </insert>
+
+<select id="getShelterVolunteerDetail" parameterType="Map" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO">
+SELECT
+	V.IDX,
+	V.USER_IDX,
+	V.VOLUNTEER_TYPE_IDX,
+	VT.NAME AS VOLUNTEER_TYPE_NAME,
+	V.VOLUNTEER_STATUS_IDX,
+	VS.NAME AS VOLUNTEER_STATUS_NAME,
+	V.TITLE,
+	V.VOLUNTEER_DATE,
+	V.TIME,
+	V.LOCATION,
+	V.CAPACITY,
+	V.APPLICANTS,
+	V.CONTENT,
+	V.AGE_TARGET,
+	V.CREATED_AT
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_TYPES VT ON V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON V.VOLUNTEER_STATUS_IDX = VS.IDX
+WHERE
+	V.IDX = #{volunteerIdx}
+AND
+	V.USER_IDX = #{userIdx}
+</select>
 </mapper>
