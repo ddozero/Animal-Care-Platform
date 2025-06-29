@@ -160,4 +160,32 @@ ORDER BY
 	VR.CREATED_AT DESC
 LIMIT #{listSize} OFFSET #{cp}
 </select>
+
+<select id="getShelterVolunteerApplicationDetail" parameterType="int" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsDetailResponseDTO">
+SELECT
+    VR.IDX,
+    VR.VOLUNTEER_IDX,
+    VR.USER_IDX,
+    VR.VOLUNTEER_REQUEST_STATUS_IDX,
+    VRS.NAME AS VOLUNTEER_REQUEST_STATUS_NAME,
+    VR.TYPE,
+    VR.NAME,
+    VR.EMAIL,
+    VR.TEL,
+    VR.BIRTH_DATE,
+    IFNULL(VR.GROUP_NAME, '-') AS GROUP_NAME,
+    IFNULL(VR.GROUP_TEL, '-') AS GROUP_TEL,
+    IFNULL(VR.DESCRIPTION, '-') AS DESCRIPTION,
+    VR.MALE,
+    VR.FEMALE,
+    VR.CREATED_AT
+FROM
+    VOLUNTEER_REQUESTS VR
+JOIN VOLUNTEERS V ON
+    VR.VOLUNTEER_IDX = V.IDX
+JOIN VOLUNTEER_REQUEST_STATUS VRS ON
+    VR.VOLUNTEER_REQUEST_STATUS_IDX = VRS.IDX
+WHERE
+    VR.IDX = #{applicationIdx};
+</select>
 </mapper>
