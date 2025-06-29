@@ -121,7 +121,7 @@ WHERE
 	IDX = #{volunteerIdx}
 </delete>
 
-<select id="getShelterVolunteerApplication" parameterType="Map" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO">
+<select id="getShelterVolunteerApplications" parameterType="Map" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO">
 SELECT
 	VR.IDX,
 	VR.VOLUNTEER_IDX,
