@@ -112,4 +112,12 @@ WHERE
 	IDX = #{volunteerIdx}
 	AND USER_IDX = #{userIdx} 
 </update>
+
+<delete id="deleteShelterVolunteer" parameterType="int">
+DELETE
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{volunteerIdx}
+</delete>
 </mapper>

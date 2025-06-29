@@ -17,6 +17,7 @@ public interface ShelterVolunteersService {
 	static int UPDATE_FAIL = 5;
 	static int VOLUNTEER_NOT_FOUND = 6;
 	static int NOT_OWNED_VOLUNTEER = 7;
+	static int DELETE_SUCCESS = 8;
 	static int ERROR = -1;
 
 	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int userIdx, int listSize, int cp);
@@ -28,4 +29,6 @@ public interface ShelterVolunteersService {
 	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx);
 
 	public int updateShelterVolunteer(ShelterVolunteerUpdateRequestDTO dto, int volunteerIdx);
+
+	public int deleteShelterVolunteer(int volunteerIdx, int userIdx);
 }
