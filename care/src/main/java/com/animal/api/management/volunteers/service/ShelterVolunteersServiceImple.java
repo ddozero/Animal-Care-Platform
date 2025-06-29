@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.management.volunteers.mapper.ShelterVolunteersMappper;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
+import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
 
 @Service
@@ -60,5 +61,21 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 		} else {
 			return UPLOAD_FAIL;
 		}
+	}
+
+	@Override
+	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx, int userIdx) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("volunteerIdx", volunteerIdx);
+		map.put("userIdx", userIdx);
+
+		ShelterVolunteerDetailResponseDTO volunteerDetail = mapper.getShelterVolunteerDetail(map);
+		if (volunteerDetail != null) {
+			List<String> imagePaths = fileManager.getImagePath("volunteerDetail", volunteerDetail.getIdx());
+			if (imagePaths != null || imagePaths.size() != 0) {
+				volunteerDetail.setImagePath(imagePaths.get(0));
+			}
+		}
+		return volunteerDetail;
 	}
 }
