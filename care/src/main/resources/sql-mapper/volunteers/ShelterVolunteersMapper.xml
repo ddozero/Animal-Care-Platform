@@ -121,6 +121,15 @@ WHERE
 	IDX = #{volunteerIdx}
 </delete>
 
+<select id="checkVolunteerExists" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{volunteerIdx}
+</select>
+
 <select id="getShelterVolunteerApplications" parameterType="Map" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO">
 SELECT
 	VR.IDX,

@@ -26,5 +26,7 @@ public interface ShelterVolunteersMappper {
 
 	public int deleteShelterVolunteer(int volunteerIdx);
 
+	public Integer checkVolunteerExists(int volunteerIdx);
+
 	public List<ShelterVolunteerApplicationsResponseDTO> getShelterVolunteerApplications(Map map);
 }
