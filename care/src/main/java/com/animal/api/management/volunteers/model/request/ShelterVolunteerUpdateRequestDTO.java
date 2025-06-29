@@ -1,5 +1,7 @@
 package com.animal.api.management.volunteers.model.request;
 
+import java.sql.Timestamp;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -32,7 +34,7 @@ public class ShelterVolunteerUpdateRequestDTO {
 	@NotBlank(message = "제목 입력은 필수입니다.")
 	private String title;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Integer volunteerDate;
+	private Timestamp volunteerDate;
 	@NotNull(message = "봉사 시간은 필수 입니다.")
 	private Integer time;
 	@NotBlank(message = "봉사장소 입력은 필수입니다.")
@@ -42,5 +44,5 @@ public class ShelterVolunteerUpdateRequestDTO {
 	@NotBlank(message = "봉사상세내용 입력은 필수입니다.")
 	private String content;
 	@NotBlank(message = "신청연령대상 입력은 필수입니다.")
-	private Integer ageTarget;
+	private String ageTarget;
 }
