@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
+import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
@@ -29,4 +30,6 @@ public interface ShelterVolunteersMappper {
 	public Integer checkVolunteerExists(int volunteerIdx);
 
 	public List<ShelterVolunteerApplicationsResponseDTO> getShelterVolunteerApplications(Map map);
+
+	public ShelterVolunteerApplicationDetailResponseDTO getShelterVolunteerApplicationDetail(int applicationIdx);
 }

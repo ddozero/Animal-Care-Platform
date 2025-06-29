@@ -26,6 +26,7 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
+import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
@@ -35,12 +36,13 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * 보호시설 기준 봉사 관련 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.29
+ * @since 2025.06.30
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO
+ * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO
  */
 
 @RestController
@@ -262,4 +264,36 @@ public class ShelterVolunteersController {
 							shelterVolunteerApplications));
 		}
 	}
+
+	/**
+	 * 봉사 신청서 상세 조회
+	 * 
+	 * @param volunteerIdx   봉사 번호
+	 * @param applicationIdx 봉사 신청 번호
+	 * @param session        로그인,보호소 검증용 세션
+	 * @return 성공시 봉사 신청한 신청서 상세정보와 메세지/실패시 메세지
+	 */
+	@GetMapping("{volunteerIdx}/applications/{applicationIdx}")
+	public ResponseEntity<?> getShelterVolunteerApplicationDetail(@PathVariable int volunteerIdx,
+			@PathVariable int applicationIdx, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+		ShelterVolunteerApplicationDetailResponseDTO shelterVolunteerApplicationDetail = service
+				.getShelterVolunteerApplicationDetail(applicationIdx);
+
+		if (shelterVolunteerApplicationDetail == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사 신청서 상세 데이터가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<ShelterVolunteerApplicationDetailResponseDTO>(200, "봉사 신청서 상세 조회 성공",
+							shelterVolunteerApplicationDetail));
+		}
+	}
+
 }
