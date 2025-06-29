@@ -313,7 +313,7 @@ LIMIT
 
 <select id="getShelterBoardTotalCnt" resultType="int">
 SELECT 
-	
+	COUNT(*)
 FROM
 	BOARDS
 WHERE

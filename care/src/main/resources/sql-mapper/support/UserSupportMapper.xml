@@ -84,7 +84,7 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
-<select id="getSearchNoticeTotalCnt" parameterType="com.animal.api.support.model.response.SearchNoticeRequestDTO" resultType="int">
+<select id="getSearchNoticeTotalCnt" parameterType="com.animal.api.support.model.request.SearchNoticeRequestDTO" resultType="int">
 SELECT
 	COUNT(*)
 FROM

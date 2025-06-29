@@ -29,7 +29,9 @@ import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
 import com.animal.api.board.service.UserBoardService;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
 import com.animal.api.support.service.UserSupportService;
 
@@ -183,11 +185,14 @@ public class AdminBoardController {
 		int listSize = 5;
 
 		List<UserNoticeResponseDTO> noticeAllList = null;
+		PageInformationDTO page = null;
 
 		if (title != null || content != null) {
-			noticeAllList = userSupportService.searchAllNotice(listSize, cp, title, content);
+			noticeAllList = userSupportService.searchAllNotice(cp, title, content);
+			page = userSupportService.searchNoticePage(cp, title, content);
 		} else {
-			noticeAllList = userSupportService.getAllNotice(listSize, cp);
+			noticeAllList = userSupportService.getAllNotice(cp);
+			page = userSupportService.getAllNoticePage(cp);
 		}
 
 		if (noticeAllList == null) {
@@ -196,7 +201,7 @@ public class AdminBoardController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList));
+					.body(new OkPageResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList, page));
 		}
 	}
 
