@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
@@ -152,5 +153,22 @@ public class ShelterVolunteersController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<ShelterVolunteerDetailResponseDTO>(200, "봉사 상세 조회 성공", volunteerDetail));
 		}
+	}
+
+	@PostMapping("{idx}")
+	public ResponseEntity<?> updateShelterVolunteer(@PathVariable int idx,
+			@Valid @RequestBody ShelterVolunteerUpdateRequestDTO dto, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+
+		service.updateShelterVolunteer(dto, idx);
+
+		return null;
 	}
 }
