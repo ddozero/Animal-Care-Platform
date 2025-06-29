@@ -127,6 +127,13 @@ public class ShelterVolunteersController {
 		}
 	}
 
+	/**
+	 * 보호시설이 등록한 봉사 상세 조회
+	 * 
+	 * @param idx     봉사 번호
+	 * @param session 로그인,보호소 검증용 세션
+	 * @return 봉사 상세 정보
+	 */
 	@GetMapping("{idx}")
 	public ResponseEntity<?> getShelterVolunteerDetail(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
