@@ -60,6 +60,7 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 		if (result) {
 			return UPLOAD_SUCCESS;
 		} else {
+			mapper.deleteShelterVolunteer(idx);
 			return UPLOAD_FAIL;
 		}
 	}
@@ -79,9 +80,9 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 	@Override
 	public int updateShelterVolunteer(ShelterVolunteerUpdateRequestDTO dto, int volunteerIdx) {
 		Integer userIdx = mapper.checkMyVolunteer(volunteerIdx);
-		if (userIdx == null || userIdx == 0) {
+		if (userIdx == null || userIdx == 0) {// 봉사 존재 여부 검증
 			return VOLUNTEER_NOT_FOUND;
-		} else if (userIdx != dto.getUserIdx()) {
+		} else if (userIdx != dto.getUserIdx()) {// 로그인한 보호시설이 등록한 봉사인지 검증
 			return NOT_OWNED_VOLUNTEER;
 		}
 
@@ -89,6 +90,24 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 
 		if (result == 1) {
 			return UPDATE_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
+
+	@Override
+	public int deleteShelterVolunteer(int volunteerIdx, int userIdx) {
+		Integer checkUserIdx = mapper.checkMyVolunteer(volunteerIdx);
+		if (checkUserIdx == null || checkUserIdx == 0) {// 봉사 존재 여부 검증
+			return VOLUNTEER_NOT_FOUND;
+		} else if (checkUserIdx != userIdx) {// 로그인한 보호시설이 등록한 봉사인지 검증
+			return NOT_OWNED_VOLUNTEER;
+		}
+		int result = mapper.deleteShelterVolunteer(volunteerIdx);
+
+		if (result == 1) {
+			fileManager.deleteFolder("volunteers", volunteerIdx);
+			return DELETE_SUCCESS;
 		} else {
 			return ERROR;
 		}
