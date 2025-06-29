@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
+import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
 
 public interface ShelterVolunteersService {
@@ -18,4 +19,6 @@ public interface ShelterVolunteersService {
 	public int addShelterVolunteer(ShelterVolunteersInsertDTO dto);
 
 	public int uploadShelterVolunteerImage(MultipartFile[] files, int idx);
+
+	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx);
 }
