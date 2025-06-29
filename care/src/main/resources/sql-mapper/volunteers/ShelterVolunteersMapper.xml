@@ -86,6 +86,15 @@ WHERE
 	V.IDX = #{volunteerIdx}
 </select>
 
+<select id="checkMyVolunteer" resultType="Integer">
+SELECT
+	USER_IDX
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{volunteerIdx}
+</select>
+
 <update id="updateShelterVolunteer" parameterType="com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO">
 UPDATE
 	VOLUNTEERS

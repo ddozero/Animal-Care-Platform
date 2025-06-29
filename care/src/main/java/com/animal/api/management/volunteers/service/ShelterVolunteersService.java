@@ -14,7 +14,9 @@ public interface ShelterVolunteersService {
 	static int UPLOAD_SUCCESS = 2;
 	static int UPLOAD_FAIL = 3;
 	static int UPDATE_SUCCESS = 4;
-	static int UPDATE_FAIL = 4;
+	static int UPDATE_FAIL = 5;
+	static int VOLUNTEER_NOT_FOUND = 6;
+	static int NOT_OWNED_VOLUNTEER = 7;
 	static int ERROR = -1;
 
 	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int userIdx, int listSize, int cp);

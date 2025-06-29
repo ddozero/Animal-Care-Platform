@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -155,7 +157,7 @@ public class ShelterVolunteersController {
 		}
 	}
 
-	@PostMapping("{idx}")
+	@PutMapping("{idx}")
 	public ResponseEntity<?> updateShelterVolunteer(@PathVariable int idx,
 			@Valid @RequestBody ShelterVolunteerUpdateRequestDTO dto, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
@@ -167,8 +169,20 @@ public class ShelterVolunteersController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
 		}
 
-		service.updateShelterVolunteer(dto, idx);
+		int result = service.updateShelterVolunteer(dto, idx);
 
-		return null;
+		if (result == service.UPDATE_SUCCESS) {
+			Integer volunteerIdx = dto.getVolunteerIdx();
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			map.put("createIdx", volunteerIdx);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Map<String, Integer>>(201, "봉사  수정 성공", map));
+		} else if (result == service.NOT_OWNED_VOLUNTEER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "로그인한 봉사시설의 봉사가 아닙니다."));
+		} else if (result == service.VOLUNTEER_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사가 존재 하지 않습니다"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "봉사 수정 실패"));
+		}
 	}
 }

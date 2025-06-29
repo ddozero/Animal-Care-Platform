@@ -78,9 +78,16 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 
 	@Override
 	public int updateShelterVolunteer(ShelterVolunteerUpdateRequestDTO dto, int volunteerIdx) {
+		Integer userIdx = mapper.checkMyVolunteer(volunteerIdx);
+		if (userIdx == null || userIdx == 0) {
+			return VOLUNTEER_NOT_FOUND;
+		} else if (userIdx != dto.getUserIdx()) {
+			return NOT_OWNED_VOLUNTEER;
+		}
+
 		int result = mapper.updateShelterVolunteer(dto);
 
-		if (result == 0) {
+		if (result == 1) {
 			return UPDATE_SUCCESS;
 		} else {
 			return ERROR;
