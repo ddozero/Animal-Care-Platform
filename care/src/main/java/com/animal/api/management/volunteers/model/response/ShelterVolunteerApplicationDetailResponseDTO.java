@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShelterVolunteerApplicationsDetailResponseDTO {
+public class ShelterVolunteerApplicationDetailResponseDTO {
 	private int idx;
 	private int volunteerIdx;
 	private int userIdx;

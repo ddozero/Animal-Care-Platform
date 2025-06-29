@@ -161,7 +161,7 @@ ORDER BY
 LIMIT #{listSize} OFFSET #{cp}
 </select>
 
-<select id="getShelterVolunteerApplicationDetail" parameterType="int" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsDetailResponseDTO">
+<select id="getShelterVolunteerApplicationDetail" parameterType="int" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO">
 SELECT
     VR.IDX,
     VR.VOLUNTEER_IDX,
