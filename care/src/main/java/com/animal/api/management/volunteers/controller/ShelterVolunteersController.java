@@ -39,6 +39,7 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO
+ * 
  */
 
 @RestController
@@ -159,7 +160,7 @@ public class ShelterVolunteersController {
 	}
 
 	/**
-	 * 봉사 수정 기능
+	 * 봉사 수정
 	 * 
 	 * @param idx     봉사 번호
 	 * @param dto     봉사 수정폼
@@ -195,6 +196,13 @@ public class ShelterVolunteersController {
 		}
 	}
 
+	/**
+	 * 봉사 삭제
+	 * 
+	 * @param idx     봉사 번호
+	 * @param session 로그인,보호소 검증용 세션
+	 * @return 성공,실패 메세지
+	 */
 	@DeleteMapping("{idx}")
 	public ResponseEntity<?> deleteShelterVolunteer(@PathVariable int idx, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
