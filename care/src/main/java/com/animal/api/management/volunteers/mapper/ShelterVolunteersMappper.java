@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
@@ -17,4 +18,6 @@ public interface ShelterVolunteersMappper {
 	public int addShelterVolunteer(ShelterVolunteersInsertDTO dto);
 
 	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx);
+
+	public int updateShelterVolunteer(ShelterVolunteerUpdateRequestDTO dto);
 }
