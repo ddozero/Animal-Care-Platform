@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +37,7 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO
+ * @see com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO
  */
 
 @RestController
@@ -157,6 +157,14 @@ public class ShelterVolunteersController {
 		}
 	}
 
+	/**
+	 * 봉사 수정 기능
+	 * 
+	 * @param idx     봉사 번호
+	 * @param dto     봉사 수정폼
+	 * @param session 로그인,보호소 검증용 세션
+	 * @return 성공시 메세지와 함께 게시글 idx(이미지업로드 활용)/실패시 실패 메세지
+	 */
 	@PutMapping("{idx}")
 	public ResponseEntity<?> updateShelterVolunteer(@PathVariable int idx,
 			@Valid @RequestBody ShelterVolunteerUpdateRequestDTO dto, HttpSession session) {
