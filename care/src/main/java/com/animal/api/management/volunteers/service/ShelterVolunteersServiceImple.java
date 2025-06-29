@@ -136,8 +136,8 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 
 	@Override
 	public ShelterVolunteerApplicationDetailResponseDTO getShelterVolunteerApplicationDetail(int applicationIdx) {
-		ShelterVolunteerApplicationDetailResponseDTO shelterVolunteerDetail = mapper
+		ShelterVolunteerApplicationDetailResponseDTO shelterVolunteerApplicationDetail = mapper
 				.getShelterVolunteerApplicationDetail(applicationIdx);
-		return shelterVolunteerDetail;
+		return shelterVolunteerApplicationDetail;
 	}
 }
