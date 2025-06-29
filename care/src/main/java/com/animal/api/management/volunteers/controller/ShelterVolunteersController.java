@@ -40,7 +40,7 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO
- * 
+ * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO
  */
 
 @RestController
@@ -228,6 +228,14 @@ public class ShelterVolunteersController {
 		}
 	}
 
+	/**
+	 * 봉사 신청한 신청서 전체 조회
+	 * 
+	 * @param cp      현재 페이지
+	 * @param idx     봉사 번호
+	 * @param session 로그인,보호소 검증용 세션
+	 * @return 성공시 봉사 신청한 신청서 리스트와 메세지/실패시 메세지
+	 */
 	@GetMapping("{idx}/applications")
 	public ResponseEntity<?> getShelterVolunteerApplications(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			@PathVariable int idx, HttpSession session) {
