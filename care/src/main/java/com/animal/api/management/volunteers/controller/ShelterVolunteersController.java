@@ -217,7 +217,7 @@ public class ShelterVolunteersController {
 		int result = service.deleteShelterVolunteer(idx, loginUser.getIdx());
 
 		if (result == service.DELETE_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "게시판 삭제 성공", null));
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "봉사 삭제 성공", null));
 		} else if (result == service.VOLUNTEER_NOT_FOUND) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사가 존재 하지 않습니다"));
 		} else if (result == service.NOT_OWNED_VOLUNTEER) {
