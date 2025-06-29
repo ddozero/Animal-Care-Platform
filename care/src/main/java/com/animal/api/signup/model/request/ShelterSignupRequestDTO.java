@@ -54,7 +54,7 @@ public class ShelterSignupRequestDTO {
     private String tel;
 
     @NotNull(message = "우편번호는 필수 항목입니다.")
-    private Integer zipCode;
+    private String zipCode;
 
     @NotBlank(message = "주소는 필수 항목입니다.")
     private String address;
@@ -87,7 +87,7 @@ public class ShelterSignupRequestDTO {
     private String shelterPersonName;
 
     @NotNull(message = "보호소 우편번호는 필수입니다.")
-    private Integer shelterZipCode;
+    private String shelterZipCode;
 
     @NotBlank(message = "보호소 주소는 필수입니다.")
     private String shelterAddress;

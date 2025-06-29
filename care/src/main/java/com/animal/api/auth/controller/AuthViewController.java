@@ -1,0 +1,27 @@
+package com.animal.api.auth.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class AuthViewController {
+
+	//메인 페이지
+	@GetMapping("/index.do")
+	public String indexPage() {
+		return "common/index/index";
+	}
+		
+	//로그인 페이지
+	@GetMapping("/login.do")
+	public String loginPage() {
+		return "user/auth/login/login";
+	}
+	
+	//회원가입 유형선택 페이지
+	@GetMapping("signup.do")
+	public String signup() {
+		return "user/auth/signup/signupTypeSelect";
+	}
+	
+}

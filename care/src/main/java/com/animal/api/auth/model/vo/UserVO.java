@@ -26,7 +26,7 @@ public class UserVO {
     private String gender;
     private String tel;
 
-    private int zipCode;
+    private String zipCode;
     private String address;
     private String addressDetail;
 

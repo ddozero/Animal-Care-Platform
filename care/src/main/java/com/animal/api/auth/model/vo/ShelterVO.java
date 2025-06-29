@@ -15,7 +15,7 @@ public class ShelterVO {
 	private String shelterTel;
 	private String shelterName;
 	private String shelterPersonName;
-	private Integer shelterZipCode;
+	private String shelterZipCode;
 	private String shelterAddress;
 	private String shelterAddressDetail;
 	private String shelterEmail;

@@ -50,7 +50,7 @@ public class UserSignupRequestDTO {
 	private String tel;
 
 	@NotNull(message = "우편번호는 필수 항목입니다.")
-	private Integer zipCode;
+	private String zipCode;
 
 	@NotBlank(message = "주소는 필수 항목입니다.")
 	private String address;

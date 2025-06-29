@@ -30,7 +30,7 @@ public class LoginResponseDTO {
 	private String gender;
 	private String tel;
 
-	private int zipCode;
+	private String zipCode;
 	private String address;
 	private String addressDetail;
 
@@ -58,7 +58,7 @@ public class LoginResponseDTO {
 	private String shelterTel;
 	private String shelterName;
 	private String shelterPersonName;
-	private Integer shelterZipCode;
+	private String shelterZipCode;
 	private String shelterAddress;
 	private String shelterAddressDetail;
 	private String shelterEmail;
