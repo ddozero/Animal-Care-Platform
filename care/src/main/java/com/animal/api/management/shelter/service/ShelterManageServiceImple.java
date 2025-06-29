@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.management.shelter.mapper.ManagementShelterMapper;
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
@@ -30,6 +31,9 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	@Autowired
 	private FileManager fileManager;
+	
+	private int listSize = 5;
+	private int pageSize = 5;
 
 	@Override
 	public AllManageShelterResponseDTO getShelterInfo(int idx) {
@@ -61,7 +65,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	//// 보호시설 리뷰
 	@Override
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int listSize, int cp, int idx) {
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
@@ -80,9 +84,19 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 		return reviewLists;
 	}
+	
+	@Override
+	public PageInformationDTO getAdoptionReviewPage(int cp, int idx) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getVolunteerReviewTotalCnt();
+		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return page;
+	}
 
 	@Override
-	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int listSize, int cp, int idx) {
+	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int cp, int idx) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
@@ -100,6 +114,16 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			}
 		}
 		return reviewLists;
+	}
+	
+	@Override
+	public PageInformationDTO getVolunteerReviewPage(int cp, int idx) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAdoptionReviewTotalCnt();
+		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return page;
 	}
 
 	@Override
