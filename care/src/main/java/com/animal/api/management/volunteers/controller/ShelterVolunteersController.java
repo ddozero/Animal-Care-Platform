@@ -23,6 +23,7 @@ import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
+import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
 import com.animal.api.management.volunteers.service.ShelterVolunteersService;
 
@@ -30,9 +31,10 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * 보호시설 기준 봉사 관련 컨트롤러 클래스
  * 
  * @author consgary
- * @since 2025.06.28
+ * @since 2025.06.29
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO
+ * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO
  */
 
 @RestController
@@ -125,4 +127,23 @@ public class ShelterVolunteersController {
 		}
 	}
 
+	@GetMapping("{idx}")
+	public ResponseEntity<?> getShelterVolunteerDetail(@PathVariable int idx, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+		ShelterVolunteerDetailResponseDTO volunteerDetail = service.getShelterVolunteerDetail(idx);
+
+		if (volunteerDetail == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사 상세 데이터가 존재하지않음"));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<ShelterVolunteerDetailResponseDTO>(200, "봉사 상세 조회 성공", volunteerDetail));
+		}
+	}
 }

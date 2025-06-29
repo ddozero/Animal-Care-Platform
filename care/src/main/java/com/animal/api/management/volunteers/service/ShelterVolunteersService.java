@@ -20,5 +20,5 @@ public interface ShelterVolunteersService {
 
 	public int uploadShelterVolunteerImage(MultipartFile[] files, int idx);
 
-	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx, int userIdx);
+	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx);
 }

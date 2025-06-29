@@ -16,5 +16,5 @@ public interface ShelterVolunteersMappper {
 
 	public int addShelterVolunteer(ShelterVolunteersInsertDTO dto);
 
-	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(Map map);
+	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx);
 }

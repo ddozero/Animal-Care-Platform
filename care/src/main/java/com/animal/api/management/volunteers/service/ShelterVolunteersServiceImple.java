@@ -64,14 +64,10 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 	}
 
 	@Override
-	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx, int userIdx) {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("volunteerIdx", volunteerIdx);
-		map.put("userIdx", userIdx);
-
-		ShelterVolunteerDetailResponseDTO volunteerDetail = mapper.getShelterVolunteerDetail(map);
+	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx) {
+		ShelterVolunteerDetailResponseDTO volunteerDetail = mapper.getShelterVolunteerDetail(volunteerIdx);
 		if (volunteerDetail != null) {
-			List<String> imagePaths = fileManager.getImagePath("volunteerDetail", volunteerDetail.getIdx());
+			List<String> imagePaths = fileManager.getImagePath("volunteers", volunteerDetail.getIdx());
 			if (imagePaths != null || imagePaths.size() != 0) {
 				volunteerDetail.setImagePath(imagePaths.get(0));
 			}
