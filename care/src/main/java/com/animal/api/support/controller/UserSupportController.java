@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
 import com.animal.api.support.service.UserSupportService;
 
@@ -51,11 +53,14 @@ public class UserSupportController {
 		}
 
 		List<UserNoticeResponseDTO> noticeAllList = null;
+		PageInformationDTO page = null;
 
 		if (title != null || content != null) {
-			noticeAllList = supportService.searchAllNotice(listSize, cp, title, content);
+			noticeAllList = supportService.searchAllNotice(cp, title, content);
+			page = supportService.searchNoticePage(cp, title, content);
 		} else {
-			noticeAllList = supportService.getAllNotice(listSize, cp);
+			noticeAllList = supportService.getAllNotice(cp);
+			page = supportService.getAllNoticePage(cp);
 		}
 
 		if (noticeAllList == null) {
@@ -64,7 +69,7 @@ public class UserSupportController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList));
+					.body(new OkPageResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList, page));
 		}
 	}
 
