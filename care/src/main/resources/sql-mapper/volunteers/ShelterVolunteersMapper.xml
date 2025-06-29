@@ -29,4 +29,35 @@ ORDER BY
 	V.CREATED_AT DESC
 LIMIT #{listSize} OFFSET #{cp};
 </select>
+
+<insert id="addShelterVolunteer" parameterType="com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO" useGeneratedKeys="true" keyProperty="idx">
+INSERT
+	INTO
+	VOLUNTEERS (
+	USER_IDX,
+	VOLUNTEER_TYPE_IDX,
+	VOLUNTEER_STATUS_IDX,
+	TITLE,
+	VOLUNTEER_DATE,
+	TIME,
+	LOCATION,
+	CAPACITY,
+	APPLICANTS,
+	CONTENT,
+	AGE_TARGET
+)
+VALUES (
+#{userIdx},
+#{volunteerTypeIdx},
+#{volunteerStatusIdx},
+#{title},
+#{volunteerDate},
+#{time},
+#{location},
+#{capacity},
+0,
+#{content},
+#{ageTarget}
+)
+</insert>
 </mapper>
