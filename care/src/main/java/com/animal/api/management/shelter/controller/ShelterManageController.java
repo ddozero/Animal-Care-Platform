@@ -402,7 +402,8 @@ public class ShelterManageController {
 			cp = (cp - 1) * listSize;
 		}
 
-		List<ShelterBoardResponseDTO> boardLists = shelterService.getShelterBoardList(userIdx, listSize, cp);
+		List<ShelterBoardResponseDTO> boardLists = shelterService.getShelterBoardList(userIdx, cp);
+		PageInformationDTO page = shelterService.getShelterBoardPage(userIdx, cp);
 
 		if (boardLists == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));

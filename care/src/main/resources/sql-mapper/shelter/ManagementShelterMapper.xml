@@ -78,18 +78,7 @@ LIMIT
 
 <select id="getVolunteerReviewTotalCnt" resultType="int">
 SELECT
-	VR.IDX AS reviewIdx, 
-	VR.USER_IDX AS userIdx, 
-	V.USER_IDX AS shelterIdx,
-	V.IDX AS volunteerIdx,
-	V.TITLE AS volunteerTitle,
-	S.SHELTER_NAME AS shelterName,
-	REVIEWER.NICKNAME,
-	VR.CONTENT,
-	VR.CREATED_AT AS createdAt,
-	VR.REF,
-	VR.LEV,
-	VR.TURN
+	COUNT(*)
 FROM
 	VOLUNTEERS V
 JOIN VOLUNTEER_REVIEWS VR ON
@@ -135,18 +124,7 @@ LIMIT
 
 <select id="getAdoptionReviewTotalCnt" resultType="int">
 SELECT
-	AR.IDX AS reviewIdx,
-	S.USER_IDX as shelterIdx,
-	U.IDX as userIdx,
-	A.IDX as animalIdx,
-	AR.CONTENT AS reviewContent,
-	U.NICKNAME,
-	A.NAME AS animalName,
-	AR.CONTENT,
-	AR.CREATED_AT as createdAt,
-	AR.REF,
-	AR.LEV,
-	AR.TURN
+	COUNT(*)
 FROM
 	ADOPTION_REVIEWS AR
 JOIN ANIMALS A ON
@@ -331,6 +309,17 @@ ORDER BY
 	IDX DESC
 LIMIT
 #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getShelterBoardTotalCnt" resultType="int">
+SELECT 
+	
+FROM
+	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 3
+AND
+	USER_IDX = #{userIdx}
 </select>
 
 <select id="getShelterBoardDetail" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO">

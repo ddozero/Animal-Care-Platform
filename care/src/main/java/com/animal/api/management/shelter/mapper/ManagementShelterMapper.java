@@ -58,6 +58,8 @@ public interface ManagementShelterMapper {
 
 	// 보호시설 게시판
 	public List<ShelterBoardResponseDTO> getShelterBoardList(Map map);
+	
+	public int getShelterBoardTotalCnt(); //게시판 페이징 구현 total count
 
 	public ShelterBoardResponseDTO getShelterBoardDetail(@Param("idx") int idx, @Param("userIdx") int userIdx);
 

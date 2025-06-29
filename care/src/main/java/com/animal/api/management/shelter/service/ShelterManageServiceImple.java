@@ -298,7 +298,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	//// 보호시설 게시판
 	@Override
-	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int listSize, int cp) {
+	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int cp) {
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
@@ -309,6 +309,19 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		List<ShelterBoardResponseDTO> boardLists = mapper.getShelterBoardList(map);
 
 		return boardLists;
+	}
+	
+	@Override
+	public PageInformationDTO getShelterBoardPage(int userIdx, int cp) {
+		
+		if (cp == 0) {
+			cp = 1;
+		}
+		
+		int totalCnt = mapper.getShelterBoardTotalCnt();
+		
+		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return page;
 	}
 
 	@Override
