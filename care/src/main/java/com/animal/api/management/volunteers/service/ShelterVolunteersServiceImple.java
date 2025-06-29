@@ -13,6 +13,7 @@ import com.animal.api.common.util.FileManager;
 import com.animal.api.management.volunteers.mapper.ShelterVolunteersMappper;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
+import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO;
 
@@ -111,5 +112,24 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 		} else {
 			return ERROR;
 		}
+	}
+
+	@Override
+	public List<ShelterVolunteerApplicationsResponseDTO> getShelterVolunteerApplications(int volunteerIdx, int listSize,
+			int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		cp = (cp - 1) * listSize;
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("volunteerIdx", volunteerIdx);
+		map.put("listSize", listSize);
+		map.put("cp", cp);
+
+		List<ShelterVolunteerApplicationsResponseDTO> shelterVolunteerApplications = mapper
+				.getShelterVolunteerApplications(map);
+
+		return shelterVolunteerApplications;
 	}
 }
