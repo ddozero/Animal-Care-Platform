@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.animal.api.common.util.FileManager;
 import com.animal.api.volunteers.mapper.UserVolunteersMapper;
@@ -58,7 +59,8 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 
 		return searchVolunteersList;
 	}
-
+	
+	@Transactional
 	@Override
 	public int submitVolunteers(VolunteersSubmitRequestDTO dto) {
 
@@ -87,6 +89,7 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 		int result = mapper.submitVolunteers(dto);
 
 		if (result > 0) {
+			mapper.updateApplicants(dto);
 			return SUBMIT_OK;
 		} else {
 			return SUBMIT_ERROR;

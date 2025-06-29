@@ -130,6 +130,9 @@ public class UserVolunteersController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
 		}
+		
+		dto.setVolunteerIdx(idx);
+		dto.setUserIdx(loginUser.getIdx());
 
 		int result = volunteerService.submitVolunteers(dto);
 

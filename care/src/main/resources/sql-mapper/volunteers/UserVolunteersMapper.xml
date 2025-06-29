@@ -205,4 +205,15 @@ VALUES(
 )
 </insert>
 
+<update id="updateApplicants" parameterType="com.animal.api.volunteers.model.request.VolunteersSubmitRequestDTO">
+UPDATE
+	VOLUNTEERS
+SET
+	APPLICANTS = APPLICANTS + (
+	#{male} + #{female})
+WHERE
+	IDX =
+	#{volunteerIdx}
+</update>
+
 </mapper>

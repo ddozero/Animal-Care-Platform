@@ -24,5 +24,7 @@ public interface UserVolunteersMapper {
 	public int submitVolunteers(VolunteersSubmitRequestDTO dto);
 
 	public int checkSubmit(@Param("userIdx") int userIdx, @Param("volunteerIdx") int volunteerIdx);
+	
+	public int updateApplicants(VolunteersSubmitRequestDTO dto);
 
 }
