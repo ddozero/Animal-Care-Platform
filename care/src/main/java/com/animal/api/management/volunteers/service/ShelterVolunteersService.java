@@ -20,6 +20,7 @@ public interface ShelterVolunteersService {
 	static int VOLUNTEER_NOT_FOUND = 6;
 	static int NOT_OWNED_VOLUNTEER = 7;
 	static int DELETE_SUCCESS = 8;
+	static int EXCEEDS_CAPACITY = 9;
 	static int ERROR = -1;
 
 	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int userIdx, int listSize, int cp);
@@ -38,4 +39,6 @@ public interface ShelterVolunteersService {
 			int cp);
 
 	public ShelterVolunteerApplicationDetailResponseDTO getShelterVolunteerApplicationDetail(int applicationIdx);
+
+	public int approveShelterVolunteerApplication(int volunteerIdx, int applicationIdx, int userIdx);
 }

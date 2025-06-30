@@ -13,6 +13,8 @@ import com.animal.api.common.util.FileManager;
 import com.animal.api.management.volunteers.mapper.ShelterVolunteersMappper;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
+import com.animal.api.management.volunteers.model.response.CountApprovedResponseDTO;
+import com.animal.api.management.volunteers.model.response.CountPeopleResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO;
@@ -139,5 +141,41 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 		ShelterVolunteerApplicationDetailResponseDTO shelterVolunteerApplicationDetail = mapper
 				.getShelterVolunteerApplicationDetail(applicationIdx);
 		return shelterVolunteerApplicationDetail;
+	}
+
+	@Override
+	public int approveShelterVolunteerApplication(int volunteerIdx, int applicationIdx, int userIdx) {
+		Integer checkUserIdx = mapper.checkMyVolunteer(volunteerIdx);
+		if (checkUserIdx == null || checkUserIdx == 0) {// 봉사 존재 여부 검증
+			return VOLUNTEER_NOT_FOUND;
+		} else if (checkUserIdx != userIdx) {// 로그인한 보호시설이 등록한 봉사인지 검증
+			return NOT_OWNED_VOLUNTEER;
+		}
+
+		List<CountApprovedResponseDTO> countApprovedList = mapper.countApproved(volunteerIdx);// 승인된 봉사 인원 조회(승인완료만)
+		int totalApprovedPeople = 0;
+		for (CountApprovedResponseDTO dto : countApprovedList) {
+			int male = dto.getMale();
+			int female = dto.getFemale();
+			totalApprovedPeople += male + female;
+		}
+
+		int capacity = mapper.checkCapacity(volunteerIdx);// 봉사 모집인원 조회
+
+		CountPeopleResponseDTO applicationPeople = mapper.getApplicationPeople(applicationIdx);// 신청 인원 조회(신청완료,거절 포함)
+		int totalapplicationPeople = 0;
+		int male = applicationPeople.getMale();
+		int female = applicationPeople.getFemale();
+		totalapplicationPeople += (male + female);
+
+		if (totalApprovedPeople + totalapplicationPeople > capacity) {// 신청한 인원과 승인된 인원이 모집인원을 초과했는지 확인 메서드
+			return EXCEEDS_CAPACITY;
+		} else {
+			int result = mapper.approveShelterVolunteerApplication(applicationIdx);
+			if (result == 1) {
+				return UPDATE_SUCCESS;
+			}
+			return ERROR;
+		}
 	}
 }
