@@ -18,10 +18,4 @@ public class AuthViewController {
 		return "user/auth/login/login";
 	}
 	
-	//회원가입 유형선택 페이지
-	@GetMapping("signup")
-	public String signup() {
-		return "user/auth/signup/signupTypeSelect";
-	}
-	
 }
