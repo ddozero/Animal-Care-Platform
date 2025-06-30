@@ -15,6 +15,7 @@ import com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO
 import com.animal.api.admin.donation.model.request.AdminUpdateRequestDTO;
 import com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO;
 import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 
 @Service
@@ -27,8 +28,11 @@ public class AdminDonationServiceImple implements AdminDonationService {
 	@Autowired
 	private FileManager fileManager;
 
+	private int listSize = 5;
+	private int pageSize = 5;
+
 	@Override
-	public List<AdminAllDonationResponseDTO> getAdminDonationList(int listSize, int cp) {
+	public List<AdminAllDonationResponseDTO> getAdminDonationList(int cp) {
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
@@ -41,12 +45,36 @@ public class AdminDonationServiceImple implements AdminDonationService {
 	}
 
 	@Override
-	public List<AdminAllDonationResponseDTO> searchAdminDonation(int listSize, int cp, String name, String status) {
+	public PageInformationDTO getAdminDonationPage(int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAdminDonationTotalCnt();
+		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return page;
+	}
+
+	@Override
+	public List<AdminAllDonationResponseDTO> searchAdminDonation(int cp, String name, String status) {
 
 		AdminDonationSearchRequestDTO dto = new AdminDonationSearchRequestDTO(listSize, cp, name, status);
 		List<AdminAllDonationResponseDTO> donationList = mapper.searchAdminDonation(dto);
 
 		return donationList;
+	}
+
+	@Override
+	public PageInformationDTO getSearchAdminDonationPage(int cp, String name, String status) {
+
+		AdminDonationSearchRequestDTO dto = new AdminDonationSearchRequestDTO(listSize, cp, name, status);
+
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getSearchAdminDonationTotalCnt(dto);
+		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+
+		return page;
 	}
 
 	@Override
@@ -63,7 +91,7 @@ public class AdminDonationServiceImple implements AdminDonationService {
 	}
 
 	@Override
-	public List<AdminDonationUserResponseDTO> getAdminDonationUser(int listSize, int cp, int idx) {
+	public List<AdminDonationUserResponseDTO> getAdminDonationUser(int cp, int idx) {
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
@@ -74,6 +102,17 @@ public class AdminDonationServiceImple implements AdminDonationService {
 		List<AdminDonationUserResponseDTO> userList = mapper.getAdminDonationUser(map);
 
 		return userList;
+	}
+	
+	@Override
+	public PageInformationDTO getAdminDonationUserPage(int cp) {
+		
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAdminDonationUserTotalCnt();
+		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return page;
 	}
 
 	@Override
@@ -91,9 +130,9 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public int uploadDonationFiles(MultipartFile[] files, int idx) {
-		
+
 		Integer donationIdx = mapper.checkDonationIdx(idx);
-		if(donationIdx == null || donationIdx == 0) {
+		if (donationIdx == null || donationIdx == 0) {
 			return DONATION_NOT_FOUND;
 		}
 
@@ -108,12 +147,12 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public int updateAdminDonation(AdminUpdateRequestDTO dto, int idx) {
-		
+
 		Integer donationIdx = mapper.checkDonationIdx(idx);
-		if(donationIdx == null || donationIdx == 0) {
+		if (donationIdx == null || donationIdx == 0) {
 			return DONATION_NOT_FOUND;
 		}
-	
+
 		int result = mapper.updateAdminDonation(dto);
 
 		if (result == 1) {
@@ -122,21 +161,21 @@ public class AdminDonationServiceImple implements AdminDonationService {
 			return ERROR;
 		}
 	}
-	
+
 	@Override
 	public int deleteAdminDonation(int idx) {
-		
+
 		Integer donationIdx = mapper.checkDonationIdx(idx);
-		if(donationIdx == null || donationIdx == 0) {
+		if (donationIdx == null || donationIdx == 0) {
 			return DONATION_NOT_FOUND;
 		}
-	
+
 		int result = mapper.deleteAdminDonation(idx);
-		
-		if(result == 1) {
+
+		if (result == 1) {
 			fileManager.deleteFolder("donations", idx);
 			return DELETE_OK;
-		}else {
+		} else {
 			return ERROR;
 		}
 	}

@@ -29,7 +29,9 @@ import com.animal.api.admin.shelter.service.AdminShelterService;
 import com.animal.api.animal.model.response.AllAnimalListResponseDTO;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO;
 import com.animal.api.support.model.response.UserNoticeResponseDTO;
 
@@ -77,11 +79,14 @@ public class AdminDonationController {
 		}
 
 		List<AdminAllDonationResponseDTO> donationLists = null;
-
+		PageInformationDTO page = null;
+		
 		if (name != null || status != null) {
-			donationLists = adminDonationService.searchAdminDonation(listSize, cp, name, status);
+			donationLists = adminDonationService.searchAdminDonation(cp, name, status);
+			page = adminDonationService.getSearchAdminDonationPage(cp, name, status);
 		} else {
-			donationLists = adminDonationService.getAdminDonationList(listSize, cp);
+			donationLists = adminDonationService.getAdminDonationList(cp);
+			page = adminDonationService.getAdminDonationPage(cp);
 		}
 
 		if (donationLists == null) {
@@ -90,7 +95,7 @@ public class AdminDonationController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지 않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AdminAllDonationResponseDTO>>(200, "지원사업 목록 조회 성공", donationLists));
+					.body(new OkPageResponseDTO<List<AdminAllDonationResponseDTO>>(200, "지원사업 목록 조회 성공", donationLists, page));
 		}
 	}
 
@@ -139,7 +144,8 @@ public class AdminDonationController {
 			cp = (cp - 1) * listSize;
 		}
 
-		List<AdminDonationUserResponseDTO> userList = adminDonationService.getAdminDonationUser(listSize, cp, idx);
+		List<AdminDonationUserResponseDTO> userList = adminDonationService.getAdminDonationUser(cp, idx);
+		PageInformationDTO page = adminDonationService.getAdminDonationUserPage(cp);
 
 		if (userList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
@@ -147,7 +153,7 @@ public class AdminDonationController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "후원자가 존재하지 않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AdminDonationUserResponseDTO>>(200, "조회 성공", userList));
+					.body(new OkPageResponseDTO<List<AdminDonationUserResponseDTO>>(200, "조회 성공", userList, page));
 		}
 
 	}

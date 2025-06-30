@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO;
@@ -33,9 +34,13 @@ public interface ShelterManageService {
 	public int uploadShelterFile(MultipartFile[] files, int idx);
 
 	// 보호시설 리뷰
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int listSize, int cp, int idx);
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx);
+	
+	public PageInformationDTO getVolunteerReviewPage(int cp, int idx);
 
-	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int listSize, int cp, int idx);
+	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int cp, int idx);
+	
+	public PageInformationDTO getAdoptionReviewPage(int cp, int idx);
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx);
 
@@ -49,9 +54,11 @@ public interface ShelterManageService {
 
 	public int deleteAdoptionReviewApply(int userIdx, int reviewIdx);
 
-	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int listSize, int cp);
-
 	// 보호시설 게시판
+	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int cp);
+	
+	public PageInformationDTO getShelterBoardPage(int userIdx, int cp);
+
 	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx);
 
 	public int addShelterBoard(ShelterBoardRequestDTO dto, int userIdx);

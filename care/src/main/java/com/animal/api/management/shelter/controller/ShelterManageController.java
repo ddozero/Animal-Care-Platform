@@ -22,7 +22,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO;
 import com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO;
@@ -100,12 +102,12 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "기본정보 수정 실패"));
 		}
 	}
-	
+
 	/**
 	 * 보호시설 기본정보 수정 시 파일 업로드 (사업자등록증 및 이미지)
 	 * 
-	 * @param idx 보호시설 번호
-	 * @param files 업로드 파일 
+	 * @param idx   보호시설 번호
+	 * @param files 업로드 파일
 	 * 
 	 * @return 보호시설 info 파일 업로드 성공 여부
 	 */
@@ -141,16 +143,16 @@ public class ShelterManageController {
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
-		
-		ManageVolunteerReviewResponseDTO dto = new ManageVolunteerReviewResponseDTO();
-		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(listSize, cp, userIdx);
+
+		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(cp, userIdx);
+		PageInformationDTO page = shelterService.getVolunteerReviewPage(cp, userIdx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
 		} else if (reviewList.size() == 0) {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList));
+			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList, page));
 		} else {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 조회 성공", reviewList));
+			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "리뷰 조회 성공", reviewList, page));
 		}
 	}
 
@@ -176,16 +178,16 @@ public class ShelterManageController {
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
-		
-		ManageAdoptionReviewResponseDTO dto = new ManageAdoptionReviewResponseDTO();
-		List<ManageAdoptionReviewResponseDTO> reviewList = shelterService.getAdoptionReview(listSize, cp, userIdx);
+
+		List<ManageAdoptionReviewResponseDTO> reviewList = shelterService.getAdoptionReview(cp, userIdx);
+		PageInformationDTO page = shelterService.getAdoptionReviewPage(cp, userIdx);
 
 		if (reviewList == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
 		} else if (reviewList.size() == 0) {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList));
+			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList, page));
 		} else {
-			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 조회 성공", reviewList));
+			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "리뷰 조회 성공", reviewList, page));
 		}
 
 	}
@@ -400,7 +402,8 @@ public class ShelterManageController {
 			cp = (cp - 1) * listSize;
 		}
 
-		List<ShelterBoardResponseDTO> boardLists = shelterService.getShelterBoardList(userIdx, listSize, cp);
+		List<ShelterBoardResponseDTO> boardLists = shelterService.getShelterBoardList(userIdx, cp);
+		PageInformationDTO page = shelterService.getShelterBoardPage(userIdx, cp);
 
 		if (boardLists == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));

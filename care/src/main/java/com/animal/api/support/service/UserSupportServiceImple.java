@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.support.mapper.UserSupportMapper;
 import com.animal.api.support.model.request.SearchNoticeRequestDTO;
@@ -21,8 +22,11 @@ public class UserSupportServiceImple implements UserSupportService {
 	@Autowired
 	private FileManager fileManager;
 
+	private int listSize = 5;
+	private int pageSize = 5;
+
 	@Override
-	public List<UserNoticeResponseDTO> getAllNotice(int listSize, int cp) {
+	public List<UserNoticeResponseDTO> getAllNotice(int cp) {
 		if (cp == 0) {
 			cp = 1;
 		} else {
@@ -37,6 +41,17 @@ public class UserSupportServiceImple implements UserSupportService {
 		List<UserNoticeResponseDTO> noticeLists = mapper.getAllNotice(map);
 
 		return noticeLists;
+	}
+
+	@Override
+	public PageInformationDTO getAllNoticePage(int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAllNoticeTotalCnt();
+
+		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return page;
 	}
 
 	@Override
@@ -62,12 +77,25 @@ public class UserSupportServiceImple implements UserSupportService {
 	}
 
 	@Override
-	public List<UserNoticeResponseDTO> searchAllNotice(int listSize, int cp, String title, String content) {
+	public List<UserNoticeResponseDTO> searchAllNotice(int cp, String title, String content) {
 
 		SearchNoticeRequestDTO dto = new SearchNoticeRequestDTO(cp, listSize, title, content);
 		List<UserNoticeResponseDTO> searchNoticeList = mapper.searchAllNotice(dto);
 
 		return searchNoticeList;
+	}
+
+	@Override
+	public PageInformationDTO searchNoticePage(int cp, String title, String content) {
+
+		SearchNoticeRequestDTO dto = new SearchNoticeRequestDTO(cp, listSize, title, content);
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getSearchNoticeTotalCnt(dto);
+
+		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return page;
 	}
 
 }

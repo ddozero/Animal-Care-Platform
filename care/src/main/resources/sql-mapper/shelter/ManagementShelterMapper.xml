@@ -76,6 +76,21 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
+<select id="getVolunteerReviewTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_REVIEWS VR ON
+	VR.VOLUNTEER_IDX = V.IDX
+JOIN USERS REVIEWER ON
+	VR.USER_IDX = REVIEWER.IDX
+JOIN SHELTERS S ON
+	S.USER_IDX = V.USER_IDX
+WHERE
+	V.USER_IDX = #{idx}
+</select>
+
 <select id="getAdoptionReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO">
 SELECT
 	AR.IDX AS reviewIdx,
@@ -99,12 +114,27 @@ JOIN USERS U ON
 JOIN SHELTERS S ON
 S.USER_IDX = A.USER_IDX
 WHERE
-	A.USER_IDX = 52
+	A.USER_IDX = #{idx}
 ORDER BY
 	AR.REF DESC,
 	AR.TURN ASC
 LIMIT
 #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getAdoptionReviewTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	ADOPTION_REVIEWS AR
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+JOIN USERS U ON
+	AR.USER_IDX = U.IDX
+JOIN SHELTERS S ON
+S.USER_IDX = A.USER_IDX
+WHERE
+	A.USER_IDX = #{idx}
 </select>
 
 <update id="updateTurnVR" parameterType="map">
@@ -279,6 +309,17 @@ ORDER BY
 	IDX DESC
 LIMIT
 #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getShelterBoardTotalCnt" resultType="int">
+SELECT 
+	COUNT(*)
+FROM
+	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 3
+AND
+	USER_IDX = #{userIdx}
 </select>
 
 <select id="getShelterBoardDetail" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO">

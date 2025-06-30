@@ -27,6 +27,13 @@ LIMIT
 #{listSize} OFFSET #{cp}
 </select>
 
+<select id = "getAllNoticeTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS
+</select>
+
 <select id="getNoticeDetail" parameterType="int" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
 SELECT 
 	IDX,
@@ -75,6 +82,24 @@ ORDER BY
 	IDX DESC
 LIMIT
 #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getSearchNoticeTotalCnt" parameterType="com.animal.api.support.model.request.SearchNoticeRequestDTO" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS
+<where>
+<if test = "title != null and title!= ''">
+	AND TITLE LIKE '%${title}%'
+</if>
+<if test = "content != null and content!= ''">
+	AND CONTENT LIKE '%${content}%'
+</if>
+<if test = "true">
+	AND BOARD_TYPE_IDX = 1
+</if>
+</where>
 </select>
 
 <update id="updateNoticeViews" parameterType="int">

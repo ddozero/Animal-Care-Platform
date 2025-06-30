@@ -15,12 +15,18 @@ import com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO
 public interface AdminDonationMapper {
 
 	public List<AdminAllDonationResponseDTO> getAdminDonationList(Map map);
+	
+	public int getAdminDonationTotalCnt(); //페이징 구현을 위한 total count
 
 	public List<AdminAllDonationResponseDTO> searchAdminDonation(AdminDonationSearchRequestDTO dto);
+	
+	public int getSearchAdminDonationTotalCnt(AdminDonationSearchRequestDTO dto);//페이징 구현을 위한 total count
 
 	public AdminAllDonationResponseDTO getAdminDonationDetail(int idx);
 	
 	public List<AdminDonationUserResponseDTO> getAdminDonationUser(Map map);
+	
+	public int getAdminDonationUserTotalCnt(); //페이징 구현을 위한 total count
 	
 	public int addAdminDonation(AdminAddDonationRequestDTO dto);
 	

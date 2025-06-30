@@ -25,8 +25,12 @@ public interface ManagementShelterMapper {
 
 	// 보호시설 리뷰
 	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(Map map);
+	
+	public int getVolunteerReviewTotalCnt(); //봉사 리뷰 페이징 구현 total count
 
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(Map map);
+	
+	public int getAdoptionReviewTotalCnt(); //입양 리뷰 페이징 구현 total count
 
 	public int updateTurnVR(ManageVolunteerReplyRequestDTO dto); // VolunteerReview 순번
 
@@ -54,6 +58,8 @@ public interface ManagementShelterMapper {
 
 	// 보호시설 게시판
 	public List<ShelterBoardResponseDTO> getShelterBoardList(Map map);
+	
+	public int getShelterBoardTotalCnt(); //게시판 페이징 구현 total count
 
 	public ShelterBoardResponseDTO getShelterBoardDetail(@Param("idx") int idx, @Param("userIdx") int userIdx);
 
