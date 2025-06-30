@@ -13,7 +13,6 @@
 
             // 보호시설 유기동물 상세 조회 함수 
             async function animalDetail() {
-                const idx = location.pathname.split("/").pop();
                 const result = await API.get('/care/api/shelters/' + shelterIdx + '/animals/' + animalIdx);
                 if (result.status != 200) {
                     location.href = '/care/shelters/' + shelterIdx;
