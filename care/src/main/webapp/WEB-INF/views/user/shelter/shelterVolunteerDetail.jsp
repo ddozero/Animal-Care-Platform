@@ -10,6 +10,8 @@
             const path = location.pathname.split("/");
             const shelterIdx = path[3];
             const volunteerIdx = path[path.length - 1];
+
+            // 보호시설 봉사 상세조회 함수
             async function shelterVolunteerDetail() {
                 const result = await API.get('/care/api/shelters/' + shelterIdx + '/volunteers/' + volunteerIdx);
                 if (result.status != 200) {
