@@ -37,7 +37,7 @@
 	padding: 20px;
 	border: 1px solid #DBDBDB;
 	border-radius: 6px;
-}
+} 
 
 .board-content-table {
 	width: 100%;
@@ -110,9 +110,8 @@
 	}
 }
 </style>
-
-
 </head>
+
 <body>
 	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
 	<section class="board">
