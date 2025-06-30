@@ -138,8 +138,10 @@
         <div id="animalListContainer"></div>
         <div id="pagingArea" class="paging"></div>
         <script>
-            window.addEventListener("DOMContentLoaded", animalList(1));
-            window.addEventListener("DOMContentLoaded", changeBreedOptions());
+            window.addEventListener("DOMContentLoaded", function () {
+                animalList(1);
+                changeBreedOptions();
+            });
         </script>
     </body>
 

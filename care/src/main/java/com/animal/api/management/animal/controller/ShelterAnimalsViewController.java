@@ -20,7 +20,7 @@ public class ShelterAnimalsViewController {
 		return "management/animal/managementAnimalDetail";
 	}
 	
-	@PostMapping
+	@GetMapping("/form")
 	public String managementAnimalAdd() {
 		return "management/animal/managementAnimalAdd";
 	}
