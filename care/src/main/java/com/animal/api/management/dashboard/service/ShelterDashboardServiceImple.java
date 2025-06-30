@@ -1,7 +1,9 @@
 package com.animal.api.management.dashboard.service;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -50,20 +52,15 @@ public class ShelterDashboardServiceImple implements ShelterDashboardService {
 		}
 
 		// DB에서 나온 정보 중 비어있는 월이 있다면 지난 6개월 배열과 비교하여 없는 월에 0 값으로 생성
-		if (dashboardList.size() != 6) {
-			for (int i = 0; i < 6; i++) {
-				if (i != 5) {
-					if (!dateArray[i].equals(dashboardList.get(i).getMonth())) {
-						ShelterVolunteerDashboardResponseDTO dto = new ShelterVolunteerDashboardResponseDTO(
-								dateArray[i], 0);
-						dashboardList.add(i, dto);
-					}
-				} else {
-					ShelterVolunteerDashboardResponseDTO dto = new ShelterVolunteerDashboardResponseDTO(dateArray[i],
-							0);
-					dashboardList.add(dto);
-				}
-			}
+		Map<String, Integer> monthMap = new HashMap<>();
+		for (ShelterVolunteerDashboardResponseDTO dto : dashboardList) {
+		    monthMap.put(dto.getMonth(), dto.getCount());
+		}
+
+		dashboardList.clear(); // 리스트를 다시 구성
+		for (String date : dateArray) {
+		    int count = monthMap.getOrDefault(date, 0);
+		    dashboardList.add(new ShelterVolunteerDashboardResponseDTO(date, count));
 		}
 
 		return dashboardList;
@@ -111,17 +108,18 @@ public class ShelterDashboardServiceImple implements ShelterDashboardService {
 
 		// DB에서 나온 정보 중 비어있는 월이 있다면 지난 6개월 배열과 비교하여 없는 월에 0 값으로 생성
 		if (dashboardList.size() != 6) {
-			for (int i = 0; i < 6; i++) {
-				if (i != 5) {
-					if (!dateArray[i].equals(dashboardList.get(i).getMonth())) {
-						ShelterViewDashboardResponseDTO dto = new ShelterViewDashboardResponseDTO(dateArray[i], 0);
-						dashboardList.add(i, dto);
-					}
-				} else {
-					ShelterViewDashboardResponseDTO dto = new ShelterViewDashboardResponseDTO(dateArray[i], 0);
-					dashboardList.add(dto);
-				}
-			}
+		    // 1. 기존 데이터를 Map으로 변환
+		    Map<String, Integer> monthMap = new HashMap<>();
+		    for (ShelterViewDashboardResponseDTO dto : dashboardList) {
+		        monthMap.put(dto.getMonth(), dto.getViews());
+		    }
+
+		    // 2. 기존 리스트 비우고, 날짜 기준으로 새로 채움
+		    dashboardList.clear();
+		    for (String date : dateArray) {
+		        int count = monthMap.getOrDefault(date, 0);
+		        dashboardList.add(new ShelterViewDashboardResponseDTO(date, count));
+		    }
 		}
 
 		return dashboardList;
