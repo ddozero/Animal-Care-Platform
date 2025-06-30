@@ -24,4 +24,9 @@ public class ShelterAnimalsViewController {
 	public String managementAnimalAdd() {
 		return "management/animal/managementAnimalAdd";
 	}
+	
+	@GetMapping("/adoptions")
+	public String managementAdoption() {
+		return "management/animal/managementAdoption";
+	}
 }
