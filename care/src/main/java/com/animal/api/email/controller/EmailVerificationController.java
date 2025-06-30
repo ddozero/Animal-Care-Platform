@@ -8,8 +8,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.common.model.OkResponseDTO;
@@ -37,7 +37,9 @@ public class EmailVerificationController {
 	 * @return 이메일 성공 
 	 */
 	@PostMapping("/verify")
-	public ResponseEntity<?> sendVerificationCode(@RequestParam String email, HttpSession session){
+	public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> payload, HttpSession session){
+		String email = payload.get("email");
+		
 		//인증번호 6자리 숫자 랜덤 생성
 		String code = String.format("%06d", new Random().nextInt(999999));
 		
@@ -65,7 +67,10 @@ public class EmailVerificationController {
 	 * @return 인증 성공 
 	 */
 	@PostMapping("/verify/code")
-	public ResponseEntity<?> verifyCode(@RequestParam String email, @RequestParam String code, HttpSession session){
+	public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> payload, HttpSession session){
+		
+	    String email = payload.get("email");
+	    String code = payload.get("code");
 		
 		String savedCode = (String) session.getAttribute("emailAuthCode");
 		String savedEmail = (String) session.getAttribute("emailAuthTarget"); 
@@ -79,7 +84,7 @@ public class EmailVerificationController {
 		if(!savedCode.equals(code)) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new OkResponseDTO<>(401, "인증번호가 일치하지 않습니다", null));
 		}
-		
+
 		//인증완료 값 저장
 		session.setAttribute("emailVerified", true);
 		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "이메일 인증 완료", null));
