@@ -321,7 +321,7 @@ public class ShelterVolunteersController {
 		int result = service.approveShelterVolunteerApplication(volunteerIdx, applicationIdx, loginUser.getIdx());
 
 		if (result == service.UPDATE_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "봉사 승인 성공", null));
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "봉사 신청서 승인 성공", null));
 		} else if (result == service.EXCEEDS_CAPACITY) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "현재 신청인원이 모집인원을 초과합니다."));
 		} else if (result == service.VOLUNTEER_NOT_FOUND) {
@@ -329,7 +329,7 @@ public class ShelterVolunteersController {
 		} else if (result == service.NOT_OWNED_VOLUNTEER) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "로그인한 봉사시설의 봉사가 아닙니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사 신청서 데이터가 존재하지않음"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "봉사 신청서 승인 실패"));
 		}
 	}
 }
