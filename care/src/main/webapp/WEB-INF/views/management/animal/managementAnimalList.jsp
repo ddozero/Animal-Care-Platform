@@ -17,7 +17,7 @@
 
                 const result = await API.get('/care/api/management/animals?' + params.toString());
                 if (result.status != 200) {
-                    location.href="care/index";
+                    location.href="/care/index";
                     return;
                 }
                 document.getElementById("body").style.display = "block";
@@ -27,7 +27,7 @@
                 for (const animal of animals) {
                     const card = document.createElement("div");
                     card.innerHTML =
-                        '<a href="animals/' + animal.idx + '">' +
+                        '<a href="/care/management/animals/' + animal.idx + '">' +
                         '<img src="' + '${pageContext.request.contextPath}' + animal.imagePath + '" alt="' + animal.name + '" width="150" height="150" />' +
                         '</a>' +
                         '<div>' + animal.name + '</div>' +

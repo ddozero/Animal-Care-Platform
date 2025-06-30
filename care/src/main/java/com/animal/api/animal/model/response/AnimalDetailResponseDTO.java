@@ -23,9 +23,13 @@ public class AnimalDetailResponseDTO {
 	private Timestamp createdAt;
 	private String description;
 	private String breed;
+	private int breedIdx;
 	private String type;
+	private int typeIdx;
 	private String personality;
+	private int personalityIdx;
 	private String adoptionStatus;
+	private int adoptionStatusIdx;
 	private String shelterName;
 	private String shelterPersonName;
 	private String shelterTel;

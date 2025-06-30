@@ -7,6 +7,7 @@
         <title>Insert title here</title>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
         <script>
+            // 로그인한 보호시설 조회 함수
             async function shelterDetail() {
                 const result = await API.get('/care/api/management/animals/shelter');
                 if (result.status != 200) {
@@ -26,6 +27,7 @@
                 document.getElementById("shelterType").textContent = shelter.shelterType;
             }
 
+            // 유기동물 등록 함수
             async function animalSubmit() {
                 const fileInput = document.getElementById('image');
                 if (!fileInput.files || fileInput.files.length === 0) {
@@ -36,7 +38,7 @@
                 const result = await API.post('/care/api/management/animals', form);
 
                 const uploadForm = getFormDataFromForm("animalImageForm");
-                const uploadResult = await FileAPI.upload("/care/api/management/animals/upload/" + result.data.createdIdx, uploadForm);
+                const uploadResult = await FileAPI.upload("/care/api/management/animals/upload/" + result.data.createdIdx + "/insert", uploadForm);
                 if (uploadResult.status != 201) {
                     alert("업로드 오류 : 다시 진행해주세요.");
                     return;
@@ -50,6 +52,7 @@
                 }
             }
 
+            // 이미지 미리보기 함수
             function previewImage(event) {
                 const file = event.target.files[0];
                 const preview = document.getElementById('preview');
@@ -71,6 +74,12 @@
 
     <body id="body" style="display: none;">
         <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
+            <h1>유기동물 등록</h1>
+            <div>
+                <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
+                <input type="button" value="유기동물 등록" onclick="location.href='/care/management/animals/form'">
+                <input type="button" value="입양상담 관리">
+            </div>
             <div class="shelter-info">
                 <h2 id="shelterName">보호소명</h2>
                 <div><span>주소: </span><span id="shelterAddress"></span> <span id="shelterAddressDetail"></span></div>
@@ -81,7 +90,7 @@
             </div>
             <hr>
             <form id="animalImageForm" enctype="multipart/form-data">
-                <img id="preview" style="display:none; max-width: 300px; max-height: 300px;" alt="미리보기 이미지">
+                <img id="preview" width="200" height="200" style="display:none;" alt="미리보기 이미지">
                 <label for="image">사진 업로드:</label>
                 <input type="file" id="image" name="files" accept="image/*" onchange="previewImage(event)">
                 <br><br>

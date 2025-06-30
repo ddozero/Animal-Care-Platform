@@ -222,9 +222,10 @@ public class ShelterAnimalsController {
 	 * @param idx   유기동물이 생성되면서 생긴 관리번호
 	 * @return 파일 업로드 성공 또는 실패
 	 */
-	@PostMapping("/upload/{idx}")
-	public ResponseEntity<?> uploadAnimalImage(MultipartFile[] files, @PathVariable int idx) {
-		int result = shelterAnimalsService.uploadAnimalImage(files, idx);
+	@PostMapping("/upload/{idx}/{method}")
+	public ResponseEntity<?> uploadAnimalImage(MultipartFile[] files, @PathVariable int idx,
+			@PathVariable String method) {
+		int result = shelterAnimalsService.uploadAnimalImage(files, idx, method);
 		if (result == shelterAnimalsService.UPLOAD_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "이미지 업로드 성공", null));
 		} else {
