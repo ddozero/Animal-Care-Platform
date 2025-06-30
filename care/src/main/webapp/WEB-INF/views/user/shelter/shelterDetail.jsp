@@ -18,7 +18,7 @@
                 }
 
                 document.getElementById("body").style.display = "block";
-                const shelter = result.data
+                const shelter = result.data;
 
                 document.getElementById("shelterImage").src = '${pageContext.request.contextPath}' + shelter.imagePath;
                 document.getElementById("shelterName").textContent = shelter.shelterName;
@@ -70,7 +70,7 @@
                     tbodyRow.innerHTML =
                         "<td>" + volunteer.idx + "</td>" +
                         "<td>" +
-                        "<a href='/care/shelters/" + idx + "/" + volunteer.idx + "'>" +
+                        "<a href='/care/shelters/" + idx + "/volunteers/" + volunteer.idx + "'>" +
                         volunteer.title +
                         "</a>" +
                         "</td>" +
@@ -327,6 +327,7 @@
     </head>
 
     <body id="body" style="display: none;">
+        <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
         <div class="shelter-detail">
             <div class="shelter-image">
                 <img id="shelterImage" src="" width="200" height="200" alt="보호소 사진">

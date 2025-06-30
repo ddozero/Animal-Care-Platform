@@ -79,6 +79,7 @@
     </head>
 
     <body id="body" style="display: none;">
+        <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
         <form id="searchForm" onsubmit="searchAnimals(); return false;" style="margin-bottom: 20px;">
             이름: <input type="text" name="name">
             성별:

@@ -49,6 +49,7 @@
     </head>
 
     <body id="body" style="display: none;">
+        <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
         <div class="animal-info">
             <div class="animal-image">
                 <img id="animalImage" src="" width="200" height="200">
