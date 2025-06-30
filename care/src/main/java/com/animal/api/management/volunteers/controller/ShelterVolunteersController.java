@@ -43,6 +43,8 @@ import com.animal.api.management.volunteers.service.ShelterVolunteersService;
  * @see com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO
  * @see com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO
+ * @see com.animal.api.management.volunteers.model.response.CountApprovedResponseDTO
+ * @see com.animal.api.management.volunteers.model.response.CountPeopleResponseDTO
  */
 
 @RestController
@@ -296,4 +298,38 @@ public class ShelterVolunteersController {
 		}
 	}
 
+	/**
+	 * 봉사 신청 승인
+	 * 
+	 * @param volunteerIdx   봉사 번호
+	 * @param applicationIdx 봉사 신청 번호
+	 * @param session        로그인,보호소 검증용 세션
+	 * @return 성공/실패 메세지
+	 */
+	@PutMapping("{volunteerIdx}/applications/{applicationIdx}/approval")
+	public ResponseEntity<?> approveShelterVolunteerApplication(@PathVariable int volunteerIdx,
+			@PathVariable int applicationIdx, HttpSession session) {
+		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
+		if (loginUser == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginUser.getUserTypeIdx() != 2) { // 보호시설 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "보호시설 회원만 접근 가능합니다."));
+		}
+
+		int result = service.approveShelterVolunteerApplication(volunteerIdx, applicationIdx, loginUser.getIdx());
+
+		if (result == service.UPDATE_SUCCESS) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "봉사 신청서 승인 성공", null));
+		} else if (result == service.EXCEEDS_CAPACITY) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "현재 신청인원이 모집인원을 초과합니다."));
+		} else if (result == service.VOLUNTEER_NOT_FOUND) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사가 존재 하지 않습니다"));
+		} else if (result == service.NOT_OWNED_VOLUNTEER) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "로그인한 봉사시설의 봉사가 아닙니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "봉사 신청서 승인 실패"));
+		}
+	}
 }
