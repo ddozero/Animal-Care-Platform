@@ -41,12 +41,24 @@ public class UserSupportController {
 	 * @return 사용자에게 보여줄 키워드 검색 목록 조회
 	 */
 	@GetMapping
-	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp,
-			@RequestParam(value = "title", required = false) String title,
-			@RequestParam(value = "content", required = false) String content) {
+	public ResponseEntity<?> getAllNotice(
+			@RequestParam(value = "cp", defaultValue = "0") int cp,
+			@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "keyword", required = false) String keyword) {
+		
+		String title = null;
+		String content = null;
+		
 
-		List<UserNoticeResponseDTO> noticeAllList = null;
-		PageInformationDTO page = null;
+	    if ("title".equals(type)) {
+	        title = keyword;
+	    } else if ("content".equals(type)) {
+	        content = keyword;
+	    }
+
+		List<UserNoticeResponseDTO> noticeAllList = supportService.searchAllNotice(cp, title, content);
+		PageInformationDTO page = supportService.searchNoticePage(cp, title, content);
+			
 
 		if (title != null || content != null) {
 			noticeAllList = supportService.searchAllNotice(cp, title, content);
