@@ -41,4 +41,6 @@ public interface ShelterVolunteersService {
 	public ShelterVolunteerApplicationDetailResponseDTO getShelterVolunteerApplicationDetail(int applicationIdx);
 
 	public int approveShelterVolunteerApplication(int volunteerIdx, int applicationIdx, int userIdx);
+	
+	public int cancelShelterVolunteerApplication(int volunteerIdx, int applicationIdx, int userIdx);
 }

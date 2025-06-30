@@ -178,4 +178,22 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 			return ERROR;
 		}
 	}
+
+	@Override
+	public int cancelShelterVolunteerApplication(int volunteerIdx, int applicationIdx, int userIdx) {
+		Integer checkUserIdx = mapper.checkMyVolunteer(volunteerIdx);
+		if (checkUserIdx == null || checkUserIdx == 0) {// 봉사 존재 여부 검증
+			return VOLUNTEER_NOT_FOUND;
+		} else if (checkUserIdx != userIdx) {// 로그인한 보호시설이 등록한 봉사인지 검증
+			return NOT_OWNED_VOLUNTEER;
+		}
+
+		int result = mapper.cancelShelterVolunteerApplication(applicationIdx);
+
+		if (result == 1) {
+			return UPDATE_SUCCESS;
+		} else {
+			return ERROR;
+		}
+	}
 }
