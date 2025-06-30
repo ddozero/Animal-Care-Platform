@@ -22,7 +22,7 @@ public class UserSupportServiceImple implements UserSupportService {
 	@Autowired
 	private FileManager fileManager;
 
-	private int listSize = 5;
+	private int listSize = 10;
 	private int pageSize = 5;
 
 	@Override
@@ -36,7 +36,7 @@ public class UserSupportServiceImple implements UserSupportService {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
-		map.put("cp", cp);
+		map.put("cp", cp); 
 
 		List<UserNoticeResponseDTO> noticeLists = mapper.getAllNotice(map);
 
@@ -56,7 +56,7 @@ public class UserSupportServiceImple implements UserSupportService {
 
 	@Override
 	public UserNoticeResponseDTO getNoticeDetail(int idx) {
-
+		
 		UserNoticeResponseDTO dto = mapper.getNoticeDetail(idx);
 		if (dto == null) {
 			return null;

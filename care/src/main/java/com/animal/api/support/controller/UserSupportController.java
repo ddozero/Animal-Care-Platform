@@ -41,19 +41,24 @@ public class UserSupportController {
 	 * @return 사용자에게 보여줄 키워드 검색 목록 조회
 	 */
 	@GetMapping
-	public ResponseEntity<?> getAllNotice(@RequestParam(value = "cp", defaultValue = "0") int cp,
-			@RequestParam(value = "title", required = false) String title,
-			@RequestParam(value = "content", required = false) String content) {
+	public ResponseEntity<?> getAllNotice(
+			@RequestParam(value = "cp", defaultValue = "0") int cp,
+			@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "keyword", required = false) String keyword) {
+		
+		String title = null;
+		String content = null;
+		
 
-		int listSize = 5;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
-		}
+	    if ("title".equals(type)) {
+	        title = keyword;
+	    } else if ("content".equals(type)) {
+	        content = keyword;
+	    }
 
-		List<UserNoticeResponseDTO> noticeAllList = null;
-		PageInformationDTO page = null;
+		List<UserNoticeResponseDTO> noticeAllList = supportService.searchAllNotice(cp, title, content);
+		PageInformationDTO page = supportService.searchNoticePage(cp, title, content);
+			
 
 		if (title != null || content != null) {
 			noticeAllList = supportService.searchAllNotice(cp, title, content);
@@ -65,8 +70,6 @@ public class UserSupportController {
 
 		if (noticeAllList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
-		} else if (noticeAllList.size() == 0) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkPageResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList, page));
@@ -82,7 +85,8 @@ public class UserSupportController {
 
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getNoticeDetail(@PathVariable int idx) {
-
+		
+		int result = supportService.addNoticeViewCount(idx);
 		UserNoticeResponseDTO dto = supportService.getNoticeDetail(idx);
 
 		if (dto == null) {
