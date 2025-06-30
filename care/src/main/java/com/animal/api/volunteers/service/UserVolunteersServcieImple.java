@@ -1,6 +1,5 @@
 package com.animal.api.volunteers.service;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -34,10 +33,16 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	@Override
 	public List<AllVolunteersResponseDTO> getAllVolunteers(int cp) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		if (cp == 0) {
+			cp = 1;
+		}
+		cp = (cp - 1) * listSize;
 
 		map.put("listSize", listSize);
 		map.put("cp", cp);
-
+		
+		
 		List<AllVolunteersResponseDTO> volunteerLists = mapper.getAllVolunteers(map);
 		return volunteerLists;
 	}

@@ -73,12 +73,6 @@ public class UserVolunteersController {
 			@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "time", defaultValue = "0") int time) {
 
-		int listSize = 5;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
-		}
 	
 		List<AllVolunteersResponseDTO> volunteersAllList = null;
 		PageInformationDTO pageInfo = null;

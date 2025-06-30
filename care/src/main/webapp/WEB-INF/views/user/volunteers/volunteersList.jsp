@@ -5,6 +5,82 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<style>
+.board {
+	font-family: 'Pretendard', sans-serif;
+	background-color: #fff;
+	padding: 60px 20px 40px;
+	margin-top: 50px;
+}
+
+
+.board-container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.board-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 16px;
+}
+
+.board-table a {
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+.board-table th {
+	padding: 14px 10px;
+	border-bottom: 2px solid #DBDBDB;
+	text-align: center;
+	color: #333;
+}
+
+.board-table td {
+	padding: 14px 10px;
+	border-bottom: 1px solid #eee;
+	text-align: center;
+	color: #333;
+}
+
+.board-table td:nth-child(2) {
+	text-align: left;
+}
+
+.board-table thead {
+	font-weight: bold;
+}
+
+.board-table tbody tr:hover {
+	background-color: #fafafa;
+}
+
+
+.paging {
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 50px;
+	font-size: 14px;
+}
+
+@media (max-width : 600px) {
+	.search-bar {
+		flex-direction: column;
+		gap: 10px;
+	}
+	.board-table th, .board-table td {
+		font-size: 12px;
+		padding: 10px 6px;
+	}
+	.write-bt input[type="button"] {
+		width: 100%;
+	}
+}
+</style>
+
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
@@ -99,7 +175,7 @@
 					</tr>
 				</thead>
 
-				<tbody id="volunteerBody"></tbody>
+			<tbody id="volunteerBody"></tbody>
 			</table>
 			<div class="paging"></div>
 			<div id="volunteersListContainer"></div>
@@ -126,7 +202,7 @@
         const result = await API.get("/care/api/volunteers?" + params.toString());
 
         if (result.status !== 200) {
-        	 location.reload(true);
+        	alert("봉사활동이 존재하지 않습니다.");
              return;
         }
         
@@ -175,12 +251,6 @@
 	  function searchVolunteers() {
 	    volunteerList(1);
 	  }
-
-	  // 페이지 로딩 시 1페이지 봉사 리스트 불러오기
-	  window.addEventListener("DOMContentLoaded", function () {
-	    volunteerList(1);
-	  });
-
 
 </script>
 </body>
