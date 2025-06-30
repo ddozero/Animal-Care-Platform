@@ -42,4 +42,6 @@ public interface ShelterVolunteersMappper {
 	public CountPeopleResponseDTO getApplicationPeople(int applicationIdx);
 
 	public int approveShelterVolunteerApplication(int applicationIdx);
+
+	public int cancelShelterVolunteerApplication(int applicationIdx);
 }
