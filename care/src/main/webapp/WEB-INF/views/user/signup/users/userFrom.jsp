@@ -48,8 +48,8 @@
 
   <!-- 회원유형 -->
   <div>
-    <label>개인회원</label>
     <input type="radio" name="signuptype" checked="checked" />
+    <label>개인회원</label>
   </div>
 
   <!-- 닉네임 -->
