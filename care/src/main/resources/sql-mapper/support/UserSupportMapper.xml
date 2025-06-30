@@ -32,6 +32,9 @@ SELECT
 	COUNT(*)
 FROM
 	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 1
+	
 </select>
 
 <select id="getNoticeDetail" parameterType="int" resultType="com.animal.api.support.model.response.UserNoticeResponseDTO">
