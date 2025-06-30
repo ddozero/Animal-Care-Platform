@@ -1,12 +1,14 @@
 package com.animal.api.volunteers.controller;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.volunteers.model.request.VolunteersSubmitRequestDTO;
 import com.animal.api.volunteers.model.response.AllVolunteersResponseDTO;
 import com.animal.api.volunteers.service.UserVolunteersService;
-import com.google.protobuf.Service;
 
 /**
  * 사용자의 고객지원 페이지 공지사항 관련 컨트롤러 클래스
@@ -65,7 +68,8 @@ public class UserVolunteersController {
 			@RequestParam(value = "status", required = false) String status,
 			@RequestParam(value = "shelter", required = false) String shelter,
 			@RequestParam(value = "shelterType", required = false) String shelterType,
-			@RequestParam(value = "volunteerDate", required = false) Timestamp volunteerDate,
+			@RequestParam(value = "volunteerDate", required = false)
+		    @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate volunteerDate,
 			@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "time", defaultValue = "0") int time) {
 
@@ -75,23 +79,26 @@ public class UserVolunteersController {
 		} else {
 			cp = (cp - 1) * listSize;
 		}
-
+	
 		List<AllVolunteersResponseDTO> volunteersAllList = null;
+		PageInformationDTO pageInfo = null;
+		
 		if (title != null || content != null || location != null || status != null || shelter != null
 				|| shelterType != null || volunteerDate != null || type != null || time != 0) {
-			volunteersAllList = volunteerService.searchVolunteers(listSize, cp, title, content, location, status,
-					shelter, shelterType, volunteerDate, type, time);
+			volunteersAllList = volunteerService.searchVolunteers(cp, title, content, location, status, shelter, shelterType, volunteerDate, type, time);
+			pageInfo = volunteerService.getSearchVolunteersPage(cp, title, content, location, status, shelter, shelterType, volunteerDate, type, time);
 		} else {
-			volunteersAllList = volunteerService.getAllVolunteers(listSize, cp);
+			volunteersAllList = volunteerService.getAllVolunteers(cp);
+			pageInfo = volunteerService.getAllVolunteersPage(cp);
 		}
 
 		if (volunteersAllList == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
 		} else if (volunteersAllList.size() == 0) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사활동이 존재하지 않습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersAllList));
+					.body(new OkPageResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersAllList, pageInfo));
 		}
 	}
 

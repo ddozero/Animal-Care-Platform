@@ -1,6 +1,7 @@
 package com.animal.api.volunteers.service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +11,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.volunteers.mapper.UserVolunteersMapper;
+import com.animal.api.volunteers.model.request.SearchVolunteerRequestDTO;
 import com.animal.api.volunteers.model.request.VolunteersSubmitRequestDTO;
 import com.animal.api.volunteers.model.response.AllVolunteersResponseDTO;
-import com.animal.api.volunteers.model.response.SearchVolunteerResponseDTO;
 
 @Service
 @Primary
@@ -25,9 +27,12 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	
 	@Autowired
 	private FileManager fileManager;
+	
+	private int listSize = 10;
+	private int pageSize = 5;
 
 	@Override
-	public List<AllVolunteersResponseDTO> getAllVolunteers(int listSize, int cp) {
+	public List<AllVolunteersResponseDTO> getAllVolunteers(int cp) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
@@ -35,6 +40,17 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 
 		List<AllVolunteersResponseDTO> volunteerLists = mapper.getAllVolunteers(map);
 		return volunteerLists;
+	}
+	
+	@Override
+	public PageInformationDTO getAllVolunteersPage(int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAllVolunteersTotalCnt();
+
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
@@ -49,15 +65,29 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	}
 
 	@Override
-	public List<AllVolunteersResponseDTO> searchVolunteers(int listSize, int cp, String title, String content,
-			String location, String status, String shelter, String shelterType, Timestamp volunteerDate, String type,
+	public List<AllVolunteersResponseDTO> searchVolunteers(int cp, String title, String content,
+			String location, String status, String shelter, String shelterType, LocalDate volunteerDate, String type,
 			int time) {
 
-		SearchVolunteerResponseDTO dto = new SearchVolunteerResponseDTO(cp, listSize, title, content, location, status,
+		SearchVolunteerRequestDTO dto = new SearchVolunteerRequestDTO(cp, listSize, title, content, location, status,
 				shelter, shelterType, volunteerDate, type, time);
 		List<AllVolunteersResponseDTO> searchVolunteersList = mapper.searchVolunteers(dto);
 
 		return searchVolunteersList;
+	}
+	
+	@Override
+	public PageInformationDTO getSearchVolunteersPage(int cp, String title, String content, String location,
+			String status, String shelter, String shelterType, LocalDate volunteerDate, String type, int time) {
+		
+		SearchVolunteerRequestDTO dto = new SearchVolunteerRequestDTO(cp, listSize, title, content, location, status, shelter, shelterType, volunteerDate, type, time);
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getSearchVolunteerTotalcnt(dto);
+
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 	
 	@Transactional

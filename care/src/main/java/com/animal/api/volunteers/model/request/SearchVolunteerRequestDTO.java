@@ -1,6 +1,6 @@
-package com.animal.api.volunteers.model.response;
+package com.animal.api.volunteers.model.request;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchVolunteerResponseDTO {
+public class SearchVolunteerRequestDTO {
 	
 	private int cp;
 	private int listSize;
@@ -19,7 +19,7 @@ public class SearchVolunteerResponseDTO {
 	private String status;
 	private String shelter;
 	private String shelterType;
-	private Timestamp volunteerDate;
+	private LocalDate volunteerDate;
 	private String type;
 	private int time;
 	

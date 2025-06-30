@@ -5,8 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>고객지원</title>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
 <style>
 .board {
@@ -153,7 +152,7 @@
 </head>
 
 <body>
-	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
+<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
 	<section class="borad">
 		<div class="board-container">
 			<div class="header-title">고객지원</div>
@@ -199,10 +198,8 @@
 			<div id="pagingArea" class="paging"></div>
 		</div>
 	</section>
-</body>
 
-<script
-	src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
+<script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
 <script>
 async function noticeList(cp) {
     const tbody = document.getElementById("noticeBody");
@@ -275,4 +272,5 @@ async function noticeList(cp) {
     noticeList(1);
   });
 </script>
+</body>
 </html>
