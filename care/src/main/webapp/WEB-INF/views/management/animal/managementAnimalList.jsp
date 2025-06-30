@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <!DOCTYPE html>
     <html>
-
     <head>
         <meta charset="UTF-8">
         <title>Insert title here</title>
@@ -16,9 +15,9 @@
                 const params = new URLSearchParams(new FormData(form));
                 params.set("cp", cp);
 
-                const result = await API.get('/care/api/animals?' + params.toString());
+                const result = await API.get('/care/api/management/animals?' + params.toString());
                 if (result.status != 200) {
-                    location.reload(true);
+                    location.href="/care/index";
                     return;
                 }
                 document.getElementById("body").style.display = "block";
@@ -28,7 +27,7 @@
                 for (const animal of animals) {
                     const card = document.createElement("div");
                     card.innerHTML =
-                        '<a href="animals/' + animal.idx + '">' +
+                        '<a href="/care/management/animals/' + animal.idx + '">' +
                         '<img src="' + '${pageContext.request.contextPath}' + animal.imagePath + '" alt="' + animal.name + '" width="150" height="150" />' +
                         '</a>' +
                         '<div>' + animal.name + '</div>' +
@@ -80,6 +79,12 @@
 
     <body id="body" style="display: none;">
         <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
+        <h1>유기동물 관리</h1>
+        <div>
+            <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
+            <input type="button" value="유기동물 등록" onclick="location.href='/care/management/animals/form'">
+            <input type="button" value="입양상담 관리">
+        </div>
         <form id="searchForm" onsubmit="searchAnimals(); return false;" style="margin-bottom: 20px;">
             이름: <input type="text" name="name">
             성별:

@@ -34,7 +34,7 @@ public interface ShelterAnimalsService {
 
 	public int getAnimalShelter(int idx);
 
-	public int uploadAnimalImage(MultipartFile[] files, int idx);
+	public int uploadAnimalImage(MultipartFile[] files, int idx, String method);
 
 	public List<AdoptionConsultListResponseDTO> getAdoptionConsultList(int idx, int cp);
 

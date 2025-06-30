@@ -93,14 +93,16 @@ public class ShelterAnimalsServiceImple implements ShelterAnimalsService {
 	}
 
 	@Override
-	public int uploadAnimalImage(MultipartFile[] files, int idx) {
+	public int uploadAnimalImage(MultipartFile[] files, int idx, String method) {
 
 		boolean result = fileManager.uploadImages("animals", idx, files);
 
 		if (result) {
 			return UPLOAD_SUCCESS;
 		} else {
-			mapper.deleteAnimal(idx);
+			if (method.equals("insert")) {
+				mapper.deleteAnimal(idx);
+			}
 			return ERROR;
 		}
 	}

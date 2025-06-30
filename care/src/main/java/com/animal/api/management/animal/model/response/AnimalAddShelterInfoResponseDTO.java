@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AnimalAddShelterInfoResponseDTO {
 	private int userIdx;
+	private String shelterName;
 	private String shelterType;
 	private int shelterZipCode;
 	private String shelterAddress;

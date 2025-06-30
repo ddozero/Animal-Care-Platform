@@ -7,6 +7,7 @@
 <select id="getShelterProfile" parameterType="int" resultType="com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO">
 SELECT
 	S.USER_IDX,
+	S.SHELTER_NAME,
 	ST.NAME AS 'SHELTER_TYPE',
 	S.SHELTER_ZIP_CODE,
 	S.SHELTER_ADDRESS,
