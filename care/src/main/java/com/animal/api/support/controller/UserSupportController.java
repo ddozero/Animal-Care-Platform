@@ -45,13 +45,6 @@ public class UserSupportController {
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "content", required = false) String content) {
 
-		int listSize = 10;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
-		}
-
 		List<UserNoticeResponseDTO> noticeAllList = null;
 		PageInformationDTO page = null;
 

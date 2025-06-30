@@ -36,7 +36,7 @@ public class UserSupportServiceImple implements UserSupportService {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
-		map.put("cp", cp);
+		map.put("cp", cp); 
 
 		List<UserNoticeResponseDTO> noticeLists = mapper.getAllNotice(map);
 

@@ -16,13 +16,19 @@
 	margin-top: 50px;
 }
 
+.banner-notice {
+  text-align: center;
+  margin : 30px;
+}
+
 .header-title {
-	font-size: 24px;
+	font-size:28px;
 	font-weight: bold;
 	margin-top: 50px;
-	margin-bottom: 20px;
+	margin-bottom: 50px;
 	text-align: center;
-	color: #333;
+	color: #3ACDB2;
+	text-align: center;
 }
 
 .board-container {
@@ -34,6 +40,12 @@
 	width: 100%;
 	border-collapse: collapse;
 	font-size: 16px;
+}
+
+.board-table a {
+  text-decoration: none; 
+  color: inherit;
+  cursor: pointer;
 }
 
 .board-table th {
@@ -62,30 +74,10 @@
 	background-color: #fafafa;
 }
 
-.write-bt {
-	max-width: 900px;
-	margin: 20px auto 0;
-	text-align: right;
-}
-
-.write-bt input[type="button"] {
-	background-color: #000;
-	color: #fff;
-	padding: 10px 20px;
-	border: none;
-	font-size: 14px;
-	border-radius: 4px;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-}
-
-.write-bt input[type="button"]:hover {
-	background-color: #444;
-}
-
 .paging {
 	text-align: center;
 	margin-top: 30px;
+	margin-bottom : 50px;
 	font-size: 14px;
 }
 
@@ -126,7 +118,7 @@ async function noticeList(cp) {
 
     if (!notices || notices.length === 0) {
       const row = document.createElement("tr");
-      row.innerHTML = '<td colspan="4" style="text-align:center;">등록된 게시글이 없습니다.</td>';
+      row.innerHTML = '<td colspan="5" style="text-align:center;">등록된 게시글이 없습니다.</td>';
       tbody.appendChild(row);
       return;
     }
@@ -137,6 +129,7 @@ async function noticeList(cp) {
         '<td>' + notice.idx + '</td>' +
         '<td><a href="/notice/' + notice.idx + '">' + notice.title + '</a></td>' +
         '<td>' + notice.createdAt + '</td>' +
+        '<td> 댕봉사 </td>' +
         '<td>' + notice.views + '</td>';
       tbody.appendChild(row);
     }
@@ -174,12 +167,12 @@ async function noticeList(cp) {
 <body>
 	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
 	<section class="borad">
-		<div>
 			<div class="header-title">고객지원</div>
 			<div class="banner-notice">
 				<img src="#">
 			</div>
 
+		<div class="board-container">
 			<form id="searchForm">
 				<div class="search-bar">
 					<select name="type">
@@ -190,13 +183,13 @@ async function noticeList(cp) {
 						type="submit" value="검색">
 				</div>
 			</form>
-			<div class="board-container">
 				<table class="board-table">
 					<thead>
 						<tr>
 							<th>NO</th>
 							<th>제목</th>
 							<th>작성일</th>
+							<th>작성자</th>
 							<th>조회수</th>
 						</tr>
 					</thead>
@@ -210,17 +203,15 @@ async function noticeList(cp) {
 							<td></td>
 							<td></td>
 							<td></td>
+							<td></td>
 						</tr>
 					</tbody>
 				</table>
-			</div>
 			<div class="paging"></div>
-			<div class="write-bt">
-				<input type="button" value="글쓰기">
-			</div>
+
+			<div id="noticeListContainer"></div>
+			<div id="pagingArea" class="paging"></div>
 		</div>
-		<div id="noticeListContainer"></div>
-		<div id="pagingArea" class="paging"></div>
 	</section>
 
 
