@@ -7,13 +7,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>index header</title>
 
 <c:set var="root" value="${pageContext.request.contextPath}" />
 <c:set var="loginUser" value="${sessionScope.loginUser}" />
 
 
 <style>
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 /* 헤더 전체 박스 : 좌우 끝까지 늘어나게 */
 #header-wrapper {
   width: 100%;
@@ -68,6 +73,7 @@
   background-color: #53D9C1;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
+  width: 100%;
 }
 
 #menu-bar a {

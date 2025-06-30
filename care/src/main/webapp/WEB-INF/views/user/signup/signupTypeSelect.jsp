@@ -16,5 +16,7 @@
   <button onclick="location.href='${root}/typeUser'">🙋 일반 사용자</button>
   <button onclick="location.href='${root}/typeShelter'">🏠 보호시설</button>
 </div>
+
+<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 </body>
 </html>

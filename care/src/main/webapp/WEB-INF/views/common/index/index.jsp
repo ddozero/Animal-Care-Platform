@@ -9,5 +9,6 @@
 <body>
 <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
 메인페이지입니다
+<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 </body>
 </html>

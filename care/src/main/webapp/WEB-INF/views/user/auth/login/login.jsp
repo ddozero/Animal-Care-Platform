@@ -63,5 +63,6 @@
     }
   });
 </script>
+<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 </body>
 </html>
