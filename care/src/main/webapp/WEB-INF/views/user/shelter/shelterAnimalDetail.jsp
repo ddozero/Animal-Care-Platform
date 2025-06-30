@@ -7,12 +7,15 @@
         <title>Insert title here</title>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
         <script>
-            // 유기동물 상세 조회 함수 
+            const path = location.pathname.split("/");
+            const shelterIdx = path[3];
+            const animalIdx = path[path.length - 1];
+
+            // 보호시설 유기동물 상세 조회 함수 
             async function animalDetail() {
-                const idx = location.pathname.split("/").pop();
-                const result = await API.get('/care/api/animals/' + idx);
+                const result = await API.get('/care/api/shelters/' + shelterIdx + '/animals/' + animalIdx);
                 if (result.status != 200) {
-                    location.href = '/care/animals';
+                    location.href = '/care/shelters/' + shelterIdx;
                     return;
                 }
                 document.getElementById("body").style.display = "block";
@@ -75,7 +78,7 @@
                 <span id="shelterAddressDetail"></span>
             </div>
         </div>
-        <input type="button" value="목록" onclick="location.href='/care/animals'">
+        <input type="button" value="목록" onclick="location.href='/care/shelters/'+shelterIdx">
         <script>
             window.addEventListener("DOMContentLoaded", animalDetail);
         </script>

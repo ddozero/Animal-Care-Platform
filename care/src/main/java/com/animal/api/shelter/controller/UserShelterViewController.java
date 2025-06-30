@@ -18,4 +18,19 @@ public class UserShelterViewController {
 	public String shelterDetail(@PathVariable int idx) {
 		return "user/shelter/shelterDetail";
 	}
+
+	@GetMapping("/{shelterIdx}/volunteers/{volunteerIdx}")
+	public String shelterVolunteerDetail(@PathVariable int shelterIdx, @PathVariable int volunteerIdx) {
+		return "user/shelter/shelterVolunteerDetail";
+	}
+
+	@GetMapping("/{shelterIdx}/animals/{animalIdx}")
+	public String shelterAnimalDetail(@PathVariable int shelterIdx, @PathVariable int animalIdx) {
+		return "user/shelter/shelterAnimalDetail";
+	}
+
+	@GetMapping("/{shelterIdx}/boards/{boardIdx}")
+	public String shelterBoardDetail(@PathVariable int shelterIdx, @PathVariable int boardIdx) {
+		return "user/shelter/shelterBoardDetail";
+	}
 }

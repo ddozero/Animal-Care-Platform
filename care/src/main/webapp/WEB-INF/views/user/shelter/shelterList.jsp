@@ -55,6 +55,7 @@
     </head>
 
     <body id="body" style="display: none;">
+        <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
         <form id="searchForm" onsubmit="searchShelters(); return false;" style="margin-bottom: 20px;">
             주소:
             <select name="shelterAddress">
