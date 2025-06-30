@@ -45,7 +45,7 @@ public class UserSupportController {
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "content", required = false) String content) {
 
-		int listSize = 5;
+		int listSize = 10;
 		if (cp == 0) {
 			cp = 1;
 		} else {
@@ -65,8 +65,6 @@ public class UserSupportController {
 
 		if (noticeAllList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
-		} else if (noticeAllList.size() == 0) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkPageResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList, page));
