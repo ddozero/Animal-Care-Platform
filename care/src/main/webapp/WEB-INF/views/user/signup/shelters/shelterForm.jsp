@@ -142,6 +142,7 @@
 	<div>
 	  <label for="shelterPersonName">담당자명</label>
 	  <input type="text" id="shelterPersonName" name="shelterPersonName" required />
+    <span class="error" id="shelterPersonNameError" style="color:red; font-size:12px;"></span>
 	</div>
 	<!-- 보호소 주소 (우편번호/주소는 기존 우편번호 api 재활용 가능) -->
 	<div>
@@ -645,6 +646,22 @@ document.getElementById("verifyCodeBtn").addEventListener("click", async () => {
 
 </script>
 
+<!--담당자명 유효성 검사-->
+<script>
+  function validateShelterPersonName() {
+  const input = document.getElementById("shelterPersonName");
+  const value = input.value.trim();
+  const error = document.getElementById("shelterPersonNameError");
+
+  if (!value) {
+    error.textContent = "담당자명을 입력해주세요.";
+    return false;
+  } else {
+    error.textContent = "";
+    return true;
+  }
+}
+</script>
 
 <!--공공 보호소 이메일 유효성 검사 -->
 <script>
@@ -773,6 +790,7 @@ function validateForm() {
 
   const shelterNameValid = validateShelterName();
   const shelterTelValid = validateShelterTel();
+  const shelterPersonNameValid = validateShelterPersonName();
   const businessNumberValid = validateBusinessNumber();
   let shelterEmailValid = true;
 
@@ -842,6 +860,7 @@ function validateForm() {
   if (bn1) bn1.addEventListener("input", debounce(validateBusinessNumber, 300));
   if (bn2) bn2.addEventListener("input", debounce(validateBusinessNumber, 300));
   document.getElementById("shelterTel").addEventListener("input", debounce(validateShelterTel, 300));
+  document.getElementById("shelterPersonName").addEventListener("input", validateForm);
 
 </script>
 
