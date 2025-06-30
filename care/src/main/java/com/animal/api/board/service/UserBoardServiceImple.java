@@ -19,6 +19,7 @@ import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 
 @Service
@@ -31,8 +32,11 @@ public class UserBoardServiceImple implements UserBoardService {
 	@Autowired
 	private FileManager fileManager;
 
+	private int listSize = 5;
+	private int pageSize = 5;
+
 	@Override
-	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp) {
+	public List<AllBoardListResponseDTO> getAllBoards(int cp) {
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -47,7 +51,17 @@ public class UserBoardServiceImple implements UserBoardService {
 	}
 
 	@Override
-	public List<AllBoardListResponseDTO> searchBoards(String type, String keyword, int listSize, int cp) {
+	public PageInformationDTO getAllBoardsPageInfo(int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAllBoardsTotalCnt();
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
+
+	@Override
+	public List<AllBoardListResponseDTO> searchBoards(String type, String keyword, int cp) {
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -57,6 +71,18 @@ public class UserBoardServiceImple implements UserBoardService {
 		List<AllBoardListResponseDTO> boardList = mapper.searchBoards(request);
 
 		return boardList;
+	}
+
+	@Override
+	public PageInformationDTO searchBoardsPageInfo(String type, String keyword, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		BoardSearchRequestDTO request = new BoardSearchRequestDTO(type, keyword, listSize, cp);
+
+		int totalCnt = mapper.searchBoardsTotalCnt(request);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
@@ -207,7 +233,7 @@ public class UserBoardServiceImple implements UserBoardService {
 	}
 
 	@Override
-	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp) {
+	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int cp) {
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -219,6 +245,16 @@ public class UserBoardServiceImple implements UserBoardService {
 		map.put("cp", cp);
 		List<AllBoardCommentsResponseDTO> commentList = mapper.getBoardComments(map);
 		return commentList;
+	}
+
+	@Override
+	public PageInformationDTO getBoardCommentsPageInfo(int boardIdx, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getBoardCommentsTotalCnt(boardIdx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
