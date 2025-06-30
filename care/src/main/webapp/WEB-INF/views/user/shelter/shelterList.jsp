@@ -7,6 +7,7 @@
         <title>Insert title here</title>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
         <script>
+            // 보호시설 조회 함수
             async function shelterList(cp) {
                 const container = document.getElementById("shelterListContainer");
                 container.innerHTML = ""; // 초기화

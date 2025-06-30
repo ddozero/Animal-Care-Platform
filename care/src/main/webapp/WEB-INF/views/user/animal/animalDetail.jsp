@@ -7,6 +7,7 @@
         <title>Insert title here</title>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
         <script>
+            // 유기동물 상세 조회 함수 
             async function animalDetail() {
                 const idx = location.pathname.split("/").pop();
                 const result = await API.get('/care/api/animals/' + idx);
