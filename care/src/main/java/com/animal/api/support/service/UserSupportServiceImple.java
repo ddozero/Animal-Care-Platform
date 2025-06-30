@@ -56,7 +56,7 @@ public class UserSupportServiceImple implements UserSupportService {
 
 	@Override
 	public UserNoticeResponseDTO getNoticeDetail(int idx) {
-
+		
 		UserNoticeResponseDTO dto = mapper.getNoticeDetail(idx);
 		if (dto == null) {
 			return null;
