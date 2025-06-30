@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
@@ -33,6 +35,8 @@ import com.animal.api.donation.model.response.DonationDetailResponseDTO;
 import com.animal.api.donation.service.UserDonationsService;
 
 /**
+ * 사용자 기준 기부 관련 컨트롤러 클래스
+ * 
  * @author consgary
  * @since 2025.06.22
  * @see com.animal.api.donation.model.response.AllDonationListResponseDTO
@@ -52,31 +56,31 @@ public class UserDonationsController {
 	private UserDonationsService service;
 
 	/**
-	 * 봉사 전체 조회
+	 * 기부 전체 조회
 	 * 
 	 * @param cp 현재 페이지
 	 * @return 기부 전체 리스트
 	 */
 	@GetMapping
 	public ResponseEntity<?> getAllDonationsLists(@RequestParam(value = "cp", defaultValue = "0") int cp) {
-		int listSize = 3;
-		List<AllDonationListResponseDTO> donationList = service.getAllDonations(listSize, cp);
+		List<AllDonationListResponseDTO> donationList = service.getAllDonations(cp);
+		PageInformationDTO pageInfo = service.getAllDonationsPageInfo(cp);
 
 		if (donationList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		} else if (donationList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllDonationListResponseDTO>>(200, "기부 전체 조회 성공", donationList));
+			return ResponseEntity.status(HttpStatus.OK).body(new OkPageResponseDTO<List<AllDonationListResponseDTO>>(
+					200, "기부 전체 조회 성공", donationList, pageInfo));
 		}
 	}
 
 	/**
-	 * 봉사 상세 정보 조회
+	 * 기부 상세 정보 조회
 	 * 
 	 * @param idx 기부번호
-	 * @return 봉사 상세 정보
+	 * @return 기부 상세 정보
 	 */
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getDonationDetail(@PathVariable int idx) {
@@ -102,8 +106,8 @@ public class UserDonationsController {
 	@GetMapping("/{idx}/comments")
 	public ResponseEntity<?> getDonationComments(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
-		int listSize = 3;
-		List<AllDonationCommentsResponseDTO> commentList = service.getDonationComments(idx, listSize, cp);
+		List<AllDonationCommentsResponseDTO> commentList = service.getDonationComments(idx, cp);
+		PageInformationDTO pageInfo = service.getDonationCommentsPageInfo(idx, cp);
 
 		if (commentList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
@@ -111,7 +115,8 @@ public class UserDonationsController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "응원 댓글 데이터가 존재하지않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllDonationCommentsResponseDTO>>(200, "응원 댓글 전체 조회 성공", commentList));
+					.body(new OkPageResponseDTO<List<AllDonationCommentsResponseDTO>>(200, "응원 댓글 전체 조회 성공",
+							commentList, pageInfo));
 		}
 
 	}
@@ -126,8 +131,8 @@ public class UserDonationsController {
 	@GetMapping("/{idx}/userLists")
 	public ResponseEntity<?> getDonationUserLists(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
-		int listSize = 3;
-		List<AllDonationUserListResponseDTO> userList = service.getDonationUserLists(idx, listSize, cp);
+		List<AllDonationUserListResponseDTO> userList = service.getDonationUserLists(idx, cp);
+		PageInformationDTO pageInfo = service.getDonationUserListsPageInfo(idx, cp);
 
 		if (userList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
@@ -135,7 +140,8 @@ public class UserDonationsController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "기부내역 데이터가 존재하지않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllDonationUserListResponseDTO>>(200, "기부내역 전체 조회 성공", userList));
+					.body(new OkPageResponseDTO<List<AllDonationUserListResponseDTO>>(200, "기부내역 전체 조회 성공", userList,
+							pageInfo));
 		}
 	}
 
@@ -159,8 +165,8 @@ public class UserDonationsController {
 		Map resultMap = service.addDonationComment(dto);
 
 		if ((int) resultMap.get("result") == service.POST_SUCCESS) {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<Void>(200, (String) resultMap.get("msg"), null));
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new OkResponseDTO<Void>(201, (String) resultMap.get("msg"), null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new ErrorResponseDTO(400, (String) resultMap.get("msg")));

@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.animal.api.common.model.PageInformationDTO;
+import com.animal.api.common.util.FileManager;
 import com.animal.api.donation.mapper.UserDonationsMapper;
 import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
@@ -26,8 +28,14 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	@Autowired
 	private UserDonationsMapper mapper;
 
+	@Autowired
+	private FileManager fileManager;
+
+	private int listSize = 5;
+	private int pageSize = 5;
+
 	@Override
-	public List<AllDonationListResponseDTO> getAllDonations(int listSize, int cp) {
+	public List<AllDonationListResponseDTO> getAllDonations(int cp) {
 
 		if (cp == 0) {
 			cp = 1;
@@ -39,7 +47,25 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		map.put("cp", cp);
 		List<AllDonationListResponseDTO> donationList = mapper.getAllDonations(map);
 
+		if (donationList != null) {
+			for (AllDonationListResponseDTO dto : donationList) {
+				List<String> imagePaths = fileManager.getImagePath("volunteers", dto.getIdx());
+				if (imagePaths != null || imagePaths.size() != 0) {
+					dto.setImagePath(imagePaths.get(0));
+				}
+			}
+		}
 		return donationList;
+	}
+
+	@Override
+	public PageInformationDTO getAllDonationsPageInfo(int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getAllDonationsTotalCnt();
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
@@ -47,11 +73,17 @@ public class UserDonationsServiceImple implements UserDonationsService {
 
 		DonationDetailResponseDTO donationDetail = mapper.getDonationDetail(idx);
 
-		return donationDetail;
+		if (donationDetail != null) {
+			donationDetail.setImagePaths(fileManager.getImagePath("volunteers", idx));
+			return donationDetail;
+		} else {
+			return null;
+		}
+
 	}
 
 	@Override
-	public List<AllDonationCommentsResponseDTO> getDonationComments(int idx, int listSize, int cp) {
+	public List<AllDonationCommentsResponseDTO> getDonationComments(int idx, int cp) {
 
 		if (cp == 0) {
 			cp = 1;
@@ -68,7 +100,17 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	}
 
 	@Override
-	public List<AllDonationUserListResponseDTO> getDonationUserLists(int idx, int listSize, int cp) {
+	public PageInformationDTO getDonationCommentsPageInfo(int idx, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getDonationCommentsTotalCnt(idx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
+	}
+
+	@Override
+	public List<AllDonationUserListResponseDTO> getDonationUserLists(int idx, int cp) {
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -80,6 +122,16 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		List<AllDonationUserListResponseDTO> userList = mapper.getDonationUserLists(map);
 
 		return userList;
+	}
+
+	@Override
+	public PageInformationDTO getDonationUserListsPageInfo(int idx, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getDonationUserListsTotalCnt(idx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
