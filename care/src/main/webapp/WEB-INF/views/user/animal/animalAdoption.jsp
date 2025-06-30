@@ -10,6 +10,7 @@
             const path = location.pathname.split("/");
             const idx = path[3];
 
+            // 유기동물 정보 조회 함수 
             async function animalInfo() {
                 const result = await API.get('/care/api/animals/' + idx + '/adoption');
                 if (result.status != 200) {
@@ -33,7 +34,7 @@
                 document.getElementById("shelterName").textContent = animal.shelterName;
 
             }
-
+            // 입양 상담 신청 함수 
             async function submitAdoption() {
                 const form = getJsonFromForm("adoptionForm");
                 const result = await API.post('/care/api/animals/' + idx + '/adoption', form);
