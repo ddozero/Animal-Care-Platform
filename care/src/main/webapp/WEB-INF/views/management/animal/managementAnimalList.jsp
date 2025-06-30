@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <!DOCTYPE html>
     <html>
+
     <head>
         <meta charset="UTF-8">
         <title>Insert title here</title>
@@ -16,10 +17,19 @@
                 params.set("cp", cp);
 
                 const result = await API.get('/care/api/management/animals?' + params.toString());
-                if (result.status != 200) {
-                    location.href="/care/index";
+                if (result.errorCode === 401 || result.errorCode === 403) {
+                    location.href = "/care/index";
                     return;
                 }
+                if (result.errorCode === 404) {
+                    return;
+                }
+
+                if (result.status != 200) {
+                    location.href = "/care/index";
+                    return;
+                }
+
                 document.getElementById("body").style.display = "block";
                 const animals = result.data;
                 const pageInfo = result.pageInfo;
@@ -79,75 +89,75 @@
 
     <body id="body" style="display: none;">
         <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
-        <h1>유기동물 관리</h1>
-        <div>
-            <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
-            <input type="button" value="유기동물 등록" onclick="location.href='/care/management/animals/form'">
-            <input type="button" value="입양상담 관리">
-        </div>
-        <form id="searchForm" onsubmit="searchAnimals(); return false;" style="margin-bottom: 20px;">
-            이름: <input type="text" name="name">
-            성별:
-            <select name="gender">
-                <option value="">전체</option>
-                <option value="M">남</option>
-                <option value="F">여</option>
-            </select>
-            중성화:
-            <select name="neuter">
-                <option value="0">전체</option>
-                <option value="1">중성화 O</option>
-                <option value="2">중성화 X</option>
-            </select>
-            나이: <input type="number" name="age" min="0" style="width: 60px;">세
-            크기:
-            <select name="size">
-                <option value="0">전체</option>
-                <option value="1">소형</option>
-                <option value="2">중형</option>
-                <option value="3">대형</option>
-            </select>
-            입양상태:
-            <select name="adoptionStatus">
-                <option value="">전체</option>
-                <option value="입양가능">입양가능</option>
-                <option value="입양대기">입양대기</option>
-                <option value="입양완료">입양완료</option>
-            </select>
-            종류:
-            <select id="typeSelect" name="type" onchange="changeBreedOptions()">
-                <option value="">전체</option>
-                <option value="개">개</option>
-                <option value="고양이">고양이</option>
-                <option value="기타">기타</option>
-            </select>
-            품종: <select id="breedSelect" name="breed">
-                <option value="">전체</option>
-            </select>
-            성격:
-            <select name="personality">
-                <option value="">전체</option>
-                <option value="온순함">온순함</option>
-                <option value="활발함">활발함</option>
-                <option value="겁많음">겁많음</option>
-                <option value="사나움">사나움</option>
-                <option value="낯가림">낯가림</option>
-                <option value="애교많음">애교많음</option>
-                <option value="호기심많음">호기심많음</option>
-                <option value="사람좋아함">사람좋아함</option>
-                <option value="소심함">소심함</option>
-                <option value="지능높음">지능높음</option>
-            </select>
-            <input type="submit" value="검색">
-        </form>
-        <div id="animalListContainer"></div>
-        <div id="pagingArea" class="paging"></div>
-        <script>
-            window.addEventListener("DOMContentLoaded", function () {
-                animalList(1);
-                changeBreedOptions();
-            });
-        </script>
+            <h1>유기동물 관리</h1>
+            <div>
+                <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
+                <input type="button" value="유기동물 등록" onclick="location.href='/care/management/animals/form'">
+                <input type="button" value="입양상담 관리" onclick="location.href='/care/management/animals/adoptions'">
+            </div>
+            <form id="searchForm" onsubmit="searchAnimals(); return false;" style="margin-bottom: 20px;">
+                이름: <input type="text" name="name">
+                성별:
+                <select name="gender">
+                    <option value="">전체</option>
+                    <option value="M">남</option>
+                    <option value="F">여</option>
+                </select>
+                중성화:
+                <select name="neuter">
+                    <option value="0">전체</option>
+                    <option value="1">중성화 O</option>
+                    <option value="2">중성화 X</option>
+                </select>
+                나이: <input type="number" name="age" min="0" style="width: 60px;">세
+                크기:
+                <select name="size">
+                    <option value="0">전체</option>
+                    <option value="1">소형</option>
+                    <option value="2">중형</option>
+                    <option value="3">대형</option>
+                </select>
+                입양상태:
+                <select name="adoptionStatus">
+                    <option value="">전체</option>
+                    <option value="입양가능">입양가능</option>
+                    <option value="입양대기">입양대기</option>
+                    <option value="입양완료">입양완료</option>
+                </select>
+                종류:
+                <select id="typeSelect" name="type" onchange="changeBreedOptions()">
+                    <option value="">전체</option>
+                    <option value="개">개</option>
+                    <option value="고양이">고양이</option>
+                    <option value="기타">기타</option>
+                </select>
+                품종: <select id="breedSelect" name="breed">
+                    <option value="">전체</option>
+                </select>
+                성격:
+                <select name="personality">
+                    <option value="">전체</option>
+                    <option value="온순함">온순함</option>
+                    <option value="활발함">활발함</option>
+                    <option value="겁많음">겁많음</option>
+                    <option value="사나움">사나움</option>
+                    <option value="낯가림">낯가림</option>
+                    <option value="애교많음">애교많음</option>
+                    <option value="호기심많음">호기심많음</option>
+                    <option value="사람좋아함">사람좋아함</option>
+                    <option value="소심함">소심함</option>
+                    <option value="지능높음">지능높음</option>
+                </select>
+                <input type="submit" value="검색">
+            </form>
+            <div id="animalListContainer"></div>
+            <div id="pagingArea" class="paging"></div>
+            <script>
+                window.addEventListener("DOMContentLoaded", function () {
+                    animalList(1);
+                    changeBreedOptions();
+                });
+            </script>
     </body>
 
     </html>

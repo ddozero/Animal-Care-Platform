@@ -13,11 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdoptionConsultListResponseDTO {
 	private int idx;
+	private int animalIdx;
 	private int userIdx;
 	private String animalName;
 	private String name;
 	private String tel;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
 	private Timestamp consultedAt;
 	private int statusIdx;
 	private String status;

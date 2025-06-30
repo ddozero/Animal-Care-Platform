@@ -11,6 +11,11 @@
             // 유기동물 상세 조회 함수 
             async function animalDetail() {
                 const result = await API.get('/care/api/management/animals/' + idx);
+                if (result.errorCode === 401 || result.errorCode === 403) {
+                    location.href = "/care/index";
+                    return;
+                }
+
                 if (result.status != 200) {
                     location.href = '/care/management/animals';
                     return;
@@ -118,7 +123,7 @@
             <div>
                 <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
                 <input type="button" value="유기동물 등록" onclick="location.href='/care/management/animals/form'">
-                <input type="button" value="입양상담 관리">
+                <input type="button" value="입양상담 관리" onclick="location.href='/care/management/animals/adoptions'">
             </div>
             <div id="animalInfo" class="animal-detail">
                 <div class="animal-image">
