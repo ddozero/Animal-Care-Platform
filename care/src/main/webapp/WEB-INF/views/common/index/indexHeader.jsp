@@ -112,10 +112,10 @@
 	<!-- 하단 메뉴 라인 -->
 	<div id="menu-bar">
 	  <a href="${root}/volunteers">봉사</a>
-	  <a href="${root}/animal">입양</a>
+	  <a href="${root}/animals">입양</a>
 	  <a href="${root}/donation">기부앤테이크</a>
 	  <a href="${root}/community">커뮤니티</a>
-	  <a href="${root}/shelter">보호시설</a>
+	  <a href="${root}/shelters">보호시설</a>
 	  <a href="${root}/support">고객지원</a>
 	</div>
 	
