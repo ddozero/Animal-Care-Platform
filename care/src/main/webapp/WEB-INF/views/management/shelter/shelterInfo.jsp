@@ -102,7 +102,7 @@ body {
 }
 .bottom-box span {
   display: block;
-  font-size: 15px;
+  font-size: 16px;
 }
 @media(max-width: 768px) {
   .content { flex-direction: column; }
@@ -110,7 +110,6 @@ body {
   .edit-button { width: 100%; }
 }
 
-/* board.css */
 .board {
   font-family: 'Pretendard', sans-serif;
   background-color: #fff;
@@ -191,6 +190,60 @@ body {
   margin-bottom: 20px; 
 }
 
+/* ===== 서브 탭 (봉사리뷰 / 입양리뷰) ===== */
+.sub-tabs {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+    margin-top: 16px;
+    margin-bottom: 20px;
+}
+
+.sub-btn {
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+}
+
+.sub-btn:hover {
+    color: #3acdb2;
+}
+
+.sub-btn.active {
+    color: #3acdb2;
+    border-color: #3acdb2;
+}
+
+.paging {
+     margin: 28px 0;
+     text-align: center;
+}
+
+.paging button {
+     border: none;
+     background: #fff;
+     padding: 6px 12px;
+     margin: 0 2px;
+     border-radius: 4px;
+     cursor: pointer;
+     box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+     transition: background .2s;
+}
+
+.paging button:hover {
+     background: #3acdb2;
+     color: #fff;
+}
+
+
 </style>
 </head>
 <body>
@@ -235,10 +288,20 @@ body {
 	  <div id="noticeSection" style="display:none;" class="notice-box">
 	    <div id="noticeContent"></div>
 	  </div>
+	  
 	
-	  <div id="reviewSection" style="display:none;" class="review-box">
-	    <div>리뷰 리스트가 여기 들어갈 예정 (ajax로)</div>
-	  </div>
+	 <div id="reviewSection" style="display:none;" class="review-box">
+		<div class="sub-tabs">
+		   <button class="sub-btn active" onclick="changeReviewTab(this, 'volunteerReview')">봉사리뷰</button>
+		   <button class="sub-btn" onclick="changeReviewTab(this, 'adoptionReview')">입양리뷰</button>
+		</div>
+		<div id="volunteerReview" class="review-content"></div>
+		<div id="adoptionReview" class="review-content" style="display:none;"></div>
+	</div>
+	
+	<div id="noticePaging" class="paging"></div>
+	<div id="reviewPagingVol" class="paging"></div>
+	<div id="reviewPagingAod" class="paging"></div>
 
 </section>
 
@@ -259,11 +322,11 @@ function ShelterInfo() {
       var shelter = result.data;
 
       var img = document.getElementById("shelterImage");
-      if (shelter.imagePaths && shelter.imagePaths.length > 0) {
-        img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0];
-      } else {
-        img.src = "/resources/images/no-image.png";
-      }
+      if (shelter.imagePaths && shelter.imagePaths.length > 0 && shelter.imagePaths[0]) {
+          img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0];
+        } else {
+          img.src = "/resources/images/no-image.png";
+        }
 
       document.getElementById("shelterName").textContent = shelter.shelterName;
       document.getElementById("personName").textContent = shelter.personName;
@@ -280,6 +343,12 @@ function ShelterInfo() {
 
 //공지사항
 function loadNotice() {
+	  const wrapper = document.getElementById("noticeContent");
+	  wrapper.innerHTML = "";
+	  
+	  const pagingBox = document.getElementById("noticePaging");
+	  pagingBox.innerHTML = ""; 
+	    
 	  var xhr = new XMLHttpRequest();
 	  xhr.open("GET", "/care/api/management/shelter/boards", true);
 	  xhr.onreadystatechange = function() {
@@ -310,10 +379,24 @@ function loadNotice() {
 	      html += '</tbody></table>';
 
 	      document.getElementById("noticeContent").innerHTML = html;
-	    }
-	  };
+
+          // **페이징**
+          
+
+          makePaging(
+              pageInfo.totalCnt,
+              pageInfo.listSize,
+              pageInfo.pageSize,
+              pageInfo.cp,
+              "noticePaging",
+              loadNotice
+          );
+      }
+  };
 	  xhr.send();
-	}
+}
+	
+	
 
 
 function changeTab(button, sectionId) {
@@ -327,20 +410,146 @@ function changeTab(button, sectionId) {
 	  for (var j=0; j<sections.length; j++) {
 	    document.getElementById(sections[j]).style.display = (sections[j] === sectionId) ? "block" : "none";
 	  }
+	  
+	  document.getElementById("noticePaging").style.display = (sectionId === "noticeSection") ? "block" : "none";
+	  document.getElementById("reviewPagingVol").style.display = (sectionId === "reviewSection") ? "block" : "none";
+	  document.getElementById("reviewPagingAod").style.display = (sectionId === "reviewSection") ? "block" : "none";
 
-  // ajax
-  if(sectionId === "noticeSection") {
-	  loadNotice();  
-  }
-  if(sectionId === "reviewSection") {
-    console.log("리뷰관리 ajax 불러오기");
-  }
-}
+	  if(sectionId === "noticeSection") {
+	    loadNotice();
+	  }
+	  if(sectionId === "reviewSection") {
+	    changeReviewTab(
+	      document.querySelector(".sub-tabs .sub-btn.active"),
+	      "volunteerReview"
+	    );
+	  }
+	}
+
 
 
 window.addEventListener("DOMContentLoaded", function() {
   ShelterInfo();
 });
+
+//보호소 리뷰 관리
+async function loadVolunteerReview(cp = 1) {
+    const wrapper = document.getElementById("volunteerReview");
+    wrapper.innerHTML = "";
+
+ 	const pagingBox = document.getElementById("reviewPagingVol");
+    pagingBox.innerHTML = ""; // 초기화
+    
+    const result = await API.get('/care/api/management/shelter/reviews/volunteer?cp=' + cp);
+    if (result.status != 200) {
+        alert("리뷰 데이터를 불러올 수 없습니다.");
+        return;
+    }
+
+    const reviews = result.data;
+    const pageInfo = result.pageInfo;
+
+    for (const review of reviews) {
+        const card = document.createElement("div");
+        card.className = "review-card";
+        card.innerHTML =
+            '<img src="${pageContext.request.contextPath}' + review.imagePath + '" ' +
+            'alt="' + review.nickName + '" width="120" height="120">' +
+            '<div class="content" style="white-space:pre-wrap;">' + review.content + '</div>' +
+            '<div class="meta">' + review.nickName + ' · ' + review.createdAt + '</div>';
+        card.addEventListener("click", () => card.classList.toggle("expanded"));
+
+        if (review.turn != 0) {
+            card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
+            card.style.backgroundColor = "#f9f9f9";             // 연한 배경
+            card.style.borderLeft = "3px solid #ccc";          // 구분선
+        }
+        wrapper.appendChild(card);
+    }
+
+
+    // paging 
+  
+    
+    makePaging(
+            pageInfo.totalCnt,
+            pageInfo.listSize,
+            pageInfo.pageSize,
+            pageInfo.cp,
+            "reviewPagingVol", 
+            loadVolunteerReview
+    );
+}
+
+
+async function loadAdoptionReview(cp = 1) {
+    const wrapper = document.getElementById("adoptionReview");
+    wrapper.innerHTML = "";
+    
+    // paging
+    const pagingBox = document.getElementById("reviewPagingAod");
+    pagingBox.innerHTML = ""; // 초기화
+
+    const result = await API.get('/care/api/management/shelter/reviews/adoption?cp=' + cp);
+    if (result.status != 200) {
+        alert("리뷰 데이터를 불러올 수 없습니다.");
+        return;
+    }
+
+    const reviews = result.data;
+    const pageInfo = result.pageInfo;
+
+    for (const review of reviews) {
+        const card = document.createElement("div");
+        card.className = "review-card";
+        card.innerHTML =
+            '<img src="${pageContext.request.contextPath}' + review.imagePath + '" ' +
+            'alt="' + review.nickName + '" width="120" height="120">' +
+            '<div class="content" style="white-space:pre-wrap;">' + review.content + '</div>' +
+            '<div class="meta">' + review.nickName + ' · ' + review.createdAt + '</div>';
+        card.addEventListener("click", () => card.classList.toggle("expanded"));
+
+        if (review.turn != 0) {
+            card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
+            card.style.backgroundColor = "#f9f9f9";             // 연한 배경
+            card.style.borderLeft = "3px solid #ccc";          // 구분선
+        }
+        wrapper.appendChild(card);
+    }
+
+    makePaging(
+            pageInfo.totalCnt,
+            pageInfo.listSize,
+            pageInfo.pageSize,
+            pageInfo.cp,
+            "reviewPagingAod", // 페이지 버튼이 들어갈 div id
+            loadAdoptionReview
+    );
+}
+
+
+function changeReviewTab(button, sectionId) {
+	  document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+	  button.classList.add('active');
+
+	  document.getElementById('volunteerReview').style.display = 'none';
+	  document.getElementById('adoptionReview').style.display = 'none';
+
+	  document.getElementById(sectionId).style.display = 'block';
+	  
+	  document.getElementById("reviewPagingVol").style.display = (sectionId === "volunteerReview") ? "block" : "none";
+	  document.getElementById("reviewPagingAod").style.display = (sectionId === "adoptionReview") ? "block" : "none";
+
+	  // 선택된 탭에 맞는 ajax 실행
+	  if (sectionId === 'volunteerReview') {
+	    loadVolunteerReview();
+	  } else if (sectionId === 'adoptionReview') {
+	    loadAdoptionReview();
+	  }
+	}
+
+
+
 
 </script>
 </body>
