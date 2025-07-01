@@ -29,6 +29,15 @@ ORDER BY
 LIMIT #{listSize} OFFSET #{cp}
 </select>
 
+<select id="getAllBoardsTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS
+WHERE 
+	BOARD_TYPE_IDX = 2
+</select>
+
 <select id="searchBoards" parameterType="com.animal.api.board.model.request.BoardSearchRequestDTO" resultType="com.animal.api.board.model.response.AllBoardListResponseDTO">
 SELECT
 	B.IDX,
@@ -77,11 +86,47 @@ ORDER BY
 LIMIT #{listSize} OFFSET #{cp}
 </select>
 
+<select id="searchBoardsTotalCnt" parameterType="com.animal.api.board.model.request.BoardSearchRequestDTO" resultType="int">
+SELECT
+	COUNT(DISTINCT B.IDX)
+FROM
+	BOARDS B
+LEFT JOIN USERS U ON
+	B.USER_IDX = U.IDX
+LEFT JOIN BOARD_LIKES BL ON
+	B.IDX = BL.BOARD_IDX
+	AND BL.IS_LIKE = 1
+<where>
+	B.BOARD_TYPE_IDX = 2
+
+    <choose>
+        <when test = "type == 'title' and keyword != null and keyword != ''">
+			AND B.TITLE LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test = "type == 'nickname' and keyword != null and keyword != ''">
+            AND U.NICKNAME LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test = "type == 'content' and keyword != null and keyword != ''">
+            AND B.CONTENT LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test = "(type == 'all' or type == null) and keyword != null and keyword != ''">
+            AND (
+                B.TITLE LIKE CONCAT('%', #{keyword}, '%')
+                OR U.NICKNAME LIKE CONCAT('%', #{keyword}, '%')
+                OR B.CONTENT LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </when>
+    </choose>
+</where>
+</select>
+
 <select id="getMaxRef" resultType="int">
 SELECT
 	IFNULL(MAX(REF), 0)
 FROM
 	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 2
 </select>
 
 <insert id="addBoard" parameterType="com.animal.api.board.model.request.BoardWriteRequestDTO" useGeneratedKeys="true" keyProperty="idx">
@@ -215,6 +260,17 @@ ORDER BY
 	BC.TURN ASC
 LIMIT
 #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getBoardCommentsTotalCnt" parameterType="int" resultType="int">
+SELECT
+    COUNT(*)
+FROM
+    BOARD_COMMENTS BC
+LEFT JOIN USERS U ON
+    BC.USER_IDX = U.IDX
+WHERE
+    BC.BOARD_IDX = #{boardIdx}
 </select>
 
 <select id="checkBoardCommentExists" parameterType="int" resultType="Integer">

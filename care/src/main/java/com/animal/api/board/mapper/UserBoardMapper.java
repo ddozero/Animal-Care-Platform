@@ -19,7 +19,11 @@ import com.animal.api.board.model.response.BoardDetailResponseDTO;
 public interface UserBoardMapper {
 	public List<AllBoardListResponseDTO> getAllBoards(Map map);
 
+	public int getAllBoardsTotalCnt();
+
 	public List<AllBoardListResponseDTO> searchBoards(BoardSearchRequestDTO dto);
+
+	public int searchBoardsTotalCnt(BoardSearchRequestDTO dto);
 
 	public int getMaxRef();
 
@@ -44,6 +48,8 @@ public interface UserBoardMapper {
 	public Integer checkBoardExists(int idx);
 
 	public List<AllBoardCommentsResponseDTO> getBoardComments(Map map);
+
+	public int getBoardCommentsTotalCnt(int boardIdx);
 
 	public Integer checkBoardCommentExists(int idx);
 

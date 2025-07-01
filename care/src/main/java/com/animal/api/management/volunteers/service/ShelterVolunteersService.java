@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO;
@@ -23,7 +24,9 @@ public interface ShelterVolunteersService {
 	static int EXCEEDS_CAPACITY = 9;
 	static int ERROR = -1;
 
-	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int userIdx, int listSize, int cp);
+	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int userIdx, int cp);
+
+	public PageInformationDTO getShelterAllVolunteersPageInfo(int userIdx, int cp);
 
 	public int addShelterVolunteer(ShelterVolunteersInsertDTO dto);
 
@@ -35,12 +38,13 @@ public interface ShelterVolunteersService {
 
 	public int deleteShelterVolunteer(int volunteerIdx, int userIdx);
 
-	public List<ShelterVolunteerApplicationsResponseDTO> getShelterVolunteerApplications(int volunteerIdx, int listSize,
-			int cp);
+	public List<ShelterVolunteerApplicationsResponseDTO> getShelterVolunteerApplications(int volunteerIdx, int cp);
+
+	public PageInformationDTO getShelterVolunteerApplicationsPageInfo(int volunteerIdx, int cp);
 
 	public ShelterVolunteerApplicationDetailResponseDTO getShelterVolunteerApplicationDetail(int applicationIdx);
 
 	public int approveShelterVolunteerApplication(int volunteerIdx, int applicationIdx, int userIdx);
-	
+
 	public int cancelShelterVolunteerApplication(int volunteerIdx, int applicationIdx, int userIdx);
 }

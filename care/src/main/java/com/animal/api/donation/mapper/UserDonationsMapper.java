@@ -18,11 +18,17 @@ import com.animal.api.donation.model.response.DonationDetailResponseDTO;
 public interface UserDonationsMapper {
 	public List<AllDonationListResponseDTO> getAllDonations(Map map);
 
+	public int getAllDonationsTotalCnt();
+
 	public DonationDetailResponseDTO getDonationDetail(int idx);
 
 	public List<AllDonationCommentsResponseDTO> getDonationComments(Map map);
 
+	public int getDonationCommentsTotalCnt(int idx);
+
 	public List<AllDonationUserListResponseDTO> getDonationUserLists(Map map);
+
+	public int getDonationUserListsTotalCnt(int idx);
 
 	public int addDonationComment(DonationCommentRequestDTO dto);
 

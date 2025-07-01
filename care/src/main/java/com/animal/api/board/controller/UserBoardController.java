@@ -32,7 +32,9 @@ import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
 import com.animal.api.board.service.UserBoardService;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 
 /**
  * 사용자 기준 자유게시판에 관련되어 있는 컨트롤러 클래스
@@ -68,13 +70,14 @@ public class UserBoardController {
 	public ResponseEntity<?> getBoards(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "keyword", required = false) String keyword) {
-		int listSize = 3;
 		List<AllBoardListResponseDTO> boardList = null;
+		PageInformationDTO pageInfo = null;
 		if (type != null || keyword != null) {
-			boardList = service.searchBoards(type, keyword, listSize, cp);
+			boardList = service.searchBoards(type, keyword, cp);
+			pageInfo = service.searchBoardsPageInfo(type, keyword, cp);
 		} else {
-			boardList = service.getAllBoards(listSize, cp);
-
+			boardList = service.getAllBoards(cp);
+			pageInfo = service.getAllBoardsPageInfo(cp);
 		}
 		if (boardList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
@@ -82,7 +85,7 @@ public class UserBoardController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllBoardListResponseDTO>>(200, "게시판 조회 성공", boardList));
+					.body(new OkPageResponseDTO<List<AllBoardListResponseDTO>>(200, "게시판 조회 성공", boardList, pageInfo));
 		}
 	}
 
@@ -317,21 +320,21 @@ public class UserBoardController {
 	@GetMapping("/{idx}/comments")
 	public ResponseEntity<?> getBoardComments(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp) {
-		int listSize = 3;
 		Integer boardIdx = service.checkBoardExists(idx);
 		if (boardIdx == null || boardIdx == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글 데이터가 존재하지않음"));
 		}
 
-		List<AllBoardCommentsResponseDTO> commentList = service.getBoardComments(idx, listSize, cp);
+		List<AllBoardCommentsResponseDTO> commentList = service.getBoardComments(idx, cp);
+		PageInformationDTO pageInfo = service.getBoardCommentsPageInfo(idx, cp);
 
 		if (commentList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		} else if (commentList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "게시글 댓글 데이터가 존재하지않음"));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllBoardCommentsResponseDTO>>(200, "게시글 댓글 전체 조회 성공", commentList));
+			return ResponseEntity.status(HttpStatus.OK).body(new OkPageResponseDTO<List<AllBoardCommentsResponseDTO>>(
+					200, "게시글 댓글 전체 조회 성공", commentList, pageInfo));
 		}
 	}
 

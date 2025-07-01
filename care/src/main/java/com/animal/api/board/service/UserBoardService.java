@@ -12,6 +12,7 @@ import com.animal.api.board.model.request.BoardWriteRequestDTO;
 import com.animal.api.board.model.response.AllBoardCommentsResponseDTO;
 import com.animal.api.board.model.response.AllBoardListResponseDTO;
 import com.animal.api.board.model.response.BoardDetailResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 
 public interface UserBoardService {
 	static int GET_SUCCESS = 1;
@@ -40,9 +41,13 @@ public interface UserBoardService {
 	static int BOARD_REF_DATA_MISSING = 24;
 	static int ERROR = -1;
 
-	public List<AllBoardListResponseDTO> getAllBoards(int listSize, int cp);
+	public List<AllBoardListResponseDTO> getAllBoards(int cp);
 
-	public List<AllBoardListResponseDTO> searchBoards(String type, String keyword, int listSize, int cp);
+	public PageInformationDTO getAllBoardsPageInfo(int cp);
+
+	public List<AllBoardListResponseDTO> searchBoards(String type, String keyword, int cp);
+
+	public PageInformationDTO searchBoardsPageInfo(String type, String keyword, int cp);
 
 	public int addBoard(BoardWriteRequestDTO dto);
 
@@ -62,7 +67,9 @@ public interface UserBoardService {
 
 	public Integer checkBoardExists(int idx);
 
-	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int listSize, int cp);
+	public List<AllBoardCommentsResponseDTO> getBoardComments(int boardIdx, int cp);
+
+	public PageInformationDTO getBoardCommentsPageInfo(int boardIdx, int cp);
 
 	public int addBoardComment(BoardCommentRequestDTO dto, int idx);
 

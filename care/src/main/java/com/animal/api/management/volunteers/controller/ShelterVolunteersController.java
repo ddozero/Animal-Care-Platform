@@ -23,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.model.ErrorResponseDTO;
+import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO;
 import com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO;
@@ -64,7 +66,6 @@ public class ShelterVolunteersController {
 	@GetMapping
 	public ResponseEntity<?> getShelterVolunteers(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
-		int listSize = 3;
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
 		if (loginUser == null) { // 로그인 여부 검증
@@ -76,14 +77,16 @@ public class ShelterVolunteersController {
 		}
 
 		List<ShelterVolunteersListResponseDTO> shelterVolunteersList = service
-				.getShelterAllVolunteers(loginUser.getIdx(), listSize, cp);
+				.getShelterAllVolunteers(loginUser.getIdx(), cp);
+		PageInformationDTO pageInfo = service.getShelterAllVolunteersPageInfo(loginUser.getIdx(), cp);
 		if (shelterVolunteersList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		} else if (shelterVolunteersList.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<List<ShelterVolunteersListResponseDTO>>(
-					200, "보호시설에 등록된 봉사 조회 성공", shelterVolunteersList));
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkPageResponseDTO<List<ShelterVolunteersListResponseDTO>>(200, "보호시설에 등록된 봉사 조회 성공",
+							shelterVolunteersList, pageInfo));
 		}
 	}
 
@@ -243,7 +246,6 @@ public class ShelterVolunteersController {
 	@GetMapping("{idx}/applications")
 	public ResponseEntity<?> getShelterVolunteerApplications(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			@PathVariable int idx, HttpSession session) {
-		int listSize = 3;
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
 		if (loginUser == null) { // 로그인 여부 검증
@@ -255,15 +257,17 @@ public class ShelterVolunteersController {
 		}
 
 		List<ShelterVolunteerApplicationsResponseDTO> shelterVolunteerApplications = service
-				.getShelterVolunteerApplications(idx, listSize, cp);
+				.getShelterVolunteerApplications(idx, cp);
+		PageInformationDTO pageInfo = service.getShelterVolunteerApplicationsPageInfo(idx, cp);
+
 		if (shelterVolunteerApplications == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
 		} else if (shelterVolunteerApplications.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterVolunteerApplicationsResponseDTO>>(200, "봉사에 신청한 신청서 조회 성공",
-							shelterVolunteerApplications));
+					.body(new OkPageResponseDTO<List<ShelterVolunteerApplicationsResponseDTO>>(200, "봉사에 신청한 신청서 조회 성공",
+							shelterVolunteerApplications, pageInfo));
 		}
 	}
 

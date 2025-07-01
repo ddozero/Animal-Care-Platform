@@ -80,13 +80,14 @@ public class AdminBoardController {
 		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
-		int listSize = 3;
 		List<AllBoardListResponseDTO> boardList = null;
+		PageInformationDTO pageInfo = null;
 		if (type != null || keyword != null) {
-			boardList = userBoardService.searchBoards(type, keyword, listSize, cp);
+			boardList = userBoardService.searchBoards(type, keyword, cp);
+			pageInfo = userBoardService.searchBoardsPageInfo(type, keyword, cp);
 		} else {
-			boardList = userBoardService.getAllBoards(listSize, cp);
-
+			boardList = userBoardService.getAllBoards(cp);
+			pageInfo = userBoardService.getAllBoardsPageInfo(cp);
 		}
 		if (boardList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 요청"));
@@ -94,7 +95,7 @@ public class AdminBoardController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지않음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<AllBoardListResponseDTO>>(200, "게시판 조회 성공", boardList));
+					.body(new OkPageResponseDTO<List<AllBoardListResponseDTO>>(200, "게시판 조회 성공", boardList, pageInfo));
 		}
 	}
 
@@ -344,7 +345,7 @@ public class AdminBoardController {
 		if (result == adminBoardService.UPLOAD_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "첨부파일 업로드 성공", null));
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "첨부파일ㄹ 업로드 실패"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "첨부파일 업로드 실패"));
 		}
 	}
 
