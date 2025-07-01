@@ -127,24 +127,24 @@ public class UserVolunteersController {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
 		if (loginUser == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능"));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능합니다."));
 		}
-		
-		dto.setVolunteerIdx(idx);
 		dto.setUserIdx(loginUser.getIdx());
+		
+		 dto.setVolunteerIdx(idx);
+
 
 		int result = volunteerService.submitVolunteers(dto);
 
 		if (result == volunteerService.SUBMIT_OK) {
-			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "봉사 신청 성공", null));
+			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "봉사 신청이 완료되었습니다.", null));
 		} else if (result == volunteerService.SUBMIT_DUPLICATE) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "봉사 중복 신청"));
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "이미 신청이 완료된 봉사입니다."));
 		} else if (result == volunteerService.SUBMIT_NOT_OK) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "봉사 신청 불가능"));
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "봉사 신청이 불가능합니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
 		}
-
 	}
 
 }

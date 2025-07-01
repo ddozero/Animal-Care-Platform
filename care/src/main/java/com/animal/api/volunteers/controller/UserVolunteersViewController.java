@@ -16,9 +16,17 @@ public class UserVolunteersViewController {
 	}
 	
 	@GetMapping("/{idx}")
-	public String volunteerDetail(@PathVariable int idx, Model model) {
+	public String volunteerDetail(@PathVariable int idx, Model model) { //봉사 상세정보
 	    model.addAttribute("idx",idx);
 	    return "user/volunteers/volunteersContent";
 	}
+	
+	@GetMapping("/{idx}/submit")
+	public String volunteerSubmit(@PathVariable int idx) { //봉사 신청
+		return "user/volunteers/volunteersSubmit";
+	}
+	
+
+	
 
 }
