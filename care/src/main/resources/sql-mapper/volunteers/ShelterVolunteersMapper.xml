@@ -30,6 +30,19 @@ ORDER BY
 LIMIT #{listSize} OFFSET #{cp}
 </select>
 
+<select id="getShelterAllVolunteersTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_TYPES VT ON
+	V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+WHERE
+	V.USER_IDX = #{userIdx}
+</select>
+
 <insert id="addShelterVolunteer" parameterType="com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO" useGeneratedKeys="true" keyProperty="idx">
 INSERT
 	INTO
@@ -159,6 +172,19 @@ WHERE
 ORDER BY
 	VR.CREATED_AT DESC
 LIMIT #{listSize} OFFSET #{cp}
+</select>
+
+<select  id="getShelterVolunteerApplicationsTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEER_REQUESTS VR
+JOIN VOLUNTEERS V ON
+	VR.VOLUNTEER_IDX = V.IDX
+JOIN VOLUNTEER_REQUEST_STATUS VRS ON
+	VR.VOLUNTEER_REQUEST_STATUS_IDX = VRS.IDX
+WHERE
+	VR.VOLUNTEER_IDX = #{volunteerIdx}
 </select>
 
 <select id="getShelterVolunteerApplicationDetail" parameterType="int" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO">

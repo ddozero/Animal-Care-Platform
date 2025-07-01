@@ -19,6 +19,8 @@ public interface ShelterVolunteersMappper {
 
 	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(Map map);
 
+	public int getShelterAllVolunteersTotalCnt(int userIdx);
+
 	public int addShelterVolunteer(ShelterVolunteersInsertDTO dto);
 
 	public ShelterVolunteerDetailResponseDTO getShelterVolunteerDetail(int volunteerIdx);
@@ -32,6 +34,8 @@ public interface ShelterVolunteersMappper {
 	public Integer checkVolunteerExists(int volunteerIdx);
 
 	public List<ShelterVolunteerApplicationsResponseDTO> getShelterVolunteerApplications(Map map);
+
+	public int getShelterVolunteerApplicationsTotalCnt(int volunteerIdx);
 
 	public ShelterVolunteerApplicationDetailResponseDTO getShelterVolunteerApplicationDetail(int applicationIdx);
 

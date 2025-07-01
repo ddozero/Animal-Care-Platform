@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.management.volunteers.mapper.ShelterVolunteersMappper;
 import com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO;
@@ -30,8 +31,11 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 	@Autowired
 	private FileManager fileManager;
 
+	private int listSize = 5;
+	private int pageSize = 5;
+
 	@Override
-	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int userIdx, int listSize, int cp) {
+	public List<ShelterVolunteersListResponseDTO> getShelterAllVolunteers(int userIdx, int cp) {
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -45,6 +49,16 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 		List<ShelterVolunteersListResponseDTO> shelterVolunteersList = mapper.getShelterAllVolunteers(map);
 
 		return shelterVolunteersList;
+	}
+
+	@Override
+	public PageInformationDTO getShelterAllVolunteersPageInfo(int userIdx, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getShelterAllVolunteersTotalCnt(userIdx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
@@ -118,8 +132,7 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 	}
 
 	@Override
-	public List<ShelterVolunteerApplicationsResponseDTO> getShelterVolunteerApplications(int volunteerIdx, int listSize,
-			int cp) {
+	public List<ShelterVolunteerApplicationsResponseDTO> getShelterVolunteerApplications(int volunteerIdx, int cp) {
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -134,6 +147,16 @@ public class ShelterVolunteersServiceImple implements ShelterVolunteersService {
 				.getShelterVolunteerApplications(map);
 
 		return shelterVolunteerApplications;
+	}
+
+	@Override
+	public PageInformationDTO getShelterVolunteerApplicationsPageInfo(int volunteerIdx, int cp) {
+		if (cp == 0) {
+			cp = 1;
+		}
+		int totalCnt = mapper.getShelterVolunteerApplicationsTotalCnt(volunteerIdx);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		return pageInfo;
 	}
 
 	@Override
