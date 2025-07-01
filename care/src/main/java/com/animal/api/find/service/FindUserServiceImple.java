@@ -1,13 +1,12 @@
 package com.animal.api.find.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.auth.exception.CustomException;
 import com.animal.api.auth.model.vo.UserVO;
-import com.animal.api.common.service.CaptchaServiceTest;
+import com.animal.api.common.service.CaptchaService;
 import com.animal.api.email.mapper.CertificationMapper;
 import com.animal.api.email.model.vo.CertificationVO;
 import com.animal.api.find.mapper.FindMapper;
@@ -25,14 +24,8 @@ public class FindUserServiceImple implements FindUserService {
 	private final FindMapper findMapper;
 	private final CertificationMapper certificationMapper;
 	private final BCryptPasswordEncoder passwordEncoder;
-	private final CaptchaServiceTest captchaService;  // 추후 프론트 개발 시 실제 캡챠랑 연동
+	private final CaptchaService captchaService;  // 추후 프론트 개발 시 실제 캡챠랑 연동
 	
-	/**
-	 * @Value("${google.recaptcha.secret}") 프론트 구현 단계 시 연결 예정
-       private String recaptchaSecretKey;  외부 설정으로 주입
-	 */
-    @Value("${google.recaptcha.secret}")
-    private String recaptchaSecretKey; // ← 외부 설정으로 주입
     /**
      * 일반 사용자 아이디 찾기
      * 이메일 인증 코드 검증 후,

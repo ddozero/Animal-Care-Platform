@@ -1,5 +1,7 @@
 package com.animal.api.find.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,9 +29,10 @@ public class FindUseridController {
 	private final FindUserService findService;
 	
 	@PostMapping("/id")
-	public ResponseEntity<?> findUserId(@RequestBody FindUserIdRequestDTO request) {
+	public ResponseEntity<?> findUserId(@RequestBody FindUserIdRequestDTO request, HttpSession session) {
 	    FindUserIdResponseDTO response = findService.findUserId(request.getName(), request.getEmail());
 
-	    return ResponseEntity.ok(new OkResponseDTO<>(200, "아이디 찾기 성공", response));
+	    session.setAttribute("findUserResult", response);
+	    return ResponseEntity.ok(new OkResponseDTO<>(200, "아이디 찾기 성공", null));
 	}
 }

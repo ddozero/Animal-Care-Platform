@@ -96,7 +96,7 @@ public class EmailCertificationController {
 	    String code = String.format("%06d", new Random().nextInt(999999));
 
 	    // 2. 이메일 발송
-	    String subject = "[Animal Care] 이메일 변경 인증번호 안내";
+	    String subject = "[유기동물 통합 플랫폼] 이메일 변경 인증번호 안내";
 	    String body = "인증번호는 [" + code + "] 입니다. 5분 이내에 입력해주세요.";
 
 	    emailService.sendEmail(newEmail, subject, body);
