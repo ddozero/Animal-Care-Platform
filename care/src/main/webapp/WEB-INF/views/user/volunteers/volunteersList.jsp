@@ -14,6 +14,21 @@
 	margin-top: 50px;
 }
 
+.header-title {
+	font-size: 28px;
+  	font-weight: bold;
+  	margin-top: 50px;
+  	margin-bottom : 20px;
+  	text-align: center;
+  	color: #3ACDB2;
+}
+
+.title-detail {
+    text-align: center;
+    margin-bottom: 40px; 
+    color: #666; 
+    font-size: 16px; 
+}
 
 .board-container {
 	max-width: 1200px;
@@ -60,10 +75,24 @@
 
 
 .paging {
-	text-align: center;
-	margin-top: 30px;
-	margin-bottom: 50px;
-	font-size: 14px;
+      margin: 28px 0;
+      text-align: center;
+}
+
+.paging button {
+    border: none;
+    background: #fff;
+    padding: 6px 12px;
+    margin: 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+    transition: background .2s;
+}
+
+.paging button:hover {
+   background: #3acdb2;
+   color: #fff;
 }
 
 @media (max-width : 600px) {
@@ -79,11 +108,17 @@
 		width: 100%;
 	}
 }
+
 </style>
 
 </head>
 <body>
-	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
+<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
+	
+	<div class="board-container">
+			<div class="header-title">봉사하기</div>
+			<div class="title-detail">다양한 봉사활동에 참여해보세요.</div>
+
 	<section class="search">
 		<form id="searchForm" onsubmit="searchVolunteers(); return false;" style="margin-bottom: 20px;">
 				<!-- 1) location -->
@@ -187,6 +222,7 @@
         	</script>
 		</div>
 	</section>
+	</div>
 
 	<script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
 	<script>
@@ -201,26 +237,22 @@
     try {
         const result = await API.get("/care/api/volunteers?" + params.toString());
 
-        if (result.status !== 200) {
-        	alert("봉사활동이 존재하지 않습니다.");
-             return;
+        if (result.status !== 200 || !Array.isArray(result.data)) {
+            const row = document.createElement("tr");
+            row.innerHTML = '<td colspan="8" style="text-align:center;">등록된 봉사활동이 없습니다.</td>';
+            tbody.appendChild(row);
+            return;
         }
         
         const volunteers = result.data;
         const pageInfo = result.pageInfo;
 
-        if (volunteers.length === 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = '<td colspan="7" style="text-align:center;">등록된 봉사활동이 없습니다.</td>';
-            tbody.appendChild(row);
-            return;
-        }
 
         for (const v of volunteers) {
             const row = document.createElement("tr");
             row.innerHTML =
                 '<td>' + v.createdAt + '</td>' +
-                '<td><a href="volunteers/' + v.idx + '">' + v.title + '</a></td>' +
+                '<td><a href="/care/volunteers/' + v.idx + '">' + v.title + '</a></td>' +
                 '<td>' + v.shelter + '</td>' +
                 '<td>' + v.shelterType + '</td>' +
                 '<td>' + v.location + '</td>' +

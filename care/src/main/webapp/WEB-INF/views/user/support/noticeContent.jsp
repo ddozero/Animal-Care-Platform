@@ -22,14 +22,6 @@
 	color: #3ACDB2;
 }
 
-.header-title {
-	font-size: 28px;
-	font-weight: bold;
-	text-align: center;
-	color: #3ACDB2;
-	margin-bottom: 30px;
-}
-
 .board-container {
 	max-width: 1200px;
 	margin: 0 auto;
@@ -147,7 +139,6 @@
 			</div>
 		</div>
 	</section>
-</body>
 
 <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
 <script>
@@ -161,8 +152,7 @@
 			return;
 		}
 
-		const result = await
-		API.get("/care/api/support/" + idx);
+		const result = await API.get("/care/api/support/" + idx);
 
 		if (result.status !== 200) {
 			alert("게시물을 불러올 수 없습니다.");
@@ -186,4 +176,5 @@
 	noticeDetail();
 </script>
 
+</body>
 </html>

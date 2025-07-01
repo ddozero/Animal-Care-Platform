@@ -18,7 +18,7 @@ public class UserVolunteersViewController {
 	@GetMapping("/{idx}")
 	public String volunteerDetail(@PathVariable int idx, Model model) {
 	    model.addAttribute("idx",idx);
-	    return "user/volunteers/volunteerDetail";
+	    return "user/volunteers/volunteersContent";
 	}
 
 }

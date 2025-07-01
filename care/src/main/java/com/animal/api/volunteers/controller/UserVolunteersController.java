@@ -71,7 +71,7 @@ public class UserVolunteersController {
 			@RequestParam(value = "volunteerDate", required = false)
 		    @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate volunteerDate,
 			@RequestParam(value = "type", required = false) String type,
-			@RequestParam(value = "time", defaultValue = "0") int time) {
+			@RequestParam(value = "time", defaultValue = "0") Integer time) {
 
 	
 		List<AllVolunteersResponseDTO> volunteersAllList = null;
@@ -88,8 +88,6 @@ public class UserVolunteersController {
 
 		if (volunteersAllList == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
-		} else if (volunteersAllList.size() == 0) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사활동이 존재하지 않습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkPageResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersAllList, pageInfo));

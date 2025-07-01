@@ -129,10 +129,24 @@
 
 
 .paging {
-	text-align: center;
-	margin-top: 30px;
-	margin-bottom: 50px;
-	font-size: 14px;
+      margin: 28px 0;
+      text-align: center;
+}
+
+.paging button {
+    border: none;
+    background: #fff;
+    padding: 6px 12px;
+    margin: 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+    transition: background .2s;
+}
+
+.paging button:hover {
+   background: #3acdb2;
+   color: #fff;
 }
 
 @media (max-width : 600px) {
