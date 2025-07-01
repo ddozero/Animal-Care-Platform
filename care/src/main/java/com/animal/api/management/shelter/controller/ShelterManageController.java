@@ -395,15 +395,8 @@ public class ShelterManageController {
 
 		int userIdx = loginUser.getIdx();
 
-		int listSize = 5;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
-		}
-
 		List<ShelterBoardResponseDTO> boardLists = shelterService.getShelterBoardList(userIdx, cp);
-		PageInformationDTO page = shelterService.getShelterBoardPage(userIdx, cp);
+		PageInformationDTO pageInfo = shelterService.getShelterBoardTotalCnt(userIdx, cp);
 
 		if (boardLists == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
@@ -411,7 +404,7 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터 없음"));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkResponseDTO<List<ShelterBoardResponseDTO>>(200, "보호소 게시판 목록 조회 성공", boardLists));
+					.body(new OkPageResponseDTO<List<ShelterBoardResponseDTO>>(200, "보호소 게시판 목록 조회 성공", boardLists, pageInfo));
 		}
 	}
 

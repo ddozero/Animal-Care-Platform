@@ -32,7 +32,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	@Autowired
 	private FileManager fileManager;
 	
-	private int listSize = 5;
+	private int listSize = 10;
 	private int pageSize = 5;
 
 	@Override
@@ -299,6 +299,11 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	//// 보호시설 게시판
 	@Override
 	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int cp) {
+		
+		if (cp == 0) {
+			cp = 1;
+		} 
+		cp = (cp - 1) * listSize;
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
@@ -312,13 +317,13 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 	
 	@Override
-	public PageInformationDTO getShelterBoardPage(int userIdx, int cp) {
+	public PageInformationDTO getShelterBoardTotalCnt(int userIdx, int cp) {
 		
 		if (cp == 0) {
 			cp = 1;
 		}
 		
-		int totalCnt = mapper.getShelterBoardTotalCnt();
+		int totalCnt = mapper.getShelterBoardTotalCnt(userIdx);
 		
 		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
 		return page;

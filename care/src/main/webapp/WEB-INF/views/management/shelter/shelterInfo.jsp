@@ -139,7 +139,7 @@
 			<!-- 상단 메뉴 -->
 			<div class="nav">
 				<button id="infoBtn" onclick="location.href='/care/shelter/manage'">정보관리</button>
-				<button id="noticeBtn" onclick="location.href='/care/shelter/notice'">공지사항</button>
+				<button id="noticeBtn" onclick="location.href='/care/shelter/board'">공지사항</button>
 				<button id="reviewBtn" onclick="location.href='/care/shelter/review'">리뷰관리</button>
 			</div>
 			
