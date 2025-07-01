@@ -5,6 +5,239 @@
     <head>
         <meta charset="UTF-8">
         <title>Insert title here</title>
+        <style>
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .header-title {
+                font-size: 28px;
+                font-weight: bold;
+                margin-top: 50px;
+                margin-bottom: 20px;
+                text-align: center;
+                color: #3ACDB2;
+            }
+
+            .title-detail {
+                text-align: center;
+                margin-bottom: 40px;
+                color: #666;
+                font-size: 16px;
+            }
+
+            #searchForm {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 16px 20px;
+                background: #f6f6f8;
+                padding: 26px 28px;
+                border-radius: 14px;
+                font-size: 15px;
+                align-items: end;
+                transition: max-height .3s ease;
+                overflow: hidden;
+            }
+
+            .form-item {
+                display: flex;
+                flex-direction: column;
+                font-weight: 600;
+                color: #333;
+            }
+
+            #searchForm select,
+            #searchForm input[type="text"],
+            #searchForm input[type="number"] {
+                width: 100%;
+                margin-top: 6px;
+                height: 44px;
+                padding: 0 12px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                font-size: 15px;
+                background: #fff;
+                box-sizing: border-box;
+            }
+
+            .name-field {
+                grid-column: 3 / 6;
+            }
+
+            .btn-area {
+                grid-column: 6 / 7;
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-end;
+                gap: 12px;
+            }
+
+            #searchForm input[type="submit"] {
+                background: #3acdb2;
+                color: #fff;
+                border: none;
+                padding: 0 34px;
+                height: 44px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+            #searchForm input[type="submit"]:hover {
+                background: #2ea992;
+            }
+
+            .reset-link {
+                font-size: 14px;
+                color: #666;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+            #animalListContainer {
+                margin-top: 18px;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 24px;
+            }
+
+            #animalListContainer>div {
+                position: relative;
+            }
+
+            .badge {
+                position: absolute;
+                top: 12px;
+                left: 12px;
+                background-color: #3acdb2;
+                color: white;
+                padding: 4px 10px;
+                border-radius: 8px;
+                font-size: 12px;
+                font-weight: bold;
+                z-index: 1;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            #animalListContainer>div {
+                background: #ffffff;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                transition: transform 0.2s;
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #animalListContainer>div:hover {
+                transform: translateY(-4px);
+            }
+
+            #animalListContainer img {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                object-fit: cover;
+                display: block;
+                border-radius: 0;
+            }
+
+            .animal-name {
+                font-weight: bold;
+                font-size: 15px;
+                padding: 10px 12px 4px 12px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .animal-info {
+                color: #555;
+                font-size: 13px;
+                line-height: 1.4;
+                padding: 0 12px 12px 12px;
+                white-space: pre-line;
+            }
+
+            #toggleBtn {
+                background: #3acdb2;
+                color: #fff;
+                font-size: 15px;
+                font-weight: 600;
+                border: none;
+                padding: 10px 28px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background 0.2s;
+
+                display: block;
+                /* 중앙 정렬을 위한 블록 요소 */
+                margin: 0 auto 20px;
+                /* 가운데 정렬 + 아래 여백 */
+            }
+
+            #toggleBtn:hover {
+                background: #2ea992;
+            }
+
+            .paging {
+                margin: 28px 0;
+                text-align: center;
+            }
+
+            .paging button {
+                border: none;
+                background: #fff;
+                padding: 6px 12px;
+                margin: 0 2px;
+                border-radius: 4px;
+                cursor: pointer;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+                transition: background .2s;
+            }
+
+            .paging button:hover {
+                background: #3acdb2;
+                color: #fff;
+            }
+
+            .submenu-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+                margin-bottom: 30px;
+                margin-top: 30px;
+            }
+
+            .submenu-buttons input[type="button"] {
+                background-color: #f6f6f6;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 10px 24px;
+                font-size: 15px;
+                font-weight: 600;
+                color: #333;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .submenu-buttons input[type="button"]:hover {
+                background-color: #3acdb2;
+                color: #fff;
+                border-color: #3acdb2;
+            }
+
+            .submenu-buttons input[type="button"].active {
+                background-color: #3acdb2;
+                color: #fff;
+                border-color: #3acdb2;
+                font-weight: bold;
+            }
+        </style>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
         <script>
             // 리스트 조회 함수
@@ -37,12 +270,16 @@
                 for (const animal of animals) {
                     const card = document.createElement("div");
                     card.innerHTML =
-                        '<a href="/care/management/animals/' + animal.idx + '">' +
-                        '<img src="' + '${pageContext.request.contextPath}' + animal.imagePath + '" alt="' + animal.name + '" width="150" height="150" />' +
+                        '<div class="badge">' + animal.adoptionStatus + '</div>' +
+                        '<a href="${pageContext.request.contextPath}/management/animals/' + animal.idx + '">' +
+                        '<img src="${pageContext.request.contextPath}' + animal.imagePath + '" alt="' + animal.name + '" />' +
                         '</a>' +
-                        '<div>' + animal.name + '</div>' +
-                        '<div>상태: ' + animal.adoptionStatus + '</div>' +
-                        '<div>품종: ' + animal.breed + '</div>';
+                        '<div class="animal-name">' + animal.name + '</div>' +
+                        '<div class="animal-info">' +
+                        animal.type + ' / ' + animal.breed + '<br>' +
+                        (animal.gender === 'F' ? '암컷' : '수컷') + '(중성화 ' + (animal.neuter === 1 ? 'O' : 'X') + ')<br>' +
+                        animal.age + '세 / ' + animal.size + 'kg' +
+                        '</div>';
                     container.appendChild(card);
                 }
 
@@ -84,80 +321,93 @@
                     }
                 }
             }
+
+            /* 토글 함수 */
+            function viewSearch() {
+                const toggleBtn = document.getElementById('toggleBtn');
+                const searchForm = document.getElementById('searchForm');
+
+                const isHidden = searchForm.style.display === 'none' || searchForm.style.display === '';
+                searchForm.style.display = isHidden ? 'grid' : 'none';     // form 보여주기/숨기기
+                toggleBtn.value = isHidden ? '검색 조건 닫기' : '검색 조건 열기'; // 버튼 글자 바꾸기
+            }
         </script>
     </head>
 
     <body id="body" style="display: none;">
-        <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
-            <h1>유기동물 관리</h1>
-            <div>
-                <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
+        <%@ include file="/WEB-INF/views/common/management/managementHeader.jsp" %>
+            <div class="submenu-buttons">
+                <input type="button" value="유기동물 조회" class="active" onclick="location.href='/care/management/animals'">
                 <input type="button" value="유기동물 등록" onclick="location.href='/care/management/animals/form'">
                 <input type="button" value="입양상담 관리" onclick="location.href='/care/management/animals/adoptions'">
             </div>
-            <form id="searchForm" onsubmit="searchAnimals(); return false;" style="margin-bottom: 20px;">
-                이름: <input type="text" name="name">
-                성별:
-                <select name="gender">
-                    <option value="">전체</option>
-                    <option value="M">남</option>
-                    <option value="F">여</option>
-                </select>
-                중성화:
-                <select name="neuter">
-                    <option value="0">전체</option>
-                    <option value="1">중성화 O</option>
-                    <option value="2">중성화 X</option>
-                </select>
-                나이: <input type="number" name="age" min="0" style="width: 60px;">세
-                크기:
-                <select name="size">
-                    <option value="0">전체</option>
-                    <option value="1">소형</option>
-                    <option value="2">중형</option>
-                    <option value="3">대형</option>
-                </select>
-                입양상태:
-                <select name="adoptionStatus">
-                    <option value="">전체</option>
-                    <option value="입양가능">입양가능</option>
-                    <option value="입양대기">입양대기</option>
-                    <option value="입양완료">입양완료</option>
-                </select>
-                종류:
-                <select id="typeSelect" name="type" onchange="changeBreedOptions()">
-                    <option value="">전체</option>
-                    <option value="개">개</option>
-                    <option value="고양이">고양이</option>
-                    <option value="기타">기타</option>
-                </select>
-                품종: <select id="breedSelect" name="breed">
-                    <option value="">전체</option>
-                </select>
-                성격:
-                <select name="personality">
-                    <option value="">전체</option>
-                    <option value="온순함">온순함</option>
-                    <option value="활발함">활발함</option>
-                    <option value="겁많음">겁많음</option>
-                    <option value="사나움">사나움</option>
-                    <option value="낯가림">낯가림</option>
-                    <option value="애교많음">애교많음</option>
-                    <option value="호기심많음">호기심많음</option>
-                    <option value="사람좋아함">사람좋아함</option>
-                    <option value="소심함">소심함</option>
-                    <option value="지능높음">지능높음</option>
-                </select>
-                <input type="submit" value="검색">
-            </form>
-            <div id="animalListContainer"></div>
-            <div id="pagingArea" class="paging"></div>
-            <script>
-                window.addEventListener("DOMContentLoaded", function () {
-                    animalList(1);
-                    changeBreedOptions();
-                });
-            </script>
+            <div class="container">
+                <input type="button" id="toggleBtn" value="검색 조건 열기" onclick="viewSearch()">
+                <form id="searchForm" onsubmit="searchAnimals(); return false;" style="display:none;">
+                    <div class="form-item"><label>성별</label><select name="gender">
+                            <option value="">전체</option>
+                            <option value="M">남</option>
+                            <option value="F">여</option>
+                        </select></div>
+                    <div class="form-item"><label>중성화</label><select name="neuter">
+                            <option value="0">전체</option>
+                            <option value="1">중성화 O</option>
+                            <option value="2">중성화 X</option>
+                        </select></div>
+                    <div class="form-item"><label>나이 (세)</label><input type="number" name="age" min="0"></div>
+                    <div class="form-item"><label>크기</label><select name="size">
+                            <option value="0">전체</option>
+                            <option value="1">소형</option>
+                            <option value="2">중형</option>
+                            <option value="3">대형</option>
+                        </select></div>
+                    <div class="form-item"><label>입양상태</label><select name="adoptionStatus">
+                            <option value="">전체</option>
+                            <option value="입양가능">입양가능</option>
+                            <option value="입양대기">입양대기</option>
+                            <option value="입양완료">입양완료</option>
+                        </select></div>
+                    <div class="form-item"><label>종류</label><select id="typeSelect" name="type"
+                            onchange="changeBreedOptions()">
+                            <option value="">전체</option>
+                            <option value="개">개</option>
+                            <option value="고양이">고양이</option>
+                            <option value="기타">기타</option>
+                        </select></div>
+                    <div class="form-item"><label>품종</label><select id="breedSelect" name="breed">
+                            <option value="">전체</option>
+                        </select></div>
+                    <div class="form-item"><label>성격</label><select name="personality">
+                            <option value="">전체</option>
+                            <option value="온순함">온순함</option>
+                            <option value="활발함">활발함</option>
+                            <option value="겁많음">겁많음</option>
+                            <option value="사나움">사나움</option>
+                            <option value="낯가림">낯가림</option>
+                            <option value="애교많음">애교많음</option>
+                            <option value="호기심많음">호기심많음</option>
+                            <option value="사람좋아함">사람좋아함</option>
+                            <option value="소심함">소심함</option>
+                            <option value="지능높음">지능높음</option>
+                        </select></div>
+                    <div class="form-item name-field"><label>이름</label><input type="text" name="name"></div>
+                    <div class="btn-area">
+                        <a class="reset-link"
+                            onclick="document.getElementById('searchForm').reset();changeBreedOptions();">검색 설정
+                            초기화</a>
+                        <input type="submit" value="검색">
+                    </div>
+                </form>
+                <div id="animalListContainer"></div>
+                <div id="pagingArea" class="paging"></div>
+            </div>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+                <script>
+                    window.addEventListener("DOMContentLoaded", function () {
+                        animalList(1);
+                        changeBreedOptions();
+                    });
+                </script>
     </body>
 
     </html>

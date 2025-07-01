@@ -209,11 +209,12 @@
                     <button class="btn" onclick="location.href='/care/shelters/' + shelterIdx">목록</button>
                 </div>
             </div>
-            <script>
-                window.addEventListener("DOMContentLoaded", function () {
-                    shelterBoard();
-                });
-            </script>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+                <script>
+                    window.addEventListener("DOMContentLoaded", function () {
+                        shelterBoard();
+                    });
+                </script>
     </body>
 
     </html>

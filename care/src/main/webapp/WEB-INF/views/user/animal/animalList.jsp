@@ -356,12 +356,13 @@
                 <div id="animalListContainer"></div>
                 <div id="pagingArea" class="paging"></div>
             </div>
-            <script>
-                window.addEventListener("DOMContentLoaded", function () {
-                    animalList(1);
-                    changeBreedOptions();
-                });
-            </script>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+                <script>
+                    window.addEventListener("DOMContentLoaded", function () {
+                        animalList(1);
+                        changeBreedOptions();
+                    });
+                </script>
     </body>
 
     </html>

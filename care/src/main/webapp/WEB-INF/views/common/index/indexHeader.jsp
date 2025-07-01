@@ -107,7 +107,7 @@ html, body {
 	        <span><strong>${loginUser.nickname}</strong>님</span>
 	        <a href="javascript:void(0);" onclick="logout()">로그아웃</a>|<a href="${root}/mypage">마이페이지</a>
 	        <c:if test="${loginUser.userTypeIdx == 2}">
-	        |<a href="${root}/shelter/manage">보호시설 관리</a>
+	        |<a href="${root}/management/shelters">보호시설 관리</a>
 	        </c:if>
 	      </c:otherwise>
 	    </c:choose>
