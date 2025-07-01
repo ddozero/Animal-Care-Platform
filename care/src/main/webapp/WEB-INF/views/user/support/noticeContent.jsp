@@ -17,9 +17,16 @@
 
 .header-title {
 	font-size: 28px;
-	font-weight: bold;
-	text-align: center;
-	color: #3ACDB2;
+  	font-weight: bold;
+  	margin-bottom : 20px;
+  	text-align: center;
+  	color: #3ACDB2;
+}
+.title-detail {
+    text-align: center;
+    margin-bottom: 40px; 
+    color: #666; 
+    font-size: 16px; 
 }
 
 .board-container {
@@ -108,6 +115,7 @@
 	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
 	<section class="board">
 		<div class="header-title">공지사항</div>
+		<div class="title-detail">댕봉사에서 알리는 공지사항입니다.</div>
 
 		<div class="board-container">
 			<table class="board-content-table">
