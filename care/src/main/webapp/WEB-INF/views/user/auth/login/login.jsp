@@ -55,7 +55,7 @@
         alert('로그인 성공');
         window.location.href = '${root}/index';
       } else {
-        document.getElementById('errorMessage').innerText = result.message || '로그인 실패';
+        document.getElementById('errorMessage').innerText = result.errorMsg || '로그인 실패';
       }
     } catch (error) {
       console.error('서버 오류:', error);
@@ -63,5 +63,6 @@
     }
   });
 </script>
+<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 </body>
 </html>

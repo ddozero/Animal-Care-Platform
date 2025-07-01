@@ -37,7 +37,7 @@
   <div>
     <label for="id">아이디</label>
     <input type="text" id="id" name="id" required autocomplete="username"/>
-    <span class="error" id="idError" style="color:red; font-size:12px;"></span>
+    <span class="error" id="idError" ></span>
   </div>
 
   <!-- 비밀번호 -->
@@ -64,7 +64,7 @@
   <div>
     <label for="nickname">닉네임</label>
     <input type="text" id="nickname" name="nickname" required />
-    <span class="error" id="nicknameError" style="color:red; font-size:12px;"></span>
+    <span class="error" id="nicknameError" ></span>
   </div>
 
   <!-- 생년월일 -->
@@ -142,6 +142,7 @@
 	<div>
 	  <label for="shelterPersonName">담당자명</label>
 	  <input type="text" id="shelterPersonName" name="shelterPersonName" required />
+    <span class="error" id="shelterPersonNameError"></span>
 	</div>
 	<!-- 보호소 주소 (우편번호/주소는 기존 우편번호 api 재활용 가능) -->
 	<div>
@@ -176,7 +177,7 @@
 	  <label for="shelterBusinessNumber">사업자등록번호</label>
 	  <input type="text" id="shelterBusinessNumber2" name="shelterBusinessNumber" />
 	</div>	
-  <span id="shelterBusinessNumberError" class="error" style="color:red; font-size:12px;"></span>
+  <span id="shelterBusinessNumberError" class="error" ></span>
 
 	<!-- 민간 (2): 사업자등록증 파일 업로드 -->
 	<div id="businessFileField" style="display: none;">
@@ -645,6 +646,24 @@ document.getElementById("verifyCodeBtn").addEventListener("click", async () => {
 
 </script>
 
+<!--담당자명 유효성 검사-->
+<script>
+  function validateShelterPersonName() {
+  const input = document.getElementById("shelterPersonName");
+  const value = input.value.trim();
+  const error = document.getElementById("shelterPersonNameError");
+
+  if (!value) {
+    error.textContent = "담당자명을 입력해주세요.";
+    error.style.color = "red";
+    input.style.border = "1px solid red";
+    return false;
+  } else {
+    error.textContent = "";
+    return true;
+  }
+}
+</script>
 
 <!--공공 보호소 이메일 유효성 검사 -->
 <script>
@@ -773,6 +792,7 @@ function validateForm() {
 
   const shelterNameValid = validateShelterName();
   const shelterTelValid = validateShelterTel();
+  const shelterPersonNameValid = validateShelterPersonName();
   const businessNumberValid = validateBusinessNumber();
   let shelterEmailValid = true;
 
@@ -790,26 +810,6 @@ function validateForm() {
   return allValid;
   }
 </script>
-
-<!--submit 시 전화번호 자동 병합 -->
-<script>
-  const signupForm = document.getElementById("signupForm");
-
-  signupForm.addEventListener("submit", function(e) {
-    const tel1 = document.getElementById("tel1").value.trim();
-    const tel2 = document.getElementById("tel2").value.trim();
-    const tel3 = document.getElementById("tel3").value.trim();
-
-    const fullTel = tel1 + tel2 + tel3;
-    document.getElementById("tel").value = fullTel;
-
-    // ↓ 아래 조건들 만족하지 않으면 전송 막기 (validateForm 내부에서)
-    if (!validateTel() || !validateForm()) {
-      e.preventDefault(); // 제출 막기
-    }
-  });
-</script>
-
 
 <!-- 유효성 검사 이벤트 등록 -->
 <script>
@@ -842,6 +842,7 @@ function validateForm() {
   if (bn1) bn1.addEventListener("input", debounce(validateBusinessNumber, 300));
   if (bn2) bn2.addEventListener("input", debounce(validateBusinessNumber, 300));
   document.getElementById("shelterTel").addEventListener("input", debounce(validateShelterTel, 300));
+  document.getElementById("shelterPersonName").addEventListener("input", validateForm);
 
 </script>
 
@@ -959,7 +960,7 @@ signupForm.addEventListener("submit", async function(e) {
       alert("회원가입이 완료되었습니다!");
       location.href = "${root}/login";
     } else {
-      alert(json.message || "회원가입에 실패했습니다.");
+      alert(json.errorMsg || "회원가입에 실패했습니다.");
     }
   } catch (err) {
     console.error("서버 오류:", err);
@@ -969,5 +970,6 @@ signupForm.addEventListener("submit", async function(e) {
 });
 
 </script>
+<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 </body>
 </html>
