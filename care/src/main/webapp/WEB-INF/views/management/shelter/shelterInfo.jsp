@@ -97,6 +97,9 @@
 
 </style>
 </head>
+
+
+
 <body>
 <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
 	<section class = "container">
@@ -123,7 +126,7 @@
 				    <!-- 사업자등록증 업로드하기 -->
 				   <form id="bizUploadForm" enctype="multipart/form-data" method="post">
 					    <label for="bizUpload" class="biz-btn">파일 선택</label>
-					    <input type="file" id="bizUpload" name="businessFile" accept=".jpg,.png,.pdf" style="display:none;" required>
+					    <input type="file" id="bizUpload" name="files" style="position:absolute;width:1px;height:1px;opacity:0;" required>
 					    <button type="submit">업로드하기</button>
 					</form>
 				  </div>
@@ -135,9 +138,9 @@
 			
 			<!-- 상단 메뉴 -->
 			<div class="nav">
-				<button>정보관리</button>
-				<button>공지사항</button>
-				<button>리뷰관리</button>
+				<button id="infoBtn" onclick="location.href='/care/shelter/manage'">정보관리</button>
+				<button id="noticeBtn" onclick="location.href='/care/shelter/notice'">공지사항</button>
+				<button id="reviewBtn" onclick="location.href='/care/shelter/review'">리뷰관리</button>
 			</div>
 			
 			<div class="bottom-box">
@@ -180,7 +183,31 @@
 			document.getElementById('email').innerText = shelters.email;
 			document.getElementById('description').innerText = shelters.description;
 			
+			//사업자 등록증 업로드
+			const form = document.getElementById('bizUploadForm');
+				form.action = '/care/api/management/shelter/upload/' + idx;
+
+				form.addEventListener('submit', function(event) {
+				event.preventDefault();
+
+				const formData = getFormDataFromForm('bizUploadForm');
+
+				FileAPI.upload(form.action, formData)
+					.then(function(data) {
+					const bizLink = document.getElementById('shelterBusinessFile');
+					bizLink.href = '${pageContext.request.contextPath}/resources/management/' + idx + '/files/' + data.fileName;
+					bizLink.innerText = data.fileName;
+					bizLink.target = '_blank';
+
+					alert('업로드 성공!');
+					})
+					.catch(function(error) {
+					alert('업로드 실패: ' + error.message);
+					console.error(error);
+					});
+    		});
 		}
+
 		window.addEventListener("DOMContentLoaded", ShelterInfo);
 	</script>
 </body>
