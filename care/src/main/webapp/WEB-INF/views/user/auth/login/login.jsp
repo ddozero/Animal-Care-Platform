@@ -132,7 +132,6 @@
     <div class="login-links">
       <a href="${root}/signup">회원가입</a> |
       <a href="${root}/find">아이디/비밀번호 찾기</a><br>
-      • <a href="${root}/find">보호시설 아이디/비밀번호 찾기</a>
     </div>
   </div>
 </div>
