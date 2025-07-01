@@ -73,7 +73,7 @@ public class ShelterManageController {
 		AllManageShelterResponseDTO dto = shelterService.getShelterInfo(userIdx);
 
 		if (dto == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "존재하지 않는 보호소"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "존재하지 않는 보호소 입니다."));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<AllManageShelterResponseDTO>(200, "보호소 기본정보 조회 성공", dto));
 		}
