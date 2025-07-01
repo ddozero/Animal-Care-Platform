@@ -20,16 +20,15 @@ SELECT
 	V.CREATED_AT,
 	VT.NAME AS TYPE,
 	VS.NAME AS STATUS,
-	S.USER_IDX,
 	S.SHELTER_NAME AS SHELTER,
-	ST.NAME AS SHELTERTYPE
+	ST.NAME AS shelterType
 FROM
 	VOLUNTEERS V
 JOIN USERS U ON
 	V.USER_IDX = U.IDX
 JOIN SHELTERS S ON
-	V.USER_IDX = S.USER_IDX
-JOIN SHELTER_TYPES ST ON
+	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST ON 
 	S.SHELTER_TYPE_IDX = ST.IDX
 JOIN VOLUNTEER_TYPES VT ON
 	V.VOLUNTEER_TYPE_IDX = VT.IDX
@@ -45,6 +44,13 @@ ORDER BY
 	V.IDX DESC
 LIMIT
 #{listSize} OFFSET #{cp}
+</select>
+
+<select id = "getAllVolunteersTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS
 </select>
 
 <select id="getVolunteersDetail" parameterType="int" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
@@ -63,7 +69,7 @@ SELECT
 	VS.NAME AS STATUS,
 	S.USER_IDX,
 	S.SHELTER_NAME AS SHELTER,
-	ST.NAME AS SHELTERTYPE
+	ST.NAME AS shelterType
 FROM
 	VOLUNTEERS V
 JOIN USERS U ON
@@ -80,7 +86,7 @@ WHERE
 	V.IDX = ${idx}
 </select>
 
-<select id="searchVolunteers" parameterType="com.animal.api.volunteers.model.response.SearchVolunteerResponseDTO" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
+<select id="searchVolunteers" parameterType="com.animal.api.volunteers.model.request.SearchVolunteerRequestDTO" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
 SELECT
 	V.IDX,
 	V.TITLE,
@@ -94,16 +100,71 @@ SELECT
 	V.CREATED_AT,
 	VT.NAME AS TYPE,
 	VS.NAME AS STATUS,
-	S.USER_IDX,
 	S.SHELTER_NAME AS SHELTER,
-	ST.NAME AS SHELTERTYPE
+	ST.NAME AS shelterType
 FROM
 	VOLUNTEERS V
 JOIN USERS U ON
 	V.USER_IDX = U.IDX
 JOIN SHELTERS S ON
-	V.USER_IDX = S.USER_IDX
-JOIN SHELTER_TYPES ST ON
+	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST ON 
+	S.SHELTER_TYPE_IDX = ST.IDX
+JOIN VOLUNTEER_TYPES VT ON
+	V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+<where>
+	<if test = "title != null and title !=''">
+		AND V.TITLE LIKE '%${title}%'
+	</if>
+	<if test = "content != null and content != ''">
+		AND V.CONTENT LIKE '%${content}%'
+	</if>
+	<if test="location != null and location !=''">
+		AND V.LOCATION LIKE '%${location}%'
+	</if>
+	<if test="status != null and status !=''">
+		AND VS.NAME = #{status}
+	</if>
+	<if test="shelter != null and shelter !=''">
+		AND S.SHELTER_NAME = #{shelter}
+	</if>
+	<if test="shelterType !=null and shelterType !=''">
+		AND ST.NAME = #{shelterType}
+	</if>
+	<if test = "volunteerDate !=null">
+		AND DATE(V.VOLUNTEER_DATE) = #{volunteerDate}
+	</if>
+	<if test = "type != null and type != ''">
+		AND VT.NAME = #{type}
+	</if>
+	<if test = "time != 0">
+		AND V.TIME = #{time}
+	</if>
+</where>
+ORDER BY
+	CASE
+		VS.NAME
+		WHEN '모집중' THEN 0
+		WHEN '모집대기' THEN 1
+		ELSE 2
+	END,
+	V.IDX DESC
+LIMIT
+#{listSize} OFFSET #{cp}
+</select>
+
+<select id="getSearchVolunteerTotalcnt" parameterType="com.animal.api.volunteers.model.request.SearchVolunteerRequestDTO" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS V
+JOIN USERS U ON
+	V.USER_IDX = U.IDX
+JOIN SHELTERS S ON
+	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST ON 
 	S.SHELTER_TYPE_IDX = ST.IDX
 JOIN VOLUNTEER_TYPES VT ON
 	V.VOLUNTEER_TYPE_IDX = VT.IDX
@@ -138,16 +199,6 @@ JOIN VOLUNTEER_STATUS VS ON
 		AND V.TIME = #{time}
 	</if>
 </where>
-ORDER BY
-	CASE
-		VS.NAME
-		WHEN '모집중' THEN 0
-		WHEN '모집대기' THEN 1
-		ELSE 2
-	END,
-	V.IDX DESC
-LIMIT
-#{listSize} OFFSET #{cp}
 </select>
 
 <select id = "checkSubmit" resultType="int">

@@ -1,6 +1,7 @@
 package com.animal.api.volunteers.model.response;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,7 +18,7 @@ public class AllVolunteersResponseDTO {
 	private int idx;
 	private String title;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Timestamp volunteerDate;
+	private LocalDate volunteerDate;
 	private int time;
 	private String location;
 	private int capacity;
