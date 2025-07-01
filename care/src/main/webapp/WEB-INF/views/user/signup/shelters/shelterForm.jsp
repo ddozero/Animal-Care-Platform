@@ -960,7 +960,7 @@ signupForm.addEventListener("submit", async function(e) {
       alert("회원가입이 완료되었습니다!");
       location.href = "${root}/login";
     } else {
-      alert(json.message || "회원가입에 실패했습니다.");
+      alert(json.errorMsg || "회원가입에 실패했습니다.");
     }
   } catch (err) {
     console.error("서버 오류:", err);
