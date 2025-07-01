@@ -105,7 +105,7 @@
     <!-- 카피라이트 + 인증 -->
     <div class="footer-bottom">
       <p>Copyright © 2025 같이 살개. All Rights Reserved.</p>
-      <img src="${root}/resources/web/images/wa.png" alt="웹접근성 인증마크" />
+      <img src="${root}/resources/web/images/indexFooter/wa.png" alt="웹접근성 인증마크" />
     </div>
 
   </div>
