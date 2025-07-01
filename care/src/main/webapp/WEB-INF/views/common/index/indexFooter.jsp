@@ -41,7 +41,7 @@
 }
 
 .footer-links {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .footer-links a {
@@ -59,7 +59,7 @@
 }
 
 .footer-bottom {
-  margin-top: 10px;
+  margin-top: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,12 +80,11 @@
 
     <!-- 관련기관 로고 영역 -->
     <div class="footer-partners">
-      <span>관련기관</span>
       <div class="partner-logos">
-        <img src="${root}/resources/web/images/partner1.png" alt="기관1" />
-        <img src="${root}/resources/web/images/partner2.png" alt="기관2" />
-        <img src="${root}/resources/web/images/partner3.png" alt="기관3" />
-        <img src="${root}/resources/web/images/partner4.png" alt="기관4" />
+        <img src="${root}/resources/web/images/indexFooter/partner1.png" alt="기관1" />
+        <img src="${root}/resources/web/images/indexFooter/partner2.png" alt="기관2" />
+        <img src="${root}/resources/web/images/indexFooter/partner3.png" alt="기관3" />
+        <img src="${root}/resources/web/images/indexFooter/partner4.png" alt="기관4" />
       </div>
     </div>
 
@@ -100,7 +99,7 @@
     <!-- 주소 및 연락처 -->
     <div class="footer-contact">
       <p>경상북도 김천시 혁신로 177 (골목동)</p>
-      <p>전화문의: <a href="tel:054-810-8626">054-810-8626</a></p>
+      <p>전화문의: 054-810-8626</p>
     </div>
 
     <!-- 카피라이트 + 인증 -->

@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>보호시설 회원가입 Form</title>
+<link rel="stylesheet" type="text/css" href="${root}/resources/web/user/auth/userForm.css">
 <style>
   input:focus {
     outline: none;
@@ -13,7 +15,6 @@
 </style>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
 <h2>보호시설 사용자 회원가입</h2>
 
 <form id="signupForm">
@@ -57,7 +58,7 @@
   <!-- 회원유형 -->
   <div>
     <input type="radio" name="signuptype" checked="checked" />
-    <label>보호시설</label>
+    <span>보호시설</span>
   </div>
 
   <!-- 닉네임 -->
@@ -160,7 +161,7 @@
 	</div>
 	<div>
 	  <label for="shelterDescription">보호소 소개</label>
-	  <textarea id="shelterDescription" name="shelterDescription" rows="3"></textarea>
+	  <textarea id="shelterDescription" name="shelterDescription" rows="8" cols="56"></textarea>
 	</div>  
 	
 	<!-- 공공 (1): 이메일 + 사업자번호 -->

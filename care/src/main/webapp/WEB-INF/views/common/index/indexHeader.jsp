@@ -12,7 +12,6 @@
 <c:set var="root" value="${pageContext.request.contextPath}" />
 <c:set var="loginUser" value="${sessionScope.loginUser}" />
 
-
 <style>
 html, body {
   margin: 0;
