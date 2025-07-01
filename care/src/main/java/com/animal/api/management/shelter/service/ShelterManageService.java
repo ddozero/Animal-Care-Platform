@@ -57,7 +57,7 @@ public interface ShelterManageService {
 	// 보호시설 게시판
 	public List<ShelterBoardResponseDTO> getShelterBoardList(int userIdx, int cp);
 	
-	public PageInformationDTO getShelterBoardPage(int userIdx, int cp);
+	public PageInformationDTO getShelterBoardTotalCnt(int userIdx, int cp);
 
 	public ShelterBoardResponseDTO getShelterBoardDetail(int idx, int userIdx);
 
