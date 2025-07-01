@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>보호시설 공지사항</title>
 </head>
 <style>
 .board {
@@ -169,7 +169,7 @@
 	
 
 		<div class="board-container">
-			<div class="header-title">공지사항</div>
+			<div class="header-title">보호시설 소식</div>
 			<div class="title-detail">보호소에서 안내할 공지사항을 등록해보세요.</div>
 			
 		<!-- 상단 메뉴 -->
