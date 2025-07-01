@@ -8,7 +8,7 @@
         <style>
             /* ───────── 전체 래퍼 ───────── */
             .animal-detail {
-                max-width: 850px;
+                max-width: 1200px;
                 margin: 40px auto;
                 display: flex;
                 gap: 32px;
@@ -54,10 +54,16 @@
                 color: #444;
             }
 
+            .animal-info .btn-group {
+                grid-column: 1 / 3;
+                display: flex;
+                gap: 12px;
+                margin-top: 18px;
+            }
+
             .animal-info input[type="button"] {
                 grid-column: 1 / 3;
-                margin-top: 18px;
-                width: 180px;
+                width: 150px;
                 height: 40px;
                 border: none;
                 border-radius: 20px;
@@ -72,7 +78,7 @@
 
             /* ───────── 소개 ───────── */
             .description-wrapper {
-                max-width: 850px;
+                max-width: 1200px;
                 margin: 20px auto 0 auto;
             }
 
@@ -94,7 +100,7 @@
 
             /* ───────── Divider ───────── */
             .animal-detail+hr {
-                max-width: 850px;
+                max-width: 1200px;
                 margin: 40px auto;
                 border: none;
                 height: 1px;
@@ -103,7 +109,7 @@
 
             /* ───────── 보호소 정보 ───────── */
             .shelter-wrapper {
-                max-width: 850px;
+                max-width: 1200px;
                 margin: 30px auto;
                 display: flex;
                 gap: 32px;
@@ -230,7 +236,10 @@
                     <div><span>성격:</span> <span id="personality"></span></div>
                     <div><span>입양상태:</span> <span id="adoptionStatus"></span></div>
                     <div><span>등록일:</span> <span id="createdAt"></span></div>
-                    <div><input type="button" id="adoption" value="입양상담신청"></div>
+                    <div class="btn-group">
+                        <input type="button" id="adoption" value="입양상담신청">
+                        <input type="button" value="목록" onclick="location.href='/care/animals'">
+                    </div>
                 </div>
             </div>
             <div class="description-wrapper">
@@ -256,7 +265,6 @@
                     <div id="map" style="width:100%; height:100%; background:#ddd;"></div>
                 </div>
             </div>
-            <input type="button" value="목록" onclick="location.href='/care/animals'">
             <script>
                 kakao.maps.load(() => {
                     animalDetail();
