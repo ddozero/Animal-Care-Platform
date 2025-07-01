@@ -56,8 +56,8 @@
 
             .shelter-info input[type="button"] {
                 grid-column: 1 / 3;
-                margin-top: 18px;
-                width: 180px;
+                margin-top: 25px;
+                width: 150px;
                 height: 40px;
                 border: none;
                 border-radius: 20px;
@@ -586,7 +586,7 @@
                     const card = document.createElement("div");
                     card.innerHTML =
                         '<div class="badge">' + animal.adoptionStatus + '</div>' +
-                        '<a href="${pageContext.request.contextPath}/animals/' + animal.idx + '">' +
+                        "<a href='/care/shelters/" + idx + "/animals/" + animal.idx + "'>" +
                         '<img src="${pageContext.request.contextPath}' + animal.imagePath + '" alt="' + animal.name + '" />' +
                         '</a>' +
                         '<div class="animal-name">' + animal.name + '</div>' +
@@ -836,7 +836,7 @@
                     const btn = document.querySelector('#reviewSelect .sub-btn[value="봉사리뷰"]');
                     subTab(btn, fn);
                 } else {
-                    toggleReviewTabs(false); 
+                    toggleReviewTabs(false);
                     fn(1);
                 }
             }
@@ -868,7 +868,11 @@
                     <div><span>연락처: </span><span id="shelterTel"></span></div>
                     <div><span>이메일: </span><span id="shelterEmail"></span></div>
                     <div><span>유기기 동물 수: </span><span id="animalCount"></span></div>
-                    <div><span>후기 수: </span><span id="reviewCount"></span></div>
+                    <div style="grid-column: 1 / 3;">
+                        <div><span>후기 수: </span><span id="reviewCount"></span></div>
+                        <input type="button" value="목록" onclick="location.href='/care/shelters'"
+                            style="margin-top: 10px;">
+                    </div>
                 </div>
             </div>
             <div class="description-wrapper">
@@ -958,8 +962,6 @@
                     <!-- 입양 후기 리스트 -->
                 </div>
             </div>
-
-            <input type="button" value="목록" onclick="location.href='/care/shelters'">
             <script>
                 window.addEventListener("DOMContentLoaded", function () {
                     shelterDetail();
