@@ -254,9 +254,10 @@
                 <div id="shelterListContainer"></div>
                 <div id="pagingArea" class="paging"></div>'
             </div>
-            <script>
-                window.addEventListener("DOMContentLoaded", shelterList(1));
-            </script>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+                <script>
+                    window.addEventListener("DOMContentLoaded", shelterList(1));
+                </script>
     </body>
 
     </html>

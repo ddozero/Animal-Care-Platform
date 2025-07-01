@@ -962,13 +962,14 @@
                     <!-- 입양 후기 리스트 -->
                 </div>
             </div>
-            <script>
-                window.addEventListener("DOMContentLoaded", function () {
-                    shelterDetail();
-                    document.querySelector('.tabs .tab-btn').classList.add('active');
-                    sheltevolunteer(1);
-                });
-            </script>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+                <script>
+                    window.addEventListener("DOMContentLoaded", function () {
+                        shelterDetail();
+                        document.querySelector('.tabs .tab-btn').classList.add('active');
+                        sheltevolunteer(1);
+                    });
+                </script>
     </body>
 
     </html>

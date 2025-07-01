@@ -265,11 +265,12 @@
                     <div id="map" style="width:100%; height:100%; background:#ddd;"></div>
                 </div>
             </div>
-            <script>
-                kakao.maps.load(() => {
-                    animalDetail();
-                });
-            </script>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+                <script>
+                    kakao.maps.load(() => {
+                        animalDetail();
+                    });
+                </script>
     </body>
 
     </html>

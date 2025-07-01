@@ -78,7 +78,7 @@
     </head>
 
     <body id="body" style="display: none;">
-        <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
+       <%@ include file="/WEB-INF/views/common/management/managementHeader.jsp" %>
             <h1>유기동물 등록</h1>
             <div>
                 <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
@@ -183,6 +183,7 @@
                 <input type="submit" value="등록">
                 <input type="reset" value="초기화">
             </form>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
             <script>
                 window.addEventListener("DOMContentLoaded", shelterDetail());
             </script>

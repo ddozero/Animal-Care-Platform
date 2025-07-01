@@ -31,15 +31,15 @@ public class UserShelterServiceImple implements UserShelterService {
 	@Autowired
 	private FileManager fileManager;
 
-	private int listSize = 5;
+	private int listSize = 10;
 	private int pageSize = 5;
 
 	@Override
 	public List<AllShelterListResponseDTO> getAllShelters(int cp) {
-		cp = changeCurrentPage(cp, listSize);
+		cp = changeCurrentPage(cp, 15);
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("listSize", listSize);
+		map.put("listSize", 15);
 		map.put("cp", cp);
 
 		List<AllShelterListResponseDTO> shelterList = mapper.getAllShelters(map);
@@ -60,15 +60,15 @@ public class UserShelterServiceImple implements UserShelterService {
 			cp = 1;
 		}
 		int totalCnt = mapper.getAllSheltersTotalCnt();
-		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, 15, pageSize, cp);
 		return pageInfo;
 	}
 
 	@Override
 	public List<AllShelterListResponseDTO> searchShelters(int cp, String shelterName, String shelterAddress,
 			String shelterType) {
-		cp = changeCurrentPage(cp, listSize);
-		SearchShelterRequestDTO request = new SearchShelterRequestDTO(listSize, cp, shelterName, shelterAddress,
+		cp = changeCurrentPage(cp, 15);
+		SearchShelterRequestDTO request = new SearchShelterRequestDTO(15, cp, shelterName, shelterAddress,
 				shelterType);
 
 		List<AllShelterListResponseDTO> shelterList = mapper.searchShelters(request);
@@ -89,10 +89,10 @@ public class UserShelterServiceImple implements UserShelterService {
 		if (cp == 0) {
 			cp = 1;
 		}
-		SearchShelterRequestDTO request = new SearchShelterRequestDTO(listSize, cp, shelterName, shelterAddress,
+		SearchShelterRequestDTO request = new SearchShelterRequestDTO(15, cp, shelterName, shelterAddress,
 				shelterType);
 		int totalCnt = mapper.searchSheltersTotalCnt(request);
-		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
+		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, 15, pageSize, cp);
 		return pageInfo;
 	}
 

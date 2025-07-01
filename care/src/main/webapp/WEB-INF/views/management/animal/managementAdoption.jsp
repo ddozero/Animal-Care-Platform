@@ -156,7 +156,7 @@
     </head>
 
     <body id="body" style="display: none;">
-        <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
+        <%@ include file="/WEB-INF/views/common/management/managementHeader.jsp" %>
             <h1>입양상담 관리</h1>
             <div>
                 <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
@@ -206,6 +206,7 @@
                 <hr>
             </div>
             <div id="adoptionList"></div>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
             <script>
                 window.addEventListener("DOMContentLoaded", shelterAdoptionList());
             </script>

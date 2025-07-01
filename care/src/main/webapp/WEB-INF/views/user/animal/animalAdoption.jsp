@@ -263,9 +263,10 @@
                     </form>
                 </div>
             </div>
-            <script>
-                window.addEventListener("DOMContentLoaded", animalInfo);
-            </script>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+                <script>
+                    window.addEventListener("DOMContentLoaded", animalInfo);
+                </script>
     </body>
 
     </html>

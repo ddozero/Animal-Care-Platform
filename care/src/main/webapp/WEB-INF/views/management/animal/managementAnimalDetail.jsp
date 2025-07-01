@@ -243,6 +243,7 @@
                 </form>
             </div>
             <input type="button" value="목록" onclick="location.href='/care/management/animals'">
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
             <script>
                 window.addEventListener("DOMContentLoaded", animalDetail);
             </script>
