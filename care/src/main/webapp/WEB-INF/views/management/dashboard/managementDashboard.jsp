@@ -94,7 +94,7 @@
             }
 
             async function viewDashboard() {
-                 const res = await API.get('/care/api/management/dashboards/views');
+                const res = await API.get('/care/api/management/dashboards/views');
                 if (res.status !== 200) { alert(res.errorMsg); return; }
 
                 const labels = res.data.map(d => d.month.slice(5).replace(/^0/, '') + '월');
@@ -134,7 +134,7 @@
     </head>
 
     <body>
-        <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
+        <%@ include file="/WEB-INF/views/common/management/managementHeader.jsp" %>
             <h1>보호시설 통계</h1>
             <div id="volCard">
                 <strong style="display:block;margin-bottom:6px;">봉사 인원 통계</strong>
@@ -160,13 +160,15 @@
                 <strong>방문자수 통계</strong>
                 <canvas id="viewChart" width="300" height="100"></canvas>
             </div>
-            <script>
-                window.addEventListener("DOMContentLoaded", function () {
-                    volunteerDashboard();
-                    adoptionDashboard();
-                    viewDashboard();
-                });
-            </script>
+            <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+
+                <script>
+                    window.addEventListener("DOMContentLoaded", function () {
+                        volunteerDashboard();
+                        adoptionDashboard();
+                        viewDashboard();
+                    });
+                </script>
     </body>
 
     </html>

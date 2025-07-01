@@ -204,6 +204,39 @@
                 background: #3acdb2;
                 color: #fff;
             }
+
+            .submenu-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+                margin-bottom: 30px;
+                margin-top: 30px;
+            }
+
+            .submenu-buttons input[type="button"] {
+                background-color: #f6f6f6;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 10px 24px;
+                font-size: 15px;
+                font-weight: 600;
+                color: #333;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .submenu-buttons input[type="button"]:hover {
+                background-color: #3acdb2;
+                color: #fff;
+                border-color: #3acdb2;
+            }
+
+            .submenu-buttons input[type="button"].active {
+                background-color: #3acdb2;
+                color: #fff;
+                border-color: #3acdb2;
+                font-weight: bold;
+            }
         </style>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
         <script>
@@ -238,7 +271,7 @@
                     const card = document.createElement("div");
                     card.innerHTML =
                         '<div class="badge">' + animal.adoptionStatus + '</div>' +
-                        '<a href="${pageContext.request.contextPath}/animals/' + animal.idx + '">' +
+                        '<a href="${pageContext.request.contextPath}/management/animals/' + animal.idx + '">' +
                         '<img src="${pageContext.request.contextPath}' + animal.imagePath + '" alt="' + animal.name + '" />' +
                         '</a>' +
                         '<div class="animal-name">' + animal.name + '</div>' +
@@ -303,9 +336,8 @@
 
     <body id="body" style="display: none;">
         <%@ include file="/WEB-INF/views/common/management/managementHeader.jsp" %>
-            <h1>유기동물 관리</h1>
-            <div>
-                <input type="button" value="유기동물 관리" onclick="location.href='/care/management/animals'">
+            <div class="submenu-buttons">
+                <input type="button" value="유기동물 조회" class="active" onclick="location.href='/care/management/animals'">
                 <input type="button" value="유기동물 등록" onclick="location.href='/care/management/animals/form'">
                 <input type="button" value="입양상담 관리" onclick="location.href='/care/management/animals/adoptions'">
             </div>
@@ -370,12 +402,12 @@
                 <div id="pagingArea" class="paging"></div>
             </div>
             <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
-            <script>
-                window.addEventListener("DOMContentLoaded", function () {
-                    animalList(1);
-                    changeBreedOptions();
-                });
-            </script>
+                <script>
+                    window.addEventListener("DOMContentLoaded", function () {
+                        animalList(1);
+                        changeBreedOptions();
+                    });
+                </script>
     </body>
 
     </html>
