@@ -743,6 +743,11 @@
                     card.addEventListener("click", () => card.classList.toggle("expanded"));
 
                     if (review.turn != 0) {
+                        const imgTag = card.querySelector("img");
+                        if (imgTag) {
+                            imgTag.remove();
+                        }
+
                         card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
                         card.style.backgroundColor = "#f9f9f9";             // 연한 배경
                         card.style.borderLeft = "3px solid #ccc";          // 구분선
@@ -796,6 +801,11 @@
                     card.addEventListener("click", () => card.classList.toggle("expanded"));
 
                     if (review.turn != 0) {
+                        const imgTag = card.querySelector("img");
+                        if (imgTag) {
+                            imgTag.remove();
+                        }
+
                         card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
                         card.style.backgroundColor = "#f9f9f9";             // 연한 배경
                         card.style.borderLeft = "3px solid #ccc";          // 구분선
