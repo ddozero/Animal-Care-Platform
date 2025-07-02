@@ -49,7 +49,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 
 		if (donationList != null) {
 			for (AllDonationListResponseDTO dto : donationList) {
-				List<String> imagePaths = fileManager.getImagePath("volunteers", dto.getIdx());
+				List<String> imagePaths = fileManager.getImagePath("donations", dto.getIdx());
 				if (imagePaths != null || imagePaths.size() != 0) {
 					dto.setImagePath(imagePaths.get(0));
 				}
@@ -74,7 +74,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		DonationDetailResponseDTO donationDetail = mapper.getDonationDetail(idx);
 
 		if (donationDetail != null) {
-			donationDetail.setImagePaths(fileManager.getImagePath("volunteers", idx));
+			donationDetail.setImagePaths(fileManager.getImagePath("donations", idx));
 			return donationDetail;
 		} else {
 			return null;
