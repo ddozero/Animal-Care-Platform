@@ -305,12 +305,12 @@
     // html 변수를 반드시 선언·초기화!
     let html = ''
       + '<div class="user-greeting">'
-      +   '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
-      +   '<button class="edit-btn">내 정보 수정</button>'
+      + '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
+      + '<button class="edit-btn">내 정보 수정</button>'
       + '</div>'
       + '<div class="history-box">'
-      +   '<h3>봉사 내역</h3>'
-      +   '<ul class="volunteer-list">';
+      + '<h3>봉사 내역</h3>'
+      + '<ul class="volunteer-list">';
 
     if (list && list.length > 0) {
       html += list.map(item => {
@@ -548,10 +548,10 @@
       + '<p><strong>입양 상태:</strong> ' + detail.statusText + '</p>'
       + '<p><strong>품종 번호:</strong> ' + detail.breedIdx + '</p>'
       + '<p><strong>품종 이름:</strong> ' + detail.breed + '</p>'
-      + '<p><strong>성별:</strong> ' + detail.gender + '</p>'
+      + '<p><strong>성별:</strong> ' + (detail.gender === 'M' ? '남' : '여') + '</p>'
       + '<p><strong>나이:</strong> ' + detail.age + ' 살</p>'
       + '<p><strong>크기(체중):</strong> ' + detail.size + ' kg</p>'
-      + '<p><strong>중성화 여부:</strong> ' + detail.neuter + '</p>'
+      + '<p><strong>중성화 여부:</strong> ' + (detail.neuter ? '유' : '무') + '</p>'
       + '<p><strong>성격:</strong> ' + detail.personality + '</p>'
       + '<p style="margin-top:16px;">' + detail.description + '</p>';
 
@@ -627,6 +627,80 @@ document.querySelectorAll("#adoption-detail-panel .close-btn").forEach(btn => {
 });
 </script>
 
+
+<!-- 기부 내역 -->
+<script>
+  // 1) 기부내역 버튼 클릭 → 리스트 호출
+  document.getElementById("btn-donation").addEventListener("click", () => {
+    fetch(root + '/api/mypage/donation')
+      .then(res => res.json())
+      .then(payload => {
+        if (payload.status === 200) {
+          renderDonationList(payload.data);
+        } else {
+          alert(payload.errorMsg || "기부 내역을 불러올 수 없습니다.");
+        }
+      })
+      .catch(err => console.error("기부내역 불러오기 실패:", err));
+  });
+
+  // 2) 기부리스트 렌더링
+  function renderDonationList(list) {
+    const main = document.querySelector(".main-content");
+    let html = ''
+      + '<div class="user-greeting">'
+      + '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
+      + '<button class="edit-btn">내 정보 수정</button>'
+      + '</div>'
+      + '<div class="history-box">'
+      + '<h3>기부 내역</h3>'
+      + '<ul class="volunteer-list">'; 
+
+      if (list && list.length > 0) {
+      html += list.map(item => {
+        return ''
+          + '<li class="donation-item" style="padding:12px 0; border-bottom:1px solid #eee;">'
+          +   '<div style="display:flex; gap:16px; align-items:center;">'
+          +     '<img src="' + root + item.imagePath + '" alt="썸네일" '
+          +          'style="width:100px;height:100px;object-fit:cover;border-radius:8px;" />'
+          +     '<div style="flex:1;">'
+          +       '<p><strong>' + item.donationName + '</strong></p>'
+          +       '<p>' + item.donationStatusText
+          +         ' | 기간: ' + item.startDate + ' ~ ' + item.endDate + '</p>'
+          +       '<p>목표 모금액: ' + item.amount +' 원 | 누적 모금액: ' + item.completionAmount + '원</p>'          
+          +       '<p>모금율: ' + item.completionRate + '%</p>'
+          +       '<p>주최: '+ item.sponsor + '</p>'
+          +     '</div>'
+          +     '<button class="view-btn" data-idx="'
+          +       item.donationIdx
+          +     '" style="'
+          +       'padding:6px 12px;'
+          +       'background:#53D9C1;'
+          +       'color:#fff;'
+          +       'border:none;'
+          +       'border-radius:4px;'
+          +       'cursor:pointer;'
+          +     '">본문보기</button>'
+          +   '</div>'
+          + '</li>';
+      }).join('');
+    } else {
+      html += '<li>기부 내역이 없습니다.</li>';
+    }
+    html += '</ul></div>';
+    main.innerHTML = html;
+
+      // 3) “본문보기” 버튼 클릭 시 이동
+      document.querySelectorAll(".view-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+      const idx = btn.dataset.idx;
+        // 원하는 상세페이지 경로로 변경하세요
+        window.location.href = root + '/donations/' + idx;
+      });
+    });
+
+  }       
+</script>
 
 
 </body>
