@@ -139,10 +139,32 @@
 
             .shelter-map {
                 width: 240px;
-                height: 180px;
+                height: 208px;
                 border-radius: 12px;
                 overflow: hidden;
                 flex-shrink: 0;
+            }
+
+            /* ─── "자세히 보기" 버튼 (보호소 카드용) ─── */
+            .shelter-info .btn-group input[type="button"] {
+                width: 100px;
+                height: 28px;
+                padding: 0 12px;
+                border: none;
+                border-radius: 18px;
+                background: #3ACDB2;
+                color: #fff;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.2s ease, transform 0.1s ease;
+            }
+
+            .shelter-info .btn-group input[type="button"]:hover {
+                background: #32b9a1;
+            }
+
+            .shelter-info .btn-group input[type="button"]:active {
+                transform: scale(0.97);
             }
         </style>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
@@ -182,6 +204,10 @@
                 document.getElementById("shelterZipCode").textContent = animal.shelterZipCode;
                 document.getElementById("shelterAddress").textContent = animal.shelterAddress;
                 document.getElementById("shelterAddressDetail").textContent = animal.shelterAddressDetail;
+
+                document.querySelector('input[value="자세히 보기"]').onclick = function () {
+                    location.href = '/care/shelters/' + animal.userIdx;
+                };
 
                 if (animal.shelterAddress && animal.shelterAddressDetail) {
                     const fullAddress = animal.shelterAddress;
@@ -258,6 +284,9 @@
                             <span id="shelterZipCode"></span>
                             <span id="shelterAddress"></span>
                             <span id="shelterAddressDetail"></span>
+                        </div>
+                        <div class="btn-group">
+                            <input type="button" value="자세히 보기">
                         </div>
                     </div>
                 </div>

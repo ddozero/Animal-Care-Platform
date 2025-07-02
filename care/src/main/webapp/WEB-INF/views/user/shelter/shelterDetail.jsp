@@ -73,7 +73,7 @@
             /* ───────── 소개 ───────── */
             .description-wrapper {
                 max-width: 1200px;
-                margin: 20px auto 100px auto;
+                margin: 20px auto 50px auto;
             }
 
             .description-wrapper .label {
@@ -458,8 +458,48 @@
                 color: #3acdb2;
                 border-color: #3acdb2;
             }
+
+            .shelter-map-wrapper {
+                max-width: 1200px;
+                margin: 10px auto 32px;
+            }
+
+            .shelter-map-box {
+                padding: 14px;
+                background: #f6f6f8;
+                border-radius: 12px;
+                display: flex;
+                gap: 14px;
+                align-items: center;
+            }
+
+            .shelter-map-text {
+                flex-shrink: 0;
+            }
+
+            .shelter-map-text strong {
+                font-size: 15px;
+                color: #333;
+            }
+
+            .shelter-map-text p {
+                margin-top: 4px;
+                font-size: 13px;
+                color: #666;
+                line-height: 1.4;
+            }
+
+            #map {
+                flex: 1;
+                height: 220px;
+                border-radius: 12px;
+                background: #ddd;
+            }
         </style>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
+        <script
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=89af9a1fd3e16580bde0d540156f0001&autoload=false&libraries=services"></script>
+
         <script>
             const idx = location.pathname.split("/").pop();
 
@@ -485,19 +525,24 @@
                 document.getElementById("animalCount").textContent = shelter.animalCount != null ? shelter.animalCount : "";
                 document.getElementById("reviewCount").textContent = shelter.reviewCount != null ? shelter.reviewCount : "";
                 document.getElementById("shelterType").textContent = shelter.shelterType;
+
+                if (shelter.shelterAddress && shelter.shelterAddressDetail) {
+                    const fullAddress = shelter.shelterAddress;
+                    initMapByAddress(fullAddress);
+                }
             }
             // 보호시설 봉사 컨텐츠 조회 함수
             async function sheltevolunteer(cp = 1) {
-                showContainer('volunteerContainer');        // ← 탭 전환
+                showContainer('volunteerContainer');
                 document.getElementById("search").style.display = "none";
                 toggleReviewTabs(false);
 
                 const wrapper = document.getElementById("volunteerContainer");
-                wrapper.innerHTML = "";                     // ← 기존 내용 비우기
+                wrapper.innerHTML = "";
 
                 const boardWrap = document.createElement("div");
                 boardWrap.className = "board-container";
-                wrapper.appendChild(boardWrap);             // ✅ wrapper에 붙이기
+                wrapper.appendChild(boardWrap);
 
                 const table = document.createElement("table");
                 table.className = "board-table";
@@ -529,13 +574,10 @@
 
                 for (const volunteer of volunteers) {
                     const tbodyRow = tbody.insertRow();
+                    tbodyRow.setAttribute("onclick", "location.href='/care/shelters/" + idx + "/volunteers/" + volunteer.idx + "'");
                     tbodyRow.innerHTML =
                         "<td>" + volunteer.idx + "</td>" +
-                        "<td>" +
-                        "<a href='/care/shelters/" + idx + "/volunteers/" + volunteer.idx + "'>" +
-                        volunteer.title +
-                        "</a>" +
-                        "</td>" +
+                        "<td>" + volunteer.title + "</td>" +
                         "<td>" + volunteer.shelterName + "</td>" +
                         "<td>" + volunteer.location + "</td>" +
                         "<td>" + volunteer.volunteerStatus + "</td>" +
@@ -544,7 +586,7 @@
                 }
 
                 const paging = document.createElement("div");
-                paging.id = "volPaging";                // ① id 다르게
+                paging.id = "volPaging";
                 paging.className = "paging";
                 wrapper.appendChild(paging);
 
@@ -647,15 +689,13 @@
 
             // 보호시설 게시글 컨텐츠 조회 함수
             async function shelteBoards(cp = 1) {
-                showContainer('boardContainer');        // ① 탭 전환
+                showContainer('boardContainer');
                 document.getElementById("search").style.display = "none";
                 toggleReviewTabs(false);
 
-                // ② 이전 내용 비우기
                 const wrapper = document.getElementById('boardContainer');
                 wrapper.innerHTML = '';
 
-                // ③ 외곽 div + 테이블 생성
                 const boardWrap = document.createElement('div');
                 boardWrap.className = 'board-container';
                 wrapper.appendChild(boardWrap);
@@ -687,6 +727,7 @@
 
                 for (const board of boards) {
                     const tbodyRow = tbody.insertRow();
+                    tbodyRow.setAttribute("onclick", "location.href='/care/shelters/" + idx + "/boards/" + board.idx + "'");
                     tbodyRow.innerHTML =
                         "<td>" + board.idx + "</td>" +
                         "<td>" +
@@ -708,14 +749,14 @@
                     pageInfo.listSize,
                     pageInfo.pageSize,
                     pageInfo.cp,
-                    "boardPaging", // 페이지 버튼이 들어갈 div id
+                    "boardPaging",
                     shelteBoards
                 );
             }
 
             // 보호시설 봉사리뷰 조회 함수
             async function shelteVolunteerReviews(cp = 1) {
-                showContainer("reviewContainer");        // 탭 전환
+                showContainer("reviewContainer");
                 document.getElementById("search").style.display = "none";
                 toggleReviewTabs(true);
 
@@ -736,7 +777,7 @@
 
                     card.innerHTML =
                         '<img src="${pageContext.request.contextPath}' + review.imagePath + '" ' +
-                        '     alt="' + review.nickname + '" width="120" height="120">' +      // 처음엔 120px
+                        '     alt="' + review.nickname + '" width="120" height="120">' +
                         '<div class="content" style="white-space:pre-wrap;">' + review.content + '</div>' +
                         '<div class="meta">' + review.nickname + ' · ' + review.createdAt + '</div>';
 
@@ -748,9 +789,9 @@
                             imgTag.remove();
                         }
 
-                        card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
-                        card.style.backgroundColor = "#f9f9f9";             // 연한 배경
-                        card.style.borderLeft = "3px solid #ccc";          // 구분선
+                        card.style.marginLeft = (review.turn * 30) + "px";
+                        card.style.backgroundColor = "#f9f9f9";
+                        card.style.borderLeft = "3px solid #ccc";
                     }
                     wrapper.appendChild(card);
                 }
@@ -860,6 +901,33 @@
                 const el = document.getElementById('reviewSelect');
                 el.classList.toggle('hidden', !show);   // show==true → 보임, false → 숨김
             }
+
+            function initMapByAddress(address) {
+                const geocoder = new kakao.maps.services.Geocoder();
+
+                geocoder.addressSearch(address, function (result, status) {
+                    let coord;
+
+                    if (status === kakao.maps.services.Status.OK && result.length) {
+                        const lat = parseFloat(result[0].y);
+                        const lng = parseFloat(result[0].x);
+                        coord = new kakao.maps.LatLng(lat, lng);
+                    } else {
+                        // 주소를 찾을 수 없을 때: 기본 좌표 (서울시청)
+                        coord = new kakao.maps.LatLng(37.5665, 126.9780);
+                    }
+
+                    const map = new kakao.maps.Map(document.getElementById('map'), {
+                        center: coord,
+                        level: 3,
+                    });
+
+                    new kakao.maps.Marker({
+                        position: coord,
+                        map: map,
+                    });
+                });
+            }
         </script>
     </head>
 
@@ -889,6 +957,16 @@
                 <div class="label">소개</div>
                 <div id="shelterDescription" style="white-space: pre-wrap;"></div>
             </div>
+            <div class="shelter-map-wrapper">
+                <div class="shelter-map-box">
+                    <div class="shelter-map-text">
+                        <strong>보호소 위치</strong>
+                        <p>지도에서 보호소 위치를 확인할 수 있습니다.</p>
+                    </div>
+                    <div id="map"></div>
+                </div>
+            </div>
+
             <div class="tabs">
                 <input type="button" class="tab-btn" value="봉사"
                     onclick="tab(this,'volunteerContainer',sheltevolunteer)">
@@ -974,7 +1052,7 @@
             </div>
             <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
                 <script>
-                    window.addEventListener("DOMContentLoaded", function () {
+                    kakao.maps.load(() => {
                         shelterDetail();
                         document.querySelector('.tabs .tab-btn').classList.add('active');
                         sheltevolunteer(1);
