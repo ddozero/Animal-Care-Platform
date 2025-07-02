@@ -32,7 +32,7 @@ public class AdoptionServiceImple implements AdoptionService {
 
         for (AdoptionListResponseDTO dto : list) {
             // 게시글 고유 volunteerRequestIdx 기반으로 이미지 경로 가져오기
-            List<String> imagePaths = fileManager.getImagePath("adoptionReviews", dto.getAdoptionConsultIdx());
+            List<String> imagePaths = fileManager.getImagePath("animals", dto.getAdoptionConsultIdx());
 
             // 경로가 비어있지 않으면 첫 번째 이미지로 대표 이미지 지정
             if (imagePaths != null && !imagePaths.isEmpty()) {
@@ -48,7 +48,7 @@ public class AdoptionServiceImple implements AdoptionService {
         AdoptionDetailResponseDTO dto = adoptionMapper.findAdoptionDetailByConsultIdx(adoptionConsultIdx);
 
         if (dto != null) {
-            List<String> imagePaths = fileManager.getImagePath("adoptionReviews", adoptionConsultIdx);
+            List<String> imagePaths = fileManager.getImagePath("animals", adoptionConsultIdx);
             dto.setImagePaths(imagePaths);
         }
 
