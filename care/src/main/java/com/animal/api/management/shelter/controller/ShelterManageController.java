@@ -133,13 +133,6 @@ public class ShelterManageController {
 	public ResponseEntity<?> getVolunteerReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
 
-		int listSize = 5;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
-		}
-
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
@@ -167,13 +160,6 @@ public class ShelterManageController {
 	@GetMapping("/reviews/adoption")
 	public ResponseEntity<?> getAdoptionReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
 			HttpSession session) {
-
-		int listSize = 5;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
-		}
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 

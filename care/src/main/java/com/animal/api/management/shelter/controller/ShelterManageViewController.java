@@ -15,15 +15,15 @@ public class ShelterManageViewController {
 		return "management/shelter/shelterInfo";
 	}
 	
-	@GetMapping("/board")
+	@GetMapping("/boards")
 	public String shelterNoticeList() { //보호시설 공지사항 목록
 		return "management/shelter/shelterNoticeList";
 	}
 	
-	@GetMapping("/board/{idx}")
+	@GetMapping("/boards/{idx}")
 	public String shelterNoticeDetail(@PathVariable int idx, Model model) { //공지사항 컨텐츠
 		model.addAttribute("idx",idx);
-		return "user/support/noticeContent";
+		return "management/shelter/shelterNoticeContent";
 	}
 
 

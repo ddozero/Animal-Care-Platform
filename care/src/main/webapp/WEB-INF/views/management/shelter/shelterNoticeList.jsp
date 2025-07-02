@@ -175,7 +175,7 @@
 		<!-- 상단 메뉴 -->
 		<div class="nav">
 			<button id="infoBtn" onclick="location.href='/care/shelter/manage'">정보관리</button>
-			<button id="noticeBtn" onclick="location.href='/care/shelter/board'">공지사항</button>
+			<button id="noticeBtn" onclick="location.href='/care/shelter/boards'">공지사항</button>
 			<button id="reviewBtn" onclick="location.href='/care/shelter/review'">리뷰관리</button>
 		</div>
 			
@@ -194,12 +194,6 @@
 					<tr>
 						<td colspan="5" style="text-align: center;">등록된 게시글이 없습니다.</td>
 					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
 				</tbody>
 			</table>
 			<div class="write-bt">
@@ -211,7 +205,10 @@
 			<div id="pagingArea" class="paging"></div>
 		</div>
 	</section>
-	
+
+<script>
+  const contextPath = "${pageContext.request.contextPath}";
+</script>
 <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
 <script>
 async function noticeList(cp) {
@@ -221,7 +218,7 @@ async function noticeList(cp) {
     const params = new URLSearchParams();
     params.set("cp", cp); // 페이지 번호
 
-    const result = await API.get("/care/api/management/shelter/boards?" + params.toString());
+    const result = await API.get("/care/api/management/shelter/boards");
 
     if (result.status !== 200) {
       alert("공지사항 목록을 불러오는 데 실패했습니다. (" + result.message + ")");
@@ -242,7 +239,7 @@ async function noticeList(cp) {
       const row = document.createElement("tr");
       row.innerHTML =
         '<td>' + notice.idx + '</td>' +
-        '<td><a href="support/' + notice.idx + '">' + notice.title + '</a></td>' +
+        '<td><a href="boards/' + notice.idx + '">' + notice.title + '</a></td>' +
         '<td>' + notice.createdAt + '</td>' +
         '<td>' + notice.views + '</td>';
       tbody.appendChild(row);

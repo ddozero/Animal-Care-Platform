@@ -32,7 +32,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	@Autowired
 	private FileManager fileManager;
 	
-	private int listSize = 10;
+	private int listSize = 5;
 	private int pageSize = 5;
 
 	@Override
@@ -66,6 +66,13 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	//// 보호시설 리뷰
 	@Override
 	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx) {
+		
+		if (cp == 0) {
+			cp = 1;
+		} 
+		cp = (cp - 1) * listSize;
+		
+		
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
@@ -86,17 +93,23 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 	
 	@Override
-	public PageInformationDTO getAdoptionReviewPage(int cp, int idx) {
+	public PageInformationDTO getVolunteerReviewPage(int cp, int idx) {
 		if (cp == 0) {
 			cp = 1;
 		}
-		int totalCnt = mapper.getVolunteerReviewTotalCnt();
+		int totalCnt = mapper.getVolunteerReviewTotalCnt(idx);
 		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
 		return page;
 	}
 
 	@Override
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int cp, int idx) {
+		
+		if (cp == 0) {
+			cp = 1;
+		} 
+		cp = (cp - 1) * listSize;
+		
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
 		map.put("listSize", listSize);
@@ -117,11 +130,11 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	}
 	
 	@Override
-	public PageInformationDTO getVolunteerReviewPage(int cp, int idx) {
+	public PageInformationDTO getAdoptionReviewPage(int cp, int idx) {
 		if (cp == 0) {
 			cp = 1;
 		}
-		int totalCnt = mapper.getAdoptionReviewTotalCnt();
+		int totalCnt = mapper.getAdoptionReviewTotalCnt(idx);
 		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
 		return page;
 	}
