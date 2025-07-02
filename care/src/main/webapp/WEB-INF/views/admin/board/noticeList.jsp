@@ -63,10 +63,6 @@
                 color: #333;
             }
 
-            .board-table td:nth-child(2) {
-                text-align: left;
-            }
-
             .board-table thead {
                 font-weight: bold;
             }
@@ -172,7 +168,7 @@
             <%@ include file="/WEB-INF/views/common/admin/adminHeader.jsp" %>
                 <section class="borad">
                     <div class="board-container">
-                        <div class="header-title">고객지원</div>
+                        <div class="header-title">공지사항 관리</div>
 
                         <form id="searchForm">
                             <div class="search-bar">
@@ -233,7 +229,7 @@
 
                         params.set("cp", cp); // 페이지 번호
 
-                        const result = await API.get("/care/api/admin/boards/notices");
+                        const result = await API.get("/care/api/admin/boards/notices?" + params.toString());
 
                         if (result.errorCode === 401 || result.errorCode === 403) {
                             location.href = "/care/admin/login";
@@ -257,9 +253,10 @@
 
                         for (const notice of notices) {
                             const row = document.createElement("tr");
+                            row.setAttribute("onclick", "location.href='/care/admin/notices/" + notice.idx + "'");
                             row.innerHTML =
                                 '<td>' + notice.idx + '</td>' +
-                                '<td><a href="support/' + notice.idx + '">' + notice.title + '</a></td>' +
+                                '<td>' + notice.title + '</td>' +
                                 '<td>' + notice.createdAt + '</td>' +
                                 '<td> 댕봉사 </td>' +
                                 '<td>' + notice.views + '</td>';

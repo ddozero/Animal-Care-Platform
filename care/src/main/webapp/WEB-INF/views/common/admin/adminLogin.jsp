@@ -120,7 +120,6 @@
     </head>
 
     <body>
-      <%@ include file="/WEB-INF/views/common/admin/adminHeader.jsp" %>
         <div class="login-wrapper">
           <div class="login-container">
             <h2>로그인</h2>
@@ -164,8 +163,6 @@
             }
           });
         </script>
-        <%@ include file="/WEB-INF/views/common/admin/adminSideBar.jsp" %>
-          <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
     </body>
 
     </html>
