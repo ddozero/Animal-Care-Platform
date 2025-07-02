@@ -32,7 +32,7 @@ public class VolunteerServiceImple implements VolunteerService {
 
         for (VolunteerListResponseDTO dto : list) {
             // 게시글 고유 volunteerRequestIdx 기반으로 이미지 경로 가져오기
-            List<String> imagePaths = fileManager.getImagePath("volunteerReviews", dto.getVolunteerRequestIdx());
+            List<String> imagePaths = fileManager.getImagePath("volunteers", dto.getVolunteerRequestIdx());
 
             // 경로가 비어있지 않으면 첫 번째 이미지로 대표 이미지 지정
             if (imagePaths != null && !imagePaths.isEmpty()) {
@@ -48,7 +48,7 @@ public class VolunteerServiceImple implements VolunteerService {
         VolunteerDetailResponseDTO dto = volunteerMapper.findVolunteerDetailByRequestIdx(volunteerRequestIdx);
         
         if (dto != null) {
-            List<String> imagePaths = fileManager.getImagePath("volunteerReviews", volunteerRequestIdx);
+            List<String> imagePaths = fileManager.getImagePath("volunteers", volunteerRequestIdx);
             dto.setImagePaths(imagePaths);
         }
 
