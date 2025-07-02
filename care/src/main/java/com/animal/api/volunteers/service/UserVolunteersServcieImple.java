@@ -61,8 +61,12 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	@Override
 	public AllVolunteersResponseDTO getVolunteersDetail(int idx) {
 		AllVolunteersResponseDTO dto = mapper.getVolunteersDetail(idx);
+		
 		if (dto != null && dto.getContent() != null) {
-			dto.setImagePaths(fileManager.getImagePath("volunteers", idx));
+			List<String> imagePaths = fileManager.getImagePath("volunteers", idx);
+			if (imagePaths != null || imagePaths.size() != 0) {
+				dto.setImagePaths(imagePaths.get(0));
+			}
 			dto.setFilePaths(fileManager.getFilePath("volunteers", idx));
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		}
