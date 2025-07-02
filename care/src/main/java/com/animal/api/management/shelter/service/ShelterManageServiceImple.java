@@ -65,7 +65,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	//// 보호시설 리뷰
 	@Override
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx) {
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx, Integer reviewIdx) {
 		
 		if (cp == 0) {
 			cp = 1;
@@ -78,6 +78,12 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		map.put("idx", idx);
+		
+		   if (reviewIdx != null && reviewIdx > 0) {
+		        map.put("reviewIdx", reviewIdx);  // reviewIdx가 있을 경우만 맵에 추가
+		    } else {
+		        map.put("reviewIdx", 0);  // reviewIdx가 없으면 0으로 처리해서 모든 리뷰 조회
+		    }
 
 		List<ManageVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReview(map);
 
@@ -138,43 +144,38 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
 		return page;
 	}
-
+	
+	@Override
+	public int getMaxTurnVR(int ref) {
+		Integer maxTurn = mapper.getMaxTurnVR(ref);  // 매퍼에서 가장 큰 turn 값을 조회
+        return maxTurn != null ? maxTurn + 1 : 1;  // maxTurn 값이 있으면 +1, 없으면 1로 설정
+	}
+	
 	@Override
 	@Transactional
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx) {
+	 
+	    int nextTurn = getMaxTurnVR(dto.getRef());
 
-		Map<String, Integer> map = new HashMap<>();
-		map.put("ref", dto.getRef());
-		map.put("turn", dto.getTurn());
+	    dto.setTurn(nextTurn);
+	    dto.setLev(dto.getLev() + 1);
+	    dto.setUserIdx(userIdx);
+	    dto.setReviewIdx(dto.getRef()); 
 
-		int count = mapper.updateTurnAR(map);
+	    Integer shelterCheck = mapper.checkShelterUserVR(dto);
+	    if (shelterCheck == null || shelterCheck == 0) { 
+	        return NOT_SHELTER_MANAGER;
+	    }
 
-		if (count < 0) {
-			return ERROR;
-		} else if (count == 0) {
-			return NOT_REVIEW;
-		}
+	    int result = mapper.addVolunteerReviewApply(dto);
 
-		dto.setTurn(dto.getTurn() + 1);
-		dto.setLev(dto.getLev() + 1);
-
-		dto.setUserIdx(userIdx);
-		dto.setReviewIdx(dto.getRef());
-
-		Integer shelterCheck = mapper.checkShelterUserVR(dto);
-		if (shelterCheck == null || shelterCheck == 0) { // 해당 보호소 관리자인지 확인
-			return NOT_SHELTER_MANAGER;
-		}
-
-		int result = mapper.addVolunteerReviewApply(dto);
-
-		if (result > 0) {
-			return UPDATE_OK;
-		} else {
-			return ERROR;
-		}
+	    if (result > 0) {
+	        return UPDATE_OK;
+	    } else {
+	        return ERROR;
+	    }
 	}
-
+	
 	@Override
 	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx) {
 

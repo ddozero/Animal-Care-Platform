@@ -335,6 +335,64 @@ textarea:disabled {
   border : none;
 }
 
+
+/*리뷰 답글 */
+.reply-form {
+    margin-top: 10px;
+    padding-top: 10px;
+    display: flex;              
+    flex-direction: column;      
+    align-items: flex-end;       
+}
+
+.reply-input {
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.reply-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-bottom:10px;
+}
+
+.reply-submit:hover {
+    background-color: #0056b3;
+}
+
+/* action-text에 스타일 적용 */
+.action-text {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 끝에 배치 */
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* 수정/삭제 텍스트 스타일 */
+.edit-text, .delete-text {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+    margin-left: 10px;
+}
+
+.edit-text:hover, .delete-text:hover {
+    color: #0056b3;
+}
+
+
+
+
 </style>
 </head>
 <body>
@@ -418,7 +476,10 @@ textarea:disabled {
 		   <button class="sub-btn active" onclick="changeReviewTab(this, 'volunteerReview')">봉사리뷰</button>
 		   <button class="sub-btn" onclick="changeReviewTab(this, 'adoptionReview')">입양리뷰</button>
 		</div>
+		
 		<div id="volunteerReview" class="review-content"></div>
+		
+		
 		<div id="adoptionReview" class="review-content" style="display:none;"></div>
 	</div>
 	
@@ -630,7 +691,7 @@ async function loadVolunteerReview(cp = 1) {
     const wrapper = document.getElementById("volunteerReview");
     wrapper.innerHTML = "";
 
- 	const pagingBox = document.getElementById("reviewPagingVol");
+    const pagingBox = document.getElementById("reviewPagingVol");
     pagingBox.innerHTML = ""; // 초기화
     
     const result = await API.get('/care/api/management/shelter/reviews/volunteer?cp=' + cp);
@@ -643,34 +704,179 @@ async function loadVolunteerReview(cp = 1) {
     const pageInfo = result.pageInfo;
 
     for (const review of reviews) {
+
         const card = document.createElement("div");
+        card.id = `review-${review.reviewIdx}`;  // 각 리뷰에 고유한 ID 설정
         card.className = "review-card";
-        card.innerHTML =
-            '<img src="${pageContext.request.contextPath}' + review.imagePath + '" ' +
-            'alt="' + review.nickName + '" width="120" height="120">' +
+
+        card.className = "review-card";
+        
+        let cardContent = '';
+        if (review.turn === 0) {  // 원본 리뷰인 경우에만 이미지 추가
+            cardContent += 
+                '<div class="image-wrapper" style="width: 150px; height: 180px; overflow: hidden; margin-right: 20px; float: left;">' +
+                '<img src="' + review.imagePath + '" ' + 
+                'style="width: 100%; height: 100%; object-fit: cover;">' +
+                '</div>' +
+                // 이미지 외부에 닉네임과 날짜를 표시
+                '<span class="nickname" style="font-weight: bold;">' + review.nickName + '</span> · ' +
+                '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>' +
+                '<div class="meta" style="float: left; margin-top: 5px;"></div>';
+        }
+        
+        // 답글인 경우에는 별도로 닉네임과 생성일 추가
+          if (review.turn !== 0) {
+            cardContent += 
+                '<span class="shelterName" style="font-weight: bold;">' + 
+                (review.shelterName ? review.shelterName : '정보 없음') + 
+                '</span> · ' + 
+                '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>';
+        }
+       
+
+        cardContent +=
             '<div class="content" style="white-space:pre-wrap;">' + review.content + '</div>' +
-            '<div class="meta">' + review.nickName + ' · ' + review.createdAt + '</div>';
+            '<div class="meta"></div>';
+
+        card.innerHTML = cardContent;
         card.addEventListener("click", () => card.classList.toggle("expanded"));
 
+        // 원본 리뷰에만 답글 폼 추가
+        if (review.turn === 0) {
+            const replyForm = document.createElement("div");
+            replyForm.className = "reply-form";
+            
+            
+            replyForm.innerHTML = `
+                <textarea class="reply-input" placeholder="답글을 입력하세요..." style="margin-bottom: 5px;"></textarea>
+                <button class="reply-submit" id="saveButton" onclick="submitReply(${review.reviewIdx})">답글 남기기</button>
+            `;
+            card.appendChild(replyForm); // 답글 폼을 추가
+        }
+        
+        if (review.turn !== 0){
+        	
+        }
+        
+        card.style.marginBottom = "10px"; 
+        card.style.padding = "10px";
+
         if (review.turn != 0) {
-            card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
-            card.style.backgroundColor = "#f9f9f9";             // 연한 배경
-            card.style.borderLeft = "3px solid #ccc";          // 구분선
+            // 수정/삭제 텍스트 추가 (오른쪽 끝에 배치)
+            const actionText = document.createElement("div");
+            actionText.className = "action-text";
+            actionText.innerHTML = 
+                '<span class="edit-text" onclick="editReview(' + review.reviewIdx + ')">수정</span>' +
+                '<span class="delete-text" onclick="deleteReview(' + review.reviewIdx + ')">삭제</span>';
+
+            // 수정/삭제 텍스트의 스타일을 절대 위치로 오른쪽 끝에 배치
+            actionText.style.position = "absolute";  
+            actionText.style.right = "10px";  
+            actionText.style.top = "5px";  
+            actionText.style.fontSize = "0.9em"; 
+            actionText.style.color = "#555"; 
+            card.style.position = "relative";
+            // actionText를 card에 추가
+            card.appendChild(actionText);  // 수정/삭제 텍스트를 추가
+            
+            card.style.marginLeft = (review.turn * 8) + "px"; // turn 값 × 들여쓰기
+            card.style.borderBottom = "1px solid #ccc";  
+            card.style.borderLeft = "3px solid #ccc";    
         }
         wrapper.appendChild(card);
     }
 
-
-    // paging 
     makePaging(
-            pageInfo.totalCnt,
-            pageInfo.listSize,
-            pageInfo.pageSize,
-            pageInfo.cp,
-            "reviewPagingVol", 
-            loadVolunteerReview
+        pageInfo.totalCnt,
+        pageInfo.listSize,
+        pageInfo.pageSize,
+        pageInfo.cp,
+        "reviewPagingVol", 
+        loadVolunteerReview
     );
+    // 모든 답글 버튼에 이벤트 리스너 추가
+    document.querySelectorAll('.reply-submit').forEach((button) => {
+        button.addEventListener("click", function () {
+            const reviewIdx = this.getAttribute("data-review-idx");
+            submitReply(reviewIdx); // 데이터 리뷰 IDX를 이용하여 답글 등록
+        });
+    });
 }
+
+function getVolunteerIdx() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const volunteerIdx = urlParams.get('volunteerIdx');
+    
+    if (volunteerIdx) {
+        return volunteerIdx;  // URL에서 volunteerIdx 값을 가져옴
+    } else {
+        console.error("봉사 활동 ID를 URL에서 찾을 수 없습니다.");
+        return null;  // URL에 없는 경우 null 반환
+    }
+}
+
+
+//봉사 리뷰 등록 
+async function submitReply(reviewIdx, volunteerIdx) {
+	
+    // textarea에서 입력된 답글 내용을 가져옴
+    const replyContent = document.querySelector(`#review-${reviewIdx} .reply-input`).value.trim();
+    
+    if (!replyContent) {
+        alert("답글을 입력해주세요.");
+        return;
+    }
+    const nextTurn = await getMaxTurn(reviewIdx);
+    console.log("Next turn:", nextTurn);  // nextTurn 확인
+    
+    const dto = {
+        ref: reviewIdx,  // 원본 리뷰의 ID (참고용)
+        turn: nextTurn,         
+        content: replyContent,
+        volunteerIdx: volunteerIdx
+    };
+        // API 호출
+        const result = await API.post('/care/api/management/shelter/reviews/volunteer', dto);
+
+        if (result.status === 201) {
+            alert("답글이 등록되었습니다.");
+            const reviewCard = document.getElementById(`review-${reviewIdx}`);
+            const replyContentDiv = document.createElement("div");
+            replyContentDiv.className = "reply-content";
+            replyContentDiv.innerHTML = replyContent; // 답글 내용
+            reviewCard.appendChild(replyContentDiv);
+        } else {
+            alert("답글 등록에 실패했습니다.");
+        }
+}
+
+function getVolunteerIdx() {
+    // 예시로, 봉사 활동 ID를 URL 또는 DOM에서 찾는 방식
+    return document.querySelector("#volunteerIdx").value; // 봉사 활동의 ID를 DOM에서 가져오는 방식
+}
+
+// `TURN`을 서버에서 계산하는 예시
+async function getMaxTurn(reviewIdx) {
+	
+	   if (!reviewIdx) {
+	        console.error("Invalid reviewIdx:", reviewIdx);  // reviewIdx가 빈 값일 경우 로그 출력
+	        return 0;  // 0을 반환하거나 적절한 오류 처리를 할 수 있습니다.
+	    }
+
+	    try {
+	        // 서버에서 해당 리뷰의 가장 큰 turn 값을 가져옵니다.
+	        const result = await API.get(`/care/api/management/shelter/reviews/turn-max?reviewIdx=${reviewIdx}`);
+	        if (result.data) {
+	            return result.data.maxTurn + 1;
+	        }
+	        console.error("MaxTurn not found in response");
+	        return 0;  // 응답이 없을 경우 0으로 처리
+	    } catch (error) {
+	        console.error("Error fetching maxTurn:", error);
+	        return 0;  // 서버 오류가 발생하면 0 반환
+	    }
+}
+
 
 ///입양리뷰
 async function loadAdoptionReview(cp = 1) {
@@ -693,20 +899,57 @@ async function loadAdoptionReview(cp = 1) {
     for (const review of reviews) {
         const card = document.createElement("div");
         card.className = "review-card";
-        card.innerHTML =
-            '<img src="${pageContext.request.contextPath}' + review.imagePath + '" ' +
-            'alt="' + review.nickName + '" width="120" height="120">' +
+        
+        let cardContent = '';
+        if (review.turn === 0) {  // 원본 리뷰인 경우에만 이미지 추가
+        	   cardContent += 
+                   '<div class="image-wrapper" style="width: 150px; height: 180px; overflow: hidden; margin-right: 20px; float: left;">' +
+                   '<img src="' + review.imagePath + '" ' + 
+                   'style="width: 100%; height: 100%; object-fit: cover;">' +
+                   '</div>' +
+                   // 이미지 외부에 닉네임과 날짜를 표시
+                   '<span class="nickname" style="font-weight: bold;">' + review.nickName + '</span> · ' +
+                   '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>'+
+                   '<div class="meta" style="float: left; margin-top: 5px;">' +
+                   '</div>';
+           }
+        
+         if (review.turn !== 0) {  // 답글인 경우에는 별도로 닉네임과 생성일 추가
+                cardContent += 
+                    '<span class="shelterName" style="font-weight: bold;">' + review.shelterName + '</span> · ' + 
+                    '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>';
+          }
+         
+        cardContent +=
             '<div class="content" style="white-space:pre-wrap;">' + review.content + '</div>' +
-            '<div class="meta">' + review.nickName + ' · ' + review.createdAt + '</div>';
+            '<div class="meta"></div>';
+            
+
+        card.innerHTML = cardContent;
         card.addEventListener("click", () => card.classList.toggle("expanded"));
+        
+        if (review.turn === 0) {
+            const replyForm = document.createElement("div");
+            replyForm.className = "reply-form";
+            replyForm.innerHTML = `
+                <textarea class="reply-input" placeholder="답글을 입력하세요..." style="margin-bottom: 5px;"></textarea>
+                <button class="reply-submit" id="saveButton" onclick="submitReply(${review.id})"">답글 남기기</button>
+            `;
+            card.appendChild(replyForm); // 답글 폼을 추가
+        }
+        
+        card.style.marginBottom = "10px"; 
+        card.style.padding = "10px";
 
         if (review.turn != 0) {
-            card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
-            card.style.backgroundColor = "#f9f9f9";             // 연한 배경
+            card.style.marginLeft = (review.turn * 8) + "px"; // turn 값 × 30px 만큼 들여쓰기
+            card.style.borderBottom = "1px solid #ccc";             // 연한 배경
             card.style.borderLeft = "3px solid #ccc";          // 구분선
         }
         wrapper.appendChild(card);
     }
+    
+
 
     makePaging(
             pageInfo.totalCnt,

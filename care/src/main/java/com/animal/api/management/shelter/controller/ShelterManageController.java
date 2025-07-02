@@ -131,13 +131,14 @@ public class ShelterManageController {
 	 */
 	@GetMapping("/reviews/volunteer")
 	public ResponseEntity<?> getVolunteerReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
+			@RequestParam(value = "reviewIdx", required = false) Integer reviewIdx,
 			HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 
-		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(cp, userIdx);
+		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(cp, userIdx, reviewIdx);
 		PageInformationDTO page = shelterService.getVolunteerReviewPage(cp, userIdx);
 
 		if (reviewList == null) {
@@ -194,10 +195,7 @@ public class ShelterManageController {
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
 
-		int reviewIdx = 0;
-		dto.setReviewIdx(reviewIdx);
-
-		int result = shelterService.addVolunteerReviewApply(dto, userIdx, reviewIdx);
+		int result = shelterService.addVolunteerReviewApply(dto, userIdx, dto.getRef());
 
 		if (result == shelterService.NOT_REVIEW) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없음"));
@@ -209,6 +207,25 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}
 	}
+	
+	/**
+	 * 해당 보호시설 trun max값 구하게 
+	 * 
+	 * @param reviewIdx 리뷰 번호 
+	 * 
+	 * @return turn값 조회 성공 여부 
+	 */
+	 @GetMapping("/reviews/turn-max")
+	    public ResponseEntity<?> getMaxTurn(@RequestParam("reviewIdx") int reviewIdx) {
+	        try {
+	            int maxTurn = shelterService.getMaxTurnVR(reviewIdx); // 최대 TURN 값을 서비스에서 가져옵니다.
+	            return ResponseEntity.ok(new OkResponseDTO<>(200, "최대 turn 값 조회 성공", maxTurn)); // 성공적으로 반환
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(500, "서버 오류: " + e.getMessage()));
+	        }
+	    }
+	
 
 	/**
 	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 수정 메서드

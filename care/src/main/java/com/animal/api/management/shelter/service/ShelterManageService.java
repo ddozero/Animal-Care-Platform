@@ -34,13 +34,15 @@ public interface ShelterManageService {
 	public int uploadShelterFile(MultipartFile[] files, int idx);
 
 	// 보호시설 리뷰
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx);
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx, Integer reviewIdx);
 	
 	public PageInformationDTO getVolunteerReviewPage(int cp, int idx);
 
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int cp, int idx);
 	
 	public PageInformationDTO getAdoptionReviewPage(int cp, int idx);
+	
+	public int getMaxTurnVR(int ref); //ref값구하기
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx);
 
