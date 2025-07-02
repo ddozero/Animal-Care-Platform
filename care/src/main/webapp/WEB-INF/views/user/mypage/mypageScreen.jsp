@@ -166,6 +166,7 @@
 }
 
 /* **************    */
+
 </style>
 </head>
 <body>
@@ -207,6 +208,7 @@
 <script>
   // 0. context-path 주입 (EL 충돌 방지)
   const root = '<%= request.getContextPath() %>';
+  let currentAdoptionIdx = null;
 
   // 1. 유저 정보 수정 버튼에 쓰일 userInfo 변수 (updateMypage에서 할당)
   let userInfo = null;
@@ -312,7 +314,6 @@
 
     if (list && list.length > 0) {
       html += list.map(item => {
-        // VolunteerListResponseDTO: volunteerRequestIdx, imagePath, title, shelterName, location, statusText, participatedAt :contentReference[oaicite:0]{index=0}
         return ''
           + '<li class="volunteer-item" data-idx="' + item.volunteerRequestIdx + '">'
           +   '<div style="display:flex; gap:16px; align-items:center; margin-bottom:12px;">'
@@ -362,8 +363,6 @@
 
   // 6. 상세내용 패널에 표시
   function renderVolunteerDetail(detail) {
-    // VolunteerDetailResponseDTO 필드: volunteerRequestIdx, title, content, shelterName, location, statusText,
-    // volunteerDate, createdAt, capacity, applicants, contact, participatedAt, imagePaths :contentReference[oaicite:1]{index=1}
     const panel = document.getElementById("volunteer-detail-panel");
     const body  = document.getElementById("volunteer-detail-body");
 
@@ -467,10 +466,10 @@
   });
 
   function renderAdoptionList(list) {
-    const main = document.getElementById("main-content");
+    const main = document.querySelector(".main-content");
     let html = ''
-      + '<div class="user-greeting">'
-      +   `<h2>${userInfo.username} 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>`
+    + '<div class="user-greeting">'
+      +   '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
       +   '<button class="edit-btn">내 정보 수정</button>'
       + '</div>'
       + '<div class="history-box">'
@@ -478,19 +477,20 @@
       +   '<ul class="volunteer-list">';
 
     if (list && list.length > 0) {
-      list.forEach(item => {
-        html += ''
-          + '<li class="adoption-item" data-idx="' + item.adoptionConsultIdx + '">'
-          +   '<div style="display:flex; gap:16px; align-items:center; padding:12px 0;">'
-          +     `<img src="${root}${item.imagePath}" alt="썸네일" `
-          +          'style="width:100px;height:100px;object-fit:cover;border-radius:8px;" />'
-          +     '<div style="margin-left:12px;">'
-          +       `<p><strong>${item.animalName}</strong></p>`
-          +       `<p>${item.statusText} | 신청일: ${item.appliedAt}</p>`
-          +     '</div>'
-          +   '</div>'
-          + '</li>';
-      });
+    html += list.map(item => {
+    return ''
+        + '<li class="adoption-item" data-idx="' + item.adoptionConsultIdx + '">'
+        +   '<div style="display:flex; gap:16px; align-items:center; margin-bottom:12px;">'
+        +     '<img src="' + root + item.imagePath + '" alt="썸네일" '
+        +          'style="width:100px;height:100px;object-fit:cover;border-radius:8px;" />'
+        +     '<div style="margin-left:12px;">'
+        +       '<p><strong>' + item.animalName + '</strong></p>'
+        +       '<p>' + item.statusText + '</p>'
+        +       '<p> 신청일: ' + item.appliedAt +'</p>'
+        +     '</div>'
+        +   '</div>'
+        + '</li>';
+      }).join('');
     } else {
       html += '<li>입양 내역이 없습니다.</li>';
     }
@@ -499,9 +499,14 @@
     main.innerHTML = html;
 
     // (Optional) 클릭 시 상세보기 바인딩
-    document.querySelectorAll(".adoption-item").forEach(el => {
-      el.addEventListener("click", () => {
-        const idx = Number(el.dataset.idx);
+    document.querySelectorAll(".adoption-item").forEach(item => {
+      console.log("▶️ item.dataset.idx =", item.dataset.idx);
+      item.addEventListener("click", () => {
+        const idx = Number(item.dataset.idx);
+        console.log("▶️ 클릭된 idx =", idx);
+        if (!idx) {
+      return alert("잘못된 항목입니다. idx:", item.dataset.idx);
+       }
         openAdoptionDetail(idx);
       });
     });
@@ -509,7 +514,12 @@
 
   // 3) 입양 상세 API 호출 및 모달/패널 렌더
   function openAdoptionDetail(adoptionConsultIdx) {
-    fetch(root + '/api/mypage/adoptions/' + adoptionConsultIdx)
+    if (!adoptionConsultIdx || isNaN(adoptionConsultIdx)) return;
+    currentAdoptionIdx = adoptionConsultIdx; 
+
+    const url = root + '/api/mypage/adoptions/' + adoptionConsultIdx;
+
+    fetch(url)
       .then(res => res.json())
       .then(payload => {
         if (payload.status === 200 && payload.data) {
@@ -525,28 +535,84 @@
     const panel = document.getElementById("adoption-detail-panel");
     const body  = document.getElementById("adoption-detail-body");
 
-    const imgTag = detail.imagePath
-    ? `<img src="${root}${detail.imagePath}" 
-            alt="썸네일"
-            style="width:100%; height:200px; object-fit:cover;
-                   border-radius:8px; margin-bottom:16px;" />`
-    : `<div style="width:100%; height:200px; background:#eee;
-                   border-radius:8px; margin-bottom:16px;"></div>`;
+    const imgTag = detail.imagePaths?.length
+    ? '<img src="' + root + detail.imagePaths[0] + '" alt="이미지" '
+        + 'style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:16px;" />'
+    : '<div style="width:100%;height:200px;background:#eee;border-radius:8px;margin-bottom:16px;"></div>';
 
-    body.innerHTML = `
-    ${imgTag}
-    <h2>${detail.animalName}</h2>
-    <p><strong>보호소:</strong> ${detail.shelterName}</p>
-    <p><strong>상태:</strong> ${detail.statusText}</p>
-    <p><strong>신청일:</strong> ${detail.appliedAt}</p>
-    <p><strong>품종:</strong> ${detail.breed}</p>
-    <p><strong>성별:</strong> ${detail.gender}</p>
-    <p><strong>나이:</strong> ${detail.age}살</p>
-    <p><strong>체중:</strong> ${detail.size}kg</p>
-    <p><strong>중성화:</strong> ${detail.neuter ? '완료' : '미완료'}</p>
-    <p style="margin-top:16px;">${detail.description}</p>
-  `;
+    body.innerHTML = ''
+      + imgTag
+      + '<h2>' + detail.animalName + '</h2>'
+      + '<p><strong>품종번호:</strong> ' + detail.breedIdx + '</p>'
+      + '<p><strong>보호소 이름:</strong> ' + detail.shelterName + '</p>'
+      + '<p><strong>입양 상태:</strong> ' + detail.statusText + '</p>'
+      + '<p><strong>품종 번호:</strong> ' + detail.breedIdx + '</p>'
+      + '<p><strong>품종 이름:</strong> ' + detail.breed + '</p>'
+      + '<p><strong>성별:</strong> ' + detail.gender + '</p>'
+      + '<p><strong>나이:</strong> ' + detail.age + ' 살</p>'
+      + '<p><strong>크기(체중):</strong> ' + detail.size + ' kg</p>'
+      + '<p><strong>중성화 여부:</strong> ' + detail.neuter + '</p>'
+      + '<p><strong>성격:</strong> ' + detail.personality + '</p>'
+      + '<p style="margin-top:16px;">' + detail.description + '</p>';
 
+      // (2) “참여완료” 상태일 때만 후기 폼 추가
+      if (detail.statusText === '상담완료') {
+        body.innerHTML += `
+          <div class="review-box" style="margin-top:24px; padding:16px; border:1px solid #e2e8f0; border-radius:8px;">
+            <h3 style="margin-top:0;">후기 작성</h3>
+            <textarea id="review-content" rows="4" style="width:100%; padding:8px;" placeholder="후기를 입력하세요"></textarea>
+            <input type="file" id="review-image" accept="image/*" style="margin-top:8px;"/>
+            <button id="review-submit" style="
+              margin-top:12px;
+              padding:8px 16px;
+              background:#53D9C1;color:#fff;border:none;border-radius:4px;
+              cursor:pointer;
+            ">등록하기</button>
+          </div>
+        `;
+
+            // (3) 등록 버튼 이벤트 바인딩
+    document.getElementById('review-submit').addEventListener('click', () => {
+      const content = document.getElementById('review-content').value.trim();
+      if (!content) {
+        return alert('후기 내용을 입력해주세요.');
+      }
+      const fileInput = document.getElementById('review-image');
+      const file = fileInput.files[0] || null;
+
+      const formData = new FormData();
+      formData.append('adoptionConsultIdx', currentAdoptionIdx);
+      formData.append('content', content);
+      if (file) formData.append('image', file);
+
+      fetch(root + '/api/mypage/adoptions/reviews', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(json => {
+        // 1) 성공 케이스: status 필드가 200일 때
+        if (json.status === 200) {
+          alert('후기 작성이 완료되었습니다.');
+          document
+            .getElementById('adoption-detail-panel')
+            .classList.replace('show','hidden');
+        }
+        // 2) 실패 케이스: errorCode 필드가 있을 때
+        else if (json.errorCode) {
+          alert(json.errorMsg || '후기 작성에 실패했습니다.');
+        }
+        // 3) 그 외
+        else {
+          alert(json.message || '알 수 없는 오류가 발생했습니다.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('서버 오류로 후기 작성에 실패했습니다.');
+      });
+  });
+  }
       panel.classList.remove("hidden");
       panel.classList.add("show");
 }
@@ -560,6 +626,8 @@ document.querySelectorAll("#adoption-detail-panel .close-btn").forEach(btn => {
   });
 });
 </script>
+
+
 
 </body>
 </html>
