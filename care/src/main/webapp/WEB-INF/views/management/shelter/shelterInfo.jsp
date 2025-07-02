@@ -219,6 +219,8 @@ body {
   background: #ccc;
 }
 
+
+
 #shelterName {
   font-size: 25px;    
   font-weight: 700;    
@@ -413,8 +415,9 @@ textarea:disabled {
 	</div>
 	
 	  <div id="noticeSection" style="display:none;" class="notice-box">
-	    <div id="noticeContent"></div>
-	  </div>
+		    <button class="edit-button" id="addButton" onclick="addNotice()">등록하기</button>
+		    <div id="noticeContent"></div>
+		</div>
 	  
 	
 	 <div id="reviewSection" style="display:none;" class="review-box">
@@ -436,43 +439,45 @@ textarea:disabled {
 <script>
 
 // 보호소 정보 불러오기
-window.onload = function() {
-  ShelterInfo();  // 페이지가 로드될 때 보호소 정보 자동 조회
-};
 
-function ShelterInfo() {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/care/api/management/shelter", true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      var result = JSON.parse(xhr.responseText);
-      if (!result || result.status !== 200 || !result.data) {
-        alert(result && result.message ? result.message : "존재하지 않는 보호소입니다.");
-        return;
-      }
-      var shelter = result.data;
 
-      var img = document.getElementById("shelterImage");
-      if (shelter.imagePaths && shelter.imagePaths.length > 0 && shelter.imagePaths[0]) {
-          img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0];
-        } else {
-          img.src = "/resources/images/no-image.png";
+async function ShelterInfo() {
+    try {
+        const result = await API.get("/care/api/management/shelter");
+
+        if (!result || result.status !== 200 || !result.data) {
+            alert(result && result.message ? result.message : "존재하지 않는 보호소입니다.");
+            return;
         }
 
-      document.getElementById("shelterName").value = shelter.shelterName;
-      document.getElementById("personName").value = shelter.personName;
-      document.getElementById("type").value = shelter.type;
-      document.getElementById("businessNumber").value = shelter.businessNumber;
-      document.getElementById("zipCode").value = shelter.zipCode;
-      document.getElementById("address").value = shelter.address;
-      document.getElementById("addressDetail").value = shelter.addressDetail;
-      document.getElementById("tel").value = shelter.tel;
-      document.getElementById("email").value = shelter.email;
-      document.getElementById("description").value = shelter.description;
+        var shelter = result.data;
+
+        // 이미지 처리
+        var img = document.getElementById("shelterImage");
+        if (shelter.imagePaths && shelter.imagePaths.length > 0 && shelter.imagePaths[0]) {
+            img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0];
+        } else {
+            img.src = "/resources/images/no-image.png";
+        }
+
+        // 정보 입력
+        document.getElementById("shelterName").value = shelter.shelterName;
+        document.getElementById("personName").value = shelter.personName;
+        document.getElementById("type").value = shelter.type;
+        document.getElementById("businessNumber").value = shelter.businessNumber;
+        document.getElementById("zipCode").value = shelter.zipCode;
+        document.getElementById("address").value = shelter.address;
+        document.getElementById("addressDetail").value = shelter.addressDetail;
+        document.getElementById("tel").value = shelter.tel;
+        document.getElementById("email").value = shelter.email;
+        document.getElementById("description").value = shelter.description;
+
+    } catch (error) {
+        console.error("보호소 정보를 불러오는 중 오류가 발생했습니다: ", error);
+        alert("보호소 정보를 불러오는 데 실패했습니다.");
     }
-  };
-  xhr.send();
 }
+
 
 //보호시설 수정
 function enableEdit() {
@@ -486,142 +491,139 @@ function enableEdit() {
 		  document.getElementById("editButton").style.display = "none"; // 수정하기 버튼 숨기기
 		}
 
-function saveChanges() {
-	var dto = {
-		    shelterName: document.getElementById("shelterName").value,
-		    personName: document.getElementById("personName").value,
-		    type: document.getElementById("type").value,
-		    businessNumber: document.getElementById("businessNumber").value,
-		    zipCode: document.getElementById("zipCode").value,  // 우편번호
-		    address: document.getElementById("address").value,  // 주소
-		    addressDetail: document.getElementById("addressDetail").value,  // 상세주소
-		    tel: document.getElementById("tel").value,
-		    email: document.getElementById("email").value,
-		    description: document.getElementById("description").value,
-		  };
+async function saveChanges() {
+	  // dto 생성
+	  var dto = {
+	    shelterName: document.getElementById("shelterName").value,
+	    personName: document.getElementById("personName").value,
+	    type: document.getElementById("type").value,
+	    businessNumber: document.getElementById("businessNumber").value,
+	    zipCode: document.getElementById("zipCode").value,  // 우편번호
+	    address: document.getElementById("address").value,  // 주소
+	    addressDetail: document.getElementById("addressDetail").value,  // 상세주소
+	    tel: document.getElementById("tel").value,
+	    email: document.getElementById("email").value,
+	    description: document.getElementById("description").value,
+	  };
 
-		  var xhr = new XMLHttpRequest();
-		  xhr.open("PUT", "/care/api/management/shelter", true);
-		  xhr.setRequestHeader("Content-Type", "application/json");
+	  try {
+	    const result = await API.put("/care/api/management/shelter", dto);
 
-		  xhr.onreadystatechange = function() {
-		    if (xhr.readyState === 4) {
-		      var result = JSON.parse(xhr.responseText);
-		      if (xhr.status === 200) {
-		        alert("정보가 수정되었습니다.");
-		        ShelterInfo();  // 수정된 정보 다시 조회하여 화면 갱신
-		      } else {
-		        alert("수정에 실패했습니다.");
-		      }
+	    if (result.status === 200) {
+	      alert("정보가 수정되었습니다.");
+	      ShelterInfo();  // 수정된 정보 다시 조회하여 화면 갱신
+	    } else {
+	      alert("수정에 실패했습니다.");
+	    }
 
-		      // 입력 필드 비활성화 및 수정하기 버튼 보이기
-		      document.getElementById("shelterName").disabled = true;
-		      document.getElementById("personName").disabled = true;
-		      document.getElementById("type").disabled = true;
-		      document.getElementById("businessNumber").disabled = true;
-		      document.getElementById("zipCode").readonly = true;
-		      document.getElementById("address").readonly = true;
-		      document.getElementById("addressDetail").readonly = true;
-		      document.getElementById("tel").disabled = true;
-		      document.getElementById("email").disabled = true;
-		      document.getElementById("description").disabled = true;
-		      document.getElementById("saveButton").style.display = "none";
-		      document.getElementById("editButton").style.display = "inline-block";
-		    }
-		  };
-		  xhr.send(JSON.stringify(dto));
+	    // 입력 필드 비활성화 및 버튼 상태 업데이트
+	    document.getElementById("shelterName").disabled = true;
+	    document.getElementById("personName").disabled = true;
+	    document.getElementById("type").disabled = true;
+	    document.getElementById("businessNumber").disabled = true;
+	    document.getElementById("zipCode").readonly = true;
+	    document.getElementById("address").readonly = true;
+	    document.getElementById("addressDetail").readonly = true;
+	    document.getElementById("tel").disabled = true;
+	    document.getElementById("email").disabled = true;
+	    document.getElementById("description").disabled = true;
+	    document.getElementById("saveButton").style.display = "none";
+	    document.getElementById("editButton").style.display = "inline-block";
+
+	  } catch (err) {
+	    console.error("Error while saving changes:", err);
+	    alert("수정 중 오류가 발생했습니다.");
+	  }
 	}
+	
+
+	window.addEventListener("DOMContentLoaded", function() {
+	  ShelterInfo();
+	});
+
 
 //공지사항
-function loadNotice() {
-	  const wrapper = document.getElementById("noticeContent");
-	  wrapper.innerHTML = "";
-	  
-	  const pagingBox = document.getElementById("noticePaging");
-	  pagingBox.innerHTML = ""; 
-	    
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("GET", "/care/api/management/shelter/boards", true);
-	  xhr.onreadystatechange = function() {
-	    if (xhr.readyState === 4) {
-	      var result = JSON.parse(xhr.responseText);
-	      if (result.status !== 200) {
-	        alert("공지사항 불러오기 실패: " + result.message);
-	        return;
-	      }
-	      var notices = result.data;
-	      var pageInfo = result.pageInfo;
+async function loadNotice(cp) {
+    const wrapper = document.getElementById("noticeContent");
+    wrapper.innerHTML = ""; // 초기화
 
-	      var html = '<table class="board-table"><thead><tr>';
-	      html += '<th>NO</th><th>제목</th><th>작성일</th><th>조회수</th></tr></thead><tbody>';
+    const pagingBox = document.getElementById("noticePaging");
+    pagingBox.innerHTML = "";
 
-	      if (!notices || notices.length === 0) {
-	        html += '<tr><td colspan="4" style="text-align:center;">등록된 게시글이 없습니다.</td></tr>';
-	      } else {
-	        for (var i=0; i<notices.length; i++) {
-	          html += '<tr>';
-	          html += '<td>' + notices[i].idx + '</td>';
-	          html += '<td><a href="/care/shelter/boards/' + notices[i].idx + '">' + notices[i].title + '</a></td>';
-	          html += '<td>' + notices[i].createdAt + '</td>';
-	          html += '<td>' + notices[i].views + '</td>';
-	          html += '</tr>';
-	        }
-	      }
-	      html += '</tbody></table>';
+    try {
+        const result = await API.get('/care/api/management/shelter/boards?cp=' + cp);
+        
+        if (result.status !== 200) {
+            alert('공지사항 목록을 불러오는 데 실패했습니다. (' + result.message + ')');
+            return;
+        }
 
-	      document.getElementById("noticeContent").innerHTML = html;
+        const notices = result.data;
+        const pageInfo = result.pageInfo;
 
-          // **페이징**
-          
+        let html = '<table class="board-table"><thead><tr>';
+        html += '<th>NO</th><th>제목</th><th>작성일</th><th>조회수</th></tr></thead><tbody>';
 
-          makePaging(
-              pageInfo.totalCnt,
-              pageInfo.listSize,
-              pageInfo.pageSize,
-              pageInfo.cp,
-              "noticePaging",
-              loadNotice
-          );
-      }
-  };
-	  xhr.send();
+        if (!notices || notices.length === 0) {
+            html += '<tr><td colspan="4" style="text-align:center;">등록된 게시글이 없습니다.</td></tr>';
+        } else {
+            for (var i = 0; i < notices.length; i++) {
+                html += '<tr>';
+                html += '<td>' + notices[i].idx + '</td>';
+                html += '<td><a href="/care/management/shelters/boards/' + notices[i].idx + '">' + notices[i].title + '</a></td>';
+                html += '<td>' + notices[i].createdAt + '</td>';
+                html += '<td>' + notices[i].views + '</td>';
+                html += '</tr>';
+            }
+        }
+
+        html += '</tbody></table>';
+
+        document.getElementById('noticeContent').innerHTML = html;
+
+        // 페이징 처리
+        makePaging(
+            pageInfo.totalCnt,
+            pageInfo.listSize,
+            pageInfo.pageSize,
+            pageInfo.cp,
+            'noticePaging',
+            loadNotice
+        );
+    } catch (error) {
+        console.error('Error loading notice:', error);
+    }
 }
-	
-	
 
+// 페이지 로드 시 공지사항 목록을 첫 번째 페이지로 불러오기
+document.addEventListener('DOMContentLoaded', function () {
+    loadNotice(1); // 첫 번째 페이지
+});
 
 function changeTab(button, sectionId) {
-	  var tabs = document.getElementsByClassName("tab-btn");
-	  for (var i=0; i<tabs.length; i++) {
-	    tabs[i].classList.remove("active");
-	  }
-	  button.classList.add("active");
+    var tabs = document.getElementsByClassName("tab-btn");
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+    }
+    button.classList.add("active");
 
-	  var sections = ["infoSection", "noticeSection", "reviewSection"];
-	  for (var j=0; j<sections.length; j++) {
-	    document.getElementById(sections[j]).style.display = (sections[j] === sectionId) ? "block" : "none";
-	  }
-	  
-	  document.getElementById("noticePaging").style.display = (sectionId === "noticeSection") ? "block" : "none";
-	  document.getElementById("reviewPagingVol").style.display = (sectionId === "reviewSection") ? "block" : "none";
-	  document.getElementById("reviewPagingAod").style.display = (sectionId === "reviewSection") ? "block" : "none";
+    var sections = ["infoSection", "noticeSection", "reviewSection"];
+    for (var j = 0; j < sections.length; j++) {
+        document.getElementById(sections[j]).style.display = (sections[j] === sectionId) ? "block" : "none";
+    }
+    
+    document.getElementById("noticePaging").style.display = (sectionId === "noticeSection") ? "block" : "none";
+    document.getElementById("reviewPagingVol").style.display = (sectionId === "reviewSection") ? "block" : "none";
+    document.getElementById("reviewPagingAod").style.display = (sectionId === "reviewSection") ? "block" : "none";
 
-	  if(sectionId === "noticeSection") {
-	    loadNotice();
-	  }
-	  if(sectionId === "reviewSection") {
-	    changeReviewTab(
-	      document.querySelector(".sub-tabs .sub-btn.active"),
-	      "volunteerReview"
-	    );
-	  }
-	}
+    if (sectionId === "noticeSection") {
+        loadNotice(1); // 첫 페이지로 로드
+    }
+    if (sectionId === "reviewSection") {
+        changeReviewTab(document.querySelector(".sub-tabs .sub-btn.active"), "volunteerReview");
+    }
+}
 
-
-
-window.addEventListener("DOMContentLoaded", function() {
-  ShelterInfo();
-});
 
 //보호소 리뷰 관리
 async function loadVolunteerReview(cp = 1) {

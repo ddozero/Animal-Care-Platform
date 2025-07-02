@@ -116,7 +116,7 @@
 	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
 	<section class="board">
 		<div class="header-title">보호시설 소식</div>
-		<div class="title-detail">보호시설에서 안내하는 소식입니다.</div>
+		<div class="title-detail">보호소에서 안내할 공지사항을 등록해보세요.</div>
 
 		<div class="board-container">
 			<table class="board-content-table">
@@ -148,45 +148,3 @@
 			</div>
 		</div>
 	</section>
-
-<script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
-<script>
-
-	async function noticeDetail() {
-		const pathParts = window.location.pathname.split('/');
-		const idx = pathParts[pathParts.length - 1];
-
-		if (!idx) {
-			alert("잘못된 접근입니다.");
-			window.location.href = "/notice";
-			return;
-		}
-
-		const result = await API.get("/care/api/management/shelter/boards/" + idx);
-		console.log(result);
-
-		if (result.status !== 200) {
-			alert("게시물을 불러올 수 없습니다.");
-			window.location.href = "/notice";
-			return;
-		}
-
-		const notice = result.data;
-
-		document.getElementById("noticeIdx").innerHTML = notice.idx;
-		document.getElementById("noticeTitle").innerHTML = notice.title;
-		document.getElementById("noticeDate").innerHTML = notice.createdAt;
-		document.getElementById("noticeWriter").innerHTML = "댕봉사";
-		document.getElementById("noticeViews").innerHTML = notice.views;
-		document.getElementById("noticeContentBox").innerHTML = notice.content;
-		
-		document.getElementById("goListNotice").addEventListener("click", function () {
-			  const contextPath = "${pageContext.request.contextPath}"; // contextPath를 동적으로 설정
-			  window.location.href = contextPath + "/management/shelters"; // 이동할 페이지 경로
-			});
-	}
-	noticeDetail();
-</script>
-
-</body>
-</html>
