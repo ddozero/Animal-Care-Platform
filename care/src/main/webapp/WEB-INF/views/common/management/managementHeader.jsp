@@ -86,6 +86,16 @@
             #menu-inner a:hover {
               text-decoration: underline;
             }
+
+            #management-label {
+              position: absolute;
+              top: 50%;
+              left: 20px;
+              transform: translateY(-50%);
+              font-size: 14px;
+              color: #888;
+              font-weight: 500;
+            }
           </style>
 
         </head>
@@ -95,8 +105,12 @@
           <!-- 상단 로고 + 유저 메뉴 -->
           <div id="header-top">
 
+            <div id="management-label">
+              management
+            </div>
+
             <div id="logo">
-              <a href="${root}/index">같 이 살 개</a>
+              <a href="${root}/management/shelters">같 이 살 개</a>
             </div>
 
             <div id="user-menu">
@@ -106,9 +120,9 @@
                 </c:when>
                 <c:otherwise>
                   <span><strong>${loginUser.nickname}</strong>님</span>
-                  <a href="javascript:void(0);" onclick="logout()">로그아웃</a>|<a href="${root}/mypage">마이페이지</a>
+                  <a href="javascript:void(0);" onclick="logout()">로그아웃</a>
                   <c:if test="${loginUser.userTypeIdx == 2}">
-                    <a href="${root}/management/shelters">보호시설 관리</a>
+                    <a href="${root}/index">관리 나가기</a>
                   </c:if>
                 </c:otherwise>
               </c:choose>
