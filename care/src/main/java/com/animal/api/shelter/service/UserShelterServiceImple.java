@@ -31,7 +31,7 @@ public class UserShelterServiceImple implements UserShelterService {
 	@Autowired
 	private FileManager fileManager;
 
-	private int listSize = 10;
+	private int listSize = 15;
 	private int pageSize = 5;
 
 	@Override
