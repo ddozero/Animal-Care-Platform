@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    String currentPage = (String) request.getAttribute("currentPage");
+    if (currentPage == null) {
+        currentPage = "";
+    }
+%>
     <!DOCTYPE html>
     <html>
 
@@ -8,6 +14,7 @@
         <link rel="stylesheet" as="style" crossorigin
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
         <style>
+            /* --- 기본 리셋 및 전체 레이아웃 --- */
             * {
                 box-sizing: border-box;
                 margin: 0;
@@ -17,6 +24,7 @@
             html,
             body {
                 height: 100%;
+                font-family: 'Pretendard', sans-serif;
                 background-color: #f7fafc;
                 color: #2d3748;
             }
@@ -32,12 +40,16 @@
                 background: none;
             }
 
+            /* --- 메인 컨테이너 (Flexbox) --- */
             .container {
                 display: flex;
                 height: 100vh;
             }
 
+            /* --- 사이드바 (order: 1 로 왼쪽에 표시) --- */
             .sidebar {
+                order: 1;
+                /* <<<<<<< 아이템 순서 1번 (왼쪽) */
                 width: 256px;
                 background-color: #1a202c;
                 color: #ffffff;
@@ -94,7 +106,10 @@
                 padding-left: 12px;
             }
 
+            /* --- 메인 콘텐츠 영역 (order: 2 로 오른쪽에 표시) --- */
             .main-content {
+                order: 2;
+                /* <<<<<<< 아이템 순서 2번 (오른쪽) */
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
@@ -140,79 +155,36 @@
                 overflow-y: auto;
                 padding: 24px;
             }
-
-            .page-content h1 {
-                font-size: 1.875rem;
-                font-weight: 700;
-            }
-
-            .page-content hr {
-                margin: 16px 0;
-                border: 0;
-                border-top: 1px solid #e2e8f0;
-            }
-
-            .content-wrapper {
-                background-color: #ffffff;
-                padding: 32px;
-                border-radius: 8px;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            }
         </style>
+        <script>
+            function logout() {
+                if (!confirm("로그아웃 하시겠습니까?")) return;
+                const root = "${pageContext.request.contextPath}";
+                fetch(`/care/api/auth/logout`, { method: 'POST' })
+                    .then(res => res.ok ? res.json() : Promise.reject(res))
+                    .then(result => {
+                        if (result.status === 'OK' || result.status === 200) {
+                            alert('로그아웃 되었습니다.');
+                            location.href = `/care/index`;
+                        } else {
+                            alert(result.message || '로그아웃에 실패했습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('로그아웃 처리 중 오류 발생:', err);
+                        alert('서버에 연결할 수 없습니다.');
+                    });
+            }
+        </script>
     </head>
 
     <body>
-
         <div class="container">
-            <aside class="sidebar">
-                <div class="logo">로고</div>
-
-                <nav class="sidebar-nav">
-                    <div class="menu-category">
-                        <h3>회원관리</h3>
-                        <a href="#">사이트 회원</a>
-                    </div>
-                    <div class="menu-category">
-                        <h3>보호소</h3>
-                        <a href="#" class="active">보호소 관리</a>
-                        <a href="#">봉사 관리</a>
-                        <a href="#">입양 관리</a>
-                    </div>
-                    <div class="menu-category">
-                        <h3>기부</h3>
-                        <a href="#">지원사업 현황</a>
-                        <a href="#">지원사업 관리</a>
-                    </div>
-                    <div class="menu-category">
-                        <h3>커뮤니티</h3>
-                        <a href="#">게시물 관리</a>
-                        <a href="#">공지사항</a>
-                    </div>
-                    <div class="menu-category">
-                        <h3>통계</h3>
-                        <a href="#">통계</a>
-                    </div>
-                </nav>
-            </aside>
-
             <div class="main-content">
                 <header class="header">
                     <div class="user-info">
                         <span>관리자</span>
-                        <button class="logout-button">로그아웃</button>
+                        <button class="logout-button" onclick="logout()">로그아웃</button>
                     </div>
                 </header>
-
                 <main class="page-content">
-                    <h1>페이지 제목</h1>
-                    <hr>
-                    <div class="content-wrapper">
-                        <p>콘텐츠 영역입니다.</p>
-                    </div>
-                </main>
-            </div>
-        </div>
-
-    </body>
-
-    </html>

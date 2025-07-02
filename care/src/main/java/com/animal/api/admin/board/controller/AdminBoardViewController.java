@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin/notice")
+@RequestMapping("/admin/notices")
 public class AdminBoardViewController {
 
 	@GetMapping
@@ -18,7 +18,7 @@ public class AdminBoardViewController {
 		return "admin/board/noticeDetail";
 	}
 	
-	@GetMapping
+	@GetMapping("/form")
 	public String noticeAddForm() {
 		return "admin/board/noticeAddForm";
 	}
