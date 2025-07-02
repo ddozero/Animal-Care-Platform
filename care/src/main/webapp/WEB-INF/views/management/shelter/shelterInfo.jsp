@@ -127,13 +127,8 @@ body {
   .content { 
     flex-direction: column; 
   }
-  .tabs { 
-    flex-direction: column; 
-    gap: 12px; 
-  }
-  .edit-button { 
-    width: 100%; 
-  }
+
+
 }
 
 .board {
@@ -218,8 +213,6 @@ body {
 .edit-button:hover, #saveButton:hover {
   background: #ccc;
 }
-
-
 
 #shelterName {
   font-size: 25px;    
@@ -414,10 +407,10 @@ textarea:disabled {
 		    </div>
 	</div>
 	
-	  <div id="noticeSection" style="display:none;" class="notice-box">
+	  <div id="noticeSection" style="display:none; text-align:right; margin-bottom:13px;" class="notice-box">
 		    <button class="edit-button" id="addButton" onclick="addNotice()">등록하기</button>
 		    <div id="noticeContent"></div>
-		</div>
+	</div>
 	  
 	
 	 <div id="reviewSection" style="display:none;" class="review-box">
@@ -439,8 +432,6 @@ textarea:disabled {
 <script>
 
 // 보호소 정보 불러오기
-
-
 async function ShelterInfo() {
     try {
         const result = await API.get("/care/api/management/shelter");
@@ -625,7 +616,16 @@ function changeTab(button, sectionId) {
 }
 
 
+/// 공지사항 글쓰기
+
+function addNotice() {
+    location.href = "/care/management/shelters/boards/write";
+}
+
+
 //보호소 리뷰 관리
+
+///봉사리뷰
 async function loadVolunteerReview(cp = 1) {
     const wrapper = document.getElementById("volunteerReview");
     wrapper.innerHTML = "";
@@ -662,8 +662,6 @@ async function loadVolunteerReview(cp = 1) {
 
 
     // paging 
-  
-    
     makePaging(
             pageInfo.totalCnt,
             pageInfo.listSize,
@@ -674,7 +672,7 @@ async function loadVolunteerReview(cp = 1) {
     );
 }
 
-
+///입양리뷰
 async function loadAdoptionReview(cp = 1) {
     const wrapper = document.getElementById("adoptionReview");
     wrapper.innerHTML = "";

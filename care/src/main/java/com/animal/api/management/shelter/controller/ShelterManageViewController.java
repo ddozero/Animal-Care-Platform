@@ -27,9 +27,14 @@ public class ShelterManageViewController {
 	}
 	
 	@GetMapping("/boards/write")
-	public String shelterNoticeUpdate(@PathVariable int idx, Model model) { //공지사항 등록폼
-		model.addAttribute("idx",idx);
-		return "management/shelter/shelterNoticeContent";
+	public String shelterNoticeWrite() { //공지사항 등록폼
+		return "management/shelter/shelterNoticeWrite";
+	}
+	
+	@GetMapping("/boards/update/{idx}")
+	public String shelterNoticeUpdate(@PathVariable int idx, Model model) {
+	    model.addAttribute("idx", idx);
+	    return "management/shelter/shelterNoticeUpdate";  // 수정 폼으로 이동
 	}
 
 
