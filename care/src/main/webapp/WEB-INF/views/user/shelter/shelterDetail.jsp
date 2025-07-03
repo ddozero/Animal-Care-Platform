@@ -506,11 +506,12 @@
             // 보호시설의 상세 정보 조회 함수
             async function shelterDetail() {
                 const result = await API.get('/care/api/shelters/' + idx);
-                if (result.status != 200) {
+                if (result.errorCode) {
                     location.href = '/care/shelters';
                     return;
                 }
 
+                sheltevolunteer(1);
                 document.getElementById("body").style.display = "block";
                 const shelter = result.data;
 
@@ -1055,7 +1056,6 @@
                     kakao.maps.load(() => {
                         shelterDetail();
                         document.querySelector('.tabs .tab-btn').classList.add('active');
-                        sheltevolunteer(1);
                     });
                 </script>
     </body>
