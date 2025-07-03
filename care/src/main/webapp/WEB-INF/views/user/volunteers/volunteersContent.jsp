@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>봉사 신청하기</title>
+<title>봉사</title>
 
 <style>
 :root {

@@ -142,6 +142,7 @@
     cursor: pointer;
     box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
     transition: background .2s;
+    margin-bottom:30px;
 }
 
 .paging button:hover {
@@ -182,6 +183,7 @@
 					<input type="submit" value="검색">
 				</div>
 			</form>
+					
 			<table class="board-table">
 				<thead>
 					<tr>
@@ -288,5 +290,7 @@ async function noticeList(cp) {
     noticeList(1);
   });
 </script>
+
+<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 </body>
 </html>

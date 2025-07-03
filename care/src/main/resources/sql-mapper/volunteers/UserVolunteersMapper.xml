@@ -267,4 +267,18 @@ WHERE
 	#{volunteerIdx}
 </update>
 
+<!-- 캘린더 조회 -->
+<select id="getVolunteerCalendar" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	VS.NAME AS STATUS,
+	V.VOLUNTEER_DATE
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_STATUS VS ON
+V.VOLUNTEER_STATUS_IDX = VS.IDX
+</select>
+
+
 </mapper>

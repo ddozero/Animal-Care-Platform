@@ -191,6 +191,25 @@
   gap: 12px;
   margin-top: 8px;
 }
+
+.filter-buttons {
+  text-align: left !important; /* 기존 right 무효화 */
+  margin: 10px 0;
+}
+
+.date-btn {
+  padding: 10px 20px;
+  background-color: #3acdb2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.date-btn:hover {
+  background-color: #32b7a1;
+}
 </style>
 
 </head>
@@ -236,6 +255,7 @@
 	          <option value="모집중">모집중</option>
 	          <option value="모집예정">모집예정</option>
 	          <option value="모집완료">모집완료</option>
+	          <option value="종료">종료</option>
 	        </select>
 	      </div>
 	
@@ -285,18 +305,22 @@
 	      </div>
 	      
 		 <div class="btn-area">
-		      <div class="search-group-bt" style="align-self: end;">
+		      <div class="search-group-bt">
 		      	<a class="reset-link" onclick="resetSearchForm()">검색 설정 초기화</a>
 		        <button type="submit">검색</button>
 		      </div>
 	    </div>
 	   </div>
-
-
   </form>
+  
 </section>
+
 	<section class="borad">
+
 		<div class="board-container">
+			<div class="filter-buttons" style="text-align: right; margin: 10px 0;">
+				<button type="button" class="date-btn">일정별 조회</button>
+			</div>
 
 			<table class="board-table">
 				<thead>
@@ -397,6 +421,14 @@
 		  volunteerList(1); // 초기화 후 봉사목록 1페이지 호출
 		}
 
+</script>
+
+<script>
+	  const contextPath = "${pageContext.request.contextPath}";
+	
+	  document.querySelector(".date-btn").addEventListener("click", function () {
+	    location.href = contextPath + "/volunteers/calendar";
+	  });
 </script>
 
 <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
