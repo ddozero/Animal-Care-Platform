@@ -311,7 +311,6 @@
                     });
                 </script>
                 <%@ include file="/WEB-INF/views/common/admin/adminSideBar.jsp" %>
-                    <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
         </body>
 
         </html>
