@@ -69,18 +69,19 @@ public class AdminDonationController {
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "status", required = false) String status, HttpSession session) {
 
-		LoginResponseDTO loginAdmin = adminUserCheck(session); // 로그인 여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
 
-		int listSize = 5;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
 
 		List<AdminAllDonationResponseDTO> donationLists = null;
 		PageInformationDTO page = null;
-		
+
 		if (name != null || status != null) {
 			donationLists = adminDonationService.searchAdminDonation(cp, name, status);
 			page = adminDonationService.getSearchAdminDonationPage(cp, name, status);
@@ -94,8 +95,8 @@ public class AdminDonationController {
 		} else if (donationLists.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "데이터가 존재하지 않음"));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkPageResponseDTO<List<AdminAllDonationResponseDTO>>(200, "지원사업 목록 조회 성공", donationLists, page));
+			return ResponseEntity.status(HttpStatus.OK).body(new OkPageResponseDTO<List<AdminAllDonationResponseDTO>>(
+					200, "지원사업 목록 조회 성공", donationLists, page));
 		}
 	}
 
@@ -110,7 +111,15 @@ public class AdminDonationController {
 	@GetMapping("/{idx}")
 	public ResponseEntity<?> getAdminDonationDetail(@PathVariable int idx, HttpSession session) {
 
-		LoginResponseDTO loginAdmin = adminUserCheck(session); // 로그인 여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
 		int userIdx = loginAdmin.getIdx();
 
 		AdminAllDonationResponseDTO dto = adminDonationService.getAdminDonationDetail(idx, userIdx);
@@ -135,13 +144,14 @@ public class AdminDonationController {
 	public ResponseEntity<?> getAdminDonationUser(@PathVariable int idx,
 			@RequestParam(value = "cp", defaultValue = "0") int cp, HttpSession session) {
 
-		LoginResponseDTO loginAdmin = adminUserCheck(session); // 로그인 여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
 
-		int listSize = 5;
-		if (cp == 0) {
-			cp = 1;
-		} else {
-			cp = (cp - 1) * listSize;
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
 
 		List<AdminDonationUserResponseDTO> userList = adminDonationService.getAdminDonationUser(cp, idx);
@@ -169,8 +179,16 @@ public class AdminDonationController {
 	@PostMapping
 	public ResponseEntity<?> addAdminDonation(@Valid @RequestBody AdminAddDonationRequestDTO dto, HttpSession session) {
 
-		LoginResponseDTO loginUser = adminUserCheck(session);
-		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+		int userIdx = loginAdmin.getIdx(); // 로그인여부, 관리자 회원 검증
 
 		int result = adminDonationService.addAdminDonation(dto, userIdx);
 
@@ -216,8 +234,16 @@ public class AdminDonationController {
 	public ResponseEntity<?> updateAdminDonation(@PathVariable int idx, @Valid @RequestBody AdminUpdateRequestDTO dto,
 			HttpSession session) {
 
-		LoginResponseDTO loginUser = adminUserCheck(session);
-		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+		int userIdx = loginAdmin.getIdx(); // 로그인여부, 관리자 회원 검증
 
 		dto.setIdx(idx);
 		int result = adminDonationService.updateAdminDonation(dto, idx);
@@ -242,8 +268,16 @@ public class AdminDonationController {
 	@DeleteMapping("/{idx}")
 	public ResponseEntity<?> deleteAdminDonation(@PathVariable int idx, HttpSession session) {
 
-		LoginResponseDTO loginUser = adminUserCheck(session);
-		int userIdx = loginUser.getIdx(); // 로그인여부, 관리자 회원 검증
+		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
+
+		if (loginAdmin == null) { // 로그인 여부 검증
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
+		}
+
+		if (loginAdmin.getUserTypeIdx() != 3) { // 관리자 회원 검증
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
+		}
+		int userIdx = loginAdmin.getIdx(); // 로그인여부, 관리자 회원 검증
 
 		int result = adminDonationService.deleteAdminDonation(idx);
 
@@ -254,26 +288,6 @@ public class AdminDonationController {
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "지원사업 삭제 실패"));
 		}
-	}
-
-	/**
-	 * (공통) 로그인 및 괸리자 검증 메서드
-	 * 
-	 * @param session 로그인 검증 세션
-	 * 
-	 * @return 관리자 계정으로 로그인 확인
-	 */
-	public LoginResponseDTO adminUserCheck(HttpSession session) {
-		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
-
-		if (loginAdmin == null) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 후 이용가능");
-		}
-		if (loginAdmin.getUserTypeIdx() != 3) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "관리자 회원만 접근 가능");
-		}
-
-		return loginAdmin;
 	}
 
 }
