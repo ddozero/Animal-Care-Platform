@@ -206,9 +206,71 @@
     background-color: #ffeedf;
     font-weight: bold;
   }
-/* **************    */
+/****************************/
+
+/*내 정보 수정*/
+
+
+#info-edit-form label {
+  display: inline-block;
+  width: 100%;
+  font-weight: bold;
+}
+
+#info-edit-form label span {
+  display: inline-block;
+  width: 100px;           /* 라벨 너비 고정 */
+  vertical-align: middle;
+}
+
+#info-edit-form input[type="text"],
+#info-edit-form input[type="password"],
+#info-edit-form input[type="date"],
+#info-edit-form input[type="email"] {
+  display: inline-block;
+  width: 200px;           /* input 고정 너비 */
+  padding: 3px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+#info-edit-form input[readonly] {
+  background-color: #f5f5f5;
+}
+
+#info-edit-form button {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #e0e0e0;
+  vertical-align: middle;
+}
+
+#info-edit-form .submit-btn {
+  display: block;
+  margin-top: 20px;
+  padding: 10px 16px;
+  background-color: #53D9C1;
+  color: white;
+  font-weight: bold;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+}
+
+
+/*********************/
+
 
 </style>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadRecaptcha&render=explicit" async defer></script>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
@@ -244,8 +306,10 @@
 
 	</div>
 </div>
-<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+<!--도로명 주소 레이어 -->
+<div id="addressLayer" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;width:400px;height:500px;border:1px solid #888;box-shadow:0 0 10px rgba(0,0,0,0.3);background:#fff;"></div>
 
+<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 <script>
   // 0. context-path 주입 (EL 충돌 방지)
   const root = '<%= request.getContextPath() %>';
@@ -346,7 +410,7 @@
     // html 변수를 반드시 선언·초기화!
     let html = ''
       + '<div class="user-greeting">'
-      + '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
+      + '<h2> 나의 봉사 활동 기록 ☀️</h2>'
       + '<button class="edit-btn">내 정보 수정</button>'
       + '</div>'
       + '<div class="history-box">'
@@ -510,7 +574,7 @@
     const main = document.querySelector(".main-content");
     let html = ''
     + '<div class="user-greeting">'
-      +   '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
+      +   '<h2> 내가 입양한 동물 친구들 ☀️</h2>'
       +   '<button class="edit-btn">내 정보 수정</button>'
       + '</div>'
       + '<div class="history-box">'
@@ -687,7 +751,7 @@ document.querySelectorAll("#adoption-detail-panel .close-btn").forEach(btn => {
     const main = document.querySelector(".main-content");
     let html = ''
       + '<div class="user-greeting">'
-      + '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
+      + '<h2> 내가 후원한 이야기들 ☀️</h2>'
       + '<button class="edit-btn">내 정보 수정</button>'
       + '</div>'
       + '<div class="history-box">'
@@ -797,12 +861,12 @@ document.querySelectorAll("#adoption-detail-panel .close-btn").forEach(btn => {
     var main = document.querySelector(".main-content");
     var html = ''
       + '<div class="user-greeting">'
-      +   '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
+      +   '<h2> 내가 남긴 따뜻한 발자국들 ☀️</h2>'
       +   '<button class="edit-btn">내 정보 수정</button>'
       + '</div>';
 
     // ✏️ 내가 쓴 글
-    html += '<div class="history-box">'
+    html += '<div class="history-box" >'
          + '<h3>✏️ 내가 쓴 글</h3>'
          + '<table class="board-table">'
          + '<thead><tr><th>작성번호</th><th>글 제목</th><th>작성자</th><th>작성날짜</th><th>조회수</th></tr></thead>'
@@ -881,8 +945,369 @@ document.querySelectorAll("#adoption-detail-panel .close-btn").forEach(btn => {
   }
 </script>
 
+<!-- 내 정보 수정-->
+<script>
+
+// 내 정보 수정 버튼 클릭 시 이벤트
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("edit-btn")) {
+    renderPasswordCheckForm();  // 비밀번호 확인 화면 표시
+  }
+});
+
+//비밀번호 확인 화면 렌더 
+function renderPasswordCheckForm() {
+  const main = document.querySelector(".main-content");
+  let html = ''
+    + '<div class="user-greeting">'
+    +   '<h2>' + (userInfo?.username || '사용자') + ' 님, 본인 확인을 먼저 해주세요 🔒</h2>'
+    + '</div>'
+    + '<div class="history-box">'
+    +   '<h3>비밀번호 확인</h3>'
+    +   '<input type="password" id="password-check" placeholder="현재 비밀번호 입력" style="padding:10px; width: 100%; max-width: 300px;" />'
+    +   '<button id="btn-password-verify" style="margin-top:12px; padding:10px 16px; background:#53D9C1; color:#fff; border:none; border-radius:4px; cursor:pointer;">확인</button>'
+    + '</div>';
+  main.innerHTML = html;
+
+  document.getElementById("btn-password-verify").addEventListener("click", () => {
+    const password = document.getElementById("password-check").value.trim();
+    if (!password) return alert("비밀번호를 입력해주세요.");
+
+    fetch(root + '/api/mypage/information/modify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    })
+    .then(res => res.json())
+    .then(json => {
+      if (json.status === 200) {
+        userInfo = json.data;
+        renderUserInfoEditForm(); //  성공 시 정보 수정 폼 출력
+      } else {
+        alert(json.errorMsg || "비밀번호가 일치하지 않습니다.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("서버 오류입니다.");
+    });
+  });
+}
+
+// 내 정보 수정 화면 렌더
+function renderUserInfoEditForm() {
+  const main = document.querySelector(".main-content");
+
+  const {
+    id, email, password, name, nickname,
+    birthDate, tel, zipCode, address, addressDetail, gender
+  } = userInfo;
+
+  let html = ''
+    + '<div class="user-greeting">'
+    +   '<h2>' + name + ' 님, 정보를 수정하세요 🛠️</h2>'
+    + '</div>'
+    + '<div class="history-box">'
+    +   '<h3>내 정보 수정</h3>'
+    +   '<form id="info-edit-form">'
+
+    // ID (수정 불가)
+    +   '<label>아이디: <input type="text" value="' + id + '" readonly style="background-color:#f5f5f5;" /></label><br><br>'
+
+    // 비밀번호 (텍스트 + 버튼)
+    +     '<label>비밀번호: '
+    +       '<input type="password" value="********" readonly style="background-color:#f5f5f5;" /> '
+    +       '<button type="button" id="btn-password-change" style="margin-left:10px;">비밀번호 변경</button>'
+    +     '</label><br><br>'
+
+    // 이름
+    +     '<label>이름: <input type="text" name="name" value="' + name + '" required /></label><br><br>'
+
+    // 닉네임
+    +     '<label>닉네임: <input type="text" name="nickname" value="' + nickname + '" required /></label><br><br>'
+
+    // 생년월일
+    +     '<label>생년월일: <input type="date" name="birthDate" value="' + birthDate + '" required /></label><br><br>'
+
+    // 전화번호
+    +     '<label>전화번호: <input type="text" name="tel" value="' + tel + '" required /></label><br><br>'
+
+    // 성별
+    +     '<label>성별: '
+    +       '<input type="radio" name="gender" value="M" ' + (gender === 'M' ? 'checked' : '') + '> 남 '
+    +       '<input type="radio" name="gender" value="F" ' + (gender === 'F' ? 'checked' : '') + '> 여'
+    +     '</label><br><br>'
+
+    // 이메일 (텍스트 + 버튼)
+    +     '<label>이메일: '
+    +       '<input type="text" value="' + email + '" readonly style="background-color:#f5f5f5;" /> '
+    +       '<button type="button" id="btn-email-change" style="margin-left:10px;">이메일 변경</button>'
+    +     '</label><br><br>'
+
+    // 주소
+    + '<label>우편번호: '
+    +   '<input type="text" id="zipCode" name="zipCode" value="' + zipCode + '" readonly /> '
+    +   '<button type="button" id="btn-address-search">우편번호 찾기</button>'
+    + '</label><br><br>'
+
+    + '<label>주소: <input type="text" id="address" name="address" value="' + address + '" readonly /></label><br><br>'
+
+    + '<label>상세주소: <input type="text" name="addressDetail" value="' + addressDetail + '" /></label><br><br>'
+
+    // 제출
+    +     '<button type="submit" style="padding:10px 16px; background:#53D9C1; color:#fff; border:none; border-radius:4px;">수정 완료</button>'
+    +   '</form>'
+    + '</div>';
+
+  main.innerHTML = html;
+
+  // (1) 주소 검색 버튼 바인딩
+  document.getElementById("btn-address-search").addEventListener("click", function() {
+  new daum.Postcode({
+    oncomplete: function(data) {
+      document.getElementById("zipCode").value = data.zonecode;
+      document.getElementById("address").value = data.roadAddress;
+    }
+  }).open();
+});
 
 
+  //  수정 전송
+  document.getElementById("info-edit-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch(root + '/api/mypage/information/update', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(json => {
+      if (json.status === 200) {
+        alert("정보가 성공적으로 수정되었습니다.");
+        location.reload(); // 또는 updateMypage(json.data) 호출
+      } else {
+        alert(json.errorMsg || "수정에 실패했습니다.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("서버 오류입니다.");
+    });
+  });
+
+}
+
+
+// 비밀번호 변경 
+document.addEventListener("click", function (e) {
+  if (e.target.id === "btn-password-change") {
+    renderPasswordChangeForm();
+  }
+});
+
+function renderPasswordChangeForm() {
+  const main = document.querySelector(".main-content");
+
+  // HTML 구성
+  const html = `
+    <div class="user-greeting">
+      <h2>비밀번호 변경 🔐</h2>
+    </div>
+    <div class="history-box">
+      <form id="password-change-form">
+        <label>현재 비밀번호<br>
+          <input type="password" name="currentPassword" required />
+        </label><br><br>
+        <label>새 비밀번호<br>
+          <input type="password" name="newPassword" required />
+        </label><br><br>
+        <label>새 비밀번호 확인<br>
+          <input type="password" name="confirmPassword" required />
+        </label><br><br>
+        <!-- explicit 렌더용 컨테이너 -->
+        <div id="recaptcha-container"></div><br>
+        <button type="submit"
+                style="padding:10px 16px; background:#53D9C1; color:#fff; border:none; border-radius:4px;">
+          변경하기
+        </button>
+      </form>
+    </div>`;
+
+  main.innerHTML = html;
+
+  // 스크립트가 이미 로드되었으면 바로 렌더,
+  // 아니면 onloadRecaptcha 콜백에서 렌더
+  if (window.grecaptcha) {
+    onloadRecaptcha();
+  }
+
+    // 3) onloadRecaptcha 콜백(전역)에 렌더 로직 정의
+  function onloadRecaptcha() {
+  grecaptcha.render('recaptcha-container', {
+    'sitekey': '6LfDx2grAAAAAKaMfsjIo7JaJrGEkaNFeYLlC4GB'
+  });
+}
+
+  // 폼 제출 처리
+  document.getElementById("password-change-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const currentPassword = formData.get("currentPassword").trim();
+    const newPassword = formData.get("newPassword").trim();
+    const confirmPassword = formData.get("confirmPassword").trim();
+
+    // 유효성 검사
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      alert("모든 비밀번호 항목을 입력해주세요.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    // ✅ grecaptcha 토큰
+    const captcha = grecaptcha.getResponse();
+    if (!captcha) {
+      alert("보안문자를 완료해주세요.");
+      return;
+    }
+
+    try {
+      const res = await fetch(root + "/api/mypage/information/password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+          confirmPassword,
+          captcha
+        })
+      });
+
+      const json = await res.json();
+      if (res.ok && json.status === 200) {
+        alert("비밀번호가 성공적으로 변경되었습니다.");
+        location.reload();
+      } else {
+        alert(json.errorMsg || "비밀번호 변경 실패");
+        grecaptcha.reset(); // 실패 시 보안문자 리셋
+      }
+    } catch (err) {
+      console.error("서버 오류:", err);
+      alert("서버 오류가 발생했습니다.");
+    }
+  });
+}
+
+//////////////////////////////
+// 1) 이메일 변경 버튼 클릭 바인딩
+document.addEventListener("click", function(e) {
+  if (e.target.id === "btn-email-change") {
+    renderEmailChangeForm();
+  }
+});
+
+function renderEmailChangeForm() {
+  const main = document.querySelector(".main-content");
+  
+  // userInfo.email 은 이전에 /api/mypage/screen/info 로 불러왔던 userInfo 객체의 email 필드
+  const current = userInfo.email || "";
+
+  // 2) HTML 구성: 현재 이메일, 새 이메일, 인증번호 받기, 코드 입력, 제출 버튼
+  main.innerHTML = `
+    <div class="user-greeting">
+      <h2>이메일 변경 </h2>
+    </div>
+    <div class="history-box">
+      <form id="email-change-form">
+        <label>현재 이메일<br>
+          <input type="email" name="currentEmail" />
+        </label><br><br>
+        <label>새 이메일<br>
+          <input type="email" id="newEmail" name="newEmail" required />
+          <button type="button" id="send-email-code-btn" style="margin-left:8px;">
+            인증번호 받기
+          </button>
+        </label><br><br>
+        <label>인증번호 입력<br>
+          <input type="text" id="emailCode" name="code" required />
+        </label><br><br>
+        <button type="submit"
+                style="padding:8px 16px; background:#53D9C1; color:#fff; border:none; border-radius:4px;">
+          이메일 변경
+        </button>
+      </form>
+    </div>
+  `;
+
+  // 3) “인증번호 받기” 클릭 → 코드 전송
+  document
+    .getElementById("send-email-code-btn")
+    .addEventListener("click", async () => {
+      const newEmail = document.getElementById("newEmail").value.trim();
+      if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+        return alert("올바른 새 이메일을 입력해주세요.");
+      }
+      try {
+        const res = await fetch(`${root}/api/email/find/change/send-code`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: newEmail })
+        });
+        const json = await res.json();
+        if (res.ok && json.status === 200) {
+          alert("이메일 변경용 인증번호가 전송되었습니다.");
+        } else {
+          alert(json.errorMsg || "인증번호 전송 실패");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("서버 오류로 인증번호 전송에 실패했습니다.");
+      }
+    });
+
+  // 4) 폼 제출 → 최종 이메일 변경
+  document
+    .getElementById("email-change-form")
+    .addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const currentEmail = this.currentEmail.value.trim();
+      const newEmail     = this.newEmail.value.trim();
+      const code         = this.code.value.trim();
+
+      if (!newEmail || !code) {
+        return alert("새 이메일과 인증번호를 모두 입력해주세요.");
+      }
+
+      try {
+        const res = await fetch(`${root}/api/mypage/information/email`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ currentEmail, newEmail, code })
+        });
+        const json = await res.json();
+        if (res.ok && json.status === 200) {
+          alert("이메일이 성공적으로 변경되었습니다.");
+          location.reload();
+        } else {
+          alert(json.errorMsg || "이메일 변경에 실패했습니다.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("서버 오류가 발생했습니다.");
+      }
+    });
+}
+
+
+</script>
   
 </body>
 </html>

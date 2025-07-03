@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.animal.api.auth.exception.CustomException;
-import com.animal.api.common.service.CaptchaServiceTest;
+import com.animal.api.common.service.CaptchaService;
 import com.animal.api.email.mapper.CertificationMapper;
 import com.animal.api.email.model.vo.CertificationVO;
 import com.animal.api.mypage.information.modify.mapper.InformationModifyMapper;
@@ -27,14 +27,7 @@ public class InformationModifyServiceImple implements InformationModifyService {
 	private final InformationModifyMapper informationModifyMapper;
 	private final BCryptPasswordEncoder  passwordEncoder;
 	private final CertificationMapper certificationMapper;
-	private final CaptchaServiceTest captchaService;  // 추후 프론트 개발 시 실제 캡챠랑 연동
-	
-	/**
-	 * @Value("${google.recaptcha.secret}") 프론트 구현 단계 시 연결 예정
-       private String recaptchaSecretKey;  외부 설정으로 주입
-	 */
-    @Value("${google.recaptcha.secret}")
-    private String recaptchaSecretKey; // ← 외부 설정으로 주입
+	private final CaptchaService captchaService;  
 
 	/**
 	 * 내 정보 출력 구현체
@@ -86,7 +79,7 @@ public class InformationModifyServiceImple implements InformationModifyService {
 		//4.변경 완료
 		String encoded = passwordEncoder.encode(dto.getNewPassword());
 		informationModifyMapper.updatePassword(userIdx, encoded);
-	}	
+	}
 	
 	/**
 	 * 내 이메일 변경 구현체

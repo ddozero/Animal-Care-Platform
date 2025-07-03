@@ -48,5 +48,6 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(new ErrorResponseDTO(400, message));
 	}
 
+	
 
 }

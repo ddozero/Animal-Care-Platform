@@ -1,16 +1,18 @@
 package com.animal.api.mypage.information.modify.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.animal.api.auth.exception.CustomException;
 import com.animal.api.auth.model.response.LoginResponseDTO;
 import com.animal.api.common.aop.util.SessionUtils;
 import com.animal.api.common.model.OkResponseDTO;
@@ -41,7 +43,7 @@ public class InformationModifyController {
 	 * @param request 세션의 정보
 	 * @return userInfo 로그인 한 유저의 내 정보 목록
 	 */
-	@GetMapping("/modify")
+	@PostMapping("/modify")
 	public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
 
 		LoginResponseDTO loginUser = SessionUtils.getLoginUser(request);
