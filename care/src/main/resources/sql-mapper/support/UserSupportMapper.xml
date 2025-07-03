@@ -74,9 +74,6 @@ FROM
 <if test = "title != null and title!= ''">
 	AND TITLE LIKE CONCAT('%', #{title}, '%')
 </if>
-<if test = "content != null and content!= ''">
-	AND CONTENT LIKE CONCAT('%', #{content}, '%')
-</if>
 <if test = "true">
 	AND BOARD_TYPE_IDX = 1
 </if>
@@ -95,9 +92,6 @@ FROM
 <where>
 <if test = "title != null and title!= ''">
 	AND TITLE LIKE CONCAT('%', #{title}, '%')
-</if>
-<if test = "content != null and content!= ''">
-	AND CONTENT LIKE CONCAT('%', #{content}, '%')
 </if>
 <if test = "true">
 	AND BOARD_TYPE_IDX = 1

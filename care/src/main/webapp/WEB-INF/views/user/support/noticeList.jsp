@@ -107,7 +107,7 @@
 
 .search-bar input[type="text"] {
     flex-grow: 1;
-    color: #999;
+    color: #333;
 }
 
 .search-bar input[type="submit"] {
@@ -225,16 +225,18 @@ async function noticeList(cp) {
     const keyword = form.keyword.value;
     
     const params = new URLSearchParams();
+
     
     if (type) params.append("type", type);
     if (keyword) params.append("keyword", keyword);
 
+    
     params.set("cp", cp); // 페이지 번호
 
     const result = await API.get("/care/api/support?" + params.toString());
 
     if (result.status !== 200) {
-      alert("공지사항 목록을 불러오는 데 실패했습니다. (" + result.message + ")");
+      alert("공지사항이 존재하지 않습니다. (" + result.message + ")");
       return;
     }
 
