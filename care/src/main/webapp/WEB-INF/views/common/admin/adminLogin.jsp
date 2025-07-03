@@ -122,7 +122,7 @@
     <body>
         <div class="login-wrapper">
           <div class="login-container">
-            <h2>로그인</h2>
+            <h2>관리자 로그인</h2>
 
             <input type="text" id="id" name="id" placeholder="아이디 입력" class="login-input" />
             <input type="password" id="password" name="password" placeholder="비밀번호 입력" class="login-input" />
