@@ -128,7 +128,7 @@ JOIN VOLUNTEER_STATUS VS ON
 		AND VS.NAME = #{status}
 	</if>
 	<if test="shelter != null and shelter !=''">
-		AND S.SHELTER_NAME = #{shelter}
+		AND S.SHELTER_NAME LIKE '%${shelter}%'
 	</if>
 	<if test="shelterType !=null and shelterType !=''">
 		AND ST.NAME = #{shelterType}

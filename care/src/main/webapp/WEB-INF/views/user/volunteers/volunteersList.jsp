@@ -83,7 +83,7 @@
     border: none;
     background: #fff;
     padding: 6px 12px;
-    margin: 0;
+    margin: 0 2px;
     border-radius: 4px;
     cursor: pointer;
     box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
@@ -177,7 +177,20 @@
    text-align: center;
 }
 
+.reset-link {
+    font-size: 14px;
+    color: #666;
+    text-decoration: underline;
+    cursor: pointer;
+}
 
+.btn-area {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
 </style>
 
 </head>
@@ -228,7 +241,7 @@
 	
 	      <div class="search-group">
 	        <label for="companyType">업체</label>
-	        <select id="companyType" name="companyType">
+	        <select id="companyType" name="shelterType">
 	          <option value="">전체</option>
 	          <option value="공공">공공</option>
 	          <option value="민간">민간</option>
@@ -238,42 +251,47 @@
 	
 	      <div class="search-group">
 	        <label for="volunteerType">봉사 유형</label>
-	        <select id="volunteerType" name="volunteerType">
+	        <select id="volunteerType" name="type">
 	          <option value="">전체</option>
-	          <option value="산책">산책</option>
-	          <option value="청소">청소</option>
+	          <option value="산책봉사">산책봉사</option>
+	          <option value="청소봉사">청소봉사</option>
 	          <option value="기타">기타</option>
 	        </select>
 	      </div>
 	
 	      <div class="search-group">
 	        <label for="hours">인정시간</label>
-	        <select id="hours" name="hours">
+	        <select id="hours" name="time">
 	          <option value="">전체</option>
 	          <option value="1">1시간</option>
 	          <option value="2">2시간</option>
 	          <option value="3">3시간</option>
 	          <option value="4">4시간</option>
 	          <option value="5">5시간</option>
+	          <option value="">5시간이상</option>
 	        </select>
 	      </div>
 	    </div>
 	
-	    <div class="search-row">
+	   <div class="search-row">
 	      <div class="search-group">
 	        <label for="companyName">업체명</label>
-	        <input type="text" id="companyName" name="companyName" placeholder="업체명을 입력하세요">
+	        <input type="text" id="companyName" name="shelter" placeholder="업체명을 입력하세요">
 	      </div>
 	
 	      <div class="search-group">
 	        <label for="volunteerDate">봉사일</label>
 	        <input type="date" id="volunteerDate" name="volunteerDate">
 	      </div>
-	
-	      <div class="search-group" style="align-self: end;">
-	        <button type="submit">검색</button>
-	      </div>
+	      
+		 <div class="btn-area">
+		      <div class="search-group-bt" style="align-self: end;">
+		      	<a class="reset-link" onclick="resetSearchForm()">검색 설정 초기화</a>
+		        <button type="submit">검색</button>
+		      </div>
 	    </div>
+	   </div>
+
 
   </form>
 </section>
@@ -317,12 +335,14 @@
 
     const form = document.getElementById("searchForm");
     const params = new URLSearchParams(new FormData(form));
+    
+    
     params.set("cp", cp);  // 현재 페이지 번호 세팅
 
     try {
         const result = await API.get("/care/api/volunteers?" + params.toString());
 
-        if (result.status !== 200 || !Array.isArray(result.data)) {
+        if (result.status !== 200 || !Array.isArray(result.data) || result.data.length === 0) {
             const row = document.createElement("tr");
             row.innerHTML = '<td colspan="9" style="text-align:center;">등록된 봉사활동이 없습니다.</td>';
             tbody.appendChild(row);
@@ -371,6 +391,11 @@
 	  function searchVolunteers() {
 	    volunteerList(1);
 	  }
+	  
+	  function resetSearchForm() {
+		  document.getElementById('searchForm').reset();
+		  volunteerList(1); // 초기화 후 봉사목록 1페이지 호출
+		}
 
 </script>
 
