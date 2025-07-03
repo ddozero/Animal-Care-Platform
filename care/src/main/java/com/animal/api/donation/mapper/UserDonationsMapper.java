@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
 import com.animal.api.donation.model.request.DonationRequestDTO;
@@ -34,7 +33,7 @@ public interface UserDonationsMapper {
 
 	public int updateDonationComment(DonationCommentUpdateRequestDTO dto);
 
-	public int deleteDonationComment(DonationCommentDeleteRequestDTO dto);
+	public int deleteDonationComment(Map map);
 
 	public int getDonationUserPoint(int idx);
 

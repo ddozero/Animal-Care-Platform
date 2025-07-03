@@ -24,7 +24,6 @@ import com.animal.api.common.model.ErrorResponseDTO;
 import com.animal.api.common.model.OkPageResponseDTO;
 import com.animal.api.common.model.OkResponseDTO;
 import com.animal.api.common.model.PageInformationDTO;
-import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
 import com.animal.api.donation.model.request.DonationRequestDTO;
@@ -161,7 +160,7 @@ public class UserDonationsController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-
+		dto.setUserIdx(loginUser.getIdx());
 		Map resultMap = service.addDonationComment(dto);
 
 		if ((int) resultMap.get("result") == service.POST_SUCCESS) {
@@ -190,7 +189,7 @@ public class UserDonationsController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-
+		dto.setUserIdx(loginUser.getIdx());
 		Map resultMap = service.updateDonationComment(dto);
 
 		if ((int) resultMap.get("result") == service.POST_SUCCESS) {
@@ -213,14 +212,13 @@ public class UserDonationsController {
 	 */
 	@DeleteMapping("{donationIdx}/comments/{donationCommentIdx}")
 	public ResponseEntity<?> deleteDonationComment(@PathVariable int donationIdx, @PathVariable int donationCommentIdx,
-			@RequestBody DonationCommentDeleteRequestDTO dto, HttpSession session) {
+			HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
-
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
 
-		Map resultMap = service.deleteDonationComment(dto);
+		Map resultMap = service.deleteDonationComment(donationCommentIdx, loginUser.getIdx());
 
 		if ((int) resultMap.get("result") == service.DELETE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK)
@@ -277,7 +275,7 @@ public class UserDonationsController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-
+		dto.setUserIdx(loginUser.getIdx());
 		Map resultMap = service.addDonation(dto, loginUser.getIdx());
 
 		if ((int) resultMap.get("result") == service.POST_SUCCESS) {

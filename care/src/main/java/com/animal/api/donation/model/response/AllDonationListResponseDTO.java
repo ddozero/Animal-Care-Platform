@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class AllDonationListResponseDTO {
 	private int idx;
 	private String name;
-	private String sponser;
+	private String sponsor;
 	private int completionRate;
 	private int completionAmount;
 	private String status;
