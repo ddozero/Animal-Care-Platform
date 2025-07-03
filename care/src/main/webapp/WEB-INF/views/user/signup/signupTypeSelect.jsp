@@ -18,7 +18,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 30px 30px;
+      padding: 70px 30px;
     }
 
     h2 {

@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class VolunteerDetailResponseDTO {
 
     private int volunteerRequestIdx; // 신청 고유 번호
+    private int applyRequestIdx; 
 
     private String title;             // 봉사 제목
     private String content;           // 봉사 본문

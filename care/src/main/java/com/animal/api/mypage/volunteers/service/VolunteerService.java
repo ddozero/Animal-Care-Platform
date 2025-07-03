@@ -14,7 +14,7 @@ public interface VolunteerService {
     List<VolunteerListResponseDTO> getVolunteerListByUserIdx(int userIdx);
     
     // 봉사 상세 내역
-    VolunteerDetailResponseDTO getVolunteerDetailByRequestIdx(int volunteerRequestIdx);
+    VolunteerDetailResponseDTO getVolunteerDetailByRequestIdx(int volunteerRequestIdx, int userIdx);
     
     // 후기 작성
     boolean writeVolunteerReview(int userIdx, VolunteerReviewWriteRequestDTO dto, MultipartFile image);
