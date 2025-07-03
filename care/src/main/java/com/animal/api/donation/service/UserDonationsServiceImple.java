@@ -244,31 +244,47 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		Map map = new HashMap();
 		int result = 0;
 		String msg = null;
-		Boolean errorCheck = false;
 		int userPoint = getDonationUserPoint(userIdx);
 		if (userPoint < dto.getDonatedAmount()) {
 			result = INSUFFICIENT_POINT;
 			msg = "보유하신 포인트가 부족합니다.";
-			errorCheck = true;
+			map.put("result", result);
+			map.put("msg", msg);
+			return map;
 		}
 
-		if (!errorCheck) {
-			int donationDetailInsert = mapper.addDonation(dto);
-			int donationUpdate = mapper.updateDonation(dto);
-			int userUpdate = mapper.updateUserPoint(dto);
-
-			if (donationDetailInsert > 0 && donationUpdate > 0 && userUpdate > 0) {
-				result = POST_SUCCESS;
-				msg = "기부 성공";
-			} else {
-				result = ERROR;
-				msg = "잘못된 접근";
-				throw new RuntimeException("기부 처리 중 오류 발생: 트랜잭션 롤백");
-			}
+		int donationDetailInsert = mapper.addDonation(dto);
+		if (donationDetailInsert <= 0) {
+			result = ERROR;
+			msg = "잘못된 접근";
+			map.put("result", result);
+			map.put("msg", msg);
+			return map;
 		}
+
+		int donationUpdate = mapper.updateDonation(dto);
+		if (donationUpdate <= 0) {
+			result = ERROR;
+			msg = "현재 완료된 기부입니다.";
+			map.put("result", result);
+			map.put("msg", msg);
+			return map;
+		}
+		int userUpdate = mapper.updateUserPoint(dto);
+		if (userUpdate <= 0) {
+			result = ERROR;
+			msg = "고객센터에 문의해 주세요";
+			map.put("result", result);
+			map.put("msg", msg);
+			return map;
+
+		}
+		result = POST_SUCCESS;
+		msg = "기부 성공";
 		map.put("result", result);
 		map.put("msg", msg);
 		return map;
 
 	}
+
 }

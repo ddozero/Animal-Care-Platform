@@ -275,7 +275,7 @@ public class UserDonationsController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-
+		dto.setUserIdx(loginUser.getIdx());
 		Map resultMap = service.addDonation(dto, loginUser.getIdx());
 
 		if ((int) resultMap.get("result") == service.POST_SUCCESS) {

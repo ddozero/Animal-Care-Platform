@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Insert title here</title>
+		<title>기부 메인 페이지</title>
 		<style>
 			.banner-image {
 				width: 300px;
@@ -25,7 +25,6 @@
 
 				const result = await API.get('/care/api/donations?cp=' + cp);
 				if (result.status != 200) {
-					alert("기부 리스트 전체 조회 실패");
 					history.back();
 					return;
 				}
