@@ -32,7 +32,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 200px); /* header/footer 여백 고려 */
+  height: calc(85vh - 170px); 
   background-color: #ffffff;
 }
 

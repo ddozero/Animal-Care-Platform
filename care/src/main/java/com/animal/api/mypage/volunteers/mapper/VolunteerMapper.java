@@ -16,7 +16,7 @@ public interface VolunteerMapper {
 	List<VolunteerListResponseDTO> findVolunteerListByUserIdx (int userIdx);
 	
 	//봉사 상세 내역
-	VolunteerDetailResponseDTO findVolunteerDetailByRequestIdx(@Param("volunteerRequestIdx") int volunteerRequestIdx);
+	VolunteerDetailResponseDTO findVolunteerDetailByRequestIdx(@Param("volunteerRequestIdx") int volunteerRequestIdx,  @Param("userIdx") int userIdx);
 	
     // 1. 참여완료 상태인지 확인
     boolean isCompletedVolunteerRequest(@Param("userIdx") int userIdx, @Param("volunteerRequestIdx") int volunteerRequestIdx);

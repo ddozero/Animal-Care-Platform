@@ -166,6 +166,47 @@
 }
 
 /* **************    */
+/*내가 쓴 글 */
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .board-table th, .board-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+  }
+
+  .board-table tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  .pagination {
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  .pagination button {
+    margin: 0 3px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .pagination button:hover {
+    background-color: #ddd;
+  }
+
+  .pagination button[style*="bold"] {
+    background-color: #ffeedf;
+    font-weight: bold;
+  }
+/* **************    */
 
 </style>
 </head>
@@ -409,7 +450,7 @@
       const file = fileInput.files[0] || null;
 
       const formData = new FormData();
-      formData.append('volunteerRequestIdx', detail.volunteerRequestIdx);
+      formData.append('volunteerRequestIdx', detail.applyRequestIdx);
       formData.append('content', content);
       if (file) formData.append('image', file);
 
@@ -500,10 +541,8 @@
 
     // (Optional) 클릭 시 상세보기 바인딩
     document.querySelectorAll(".adoption-item").forEach(item => {
-      console.log("▶️ item.dataset.idx =", item.dataset.idx);
       item.addEventListener("click", () => {
         const idx = Number(item.dataset.idx);
-        console.log("▶️ 클릭된 idx =", idx);
         if (!idx) {
       return alert("잘못된 항목입니다. idx:", item.dataset.idx);
        }
@@ -546,7 +585,6 @@
       + '<p><strong>품종번호:</strong> ' + detail.breedIdx + '</p>'
       + '<p><strong>보호소 이름:</strong> ' + detail.shelterName + '</p>'
       + '<p><strong>입양 상태:</strong> ' + detail.statusText + '</p>'
-      + '<p><strong>품종 번호:</strong> ' + detail.breedIdx + '</p>'
       + '<p><strong>품종 이름:</strong> ' + detail.breed + '</p>'
       + '<p><strong>성별:</strong> ' + (detail.gender === 'M' ? '남' : '여') + '</p>'
       + '<p><strong>나이:</strong> ' + detail.age + ' 살</p>'
@@ -703,5 +741,148 @@ document.querySelectorAll("#adoption-detail-panel .close-btn").forEach(btn => {
 </script>
 
 
+<!-- 활동내역 -->
+<script>
+  document.getElementById("btn-activity").addEventListener("click", () => {
+    loadActivityPage();
+  });
+
+  function loadActivityPage(pageWritten = 1, pageLiked = 1) {
+    fetch(root + '/api/mypage/board/activity?pageWritten=' + pageWritten + '&pageLiked=' + pageLiked)
+      .then(res => res.json())
+      .then(payload => {
+        if (payload.status === 200 && payload.data) {
+          renderActivityHistory(payload.data, pageWritten, pageLiked);
+        } else {
+          alert(payload.errorMsg || "활동 내역을 불러올 수 없습니다.");
+        }
+      })
+      .catch(err => console.error("활동 내역 불러오기 실패:", err));
+  }
+
+  function createPaginationHTML(currentPage, totalPages, btnClass) {
+    if (totalPages <= 1) return ''; // 페이지 수 1 이하면 페이징 없음
+
+    var html = '';
+    var maxPages = 5;
+    var startPage = Math.floor((currentPage - 1) / maxPages) * maxPages + 1;
+    var endPage = Math.min(startPage + maxPages - 1, totalPages);
+
+    // ◀ 이전 그룹
+    if (startPage > 1) {
+      html += '<button class="' + btnClass + '" data-page="' + (startPage - 1) + '">&lt;</button>';
+    }
+
+    // 숫자 버튼들
+    for (var i = startPage; i <= endPage; i++) {
+      html += '<button class="' + btnClass + '" data-page="' + i + '"'
+           + (i === currentPage ? ' style="font-weight:bold;"' : '') + '>' + i + '</button>';
+    }
+
+    // ▶ 다음 그룹
+    if (endPage < totalPages) {
+      html += '<button class="' + btnClass + '" data-page="' + (endPage + 1) + '">&gt;</button>';
+    }
+
+    return html;
+  }
+
+  function renderActivityHistory(data, pageWritten, pageLiked) {
+    var written = data.written;
+    var liked = data.liked;
+
+    var writtenTotalPages = Math.ceil((written?.totalCount || 0) / 5); // 5개씩 
+    var likedTotalPages = Math.ceil((liked?.totalCount || 0) / 5); 
+
+    var main = document.querySelector(".main-content");
+    var html = ''
+      + '<div class="user-greeting">'
+      +   '<h2>' + (userInfo?.username || '사용자') + ' 님, 오늘도 따뜻한 하루 보내세요 ☀️</h2>'
+      +   '<button class="edit-btn">내 정보 수정</button>'
+      + '</div>';
+
+    // ✏️ 내가 쓴 글
+    html += '<div class="history-box">'
+         + '<h3>✏️ 내가 쓴 글</h3>'
+         + '<table class="board-table">'
+         + '<thead><tr><th>작성번호</th><th>글 제목</th><th>작성자</th><th>작성날짜</th><th>조회수</th></tr></thead>'
+         + '<tbody>';
+
+    if (written?.list?.length > 0) {
+      html += written.list.map(function(item) {
+        return '<tr class="activity-item" data-idx="' + item.boardIdx + '" data-type="' + item.boardType + '">'
+             + '<td>' + item.boardIdx + '</td>'
+             + '<td>' + item.title + '</td>'
+             + '<td>' + item.nickname + '</td>'
+             + '<td>' + item.createdAt + '</td>'
+             + '<td>' + item.views + '</td>'
+             + '</tr>';
+      }).join('');
+    } else {
+      html += '<tr><td colspan="5">작성한 글이 없습니다.</td></tr>';
+    }
+
+    html += '</tbody></table>'
+     + '<div class="pagination" id="written-pagination">'
+     + createPaginationHTML(pageWritten, writtenTotalPages, "written-page-btn")
+     + '</div>';
+
+    // ❤️ 좋아요한 글
+    html += '<div class="history-box" style="margin-top:40px;">'
+         + '<h3>❤️ 좋아요한 글</h3>'
+         + '<table class="board-table">'
+         + '<thead><tr><th>작성번호</th><th>글 제목</th><th>작성자</th><th>작성날짜</th><th>조회수</th></tr></thead>'
+         + '<tbody>';
+
+    if (liked?.list?.length > 0) {
+      html += liked.list.map(function(item) {
+        return '<tr class="activity-item" data-idx="' + item.boardIdx + '" data-type="' + item.boardType + '">'
+             + '<td>' + item.boardIdx + '</td>'
+             + '<td>' + item.title + '</td>'
+             + '<td>' + item.nickname + '</td>'
+             + '<td>' + item.createdAt + '</td>'
+             + '<td>' + item.views + '</td>'
+             + '</tr>';
+      }).join('');
+    } else {
+      html += '<tr><td colspan="5">좋아요한 글이 없습니다.</td></tr>';
+    }
+
+    html += '</tbody></table>'
+     + '<div class="pagination" id="liked-pagination">'
+     + createPaginationHTML(pageLiked, likedTotalPages, "liked-page-btn")
+     + '</div>';
+
+    main.innerHTML = html;
+
+    // 본문 이동
+    document.querySelectorAll(".activity-item").forEach(function(row) {
+      row.addEventListener("click", function() {
+        var boardIdx = row.dataset.idx;
+        var boardType = row.dataset.type;
+        location.href = root + '/boards/' + boardType + '/' + boardIdx;
+      });
+    });
+
+    // 페이징 이벤트
+    document.querySelectorAll(".written-page-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var page = Number(btn.dataset.page);
+        loadActivityPage(page, pageLiked);
+      });
+    });
+
+    document.querySelectorAll(".liked-page-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var page = Number(btn.dataset.page);
+        loadActivityPage(pageWritten, page);
+      });
+    });
+  }
+</script>
+
+
+
+  
 </body>
 </html>

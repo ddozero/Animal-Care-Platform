@@ -1,5 +1,8 @@
 package com.animal.api.mypage.board.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +72,24 @@ public class BoardController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<>(200, "좋아요한 게시글 조회 성공",
 				boardService.getLikedBoardListByUserIdx(loginUser.getIdx(), page)));
+	}
+	
+	@GetMapping("/activity")
+	public ResponseEntity<?> getActivity(
+	    HttpServletRequest request,
+	    @RequestParam(defaultValue = "1") int pageWritten,
+	    @RequestParam(defaultValue = "1") int pageLiked
+	) {
+	    LoginResponseDTO loginUser = SessionUtils.getLoginUser(request);
+	    if (loginUser == null) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	            .body(new OkResponseDTO<>(401, "로그인 정보가 없습니다", null));
+	    }
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("written", boardService.getWrittenBoardListByUserIdx(loginUser.getIdx(), pageWritten));
+	    result.put("liked", boardService.getLikedBoardListByUserIdx(loginUser.getIdx(), pageLiked));
+
+	    return ResponseEntity.ok(new OkResponseDTO<>(200, "활동 내역 조회 성공", result));
 	}
 }
