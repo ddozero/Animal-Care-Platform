@@ -526,6 +526,10 @@ async function ShelterInfo() {
         document.getElementById("tel").value = shelter.tel;
         document.getElementById("email").value = shelter.email;
         document.getElementById("description").value = shelter.description;
+        
+        document.getElementById("noticePaging").style.display = "none";
+        document.getElementById("reviewPagingVol").style.display = "none";
+        document.getElementById("reviewPagingAod").style.display = "none";
 
     } catch (error) {
         console.error("보호소 정보를 불러오는 중 오류가 발생했습니다: ", error);
