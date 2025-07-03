@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.donation.mapper.UserDonationsMapper;
-import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
 import com.animal.api.donation.model.request.DonationRequestDTO;
@@ -210,32 +209,24 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	}
 
 	@Override
-	public Map deleteDonationComment(DonationCommentDeleteRequestDTO dto) {
-		Map map = new HashMap();
+	public Map deleteDonationComment(int idx, int userIdx) {
 		int result = 0;
 		String msg = null;
-		Boolean errorCheck = false;
-		if (dto.getIdx() == 0) {
-			result = COMMENT_NOT_FOUND;
-			msg = "잘못된 접근:댓글정보없음";
-			errorCheck = true;
-		} else if (dto.getUserIdx() == 0) {
-			result = USER_NOT_FOUND;
-			msg = "잘못된 접근:유저정보없음";
-			errorCheck = true;
+
+		Map map = new HashMap<>();
+		map.put("idx", idx);
+		map.put("userIdx", userIdx);
+
+		int count = mapper.deleteDonationComment(map);
+
+		if (count > 0) {
+			result = DELETE_SUCCESS;
+			msg = "응원 댓글 삭제 성공";
+		} else {
+			result = ERROR;
+			msg = "잘못된 접근 또는 본인이 작성한 댓글이 아닙니다.";
 		}
 
-		if (!errorCheck) {
-			int count = mapper.deleteDonationComment(dto);
-
-			if (count > 0) {
-				result = DELETE_SUCCESS;
-				msg = "응원 댓글 삭제 성공";
-			} else {
-				result = ERROR;
-				msg = "잘못된 접근";
-			}
-		}
 		map.put("result", result);
 		map.put("msg", msg);
 		return map;

@@ -76,6 +76,41 @@
                     );
 
                 }
+                async function deleteComment(commentId) {
+                     //const commentDiv = button.closest(".donationComment"); // 버튼이 속한 댓글 div를 탐색
+                     //const commentUserId = parseInt(commentDiv.dataset.userId);//해당 댓글의 userIdx를 변수에 담음
+                     //const loginUserId = parseInt(document.body.dataset.loginUserId || "0");
+
+
+
+
+                    // if (!loginUserId) {
+                    //     alert("로그인 후 이용해주세요.");
+                    //     location.href = "/care/login";
+                    //     return;
+                    // }
+
+                    // if (loginUserId !== commentUserId) {
+                    //     alert("본인이 작성한 댓글만 삭제할 수 있습니다.");
+                    //     return;
+                    // }
+
+                    const confirmed = confirm("정말로 이 댓글을 삭제하시겠습니까?");
+                    if (!confirmed) return;
+
+                    const donationIdx = location.pathname.split("/").pop();
+
+
+
+                    const result = await API.delete('/care/api/donations/' + donationIdx + '/comments/' + commentId);
+
+                    if (result.status === 200) {
+                        alert("댓글이 삭제되었습니다.");
+                        donationCommentList(1); // 댓글 목록 갱신
+                    } else {
+                        alert("댓글 삭제에 실패했습니다.");
+                    }
+                }
 
                 async function donationCommentList(cp) {
 
@@ -96,7 +131,7 @@
                     for (const donationComment of donationComments) {
                         const card = document.createElement("div");
                         card.className = "donationComment";
-                        card.dataset.userId = donationComment.userIdx;
+                        card.dataset.userId = donationComment.userIdx;//댓글 전체 조회시 userIdx값 변수에 넣는 과정
                         card.dataset.commentId = donationComment.idx;
                         card.innerHTML =
                             '<div class="donationComment-nickname">' + donationComment.nickname + '</div>' +
@@ -163,12 +198,12 @@
 
                 function enterEditMode(button) {
                     const commentDiv = button.closest(".donationComment"); //하나의 댓글 정보를 변수에 담고
-                    const contentDiv = commentDiv.querySelector(".donationComment-content");//하나의 댓글의 본문 내용을 담고
-                    const originalContent = contentDiv.innerText;//본문 내용을 다시 변수에 담음
+                    const contentDiv = commentDiv.querySelector(".donationComment-content");//하나의 댓글의 원문 내용을 변수에 담고
+                    const originalContent = contentDiv.innerText;//원문 내용을 다시 변수에 담음
                     const commentId = parseInt(commentDiv.dataset.commentId);//댓글 idx를 변수에 담음
-                    const commentUserId = commentDiv.dataset.userId;//댓글의 userIdx를 변수에 담음
+                    const commentUserId = parseInt(commentDiv.dataset.userId);//댓글의 userIdx를 변수에 담음
 
-                    const loginUserId = parseInt(document.body.dataset.loginUserId || "0");
+                    const loginUserId = parseInt(document.body.dataset.loginUserId || "0"); //로그인했을때의 userIdx값
 
                     if (!loginUserId) {
                         alert("로그인 후 이용해주세요.");
@@ -176,14 +211,14 @@
                         return;
                     }
 
-                    if (parseInt(commentUserId) !== loginUserId) {
+                    if (commentUserId !== loginUserId) {
                         alert("본인이 작성한 댓글만 수정할 수 있습니다.");
                         return;
                     }
 
 
 
-                    contentDiv.innerHTML = '<textarea class="edit-area" rows="3">' + originalContent + '</textarea>';
+                    contentDiv.innerHTML = '<textarea class="edit-area" rows="3">' + originalContent + '</textarea>';//원문 댓글이 출력되는것을 textare로 바꿈
 
                     const buttonBox = commentDiv.querySelector(".donationComment-buttons");//버튼 들을 변수에 담음
                     buttonBox.innerHTML =
@@ -193,23 +228,24 @@
                 }
 
                 async function submitEdit(button, commentIdx) {
-                    const commentDiv = button.closest(".donationComment");//하나의 댓글 정보를 변수에 담고
+                    const commentDiv = button.closest(".donationComment");//하나의 수정된 댓글 정보를 변수에 담고
                     const textarea = commentDiv.querySelector("textarea.edit-area");//수정한 댓글을 변수에 담고
                     const newContent = textarea.value.trim();//가공해서 수정댓글을 변수에 넣음
                     const donationIdx = location.pathname.split("/").pop();//url로 부터 기부 번호 변수에 담고
-                    const commentUserId = commentDiv.dataset.userId;//댓글의 userIdx를 변수에 담음
+                    const commentId = parseInt(commentDiv.dataset.commentId);
+                    const commentUserId = parseInt(commentDiv.dataset.userId);//댓글의 userIdx를 변수에 담음
                     if (!newContent) {
                         alert("수정할 내용을 입력하세요.");
                         return;
                     }
 
                     const body = {
-                        idx: commentIdx,
+                        idx: commentId,
                         content: newContent,
                         donationIdx: donationIdx
                     };
 
-                    const result = await API.put('/care/api/donations/' + donationIdx + '/comments/' + commentIdx, body);
+                    const result = await API.put('/care/api/donations/' + donationIdx + '/comments/' + commentId, body);
 
                     if (result.status === 200) {
                         const contentDiv = commentDiv.querySelector(".donationComment-content");
@@ -218,11 +254,16 @@
                         const buttonBox = commentDiv.querySelector(".donationComment-buttons");
                         buttonBox.innerHTML =
                             '<button onclick="enterEditMode(this)">수정</button>' +
-                            '<button onclick="deleteComment(' + commentIdx + ')">삭제</button>';
+                            '<button onclick="deleteComment(' + commentIdx + ',this)">삭제</button>';
                     } else {
                         alert("댓글 수정 실패");
                     }
                 }
+
+
+
+
+
             </script>
 
 
@@ -243,6 +284,7 @@
                 <div id="donation-sponsorDetail"></div>
                 <div id="donation-content"></div>
                 <script>
+                    window.deleteComment = deleteComment;
                     window.addEventListener("DOMContentLoaded", function () {
                         donationDetail();
                         donationCommentList(1);

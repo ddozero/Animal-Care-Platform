@@ -117,7 +117,7 @@ WHERE
 	AND DONATION_IDX = #{donationIdx}
 </update>
 
-<delete id="deleteDonationComment" parameterType="com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO">
+<delete id="deleteDonationComment" parameterType="Map">
 DELETE
 FROM
 	DONATION_COMMENTS
