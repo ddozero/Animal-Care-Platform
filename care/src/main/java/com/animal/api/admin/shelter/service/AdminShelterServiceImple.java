@@ -21,7 +21,7 @@ public class AdminShelterServiceImple implements AdminShelterService {
 	@Autowired
 	private FileManager fileManager;
 
-	private int listSize = 5;
+	private int listSize = 10;
 	private int pageSize = 5;
 
 	@Override
@@ -61,8 +61,8 @@ public class AdminShelterServiceImple implements AdminShelterService {
 		if (requestList != null) {
 			for (ShelterJoinRequestListResponseDTO dto : requestList) {
 				List<String> filePaths = fileManager.getFilePath("users", dto.getIdx());
-				if (filePaths != null || filePaths.size() != 0) {
-					dto.setFilePath(filePaths.get(0));
+				if (filePaths != null && !filePaths.isEmpty()) {
+				    dto.setFilePath(filePaths.get(0));
 				}
 			}
 		}
@@ -84,8 +84,8 @@ public class AdminShelterServiceImple implements AdminShelterService {
 		ShelterJoinRequestListResponseDTO dto = mapper.getShelterJoinRequestDetail(idx);
 		if (dto != null) {
 			List<String> filePaths = fileManager.getFilePath("users", dto.getIdx());
-			if (filePaths != null || filePaths.size() != 0) {
-				dto.setFilePath(filePaths.get(0));
+			if (filePaths != null && !filePaths.isEmpty()) {
+			    dto.setFilePath(filePaths.get(0));
 			}
 		}
 		return dto;

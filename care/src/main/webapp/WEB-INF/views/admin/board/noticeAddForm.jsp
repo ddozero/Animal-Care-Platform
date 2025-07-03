@@ -7,6 +7,7 @@
             <meta charset="UTF-8">
             <title>Insert title here</title>
         </head>
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
         <style>
             .board {
                 font-family: 'Pretendard', sans-serif;

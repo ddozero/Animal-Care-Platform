@@ -16,15 +16,25 @@ FROM
 JOIN SHELTER_TYPES ST
 	ON
 	S.SHELTER_TYPE_IDX = ST.IDX
+JOIN USERS U
+	ON
+	S.USER_IDX = U.IDX
+WHERE
+	U.STATUS = 1
 ORDER BY
 	S.USER_IDX DESC
-LIMIT #{listSize} OFFSET #{cp}
+LIMIT #{listSize} OFFSET #{cp}\
 </select>
 <select id="getAllSheltersTotalCnt" resultType="int">
 SELECT
 	COUNT(*)
 FROM
 	SHELTERS S
+JOIN USERS U
+	ON
+	S.USER_IDX = U.IDX
+WHERE
+	U.STATUS = 1
 </select>
 
 <select id="searchShelters" parameterType="com.animal.api.shelter.model.request.SearchShelterRequestDTO" resultType="com.animal.api.shelter.model.response.AllShelterListResponseDTO">
@@ -39,7 +49,13 @@ FROM
 JOIN SHELTER_TYPES ST
 	ON
 	S.SHELTER_TYPE_IDX = ST.IDX
+JOIN USERS U
+	ON
+	S.USER_IDX = U.IDX
 <where>
+	<if test="true">
+		AND U.STATUS = 1
+	</if>
 	<if test="shelterAddress != null and shelterAddress != ''">
 		AND S.SHELTER_ADDRESS LIKE '%${shelterAddress}%'
 	</if>
@@ -113,8 +129,12 @@ FROM
 JOIN SHELTER_TYPES ST
 	ON
 	S.SHELTER_TYPE_IDX = ST.IDX
+JOIN USERS U
+	ON
+	S.USER_IDX = U.IDX
 WHERE
 	S.USER_IDX = #{idx}
+	AND U.STATUS = 1
 </select>
 
 <select id="getShelterVolunteers" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO">
