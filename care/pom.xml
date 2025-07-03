@@ -74,7 +74,7 @@
 			<artifactId>spring-security-crypto</artifactId>
 			<version>5.8.5</version>
 		</dependency>
-
+		
 		<!--✅ ORM & DB 연동 (회원가입, 게시판, 댓글 등 DB 기반 CRUD 구현 가능) -->
 		<!-- JDBC 사용 시 필요한 Spring 지원 라이브러리 -->
 		<dependency>
