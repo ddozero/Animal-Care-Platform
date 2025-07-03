@@ -34,7 +34,7 @@ public interface ShelterManageService {
 	public int uploadShelterFile(MultipartFile[] files, int idx);
 
 	// 보호시설 리뷰
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx, Integer reviewIdx);
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx);
 	
 	public PageInformationDTO getVolunteerReviewPage(int cp, int idx);
 

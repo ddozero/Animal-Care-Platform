@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/management/shelters")
 public class ShelterManageViewController {
 	
-	@GetMapping
+	@GetMapping()
 	public String ShelterInfo() { //보호시설 정보
 		return "management/shelter/shelterInfo";
 	}

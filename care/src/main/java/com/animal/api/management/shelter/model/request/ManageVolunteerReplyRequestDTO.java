@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ManageVolunteerReplyRequestDTO {
 
 
-	private Integer reviewIdx;
+	private Integer idx;
 
 	private Integer userIdx;
 

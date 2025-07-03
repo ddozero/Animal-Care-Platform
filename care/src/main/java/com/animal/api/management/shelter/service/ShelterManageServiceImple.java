@@ -65,7 +65,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	//// 보호시설 리뷰
 	@Override
-	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx, Integer reviewIdx) {
+	public List<ManageVolunteerReviewResponseDTO> getVolunteerReview(int cp, int idx) {
 		
 		if (cp == 0) {
 			cp = 1;
@@ -78,12 +78,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		map.put("listSize", listSize);
 		map.put("cp", cp);
 		map.put("idx", idx);
-		
-		   if (reviewIdx != null && reviewIdx > 0) {
-		        map.put("reviewIdx", reviewIdx);  // reviewIdx가 있을 경우만 맵에 추가
-		    } else {
-		        map.put("reviewIdx", 0);  // reviewIdx가 없으면 0으로 처리해서 모든 리뷰 조회
-		    }
+
 
 		List<ManageVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReview(map);
 
@@ -160,7 +155,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 	    dto.setTurn(nextTurn);
 	    dto.setLev(dto.getLev() + 1);
 	    dto.setUserIdx(userIdx);
-	    dto.setReviewIdx(dto.getRef()); 
+	    dto.setIdx(dto.getRef()); 
 
 	    Integer shelterCheck = mapper.checkShelterUserVR(dto);
 	    if (shelterCheck == null || shelterCheck == 0) { 
@@ -185,7 +180,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return NOT_REVIEW;
 		}
 
-		dto.setReviewIdx(reviewIdx);
+		dto.setIdx(reviewIdx);
 		dto.setUserIdx(userIdx);
 
 		Integer shelterCheck = mapper.checkShelterUserVR(dto);
@@ -210,7 +205,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 
 		ManageVolunteerReplyRequestDTO dto = new ManageVolunteerReplyRequestDTO();
-		dto.setReviewIdx(reviewIdx);
+		dto.setIdx(reviewIdx);
 		dto.setUserIdx(userIdx);
 
 		Integer shelterCheck = mapper.checkShelterUserVR(dto);

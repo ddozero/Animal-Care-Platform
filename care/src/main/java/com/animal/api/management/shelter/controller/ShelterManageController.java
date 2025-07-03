@@ -131,14 +131,13 @@ public class ShelterManageController {
 	 */
 	@GetMapping("/reviews/volunteer")
 	public ResponseEntity<?> getVolunteerReview(@RequestParam(value = "cp", defaultValue = "0") int cp,
-			@RequestParam(value = "reviewIdx", required = false) Integer reviewIdx,
 			HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 
-		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(cp, userIdx, reviewIdx);
+		List<ManageVolunteerReviewResponseDTO> reviewList = shelterService.getVolunteerReview(cp, userIdx);
 		PageInformationDTO page = shelterService.getVolunteerReviewPage(cp, userIdx);
 
 		if (reviewList == null) {
@@ -236,17 +235,17 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 봉사 리뷰글 답글 수정
 	 */
-	@PutMapping("/reviews/volunteer/{reviewIdx}")
-	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int reviewIdx,
+	@PutMapping("/reviews/volunteer/{idx}")
+	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int idx,
 			@Valid @RequestBody ManageVolunteerReplyRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
-		dto.setReviewIdx(reviewIdx);
+		dto.setIdx(idx);
 
-		int result = shelterService.updateVolunteerReviewApply(dto, loginUser.getIdx(), reviewIdx);
+		int result = shelterService.updateVolunteerReviewApply(dto, loginUser.getIdx(), idx);
 
 		if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "봉사 리뷰 답글 수정 성공", null));
