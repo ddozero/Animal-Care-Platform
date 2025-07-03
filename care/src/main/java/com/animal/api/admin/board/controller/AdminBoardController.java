@@ -164,15 +164,15 @@ public class AdminBoardController {
 	 * 사이트 관리 페이지의 공지사항 조회
 	 * 
 	 * @param cp      현재 페이지
-	 * @param title   글 제목
-	 * @param content 본문 내용
+	 * @param title   사용자가 검색시 입력한 제목
+	 * @param content 사용자가 검색시 입력한 내용
 	 * @param session 로그인 검증을 위한 세션
 	 * @return 조회된 공지사항 리스트
 	 */
 	@GetMapping("/notices")
 	public ResponseEntity<?> getNoticeList(@RequestParam(value = "cp", defaultValue = "0") int cp,
-			@RequestParam(value = "title", required = false) String title,
-			@RequestParam(value = "content", required = false) String content, HttpSession session) {
+			@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "keyword", required = false) String keyword, HttpSession session) {
 		LoginResponseDTO loginAdmin = (LoginResponseDTO) session.getAttribute("loginAdmin");
 
 		if (loginAdmin == null) { // 로그인 여부 검증
@@ -183,10 +183,17 @@ public class AdminBoardController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "관리자만 접근 가능합니다."));
 		}
 
-		int listSize = 5;
+		String title = null;
+		String content = null;
 
-		List<UserNoticeResponseDTO> noticeAllList = null;
-		PageInformationDTO page = null;
+		if ("title".equals(type)) {
+			title = keyword;
+		} else if ("content".equals(type)) {
+			content = keyword;
+		}
+
+		List<UserNoticeResponseDTO> noticeAllList = userSupportService.searchAllNotice(cp, title, content);
+		PageInformationDTO page = userSupportService.searchNoticePage(cp, title, content);
 
 		if (title != null || content != null) {
 			noticeAllList = userSupportService.searchAllNotice(cp, title, content);
