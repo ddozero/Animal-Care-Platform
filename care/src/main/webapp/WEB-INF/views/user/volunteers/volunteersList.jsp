@@ -83,11 +83,12 @@
     border: none;
     background: #fff;
     padding: 6px 12px;
-    margin: 0 2px;
+    margin: 0;
     border-radius: 4px;
     cursor: pointer;
     box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
     transition: background .2s;
+    margin-bottom:30px;
 }
 
 .paging button:hover {
@@ -95,19 +96,87 @@
    color: #fff;
 }
 
-@media (max-width : 600px) {
-	.search-bar {
-		flex-direction: column;
-		gap: 10px;
-	}
-	.board-table th, .board-table td {
-		font-size: 12px;
-		padding: 10px 6px;
-	}
-	.write-bt input[type="button"] {
-		width: 100%;
-	}
+
+.search {
+  background-color: #f7f7f9;
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 40px;
 }
+
+#searchForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+}
+
+.search-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  width: 100%;
+}
+
+.search-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+
+.search-group label {
+  font-size: 15px;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: bold;
+}
+
+.search-group input,
+.search-group select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+#searchForm button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #3acdb2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+#searchForm button[type="submit"]:hover {
+  background-color: #32b8a1;
+}
+
+@media (max-width: 768px) {
+  .search-row {
+    flex-direction: column;
+  }
+  .search-group {
+    width: 100%;
+  }
+
+}
+
+.badge-type {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 13px;
+  color: #555;
+  background-color: #eee;
+  border-radius: 20px;
+  font-weight: 500;
+   margin: 0 auto;
+   text-align: center;
+}
+
 
 </style>
 
@@ -120,79 +189,94 @@
 			<div class="title-detail">다양한 봉사활동에 참여해보세요.</div>
 
 	<section class="search">
-		<form id="searchForm" onsubmit="searchVolunteers(); return false;" style="margin-bottom: 20px;">
-				<!-- 1) location -->
-				<label for="location">지역:</label> 
-				<select id="location" name="location">
-					<option value="">전국</option>
-					<option value="서울">서울</option>
-					<option value="부산">부산</option>
-					<option value="대구">대구</option>
-					<option value="인천">인천</option>
-					<option value="광주">광주</option>
-					<option value="대전">대전</option>
-					<option value="울산">울산</option>
-					<option value="세종">세종</option>
-					<option value="경기">경기</option>
-					<option value="강원">강원</option>
-					<option value="충북">충북</option>
-					<option value="충남">충남</option>
-					<option value="전북">전북</option>
-					<option value="전남">전남</option>
-					<option value="경북">경북</option>
-					<option value="경남">경남</option>
-					<option value="제주">제주</option>
-				</select>
+  <form id="searchForm" onsubmit="searchVolunteers(); return false;" style="margin-bottom: 20px;">
+    
+	    <div class="search-row">
+	      <div class="search-group">
+	        <label for="location">지역</label>
+	        <select id="location" name="location">
+	          <option value="">전국</option>
+	          <option value="서울">서울</option>
+	          <option value="부산">부산</option>
+	          <option value="대구">대구</option>
+	          <option value="인천">인천</option>
+	          <option value="광주">광주</option>
+	          <option value="대전">대전</option>
+	          <option value="울산">울산</option>
+	          <option value="세종">세종</option>
+	          <option value="경기">경기</option>
+	          <option value="강원">강원</option>
+	          <option value="충북">충북</option>
+	          <option value="충남">충남</option>
+	          <option value="전북">전북</option>
+	          <option value="전남">전남</option>
+	          <option value="경북">경북</option>
+	          <option value="경남">경남</option>
+	          <option value="제주">제주</option>
+	        </select>
+	      </div>
+	
+	      <div class="search-group">
+	        <label for="status">모집상태</label>
+	        <select id="status" name="status">
+	          <option value="">전체</option>
+	          <option value="모집중">모집중</option>
+	          <option value="모집예정">모집예정</option>
+	          <option value="모집완료">모집완료</option>
+	        </select>
+	      </div>
+	
+	      <div class="search-group">
+	        <label for="companyType">업체</label>
+	        <select id="companyType" name="companyType">
+	          <option value="">전체</option>
+	          <option value="공공">공공</option>
+	          <option value="민간">민간</option>
+	          <option value="사설">사설</option>
+	        </select>
+	      </div>
+	
+	      <div class="search-group">
+	        <label for="volunteerType">봉사 유형</label>
+	        <select id="volunteerType" name="volunteerType">
+	          <option value="">전체</option>
+	          <option value="산책">산책</option>
+	          <option value="청소">청소</option>
+	          <option value="기타">기타</option>
+	        </select>
+	      </div>
+	
+	      <div class="search-group">
+	        <label for="hours">인정시간</label>
+	        <select id="hours" name="hours">
+	          <option value="">전체</option>
+	          <option value="1">1시간</option>
+	          <option value="2">2시간</option>
+	          <option value="3">3시간</option>
+	          <option value="4">4시간</option>
+	          <option value="5">5시간</option>
+	        </select>
+	      </div>
+	    </div>
+	
+	    <div class="search-row">
+	      <div class="search-group">
+	        <label for="companyName">업체명</label>
+	        <input type="text" id="companyName" name="companyName" placeholder="업체명을 입력하세요">
+	      </div>
+	
+	      <div class="search-group">
+	        <label for="volunteerDate">봉사일</label>
+	        <input type="date" id="volunteerDate" name="volunteerDate">
+	      </div>
+	
+	      <div class="search-group" style="align-self: end;">
+	        <button type="submit">검색</button>
+	      </div>
+	    </div>
 
-				<!-- 2) status -->
-				<label for="status">모집상태:</label> 
-				<select id="status" name="status">
-					<option value="">전체</option>
-					<option value="모집중">모집중</option>
-					<option value="모집예정">모집예정</option>
-					<option value="모집완료">모집완료</option>
-				</select>
-
-				<!-- 3) shelterType -->
-				<label for="companyType">업체:</label> 
-				<select id="companyType" name="companyType">
-					<option value="">전체</option>
-					<option value="공공">공공</option>
-					<option value="민간">민간</option>
-					<option value="사설">사설</option>
-				</select>
-
-				<!-- 4) type -->
-				<label for="volunteerType">봉사 유형:</label> 
-				<select id="volunteerType" name="volunteerType">
-					<option value="">전체</option>
-					<option value="산책봉사">산책봉사</option>
-					<option value="청소봉사">청소봉사</option>
-					<option value="기타">기타</option>
-				</select>
-
-				<!-- 5) time -->
-				<label for="hours">인정시간:</label> <select id="hours" name="hours">
-					<option value="">전체</option>
-					<option value="1">1시간</option>
-					<option value="2">2시간</option>
-					<option value="3">3시간</option>
-					<option value="4">4시간</option>
-					<option value="5">5시간</option>
-				</select>
-
-				<!-- 6) shelter -->
-				<label for="companyName">업체명:</label> 
-				<input type="text" id="companyName" name="companyName" placeholder="업체명을 입력하세요">
-				
-				<!--7) volunteerDate -->
-				<label for="volunteerDate">봉사일:</label>
-				<input type="date" id="volunteerDate" name="volunteerDate">
-				
-
-				<button type="submit">검색</button>
-			</form>
-	</section>
+  </form>
+</section>
 	<section class="borad">
 		<div class="board-container">
 
@@ -200,6 +284,7 @@
 				<thead>
 					<tr>
 						<th>등록일</th>
+						<th>유형</th>
 						<th>제목</th>
 						<th>보호시설명</th>
 						<th>기관</th>
@@ -239,7 +324,7 @@
 
         if (result.status !== 200 || !Array.isArray(result.data)) {
             const row = document.createElement("tr");
-            row.innerHTML = '<td colspan="8" style="text-align:center;">등록된 봉사활동이 없습니다.</td>';
+            row.innerHTML = '<td colspan="9" style="text-align:center;">등록된 봉사활동이 없습니다.</td>';
             tbody.appendChild(row);
             return;
         }
@@ -249,9 +334,12 @@
 
 
         for (const v of volunteers) {
+        	
+        	
             const row = document.createElement("tr");
             row.innerHTML =
                 '<td>' + v.createdAt + '</td>' +
+                '<td><span class="badge-type">' + v.type + '</span></td>' +
                 '<td><a href="/care/volunteers/' + v.idx + '">' + v.title + '</a></td>' +
                 '<td>' + v.shelter + '</td>' +
                 '<td>' + v.shelterType + '</td>' +
@@ -285,5 +373,7 @@
 	  }
 
 </script>
+
+<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 </body>
 </html>
