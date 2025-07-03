@@ -745,10 +745,22 @@ async function loadVolunteerReview(cp = 1) {
             const replyButton = document.createElement("button");
             replyButton.innerHTML = "답글 남기기";
             replyButton.className = "reply-button";
-            replyButton.onclick = () => showReplyForm(review.reviewIdx);  // 답글 폼 표시 함수 호출
             
+            replyButton.onclick = () => openPopup();  // 답글 폼 팝업 함수 호출
             // 리뷰 카드에 답글 버튼 추가
             card.appendChild(replyButton);
+        }
+     
+        function openPopup() {
+            // 팝업 URL을 작성 (reviewIdx를 쿼리 파라미터로 전달)
+            const url = '/care//management/shelters/adoptionReview/reply'; 
+            const width = 600;
+            const height = 400;
+            const left = (window.innerWidth - width) / 2;
+            const top = (window.innerHeight - height) / 2;
+
+            var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
+            window.open(url, "리뷰 답글 남기기", windowOptions); 
         }
 
         // 답글일 경우 수정/삭제 버튼 추가

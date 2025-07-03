@@ -36,6 +36,12 @@ public class ShelterManageViewController {
 	    model.addAttribute("idx", idx);
 	    return "management/shelter/shelterNoticeUpdate";  // 수정 폼으로 이동
 	}
+	
+	@GetMapping("/adoptionReview/reply")
+	  public String showReviewPage() {
+	   return "management/shelter/shelterReplyForm"; // 해당 JSP 페이지로 이동
+
+	}
 
 
 }
