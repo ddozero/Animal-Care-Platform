@@ -32,7 +32,7 @@ public class AllVolunteersResponseDTO {
 	private int userIdx;
 	private String shelter;
 	private String shelterType;
-	private String imagePaths;
+	private String imagePath;
 	private List<String> filePaths;
 
 }

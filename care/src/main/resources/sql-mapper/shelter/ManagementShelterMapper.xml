@@ -94,14 +94,15 @@ WHERE
 <select id="getAdoptionReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO">
 SELECT
 	AR.IDX AS reviewIdx,
-	S.USER_IDX as shelterIdx,
-	U.IDX as userIdx,
+	S.USER_IDX AS shelterIdx,
+	U.IDX AS userIdx,
 	A.IDX as animalIdx,
 	AR.CONTENT AS reviewContent,
+	S.SHELTER_NAME AS shelterName,
 	U.NICKNAME,
 	A.NAME AS animalName,
 	AR.CONTENT,
-	AR.CREATED_AT as createdAt,
+	AR.CREATED_AT AS createdAt,
 	AR.REF,
 	AR.LEV,
 	AR.TURN
@@ -146,6 +147,12 @@ WHERE
 	REF = #{ref}
 	AND TURN >= #{turn};
 </update>
+
+<select id="getMaxTurnVR" resultType="Integer" parameterType="int">
+    SELECT MAX(TURN)
+    FROM VOLUNTEER_REVIEWS
+    WHERE REF = #{ref}
+</select>
 
 <insert id="addVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
 INSERT
@@ -244,6 +251,8 @@ WHERE
 	REF = #{ref}
 	AND TURN >= #{turn};
 </update>
+
+
 
 <insert id="addAdoptionReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
 INSERT

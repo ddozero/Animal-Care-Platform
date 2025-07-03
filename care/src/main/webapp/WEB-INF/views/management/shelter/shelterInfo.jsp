@@ -12,7 +12,11 @@
   --gray-3: #eee;
   --text-main: #333;
 }
-* { box-sizing: border-box; }
+
+* { 
+  box-sizing: border-box; 
+}
+
 body {
   margin: 0;
   font-family: 'Pretendard', sans-serif;
@@ -20,6 +24,7 @@ body {
   color: var(--text-main);
   line-height: 1.55;
 }
+
 .container {
   max-width: 1200px;
   margin: 60px auto;
@@ -35,9 +40,10 @@ body {
   flex-wrap: wrap;
   align-items: flex-start;
 }
+
 .photo-box {
   width: 250px;
-  height: 280px;
+  height: 260px;
   background: var(--gray-3);
   border-radius: 8px;
   overflow: hidden;
@@ -45,11 +51,13 @@ body {
   align-items: center;
   justify-content: center;
 }
+
 .photo-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .upload-button {
   margin-top: 8px;
   background: #eee;
@@ -58,6 +66,7 @@ body {
   padding: 8px 16px;
   cursor: pointer;
 }
+
 .upload-button:hover { 
   background: #ddd; 
 }
@@ -67,17 +76,20 @@ body {
   font-size: 16px;
   margin-left : 20px;
 }
+
 .info-section span.label {
   display: inline-block;
   min-width: 100px;
   font-weight: 600;
 }
+
 .tabs {
   display: flex;
   justify-content: center;
   gap: 8px;
   margin: 30px 0;
 }
+
 .tab-btn {
   border: 1px solid var(--gray-2);
   border-radius: 8px;
@@ -87,12 +99,17 @@ body {
   font-weight: 600;
   transition: 0.3s;
 }
-.tab-btn:hover { background: var(--gray-1); }
+
+.tab-btn:hover { 
+  background: var(--gray-1); 
+}
+
 .tab-btn.active {
   background: var(--brand);
   border-color: var(--brand);
   color: #fff;
 }
+
 .bottom-box {
   margin-top: 40px;
   padding: 20px;
@@ -100,14 +117,18 @@ body {
   background: var(--gray-1);
   min-height: 150px;
 }
+
 .bottom-box span {
   display: block;
   font-size: 16px;
 }
+
 @media(max-width: 768px) {
-  .content { flex-direction: column; }
-  .tabs { flex-direction: column; gap: 12px; }
-  .edit-button { width: 100%; }
+  .content { 
+    flex-direction: column; 
+  }
+
+
 }
 
 .board {
@@ -116,6 +137,7 @@ body {
   padding: 60px 20px 40px;
   margin-top: 50px;
 }
+
 .header-title {
   font-size: 28px;
   font-weight: bold;
@@ -124,41 +146,49 @@ body {
   text-align: center;
   color: #3ACDB2;
 }
+
 .title-detail {
   text-align: center;
   margin-bottom: 40px;
   color: #666;
   font-size: 16px;
 }
+
 .board-container {
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .board-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 16px;
 }
+
 .board-table a {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
 }
+
 .board-table th {
   padding: 14px 10px;
   border-bottom: 2px solid #DBDBDB;
   text-align: center;
   color: #333;
 }
+
 .board-table td {
   padding: 14px 10px;
   border-bottom: 1px solid #eee;
   text-align: center;
   color: #333;
 }
+
 .board-table td:nth-child(2) {
   text-align: left;
 }
+
 .board-table tbody tr:hover {
   background-color: #fafafa;
 }
@@ -169,7 +199,7 @@ body {
   margin-bottom: 10px;
 }
 
-.edit-button {
+.edit-button, #saveButton {
   background: #ddd;
   border: none;
   border-radius: 6px;
@@ -179,7 +209,8 @@ body {
   margin-left: auto; /* 오른쪽 끝에 배치 */
   color: var(--text-main);
 }
-.edit-button:hover {
+
+.edit-button:hover, #saveButton:hover {
   background: #ccc;
 }
 
@@ -192,56 +223,174 @@ body {
 
 /* ===== 서브 탭 (봉사리뷰 / 입양리뷰) ===== */
 .sub-tabs {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    gap: 12px;
-    margin-top: 16px;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 12px;
+  margin-top: 16px;
+  margin-bottom: 20px;
 }
 
 .sub-btn {
-    appearance: none;
-    border: none;
-    background: transparent;
-    padding: 6px 14px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #666;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: color .2s, border-color .2s;
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
 }
 
 .sub-btn:hover {
-    color: #3acdb2;
+  color: #3acdb2;
 }
 
 .sub-btn.active {
-    color: #3acdb2;
-    border-color: #3acdb2;
+  color: #3acdb2;
+  border-color: #3acdb2;
 }
 
+/* Paging */
 .paging {
-     margin: 28px 0;
-     text-align: center;
+  margin: 28px 0;
+  text-align: center;
 }
 
 .paging button {
-     border: none;
-     background: #fff;
-     padding: 6px 12px;
-     margin: 0 2px;
-     border-radius: 4px;
-     cursor: pointer;
-     box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
-     transition: background .2s;
+  border: none;
+  background: #fff;
+  padding: 6px 12px;
+  margin: 0 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+  transition: background .2s;
 }
 
 .paging button:hover {
-     background: #3acdb2;
-     color: #fff;
+  background: #3acdb2;
+  color: #fff;
 }
+
+/** 보호소 정보 **/
+input:disabled {
+  all: unset;
+  border: none;
+  background-color: transparent;
+  color: #333;
+}
+
+input:enabled {
+  border: 1px solid #DBDBDB !important;
+  background-color: #fff !important;
+}
+
+label {
+  font-weight: 700;  
+  display: inline-block;
+  margin-right : 8px;
+}
+
+.info-section div {
+  margin-bottom: 12px; 
+}
+
+input {
+  width: 100%;  
+  padding: 10px;
+  margin-top: 4px;  
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 16px; /* 기본 폰트 크기 설정 */
+}
+
+input[readonly] {
+  border: none !important; 
+  background-color: transparent !important; 
+  color: #333; 
+}
+
+input[readonly]:focus {
+  outline: none;                       
+  border: 1px solid #DBDBDB !important; 
+}
+
+/* 보호시설 소개 */
+textarea {
+  width: 100%;  
+  padding: 10px;
+  font-size: 16px;
+  font-family: 'Pretendard', sans-serif;
+  border-radius: 4px;
+  border: 1px solid #DBDBDB;
+  background-color: #fff;
+  resize: vertical;  
+}
+
+textarea:disabled {
+  background-color: #fff; /* disabled 상태일 때 색상 변경 */
+  border : none;
+}
+
+
+/*리뷰 답글 */
+.reply-form {
+    margin-top: 10px;
+    padding-top: 10px;
+    display: flex;              
+    flex-direction: column;      
+    align-items: flex-end;       
+}
+
+.reply-input {
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.reply-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-bottom:10px;
+}
+
+.reply-submit:hover {
+    background-color: #0056b3;
+}
+
+/* action-text에 스타일 적용 */
+.action-text {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 끝에 배치 */
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* 수정/삭제 텍스트 스타일 */
+.edit-text, .delete-text {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+    margin-left: 10px;
+}
+
+.edit-text:hover, .delete-text:hover {
+    color: #0056b3;
+}
+
+
 
 
 </style>
@@ -258,14 +407,41 @@ body {
       </div>
       <button class="upload-button">사진업로드</button>
     </div>
-    <div class="info-section">
-      <div><span id="shelterName"></span></div>
-      <div><span class="label">담당자</span> <span id="personName"></span></div>
-      <div><span class="label">분류</span> <span id="type"></span></div>
-      <div><span class="label">사업자번호</span> <span id="businessNumber"></span></div>
-      <div><span class="label">주소</span> <span id="address"></span></div>
-      <div><span class="label">연락처</span> <span id="tel"></span></div>
-      <div><span class="label">이메일</span> <span id="email"></span></div>
+     <div class="info-section">
+           <div>
+		      <input type="text" id="shelterName" value="" disabled />
+		    </div>
+		    <div>
+		      <label for="personNameInput" class="label">담당자</label>
+		      <input type="text" id="personName" value="" disabled />
+		    </div>
+		    <div>
+		      <label for="typeInput" class="label">분류</label>
+		      <input type="text" id="type" value="" disabled />
+		    </div>
+		    <div>
+		      <label for="businessNumberInput" class="label">사업자번호</label>
+		      <input type="text" id="businessNumber" value="" disabled/>
+		    </div>
+			<div>
+			  <label for="addressInput" class="label">주소</label>
+			  <span>(</span>
+			  <input type="text" id="zipCode" value="shelter.zipCode" disabled style="width: 13%; padding: 0; margin: 0; text-align:center;"/>
+			  <span>)</span>
+			  <input type="text" id="address" value="shelter.address" disabled style="padding: 0; margin: 0;"/>
+			</div>
+			<div>
+			  <label for="addressInput" class="label">상세주소</label>
+			  <input type="text" id="addressDetail" value="shelter.addressDetail" disabled style="width: 10%; max-width: 200px; padding: 0; margin: 0;"/>
+			</div>
+		    <div>
+		      <label for="telInput" class="label">연락처</label>
+		      <input type="text" id="tel" value="" disabled />
+		    </div>
+		    <div>
+		      <label for="emailInput" class="label">이메일</label>
+		      <input type="email" id="email" value="" disabled />
+		    </div>
     </div>
   </div>
 
@@ -279,15 +455,20 @@ body {
   <!-- 탭 컨텐츠 -->
 	<div id="infoSection" style="display:block;" class="bottom-box info-box">
   		<div class="info-box-header">
-    		<strong>보호시설 소개</strong>
-    	<button class="edit-button" id="editButton">수정하기</button>
+  		
+    	<strong>보호시설 소개</strong>
+	    	<button class="edit-button" id="editButton" onclick="enableEdit()">수정하기</button>
+	    	<button id="saveButton" onclick="saveChanges()" style="display:none;">저장하기</button>
   		</div>
-  		<span id="description"></span>
+  			<div>
+		       <textarea id="description" rows="4" disabled></textarea>
+		    </div>
 	</div>
 	
-	  <div id="noticeSection" style="display:none;" class="notice-box">
-	    <div id="noticeContent"></div>
-	  </div>
+	  <div id="noticeSection" style="display:none; text-align:right; margin-bottom:13px;" class="notice-box">
+		    <button class="edit-button" id="addButton" onclick="addNotice()">등록하기</button>
+		    <div id="noticeContent"></div>
+	</div>
 	  
 	
 	 <div id="reviewSection" style="display:none;" class="review-box">
@@ -295,7 +476,13 @@ body {
 		   <button class="sub-btn active" onclick="changeReviewTab(this, 'volunteerReview')">봉사리뷰</button>
 		   <button class="sub-btn" onclick="changeReviewTab(this, 'adoptionReview')">입양리뷰</button>
 		</div>
-		<div id="volunteerReview" class="review-content"></div>
+		
+		<div id="volunteerReview" class="review-content">
+			<button class="edit-button" id="addButton" onclick="addNotice()">등록하기</button>
+		
+		</div>
+		
+		
 		<div id="adoptionReview" class="review-content" style="display:none;"></div>
 	</div>
 	
@@ -309,135 +496,209 @@ body {
 <script>
 
 // 보호소 정보 불러오기
-function ShelterInfo() {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/care/api/management/shelter", true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      var result = JSON.parse(xhr.responseText);
-      if (!result || result.status !== 200 || !result.data) {
-        alert(result && result.message ? result.message : "존재하지 않는 보호소입니다.");
-        return;
-      }
-      var shelter = result.data;
+async function ShelterInfo() {
+    try {
+        const result = await API.get("/care/api/management/shelter");
 
-      var img = document.getElementById("shelterImage");
-      if (shelter.imagePaths && shelter.imagePaths.length > 0 && shelter.imagePaths[0]) {
-          img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0];
-        } else {
-          img.src = "/resources/images/no-image.png";
+        if (!result || result.status !== 200 || !result.data) {
+            alert(result && result.message ? result.message : "존재하지 않는 보호소입니다.");
+            return;
         }
 
-      document.getElementById("shelterName").textContent = shelter.shelterName;
-      document.getElementById("personName").textContent = shelter.personName;
-      document.getElementById("type").textContent = shelter.type;
-      document.getElementById("businessNumber").textContent = shelter.businessNumber;
-      document.getElementById("address").textContent = shelter.address;
-      document.getElementById("tel").textContent = shelter.tel;
-      document.getElementById("email").textContent = shelter.email;
-      document.getElementById("description").textContent = shelter.description;
+        var shelter = result.data;
+
+        // 이미지 처리
+        var img = document.getElementById("shelterImage");
+        if (shelter.imagePaths && shelter.imagePaths.length > 0 && shelter.imagePaths[0]) {
+            img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0];
+        } else {
+            img.src = "/resources/images/no-image.png";
+        }
+
+        // 정보 입력
+        document.getElementById("shelterName").value = shelter.shelterName;
+        document.getElementById("personName").value = shelter.personName;
+        document.getElementById("type").value = shelter.type;
+        document.getElementById("businessNumber").value = shelter.businessNumber;
+        document.getElementById("zipCode").value = shelter.zipCode;
+        document.getElementById("address").value = shelter.address;
+        document.getElementById("addressDetail").value = shelter.addressDetail;
+        document.getElementById("tel").value = shelter.tel;
+        document.getElementById("email").value = shelter.email;
+        document.getElementById("description").value = shelter.description;
+        
+        document.getElementById("noticePaging").style.display = "none";
+        document.getElementById("reviewPagingVol").style.display = "none";
+        document.getElementById("reviewPagingAod").style.display = "none";
+
+    } catch (error) {
+        console.error("보호소 정보를 불러오는 중 오류가 발생했습니다: ", error);
+        alert("보호소 정보를 불러오는 데 실패했습니다.");
     }
-  };
-  xhr.send();
 }
 
-//공지사항
-function loadNotice() {
-	  const wrapper = document.getElementById("noticeContent");
-	  wrapper.innerHTML = "";
-	  
-	  const pagingBox = document.getElementById("noticePaging");
-	  pagingBox.innerHTML = ""; 
-	    
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("GET", "/care/api/management/shelter/boards", true);
-	  xhr.onreadystatechange = function() {
-	    if (xhr.readyState === 4) {
-	      var result = JSON.parse(xhr.responseText);
-	      if (result.status !== 200) {
-	        alert("공지사항 불러오기 실패: " + result.message);
-	        return;
-	      }
-	      var notices = result.data;
-	      var pageInfo = result.pageInfo;
 
-	      var html = '<table class="board-table"><thead><tr>';
-	      html += '<th>NO</th><th>제목</th><th>작성일</th><th>조회수</th></tr></thead><tbody>';
+//보호시설 수정
+function enableEdit() {
+		  document.getElementById("shelterName").disabled = false;
+		  document.getElementById("personName").disabled = false;
+		  document.getElementById("tel").disabled = false;
+		  document.getElementById("email").disabled = false;
+		  document.getElementById("description").disabled = false;
 
-	      if (!notices || notices.length === 0) {
-	        html += '<tr><td colspan="4" style="text-align:center;">등록된 게시글이 없습니다.</td></tr>';
-	      } else {
-	        for (var i=0; i<notices.length; i++) {
-	          html += '<tr>';
-	          html += '<td>' + notices[i].idx + '</td>';
-	          html += '<td><a href="/care/shelter/boards/' + notices[i].idx + '">' + notices[i].title + '</a></td>';
-	          html += '<td>' + notices[i].createdAt + '</td>';
-	          html += '<td>' + notices[i].views + '</td>';
-	          html += '</tr>';
-	        }
-	      }
-	      html += '</tbody></table>';
+		  document.getElementById("saveButton").style.display = "inline-block"; // 수정 완료 후 저장하기 버튼 보이기
+		  document.getElementById("editButton").style.display = "none"; // 수정하기 버튼 숨기기
+		}
 
-	      document.getElementById("noticeContent").innerHTML = html;
+async function saveChanges() {
+	  // dto 생성
+	  var dto = {
+	    shelterName: document.getElementById("shelterName").value,
+	    personName: document.getElementById("personName").value,
+	    type: document.getElementById("type").value,
+	    businessNumber: document.getElementById("businessNumber").value,
+	    zipCode: document.getElementById("zipCode").value,  // 우편번호
+	    address: document.getElementById("address").value,  // 주소
+	    addressDetail: document.getElementById("addressDetail").value,  // 상세주소
+	    tel: document.getElementById("tel").value,
+	    email: document.getElementById("email").value,
+	    description: document.getElementById("description").value,
+	  };
 
-          // **페이징**
-          
+	  try {
+	    const result = await API.put("/care/api/management/shelter", dto);
 
-          makePaging(
-              pageInfo.totalCnt,
-              pageInfo.listSize,
-              pageInfo.pageSize,
-              pageInfo.cp,
-              "noticePaging",
-              loadNotice
-          );
-      }
-  };
-	  xhr.send();
-}
-	
-	
+	    if (result.status === 200) {
+	      alert("정보가 수정되었습니다.");
+	      ShelterInfo();  // 수정된 정보 다시 조회하여 화면 갱신
+	    } else {
+	      alert("수정에 실패했습니다.");
+	    }
 
+	    // 입력 필드 비활성화 및 버튼 상태 업데이트
+	    document.getElementById("shelterName").disabled = true;
+	    document.getElementById("personName").disabled = true;
+	    document.getElementById("type").disabled = true;
+	    document.getElementById("businessNumber").disabled = true;
+	    document.getElementById("zipCode").readonly = true;
+	    document.getElementById("address").readonly = true;
+	    document.getElementById("addressDetail").readonly = true;
+	    document.getElementById("tel").disabled = true;
+	    document.getElementById("email").disabled = true;
+	    document.getElementById("description").disabled = true;
+	    document.getElementById("saveButton").style.display = "none";
+	    document.getElementById("editButton").style.display = "inline-block";
 
-function changeTab(button, sectionId) {
-	  var tabs = document.getElementsByClassName("tab-btn");
-	  for (var i=0; i<tabs.length; i++) {
-	    tabs[i].classList.remove("active");
-	  }
-	  button.classList.add("active");
-
-	  var sections = ["infoSection", "noticeSection", "reviewSection"];
-	  for (var j=0; j<sections.length; j++) {
-	    document.getElementById(sections[j]).style.display = (sections[j] === sectionId) ? "block" : "none";
-	  }
-	  
-	  document.getElementById("noticePaging").style.display = (sectionId === "noticeSection") ? "block" : "none";
-	  document.getElementById("reviewPagingVol").style.display = (sectionId === "reviewSection") ? "block" : "none";
-	  document.getElementById("reviewPagingAod").style.display = (sectionId === "reviewSection") ? "block" : "none";
-
-	  if(sectionId === "noticeSection") {
-	    loadNotice();
-	  }
-	  if(sectionId === "reviewSection") {
-	    changeReviewTab(
-	      document.querySelector(".sub-tabs .sub-btn.active"),
-	      "volunteerReview"
-	    );
+	  } catch (err) {
+	    console.error("Error while saving changes:", err);
+	    alert("수정 중 오류가 발생했습니다.");
 	  }
 	}
+	
+
+	window.addEventListener("DOMContentLoaded", function() {
+	  ShelterInfo();
+	});
 
 
+//공지사항
+async function loadNotice(cp) {
+    const wrapper = document.getElementById("noticeContent");
+    wrapper.innerHTML = ""; // 초기화
 
-window.addEventListener("DOMContentLoaded", function() {
-  ShelterInfo();
+    const pagingBox = document.getElementById("noticePaging");
+    pagingBox.innerHTML = "";
+
+    try {
+        const result = await API.get('/care/api/management/shelter/boards?cp=' + cp);
+        
+        if (result.status !== 200) {
+            alert('공지사항 목록을 불러오는 데 실패했습니다. (' + result.message + ')');
+            return;
+        }
+
+        const notices = result.data;
+        const pageInfo = result.pageInfo;
+
+        let html = '<table class="board-table"><thead><tr>';
+        html += '<th>NO</th><th>제목</th><th>작성일</th><th>조회수</th></tr></thead><tbody>';
+
+        if (!notices || notices.length === 0) {
+            html += '<tr><td colspan="4" style="text-align:center;">등록된 게시글이 없습니다.</td></tr>';
+        } else {
+            for (var i = 0; i < notices.length; i++) {
+                html += '<tr>';
+                html += '<td>' + notices[i].idx + '</td>';
+                html += '<td><a href="/care/management/shelters/boards/' + notices[i].idx + '">' + notices[i].title + '</a></td>';
+                html += '<td>' + notices[i].createdAt + '</td>';
+                html += '<td>' + notices[i].views + '</td>';
+                html += '</tr>';
+            }
+        }
+
+        html += '</tbody></table>';
+
+        document.getElementById('noticeContent').innerHTML = html;
+
+        // 페이징 처리
+        makePaging(
+            pageInfo.totalCnt,
+            pageInfo.listSize,
+            pageInfo.pageSize,
+            pageInfo.cp,
+            'noticePaging',
+            loadNotice
+        );
+    } catch (error) {
+        console.error('Error loading notice:', error);
+    }
+}
+
+// 페이지 로드 시 공지사항 목록을 첫 번째 페이지로 불러오기
+document.addEventListener('DOMContentLoaded', function () {
+    loadNotice(1); // 첫 번째 페이지
 });
 
+function changeTab(button, sectionId) {
+    var tabs = document.getElementsByClassName("tab-btn");
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+    }
+    button.classList.add("active");
+
+    var sections = ["infoSection", "noticeSection", "reviewSection"];
+    for (var j = 0; j < sections.length; j++) {
+        document.getElementById(sections[j]).style.display = (sections[j] === sectionId) ? "block" : "none";
+    }
+    
+    document.getElementById("noticePaging").style.display = (sectionId === "noticeSection") ? "block" : "none";
+    document.getElementById("reviewPagingVol").style.display = (sectionId === "reviewSection") ? "block" : "none";
+    document.getElementById("reviewPagingAod").style.display = (sectionId === "reviewSection") ? "block" : "none";
+
+    if (sectionId === "noticeSection") {
+        loadNotice(1); // 첫 페이지로 로드
+    }
+    if (sectionId === "reviewSection") {
+        changeReviewTab(document.querySelector(".sub-tabs .sub-btn.active"), "volunteerReview");
+    }
+}
+
+
+/// 공지사항 글쓰기
+
+function addNotice() {
+    location.href = "/care/management/shelters/boards/write";
+}
+
+
 //보호소 리뷰 관리
+
+///봉사리뷰
 async function loadVolunteerReview(cp = 1) {
     const wrapper = document.getElementById("volunteerReview");
     wrapper.innerHTML = "";
 
- 	const pagingBox = document.getElementById("reviewPagingVol");
+    const pagingBox = document.getElementById("reviewPagingVol");
     pagingBox.innerHTML = ""; // 초기화
     
     const result = await API.get('/care/api/management/shelter/reviews/volunteer?cp=' + cp);
@@ -451,37 +712,102 @@ async function loadVolunteerReview(cp = 1) {
 
     for (const review of reviews) {
         const card = document.createElement("div");
-        card.className = "review-card";
-        card.innerHTML =
-            '<img src="${pageContext.request.contextPath}' + review.imagePath + '" ' +
-            'alt="' + review.nickName + '" width="120" height="120">' +
-            '<div class="content" style="white-space:pre-wrap;">' + review.content + '</div>' +
-            '<div class="meta">' + review.nickName + ' · ' + review.createdAt + '</div>';
-        card.addEventListener("click", () => card.classList.toggle("expanded"));
+        card.id = `review-${review.reviewIdx}`;
 
-        if (review.turn != 0) {
-            card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
-            card.style.backgroundColor = "#f9f9f9";             // 연한 배경
-            card.style.borderLeft = "3px solid #ccc";          // 구분선
+        let cardContent = '';
+
+        // 원본 리뷰일 경우 (turn === 0)
+        if (review.turn === 0) {
+            card.className = "review-card"; // 원본 리뷰용 클래스 설정
+            cardContent += 
+                '<div class="image-wrapper" style="width: 150px; height: 180px; overflow: hidden; margin-right: 20px; float: left;">' +
+                '<img src="' + review.imagePath + '" style="width: 100%; height: 100%; object-fit: cover;">' +
+                '</div>' +
+                '<span class="nickname" style="font-weight: bold;">' + review.nickName + '</span> · ' +
+                '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>';
+        } else {
+            card.className = "reply-card"; // 답글용 클래스 설정
+            cardContent += 
+                '<span class="shelterName" style="font-weight: bold;">' + 
+                (review.shelterName ? review.shelterName : '정보 없음') + 
+                '</span> · ' + 
+                '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>';
         }
+
+        // 공통 내용 추가
+        cardContent += 
+            '<div class="content" style="white-space:pre-wrap;">' + review.content + '</div>';
+
+        card.innerHTML = cardContent;
+
+        // 카드 스타일
+        card.style.marginBottom = "15px"; 
+        card.style.padding = "10px";
+        
+     // 답글 버튼 추가 (리뷰에만)
+        if (review.turn === 0) {
+            const replyButton = document.createElement("button");
+            replyButton.innerHTML = "답글 남기기";
+            replyButton.className = "reply-button";
+            
+            replyButton.onclick = () => openPopup();  // 답글 폼 팝업 함수 호출
+            // 리뷰 카드에 답글 버튼 추가
+            card.appendChild(replyButton);
+        }
+     
+        function openPopup() {
+            // 팝업 URL을 작성 (reviewIdx를 쿼리 파라미터로 전달)
+            const url = '/care//management/shelters/adoptionReview/reply'; 
+            const width = 600;
+            const height = 400;
+            const left = (window.innerWidth - width) / 2;
+            const top = (window.innerHeight - height) / 2;
+
+            var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
+            window.open(url, "리뷰 답글 남기기", windowOptions); 
+        }
+
+        // 답글일 경우 수정/삭제 버튼 추가
+        if (review.turn !== 0) {
+            const actionText = document.createElement("div");
+            actionText.className = "action-text";
+            actionText.innerHTML = 
+                '<span class="edit-text" onclick="editReview(' + review.reviewIdx + ')">수정</span>' +
+                '<span class="delete-text" onclick="deleteReview(' + review.reviewIdx + ')">삭제</span>';
+
+            actionText.style.position = "absolute";  
+            actionText.style.right = "10px";  
+            actionText.style.top = "5px";  
+            actionText.style.fontSize = "0.9em"; 
+            actionText.style.color = "#555"; 
+            card.style.position = "relative";
+            card.appendChild(actionText);  // 수정/삭제 텍스트를 추가
+            
+            // 답글에 margin-top과 border 추가
+            card.style.marginTop = "15px";  // 답글과 원본 리뷰 사이 간격
+            card.style.marginLeft = (review.turn * 8) + "px"; // turn 값 × 들여쓰기
+            card.style.borderBottom = "1px solid #ccc";  
+            card.style.borderLeft = "3px solid #ccc";    
+            card.style.clear = "both"; 
+        }
+
         wrapper.appendChild(card);
     }
 
-
-    // paging 
-  
-    
     makePaging(
-            pageInfo.totalCnt,
-            pageInfo.listSize,
-            pageInfo.pageSize,
-            pageInfo.cp,
-            "reviewPagingVol", 
-            loadVolunteerReview
+        pageInfo.totalCnt,
+        pageInfo.listSize,
+        pageInfo.pageSize,
+        pageInfo.cp,
+        "reviewPagingVol", 
+        loadVolunteerReview
     );
 }
 
 
+
+
+///입양리뷰
 async function loadAdoptionReview(cp = 1) {
     const wrapper = document.getElementById("adoptionReview");
     wrapper.innerHTML = "";
@@ -502,20 +828,57 @@ async function loadAdoptionReview(cp = 1) {
     for (const review of reviews) {
         const card = document.createElement("div");
         card.className = "review-card";
-        card.innerHTML =
-            '<img src="${pageContext.request.contextPath}' + review.imagePath + '" ' +
-            'alt="' + review.nickName + '" width="120" height="120">' +
+        
+        let cardContent = '';
+        if (review.turn === 0) {  // 원본 리뷰인 경우에만 이미지 추가
+        	   cardContent += 
+                   '<div class="image-wrapper" style="width: 150px; height: 180px; overflow: hidden; margin-right: 20px; float: left;">' +
+                   '<img src="' + review.imagePath + '" ' + 
+                   'style="width: 100%; height: 100%; object-fit: cover;">' +
+                   '</div>' +
+                   // 이미지 외부에 닉네임과 날짜를 표시
+                   '<span class="nickname" style="font-weight: bold;">' + review.nickName + '</span> · ' +
+                   '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>'+
+                   '<div class="meta" style="float: left; margin-top: 5px;">' +
+                   '</div>';
+           }
+        
+         if (review.turn !== 0) {  // 답글인 경우에는 별도로 닉네임과 생성일 추가
+                cardContent += 
+                    '<span class="shelterName" style="font-weight: bold;">' + review.shelterName + '</span> · ' + 
+                    '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>';
+          }
+         
+        cardContent +=
             '<div class="content" style="white-space:pre-wrap;">' + review.content + '</div>' +
-            '<div class="meta">' + review.nickName + ' · ' + review.createdAt + '</div>';
+            '<div class="meta"></div>';
+            
+
+        card.innerHTML = cardContent;
         card.addEventListener("click", () => card.classList.toggle("expanded"));
+        
+        if (review.turn === 0) {
+            const replyForm = document.createElement("div");
+            replyForm.className = "reply-form";
+            replyForm.innerHTML = `
+                <textarea class="reply-input" placeholder="답글을 입력하세요..." style="margin-bottom: 5px;"></textarea>
+                <button class="reply-submit" id="saveButton" onclick="submitReply(${review.id})"">답글 남기기</button>
+            `;
+            card.appendChild(replyForm); // 답글 폼을 추가
+        }
+        
+        card.style.marginBottom = "10px"; 
+        card.style.padding = "10px";
 
         if (review.turn != 0) {
-            card.style.marginLeft = (review.turn * 30) + "px"; // turn 값 × 30px 만큼 들여쓰기
-            card.style.backgroundColor = "#f9f9f9";             // 연한 배경
+            card.style.marginLeft = (review.turn * 8) + "px"; // turn 값 × 30px 만큼 들여쓰기
+            card.style.borderBottom = "1px solid #ccc";             // 연한 배경
             card.style.borderLeft = "3px solid #ccc";          // 구분선
         }
         wrapper.appendChild(card);
     }
+    
+
 
     makePaging(
             pageInfo.totalCnt,

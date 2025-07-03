@@ -19,6 +19,7 @@ public class ManageAdoptionReviewResponseDTO {
 	private int shelterIdx;
 	private int animalIdx;
 	private String nickName;
+	private String shelterName;
 	private String animalName;
 	private String content;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")

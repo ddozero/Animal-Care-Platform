@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>고객지원</title>
+<title>보호시설 공지사항</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
@@ -101,14 +101,30 @@
 		font-size: 14px;
 		padding: 10px;
 	}
-	.btn-area {
-		text-align: center;
-		margin-top: 20px;
-	}
-	.btn-area input[type="button"] {
-		width: 100%;
-	}
 }
+
+.action-buttons {
+  text-align: right;
+}
+
+.bt2{
+	  background: #ddd;
+	  border: none;
+	  border-radius: 6px;
+	  padding: 8px 16px;
+	  cursor: pointer;
+	  transition: background 0.25s;
+	  color: var(--text-main);
+	  font-size: 14px;
+	  margin-left: 8px; 
+	  margin-bottom:10px;
+}
+
+.bt2:hover {
+  	background: #ccc;
+}
+
+
 </style>
 </head>
 
@@ -116,9 +132,13 @@
 	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
 	<section class="board">
 		<div class="header-title">보호시설 소식</div>
-		<div class="title-detail">보호소에서 안내할 공지사항을 등록해보세요.</div>
+		<div class="title-detail">보호시설에서 안내하는 소식입니다.</div>
 
 		<div class="board-container">
+			<div class="action-buttons">
+			  <input type="button" class="bt2" value="수정하기" onclick="editNotice()" />
+			  <input type="button" class="bt2" value="삭제하기" onclick="deleteNotice()" />
+			</div>
 			<table class="board-content-table">
 				<tr>
 					<th>NO</th>
@@ -151,9 +171,9 @@
 
 <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
 <script>
- var contextPath = "${pageContext.request.contextPath}";
 
-	async function noticeDetail() {
+//공지사항 조회
+async function noticeDetail() {
 		const pathParts = window.location.pathname.split('/');
 		const idx = pathParts[pathParts.length - 1];
 
@@ -163,7 +183,8 @@
 			return;
 		}
 
-		const result = await API.get(contextPath + "/api/management/shelter/boards/" + idx);
+		const result = await API.get("/care/api/management/shelter/boards/" + idx);
+		console.log(result);
 
 		if (result.status !== 200) {
 			alert("게시물을 불러올 수 없습니다.");
@@ -176,15 +197,49 @@
 		document.getElementById("noticeIdx").innerHTML = notice.idx;
 		document.getElementById("noticeTitle").innerHTML = notice.title;
 		document.getElementById("noticeDate").innerHTML = notice.createdAt;
-		document.getElementById("noticeWriter").innerHTML = "댕봉사";
+		document.getElementById("noticeWriter").innerHTML = "보호소 관리자";
 		document.getElementById("noticeViews").innerHTML = notice.views;
 		document.getElementById("noticeContentBox").innerHTML = notice.content;
 		
 		document.getElementById("goListNotice").addEventListener("click", function () {
-			 window.location.href = contextPath + "/shelter/manage";
-		  });
+			  const contextPath = "${pageContext.request.contextPath}"; // contextPath를 동적으로 설정
+			  window.location.href = contextPath + "/management/shelters"; // 이동할 페이지 경로
+			});
 	}
 	noticeDetail();
+	
+//수정하기 폼 이동
+function editNotice() {
+  const pathParts = window.location.pathname.split('/');
+  const idx = pathParts[pathParts.length - 1];  // 현재 공지사항의 idx를 URL에서 가져옵니다.
+  window.location.href = '/care/management/shelters/boards/update/' + idx;  // 수정 페이지로 이동
+}
+
+//삭제하기
+async function deleteNotice() {
+	  const pathParts = window.location.pathname.split('/');
+	  const idx = pathParts[pathParts.length - 1];  // 현재 공지사항의 idx를 URL에서 가져옵니다.
+
+	  if (!confirm("공지사항을 삭제하시겠습니까?")) {
+	    return; 
+	  }
+
+	  try {
+	    const result = await API.delete(`/care/api/management/shelter/boards/${idx}`);
+
+	    if (result.status === 200) {
+	      alert("공지사항이 삭제되었습니다.");
+	      window.location.href = "/care/management/shelters"; 
+	    } else {
+	      alert("삭제에 실패했습니다.");
+	    }
+	  } catch (err) {
+	    console.error("삭제 중 오류 발생:", err);
+	    alert("삭제 중 오류가 발생했습니다.");
+	  }
+	}
+
+
 </script>
 
 </body>

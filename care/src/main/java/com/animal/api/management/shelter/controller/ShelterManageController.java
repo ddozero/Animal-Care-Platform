@@ -194,10 +194,7 @@ public class ShelterManageController {
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
 
-		int reviewIdx = 0;
-		dto.setReviewIdx(reviewIdx);
-
-		int result = shelterService.addVolunteerReviewApply(dto, userIdx, reviewIdx);
+		int result = shelterService.addVolunteerReviewApply(dto, userIdx, dto.getRef());
 
 		if (result == shelterService.NOT_REVIEW) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없음"));
@@ -209,6 +206,25 @@ public class ShelterManageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
 		}
 	}
+	
+	/**
+	 * 해당 보호시설 trun max값 구하게 
+	 * 
+	 * @param reviewIdx 리뷰 번호 
+	 * 
+	 * @return turn값 조회 성공 여부 
+	 */
+	 @GetMapping("/reviews/turn-max")
+	    public ResponseEntity<?> getMaxTurn(@RequestParam("reviewIdx") int reviewIdx) {
+	        try {
+	            int maxTurn = shelterService.getMaxTurnVR(reviewIdx); // 최대 TURN 값을 서비스에서 가져옵니다.
+	            return ResponseEntity.ok(new OkResponseDTO<>(200, "최대 turn 값 조회 성공", maxTurn)); // 성공적으로 반환
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(500, "서버 오류: " + e.getMessage()));
+	        }
+	    }
+	
 
 	/**
 	 * 해당 보호시설 봉사 리뷰 글에 대한 답글 수정 메서드
@@ -219,17 +235,17 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 봉사 리뷰글 답글 수정
 	 */
-	@PutMapping("/reviews/volunteer/{reviewIdx}")
-	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int reviewIdx,
+	@PutMapping("/reviews/volunteer/{idx}")
+	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int idx,
 			@Valid @RequestBody ManageVolunteerReplyRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
-		dto.setReviewIdx(reviewIdx);
+		dto.setIdx(idx);
 
-		int result = shelterService.updateVolunteerReviewApply(dto, loginUser.getIdx(), reviewIdx);
+		int result = shelterService.updateVolunteerReviewApply(dto, loginUser.getIdx(), idx);
 
 		if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "봉사 리뷰 답글 수정 성공", null));

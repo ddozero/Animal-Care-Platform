@@ -33,6 +33,8 @@ public interface ManagementShelterMapper {
 	public int getAdoptionReviewTotalCnt(@Param("idx") int userIdx); //입양 리뷰 페이징 구현 total count
 
 	public int updateTurnVR(ManageVolunteerReplyRequestDTO dto); // VolunteerReview 순번
+	
+	public Integer getMaxTurnVR(int ref); //ref값구하기
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 

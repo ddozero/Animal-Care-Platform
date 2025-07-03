@@ -134,7 +134,7 @@ textarea:focus {
 		<div class="title-detail">보호소에서 안내할 공지사항을 등록해보세요.</div>
 
 		<div class="board-container">
-
+			<form id = "noticeWriteForm">
 			<table class="board-content-table">
 				<tr>
 					<th>작성자</th>
@@ -145,100 +145,65 @@ textarea:focus {
 				<tr>
 					<th>제목</th>
 					<td colspan="3">
-						<input type="text" id="title"  name="title" style="border: none; outline: none; font-size:15px; width: 100%; padding: 8px;"  placeholder="제목을 입력하세요" required>
+						<input type="text" name="title" style="border: none; outline: none; font-size:15px; width: 100%; padding: 8px;"  placeholder="제목을 입력하세요" required>
 					</td>
 				</tr>
 				<tr>
 					<th>내용</th>
 					<td colspan="3">
-						<textarea id="content" name="content" required placeholder="내용을 입력하세요" rows="15" style="width: 100%; padding: 10px; font-size: 15px; resize: vertical;"></textarea>
+						<textarea name="content" required placeholder="내용을 입력하세요" rows="15" style="width: 100%; padding: 10px; font-size: 15px; resize: vertical;"></textarea>
 					</td>
 				</tr>
 			</table>
 
 			<div class="btn-area">
-				<input type ="button" class="bt2" value="저장하기" id="saveButton" onclick="saveChanges()">
-				<input type="button" class="bt2" value="돌아가기" onclick="history.back()">
+				<input type="submit" value="등록하기">
+				<input type="button" value="돌아가기" onclick="history.back()">
 			</div>
 		</div>
-	
+		</form>
 	</section>
 	
 	
 <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
 <script>
-//공지사항 정보 불러오기
-async function noticeDetail() {
-  const pathParts = window.location.pathname.split('/');
-  const idx = pathParts[pathParts.length - 1];
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("noticeWriteForm");
 
-  if (!idx) {
-    alert("잘못된 접근입니다.");
-    window.location.href = "/notice";
-    return;
-  }
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault(); // 기본 form 제출 막기
 
-  const result = await API.get("/care/api/management/shelter/boards/" + idx);
+    const title = form.title.value.trim();
+    const content = form.content.value.trim();
 
-  if (result.status !== 200) {
-    alert("게시물을 불러올 수 없습니다.");
-    window.location.href = "/notice";
-    return;
-  }
+    if (!title || !content) {
+      alert("제목과 내용을 모두 입력해주세요.");
+      return;
+    }
 
-  const notice = result.data;
+    const dto = {
+      title: title,
+      content: content
+    };
 
-  document.getElementById("title").value = notice.title;
-  document.getElementById("content").value = notice.content;
-}
-
-function enableEdit() {
-  document.getElementById("title").disabled = false;
-  document.getElementById("content").disabled = false;
-  
-  document.getElementById("saveButton").style.display = "inline-block"; // 수정 완료 후 저장하기 버튼 보이기
-  document.getElementById("editButton").style.display = "none"; // 수정하기 버튼 숨기기
-}
-
-//수정 저장하기
-async function saveChanges() {
-	  const title = document.getElementById("title").value.trim();
-	  const content = document.getElementById("content").value.trim();
-
-	  if (!title || !content) {
-	    alert("제목과 내용을 모두 입력해주세요.");
-	    return;
-	  }
-
-	  const dto = {
-	    title: title,
-	    content: content
-	  };
-
-	  const pathParts = window.location.pathname.split('/');
-	  const idx = pathParts[pathParts.length - 1];  // URL에서 idx 가져오기
-
-	  try {
-	    const result = await API.put(`/care/api/management/shelter/boards/${idx}`, dto);
-
-	    if (result.status === 200) {
-	      alert("공지사항이 수정되었습니다.");
-	      window.location.href = "/care/management/shelters";  // 수정 후 목록으로 이동
-	    } else {
-	      alert("수정에 실패했습니다.");
-	    }
-	  } catch (err) {
-	    console.error("수정 중 오류 발생:", err);
-	    alert("수정 중 오류가 발생했습니다.");
-	  }
-	}
-
-// 페이지 로드 시 공지사항 불러오기
-window.addEventListener("DOMContentLoaded", function() {
-  noticeDetail();
+    try {
+      const result = await API.post("/care/api/management/shelter/boards/", dto); 
+      if (result.status === 201) {
+        alert("공지사항이 등록되었습니다.");
+        location.href = "/care/management/shelters"; 
+      } else {
+        alert("등록에 실패했습니다.");
+      }
+    } catch (err) {
+      console.error("등록 중 오류:", err);
+      alert("서버 오류로 등록 실패");
+    }
+  });
 });
-
 </script>
+
+
+
 
 </body>
 </html>

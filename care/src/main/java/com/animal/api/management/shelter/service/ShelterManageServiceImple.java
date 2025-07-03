@@ -79,6 +79,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		map.put("cp", cp);
 		map.put("idx", idx);
 
+
 		List<ManageVolunteerReviewResponseDTO> reviewLists = mapper.getVolunteerReview(map);
 
 		if (reviewLists != null) {
@@ -138,43 +139,38 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		PageInformationDTO page = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
 		return page;
 	}
-
+	
+	@Override
+	public int getMaxTurnVR(int ref) {
+		Integer maxTurn = mapper.getMaxTurnVR(ref);  // 매퍼에서 가장 큰 turn 값을 조회
+        return maxTurn != null ? maxTurn + 1 : 1;  // maxTurn 값이 있으면 +1, 없으면 1로 설정
+	}
+	
 	@Override
 	@Transactional
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx) {
+	 
+	    int nextTurn = getMaxTurnVR(dto.getRef());
 
-		Map<String, Integer> map = new HashMap<>();
-		map.put("ref", dto.getRef());
-		map.put("turn", dto.getTurn());
+	    dto.setTurn(nextTurn);
+	    dto.setLev(dto.getLev() + 1);
+	    dto.setUserIdx(userIdx);
+	    dto.setIdx(dto.getRef()); 
 
-		int count = mapper.updateTurnAR(map);
+	    Integer shelterCheck = mapper.checkShelterUserVR(dto);
+	    if (shelterCheck == null || shelterCheck == 0) { 
+	        return NOT_SHELTER_MANAGER;
+	    }
 
-		if (count < 0) {
-			return ERROR;
-		} else if (count == 0) {
-			return NOT_REVIEW;
-		}
+	    int result = mapper.addVolunteerReviewApply(dto);
 
-		dto.setTurn(dto.getTurn() + 1);
-		dto.setLev(dto.getLev() + 1);
-
-		dto.setUserIdx(userIdx);
-		dto.setReviewIdx(dto.getRef());
-
-		Integer shelterCheck = mapper.checkShelterUserVR(dto);
-		if (shelterCheck == null || shelterCheck == 0) { // 해당 보호소 관리자인지 확인
-			return NOT_SHELTER_MANAGER;
-		}
-
-		int result = mapper.addVolunteerReviewApply(dto);
-
-		if (result > 0) {
-			return UPDATE_OK;
-		} else {
-			return ERROR;
-		}
+	    if (result > 0) {
+	        return UPDATE_OK;
+	    } else {
+	        return ERROR;
+	    }
 	}
-
+	
 	@Override
 	public int updateVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx) {
 
@@ -184,7 +180,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return NOT_REVIEW;
 		}
 
-		dto.setReviewIdx(reviewIdx);
+		dto.setIdx(reviewIdx);
 		dto.setUserIdx(userIdx);
 
 		Integer shelterCheck = mapper.checkShelterUserVR(dto);
@@ -209,7 +205,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 
 		ManageVolunteerReplyRequestDTO dto = new ManageVolunteerReplyRequestDTO();
-		dto.setReviewIdx(reviewIdx);
+		dto.setIdx(reviewIdx);
 		dto.setUserIdx(userIdx);
 
 		Integer shelterCheck = mapper.checkShelterUserVR(dto);

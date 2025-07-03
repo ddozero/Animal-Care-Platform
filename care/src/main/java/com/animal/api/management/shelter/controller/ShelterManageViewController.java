@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/shelter")
+@RequestMapping("/management/shelters")
 public class ShelterManageViewController {
 	
-	@GetMapping("/manage")
+	@GetMapping()
 	public String ShelterInfo() { //보호시설 정보
 		return "management/shelter/shelterInfo";
 	}
@@ -24,6 +24,23 @@ public class ShelterManageViewController {
 	public String shelterNoticeDetail(@PathVariable int idx, Model model) { //공지사항 컨텐츠
 		model.addAttribute("idx",idx);
 		return "management/shelter/shelterNoticeContent";
+	}
+	
+	@GetMapping("/boards/write")
+	public String shelterNoticeWrite() { //공지사항 등록폼
+		return "management/shelter/shelterNoticeWrite";
+	}
+	
+	@GetMapping("/boards/update/{idx}")
+	public String shelterNoticeUpdate(@PathVariable int idx, Model model) {
+	    model.addAttribute("idx", idx);
+	    return "management/shelter/shelterNoticeUpdate";  // 수정 폼으로 이동
+	}
+	
+	@GetMapping("/adoptionReview/reply")
+	  public String showReviewPage() {
+	   return "management/shelter/shelterReplyForm"; // 해당 JSP 페이지로 이동
+
 	}
 
 

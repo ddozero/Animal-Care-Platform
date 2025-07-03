@@ -65,7 +65,7 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 		if (dto != null && dto.getContent() != null) {
 			List<String> imagePaths = fileManager.getImagePath("volunteers", idx);
 			if (imagePaths != null || imagePaths.size() != 0) {
-				dto.setImagePaths(imagePaths.get(0));
+				dto.setImagePath(imagePaths.get(0));
 			}
 			dto.setFilePaths(fileManager.getFilePath("volunteers", idx));
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
