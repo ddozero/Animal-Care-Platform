@@ -741,27 +741,25 @@ async function loadVolunteerReview(cp = 1) {
         card.style.marginBottom = "15px"; 
         card.style.padding = "10px";
         
-     // 답글 버튼 추가 (리뷰에만)
+     // 답글 버튼 
         if (review.turn === 0) {
             const replyButton = document.createElement("button");
             replyButton.innerHTML = "답글 남기기";
             replyButton.className = "reply-button";
             
-            replyButton.onclick = () => openPopup();  // 답글 폼 팝업 함수 호출
-            // 리뷰 카드에 답글 버튼 추가
+            replyButton.onclick = () => openPopup(review.reviewIdx);
             card.appendChild(replyButton);
         }
      
-        function openPopup() {
-            // 팝업 URL을 작성 (reviewIdx를 쿼리 파라미터로 전달)
-            const url = '/care/management/shelters/adoptionReview/reply'; 
+        function openPopup(reviewIdx) {
+            const url = '/care/management/shelters/volunteerReview/reply?reviewIdx=' + reviewIdx + '&volunteerIdx=' + review.volunteerIdx;
             const width = 600;
             const height = 400;
             const left = (window.innerWidth - width) / 2;
             const top = (window.innerHeight - height) / 2;
 
             var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
-            window.open(url, "리뷰 답글 남기기", windowOptions); 
+            window.open(url, "리뷰 답글 남기기", windowOptions);
         }
 
         // 답글일 경우 수정/삭제 버튼 추가

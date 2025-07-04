@@ -2,6 +2,7 @@ package com.animal.api.management.shelter.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.api.common.model.PageInformationDTO;
@@ -16,6 +17,7 @@ import com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO;
 
 public interface ShelterManageService {
 	
+	public static int NOT_ALLOWED_REPLY = -5;
 	public static int NOT_EXIST_BOARD = -4;
 	public static int NOT_SHELTER_MANAGER = -3;
 	public static int NOT_REVIEW = -2;
@@ -42,7 +44,8 @@ public interface ShelterManageService {
 	
 	public PageInformationDTO getAdoptionReviewPage(int cp, int idx);
 	
-	public int getMaxTurnVR(int ref); //ref값구하기
+	//public int getMaxTurnVR(int ref); //ref값구하기
+	
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx);
 

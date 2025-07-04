@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/management/shelters")
@@ -37,10 +38,13 @@ public class ShelterManageViewController {
 	    return "management/shelter/shelterNoticeUpdate";  // 수정 폼으로 이동
 	}
 	
-	@GetMapping("/adoptionReview/reply")
-	  public String showReviewPage() {
-	   return "management/shelter/shelterReplyForm"; // 해당 JSP 페이지로 이동
-
+	@GetMapping("/volunteerReview/reply")
+	public String showReviewPage(@RequestParam int reviewIdx,
+	                             @RequestParam int volunteerIdx,
+	                             Model model) {
+	    model.addAttribute("reviewIdx", reviewIdx);
+	    model.addAttribute("volunteerIdx", volunteerIdx);
+	    return "management/shelter/shelterReplyForm";
 	}
 
 

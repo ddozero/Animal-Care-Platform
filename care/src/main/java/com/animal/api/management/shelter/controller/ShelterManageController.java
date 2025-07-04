@@ -169,11 +169,11 @@ public class ShelterManageController {
 		PageInformationDTO page = shelterService.getAdoptionReviewPage(cp, userIdx);
 
 		if (reviewList == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없습니다."));
 		} else if (reviewList.size() == 0) {
-			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList, page));
+			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "등록된 리뷰가 없습니다.", reviewList, page));
 		} else {
-			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "리뷰 조회 성공", reviewList, page));
+			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "리뷰 조회가 완료되었습니다.", reviewList, page));
 		}
 
 	}
@@ -186,7 +186,7 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 봉사 리뷰글 답글
 	 */
-	@PostMapping("/reviews/volunteer")
+	@PostMapping("/volunteerReviews/reply")
 	public ResponseEntity<?> addVolunteerReviewApply(@Valid @RequestBody ManageVolunteerReplyRequestDTO dto,
 			HttpSession session) {
 
@@ -197,33 +197,35 @@ public class ShelterManageController {
 		int result = shelterService.addVolunteerReviewApply(dto, userIdx, dto.getRef());
 
 		if (result == shelterService.NOT_REVIEW) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없음"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없습니다."));
 		} else if (result == shelterService.UPDATE_OK) {
-			return ResponseEntity.ok(new OkResponseDTO<>(201, "리뷰 답글 등록 성공", null));
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<>(201, "답글 등록이 완료되었습니다.", null));
 		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아님"));
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아니면 접근할 수 없습니다."));
+		} else if (result == shelterService.NOT_ALLOWED_REPLY) {
+		    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "답글은 한 번만 등록할 수 있습니다."));
+		}else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
 		}
 	}
 	
-	/**
-	 * 해당 보호시설 trun max값 구하게 
-	 * 
-	 * @param reviewIdx 리뷰 번호 
-	 * 
-	 * @return turn값 조회 성공 여부 
-	 */
-	 @GetMapping("/reviews/turn-max")
-	    public ResponseEntity<?> getMaxTurn(@RequestParam("reviewIdx") int reviewIdx) {
-	        try {
-	            int maxTurn = shelterService.getMaxTurnVR(reviewIdx); // 최대 TURN 값을 서비스에서 가져옵니다.
-	            return ResponseEntity.ok(new OkResponseDTO<>(200, "최대 turn 값 조회 성공", maxTurn)); // 성공적으로 반환
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(500, "서버 오류: " + e.getMessage()));
-	        }
-	    }
+//	/**
+//	 * 해당 보호시설 trun max값 구하게 
+//	 * 
+//	 * @param reviewIdx 리뷰 번호 
+//	 * 
+//	 * @return turn값 조회 성공 여부 
+//	 */
+//	 @GetMapping("/reviews/turn-max")
+//	    public ResponseEntity<?> getMaxTurn(@RequestParam("reviewIdx") int reviewIdx) {
+//	        try {
+//	            int maxTurn = shelterService.getMaxTurnVR(reviewIdx); // 최대 TURN 값을 서비스에서 가져옵니다.
+//	            return ResponseEntity.ok(new OkResponseDTO<>(200, "최대 turn 값 조회 성공", maxTurn)); // 성공적으로 반환
+//	        } catch (Exception e) {
+//	            e.printStackTrace();
+//	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(500, "서버 오류: " + e.getMessage()));
+//	        }
+//	    }
 	
 
 	/**
@@ -243,7 +245,7 @@ public class ShelterManageController {
 
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
-		dto.setIdx(idx);
+		dto.setReviewIdx(idx);
 
 		int result = shelterService.updateVolunteerReviewApply(dto, loginUser.getIdx(), idx);
 

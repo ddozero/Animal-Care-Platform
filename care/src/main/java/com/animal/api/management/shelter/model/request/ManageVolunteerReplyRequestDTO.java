@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 public class ManageVolunteerReplyRequestDTO {
 
 
-	private Integer idx;
+	private Integer reviewIdx;
 
-	private Integer userIdx;
+	private int userIdx;
 
 	private Integer volunteerIdx;
 	
 	@NotBlank(message = "답글 내용을 작성해주세요.")
 	private String content;
 
-	private Integer ref;
+	private int ref;
 
 	private int lev;
 
