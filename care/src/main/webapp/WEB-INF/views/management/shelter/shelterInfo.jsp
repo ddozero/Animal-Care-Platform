@@ -21,8 +21,6 @@ body {
   margin: 0;
   font-family: 'Pretendard', sans-serif;
   background: #fff;
-  color: var(--text-main);
-  line-height: 1.55;
 }
 
 .container {
@@ -130,7 +128,6 @@ body {
 }
 
 .board {
-  font-family: 'Pretendard', sans-serif;
   background-color: #fff;
   padding: 60px 20px 40px;
   margin-top: 50px;
@@ -764,7 +761,7 @@ async function loadVolunteerReview(cp = 1) {
             replyButton.onclick = () => openPopup(review.reviewIdx);
             card.appendChild(replyButton);
         }
-     
+     	//답글 등록
         function openPopup(reviewIdx) {
             const url = '/care/management/shelters/volunteerReview/reply?reviewIdx=' + reviewIdx + '&volunteerIdx=' + review.volunteerIdx;
             const width = 600;
@@ -773,7 +770,7 @@ async function loadVolunteerReview(cp = 1) {
             const top = (window.innerHeight - height) / 2;
 
             var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
-            window.open(url, "리뷰 답글 남기기", windowOptions);
+            window.open(url, "blank", windowOptions);
         }
 
         // 답글일 경우 수정/삭제 버튼 추가
@@ -781,7 +778,7 @@ async function loadVolunteerReview(cp = 1) {
             const actionText = document.createElement("div");
             actionText.className = "action-text";
             actionText.innerHTML = 
-                '<span class="edit-text" onclick="editReview(' + review.reviewIdx + ')">수정</span>' +
+                '<span class="edit-text" onclick="editReviewPopup(' + review.reviewIdx + ')">수정</span>' +
                 '<span class="delete-text" onclick="deleteReview(' + review.reviewIdx + ')">삭제</span>';
 
             actionText.style.position = "absolute";  
@@ -791,7 +788,7 @@ async function loadVolunteerReview(cp = 1) {
             actionText.style.color = "#555"; 
             card.style.position = "relative";
             card.appendChild(actionText);  // 수정/삭제 텍스트를 추가
-            
+  
             // 답글에 margin-top과 border 추가
           
             card.style.marginLeft = (review.turn * 8) + "px"; // turn 값 × 들여쓰기
@@ -799,7 +796,7 @@ async function loadVolunteerReview(cp = 1) {
             card.style.borderLeft = "3px solid #ccc";    
             card.style.clear = "both"; 
         }
-
+ 
         wrapper.appendChild(card);
     }
 
@@ -812,6 +809,20 @@ async function loadVolunteerReview(cp = 1) {
         loadVolunteerReview
     );
 }
+
+
+	//답글 수정 
+	function editReviewPopup(reviewIdx) {
+			const url = '/care/management/shelters/volunteerReview/reply/update?reviewIdx=' + reviewIdx;
+			const width = 600;
+            const height = 400;
+            const left = (window.innerWidth - width) / 2;
+            const top = (window.innerHeight - height) / 2;
+
+            var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
+            window.open(url, "replyUpdate", windowOptions);
+	 }
+
 
 
 

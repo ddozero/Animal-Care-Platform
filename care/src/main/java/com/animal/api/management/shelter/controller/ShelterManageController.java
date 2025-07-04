@@ -219,7 +219,7 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 봉사 리뷰글 답글 수정
 	 */
-	@PutMapping("/reviews/volunteer/{idx}")
+	@PutMapping("/volunteerReviews/reply/update/{idx}")
 	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int idx,
 			@Valid @RequestBody ManageVolunteerReplyRequestDTO dto, HttpSession session) {
 

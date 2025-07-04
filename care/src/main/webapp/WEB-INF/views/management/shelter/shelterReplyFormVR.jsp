@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -20,8 +21,9 @@
 }
 
 .popup-box {
-	width : 500px;
+	width: 500px;
 }
+
 .popup-box h2 {
 	margin-top: 0;
 	margin-bottom: 20px;
@@ -29,11 +31,11 @@
 	color: #3ACDB2;
 	padding-bottom: 10px;
 	text-align: center;
-	border-bottom : 1px solid #eee;
+	border-bottom: 1px solid #eee;
 }
 
 .reply-form {
-  text-align: center;
+	text-align: center;
 }
 
 .reply-form label {
@@ -54,54 +56,52 @@
 }
 
 .bt-box {
-  text-align: center;
+	text-align: center;
 }
 
 .reply-btn {
-  background: #3ACDB2;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background 0.25s;
-  margin-left: auto;
-  color: #fff;
-  margin-top : 30px;
+	background: #3ACDB2;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	cursor: pointer;
+	transition: background 0.25s;
+	margin-left: auto;
+	color: #fff;
+	margin-top: 30px;
 }
 
 .close-btn {
-  background: #999;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background 0.25s;
-  margin-left: auto;
-  color: #fff;
-  margin-top : 30px;
+	background: #999;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	cursor: pointer;
+	transition: background 0.25s;
+	margin-left: auto;
+	color: #fff;
+	margin-top: 30px;
 }
 
 .reply-button:hover {
-  background: #ccc;
+	background: #ccc;
 }
 
 textarea {
-  width: 100%;  
-  padding: 10px;
-  font-size: 16px;
-  font-family: 'Pretendard', sans-serif;
-  border-radius: 4px;
-  border: 1px solid #DBDBDB;
-  background-color: #fff;
-  resize: vertical;  
+	width: 100%;
+	padding: 10px;
+	font-size: 16px;
+	font-family: 'Pretendard', sans-serif;
+	border-radius: 4px;
+	border: 1px solid #DBDBDB;
+	background-color: #fff;
+	resize: vertical;
 }
 
 textarea:disabled {
-  background-color: #fff; /* disabled 상태일 때 색상 변경 */
-  border : none;
+	background-color: #fff; /* disabled 상태일 때 색상 변경 */
+	border: none;
 }
-
-
 </style>
 </head>
 <body>
@@ -109,18 +109,20 @@ textarea:disabled {
 		<div class="popup-box">
 			<h2>리뷰 답글 남기기</h2>
 			<form id="replyForm" class="reply-form">
-				<textarea name="content" id="content" placeholder="답글을 입력해주세요" required></textarea>
+				<textarea name="content" id="content" placeholder="답글을 입력해주세요"
+					required></textarea>
 				<div class="bt-box">
-				<button type="submit" class="reply-btn">등록</button>
-			    <button class="close-btn" onclick="closePopup()">닫기</button>
-				<input type="hidden" name="reviewIdx" id="reviewIdx"> 
-				<input type="hidden" name="volunteerIdx" id="volunteerIdx">
+					<button type="submit" class="reply-btn">등록</button>
+					<button class="close-btn" onclick="closePopup()">닫기</button>
+					<input type="hidden" name="reviewIdx" id="reviewIdx"> <input
+						type="hidden" name="volunteerIdx" id="volunteerIdx">
 				</div>
 			</form>
 		</div>
 	</div>
 
-	<script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
 	<script>
 	document.addEventListener("DOMContentLoaded", function () {
 		  const form = document.getElementById("replyForm");

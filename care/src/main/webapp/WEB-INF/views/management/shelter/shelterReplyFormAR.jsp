@@ -20,7 +20,9 @@
 }
 
 .popup-box {
-	width : 500px;
+	width: 500px;
+	padding: 20px;
+	box-sizing: border-box; 
 }
 .popup-box h2 {
 	margin-top: 0;
@@ -44,13 +46,16 @@
 }
 
 .reply-form textarea {
-	width: 100%;
-	height: 120px;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	font-size: 14px;
-	resize: vertical;
+  width: 100%;
+  height: 120px;
+  box-sizing: border-box;    
+  padding: 10px;
+  font-size: 16px;
+  font-family: 'Pretendard', sans-serif;
+  border: 1px solid #DBDBDB;
+  border-radius: 4px;
+  background-color: #fff;
+  resize: vertical;
 }
 
 .bt-box {
@@ -85,22 +90,10 @@
   background: #ccc;
 }
 
-textarea {
-  width: 100%;  
-  padding: 10px;
-  font-size: 16px;
-  font-family: 'Pretendard', sans-serif;
-  border-radius: 4px;
-  border: 1px solid #DBDBDB;
-  background-color: #fff;
-  resize: vertical;  
-}
-
 textarea:disabled {
   background-color: #fff; /* disabled 상태일 때 색상 변경 */
   border : none;
 }
-
 
 </style>
 </head>
