@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.animal.api.index.animal.mapper.MainAnimalMapper">
+	<select id="selectRecentAnimals" resultType="com.animal.api.index.animal.model.response.MainAnimalResponseDTO">
+		SELECT 
+		    A.IDX,
+		    A.NAME,
+		    B.NAME AS BREED_NAME,
+		    CASE A.GENDER
+		        WHEN 'M' THEN '남'
+		        WHEN 'F' THEN '여'
+		    END AS GENDER
+		FROM ANIMALS A
+		JOIN ANIMAL_BREEDS B ON A.ANIMAL_BREED_IDX = B.IDX
+		ORDER BY A.CREATED_AT DESC
+		LIMIT 5;
+	</select>
+</mapper>
