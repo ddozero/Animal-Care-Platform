@@ -42,8 +42,8 @@ body {
 }
 
 .photo-box {
-  width: 250px;
-  height: 260px;
+  width: 270px;
+  height: 300px;
   background: var(--gray-3);
   border-radius: 8px;
   overflow: hidden;
@@ -405,7 +405,6 @@ textarea:disabled {
       <div class="photo-box">
         <img id="shelterImage" src="" alt="보호소 사진">
       </div>
-      <button class="upload-button">사진업로드</button>
     </div>
      <div class="info-section">
            <div>
@@ -511,9 +510,7 @@ async function ShelterInfo() {
         var img = document.getElementById("shelterImage");
         if (shelter.imagePaths && shelter.imagePaths.length > 0 && shelter.imagePaths[0]) {
             img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0];
-        } else {
-            img.src = "/resources/images/no-image.png";
-        }
+        } 
 
         // 정보 입력
         document.getElementById("shelterName").value = shelter.shelterName;
@@ -721,7 +718,7 @@ async function loadVolunteerReview(cp = 1) {
             card.className = "review-card"; // 원본 리뷰용 클래스 설정
             cardContent += 
                 '<div class="image-wrapper" style="width: 150px; height: 180px; overflow: hidden; margin-right: 20px; float: left;">' +
-                '<img src="' + review.imagePath + '" style="width: 100%; height: 100%; object-fit: cover;">' +
+                '<img src="${pageContext.request.contextPath}' + review.imagePath + '" style="width: 100%; height: 100%; object-fit: cover;">' +
                 '</div>' +
                 '<span class="nickname" style="font-weight: bold;">' + review.nickName + '</span> · ' +
                 '<span class="created-at" style="font-size: 0.9em; color: #777;">' + review.createdAt + '</span>';
@@ -757,7 +754,7 @@ async function loadVolunteerReview(cp = 1) {
      
         function openPopup() {
             // 팝업 URL을 작성 (reviewIdx를 쿼리 파라미터로 전달)
-            const url = '/care//management/shelters/adoptionReview/reply'; 
+            const url = '/care/management/shelters/adoptionReview/reply'; 
             const width = 600;
             const height = 400;
             const left = (window.innerWidth - width) / 2;
@@ -833,7 +830,7 @@ async function loadAdoptionReview(cp = 1) {
         if (review.turn === 0) {  // 원본 리뷰인 경우에만 이미지 추가
         	   cardContent += 
                    '<div class="image-wrapper" style="width: 150px; height: 180px; overflow: hidden; margin-right: 20px; float: left;">' +
-                   '<img src="' + review.imagePath + '" ' + 
+                   '<img src="${pageContext.request.contextPath}' + review.imagePath + '" style="width: 100%; height: 100%; object-fit: cover;">' +
                    'style="width: 100%; height: 100%; object-fit: cover;">' +
                    '</div>' +
                    // 이미지 외부에 닉네임과 날짜를 표시

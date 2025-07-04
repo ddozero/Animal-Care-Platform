@@ -86,7 +86,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			for (ManageVolunteerReviewResponseDTO dto : reviewLists) { // 이미지 경로 가져오기
 				List<String> imagePaths = fileManager.getImagePath("volunteerReviews", dto.getReviewIdx());
 				if (imagePaths != null || imagePaths.size() != 0) {
-					dto.setImagePaths(imagePaths.get(0));
+					dto.setImagePath(imagePaths.get(0));
 				}
 			}
 		}
@@ -123,7 +123,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			for (ManageAdoptionReviewResponseDTO dto : reviewLists) { // 이미지 경로 가져오기
 				List<String> imagePaths = fileManager.getImagePath("adoptionReviews", dto.getReviewIdx());
 				if (imagePaths != null || imagePaths.size() != 0) {
-					dto.setImagePaths(imagePaths.get(0));
+					dto.setImagePath(imagePaths.get(0));
 				}
 			}
 		}
