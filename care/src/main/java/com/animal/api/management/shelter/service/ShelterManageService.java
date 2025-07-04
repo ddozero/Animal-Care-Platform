@@ -43,9 +43,6 @@ public interface ShelterManageService {
 	public List<ManageAdoptionReviewResponseDTO> getAdoptionReview(int cp, int idx);
 	
 	public PageInformationDTO getAdoptionReviewPage(int cp, int idx);
-	
-	//public int getMaxTurnVR(int ref); //ref값구하기
-	
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx);
 

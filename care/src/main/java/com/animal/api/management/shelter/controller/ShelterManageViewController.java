@@ -38,13 +38,24 @@ public class ShelterManageViewController {
 	    return "management/shelter/shelterNoticeUpdate";  // 수정 폼으로 이동
 	}
 	
+	//봉사 리뷰 답글
 	@GetMapping("/volunteerReview/reply")
-	public String showReviewPage(@RequestParam int reviewIdx,
+	public String showReviewPageVR(@RequestParam int reviewIdx,
 	                             @RequestParam int volunteerIdx,
 	                             Model model) {
 	    model.addAttribute("reviewIdx", reviewIdx);
 	    model.addAttribute("volunteerIdx", volunteerIdx);
-	    return "management/shelter/shelterReplyForm";
+	    return "management/shelter/shelterReplyFormVR";
+	}
+	
+	//입양 리뷰 답글
+	@GetMapping("/adoptionReview/reply")
+	public String showReviewPageAR(@RequestParam int reviewIdx,
+	                             @RequestParam int animalIdx,
+	                             Model model) {
+	    model.addAttribute("reviewIdx", reviewIdx);
+	    model.addAttribute("volunteerIdx", animalIdx);
+	    return "management/shelter/shelterReplyFormAR";
 	}
 
 

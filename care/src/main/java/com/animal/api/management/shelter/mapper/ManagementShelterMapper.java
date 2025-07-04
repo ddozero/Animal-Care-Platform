@@ -34,11 +34,9 @@ public interface ManagementShelterMapper {
 
 	public int updateTurnVR(Map map); // VolunteerReview 순번
 	
-	//public Integer getMaxTurnVR(int ref); //ref값구하기
+	public ManageVolunteerReviewResponseDTO getReviewIdxVR(@Param("reviewIdx") int reviewIdx); //봉사리뷰조회
 	
-	public ManageVolunteerReviewResponseDTO getReviewIdxVR(@Param("reviewIdx") int reviewIdx);
-	
-	public int getMaxTurnVR(@Param("ref") int ref);
+	public int getMaxTurnVR(@Param("ref") int ref); //봉사 리뷰 turn
 
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto);
 
@@ -51,6 +49,10 @@ public interface ManagementShelterMapper {
 	public Integer checkShelterUserVR(ManageVolunteerReplyRequestDTO dto);
 
 	public int updateTurnAR(Map map); // AdoptionReview 순번
+	
+	public ManageAdoptionReviewResponseDTO getReviewIdxAR(@Param("reviewIdx") int reviewIdx); //입양리뷰조회
+	
+	public int getMaxTurnAR(@Param("ref") int ref); //입양 리뷰 turn
 
 	public Integer checkAdoptionReview(@Param("reviewIdx") int reviewIdx);
 

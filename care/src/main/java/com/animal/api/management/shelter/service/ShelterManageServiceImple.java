@@ -140,13 +140,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		return page;
 	}
 	
-//	@Override
-//	public int getMaxTurnVR(int ref) {
-//		Integer maxTurn = mapper.getMaxTurnVR(ref);  // 매퍼에서 가장 큰 turn 값을 조회
-//        return maxTurn != null ? maxTurn + 1 : 1;  // maxTurn 값이 있으면 +1, 없으면 1로 설정
-//	}
-	
-
+	//봉사 리뷰 답글
 	@Override
 	@Transactional
 	public int addVolunteerReviewApply(ManageVolunteerReplyRequestDTO dto, int userIdx, int reviewIdx) {
@@ -228,40 +222,40 @@ public class ShelterManageServiceImple implements ShelterManageService {
 			return ERROR;
 		}
 	}
-
+	
+	//입양 리뷰 답글	
 	@Override
+	@Transactional
 	public int addAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx) {
 
-		Map<String, Integer> map = new HashMap<>();
-		map.put("ref", dto.getRef());
-		map.put("turn", dto.getTurn());
+		ManageAdoptionReviewResponseDTO reviewIdxAR = mapper.getReviewIdxAR(dto.getRef());
+	    if (reviewIdxAR == null) {
+	        return NOT_REVIEW;  // 부모 리뷰 조회 실패시
+	    }
+	    
+	    if (reviewIdxAR.getLev() != 0) {
+	        return NOT_ALLOWED_REPLY;  // 리뷰 답글 1번만 가능하게 설정
+	    }
 
-		int count = mapper.updateTurnAR(map);
+	    int maxTurn = mapper.getMaxTurnVR(reviewIdxAR.getRef());
 
-		if (count < 0) {
-			return ERROR;
-		} else if (count == 0) {// 리뷰글이 있는지 확인
-			return NOT_REVIEW;
-		}
+	    dto.setRef(reviewIdxAR.getRef());                    
+	    dto.setReviewIdx(reviewIdxAR.getReviewIdx());        
+	    dto.setLev(reviewIdxAR.getLev() + 1);
+	    dto.setTurn(maxTurn + 1);
+	    dto.setUserIdx(userIdx); 
 
-		dto.setTurn(dto.getTurn() + 1);
-		dto.setLev(dto.getLev() + 1);
+	    Integer shelterCheck = mapper.checkShelterUserAR(dto);
+	    if (shelterCheck == null || shelterCheck == 0) {
+	        return NOT_SHELTER_MANAGER;
+	    }
 
-		dto.setUserIdx(userIdx);
-		dto.setReviewIdx(dto.getRef());
-		Integer shelterCheck = mapper.checkShelterUserAR(dto);
-		if (shelterCheck == null || shelterCheck == 0) {// 해당 보호소 관리자인지 확인
-			return NOT_SHELTER_MANAGER;
-		}
+	    int result = mapper.addAdoptionReviewApply(dto);
 
-		int result = mapper.addAdoptionReviewApply(dto);
-
-		if (result > 0) {
-			return UPDATE_OK;
-		} else {
-			return ERROR;
-		}
+	    return (result > 0) ? UPDATE_OK : ERROR;
 	}
+	
+	
 
 	@Override
 	public int updateAdoptionReviewApply(ManageAdoptionReplyRequestDTO dto, int userIdx, int reviewIdx) {
