@@ -50,7 +50,7 @@ public class ShelterManageViewController {
 	
 	//봉사 리뷰 수정
 	@GetMapping("/volunteerReview/reply/update")
-	public String showReviewPageVR(@RequestParam int reviewIdx,
+	public String shelterReplyUpdateVR(@RequestParam int reviewIdx,
 		                             Model model) {
 		model.addAttribute("reviewIdx", reviewIdx);
 		return "management/shelter/shelterReplyUpdateVR";
@@ -65,6 +65,14 @@ public class ShelterManageViewController {
 	    model.addAttribute("volunteerIdx", animalIdx);
 	    return "management/shelter/shelterReplyFormAR";
 	}
+	
+	//입양 리뷰 수정
+		@GetMapping("/adoptionReview/reply/update")
+		public String shelterReplyUpdateAR(@RequestParam int reviewIdx,
+			                             Model model) {
+			model.addAttribute("reviewIdx", reviewIdx);
+			return "management/shelter/shelterReplyUpdateAR";
+		}
 
 
 }

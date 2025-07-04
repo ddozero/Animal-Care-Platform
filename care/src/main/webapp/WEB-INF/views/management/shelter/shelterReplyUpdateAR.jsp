@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>봉사 리뷰 답글 수정</title>
+<title>입양 리뷰 답글 수정</title>
 <style>
 .popup-background {
 	display: flex;
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const dto = { content: content };
     
     try {
-      const result = await API.put( "/care/api/management/shelter/volunteerReviews/reply/update/" + reviewIdx, dto);
+      const result = await API.put( "/care/api/management/shelter/adoptionReviews/reply/update/" + reviewIdx, dto);
       if (result.status === 200) {
         alert(result.message);
         // 부모창 새로고침
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const subBtn = window.opener.document.querySelector(".sub-btn:nth-child(1)");
             if (tabBtn && subBtn) {
               window.opener.changeTab(tabBtn, "reviewSection");
-              window.opener.changeReviewTab(subBtn, "volunteerReview");
+              window.opener.changeReviewTab(subBtn, "adoptionReview");
             } else {
               window.opener.location.reload();
             }

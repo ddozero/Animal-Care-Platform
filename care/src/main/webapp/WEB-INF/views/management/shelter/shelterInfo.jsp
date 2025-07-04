@@ -778,7 +778,7 @@ async function loadVolunteerReview(cp = 1) {
             const actionText = document.createElement("div");
             actionText.className = "action-text";
             actionText.innerHTML = 
-                '<span class="edit-text" onclick="editReviewPopup(' + review.reviewIdx + ')">수정</span>' +
+                '<span class="edit-text" onclick="editReviewPopupVR(' + review.reviewIdx + ')">수정</span>' +
                 '<span class="delete-text" onclick="deleteReview(' + review.reviewIdx + ')">삭제</span>';
 
             actionText.style.position = "absolute";  
@@ -811,8 +811,8 @@ async function loadVolunteerReview(cp = 1) {
 }
 
 
-	//답글 수정 
-	function editReviewPopup(reviewIdx) {
+	//봉사 리뷰 답글 수정 
+	function editReviewPopupVR(reviewIdx) {
 			const url = '/care/management/shelters/volunteerReview/reply/update?reviewIdx=' + reviewIdx;
 			const width = 600;
             const height = 400;
@@ -820,7 +820,7 @@ async function loadVolunteerReview(cp = 1) {
             const top = (window.innerHeight - height) / 2;
 
             var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
-            window.open(url, "replyUpdate", windowOptions);
+            window.open(url, "replyUpdateVR", windowOptions);
 	 }
 
 
@@ -904,7 +904,7 @@ async function loadAdoptionReview(cp = 1) {
             const actionText = document.createElement("div");
             actionText.className = "action-text";
             actionText.innerHTML =
-                '<span class="edit-text" onclick="editReview(' + review.reviewIdx + ')">수정</span>' +
+                '<span class="edit-text" onclick="editReviewPopupAR(' + review.reviewIdx + ')">수정</span>' +
                 '<span class="delete-text" onclick="deleteReview(' + review.reviewIdx + ')">삭제</span>';
             actionText.style.position = "absolute";
             actionText.style.right = "10px";
@@ -930,6 +930,18 @@ async function loadAdoptionReview(cp = 1) {
         loadAdoptionReview
     );
 }
+
+	//입양 답글 수정 
+	function editReviewPopupAR(reviewIdx) {
+			const url = '/care/management/shelters/adoptionReview/reply/update?reviewIdx=' + reviewIdx;
+			const width = 600;
+	        const height = 400;
+	        const left = (window.innerWidth - width) / 2;
+	        const top = (window.innerHeight - height) / 2;
+	
+	        var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
+	        window.open(url, "replyUpdateAR", windowOptions);
+	 }
 
 
 

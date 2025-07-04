@@ -311,17 +311,17 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 입양 리뷰글 답글 수정
 	 */
-	@PutMapping("/reviews/adoption/{reviewIdx}")
-	public ResponseEntity<?> updateAdoptionReviewApply(@PathVariable int reviewIdx,
+	@PutMapping("/adoptionReviews/reply/update/{idx}")
+	public ResponseEntity<?> updateAdoptionReviewApply(@PathVariable int idx,
 			@Valid @RequestBody ManageAdoptionReplyRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 		dto.setUserIdx(userIdx);
-		dto.setReviewIdx(reviewIdx);
+		dto.setReviewIdx(idx);
 
-		int result = shelterService.updateAdoptionReviewApply(dto, userIdx, reviewIdx);
+		int result = shelterService.updateAdoptionReviewApply(dto, userIdx, idx);
 
 		if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 답글 수정이 완료되었습니다.", null));
