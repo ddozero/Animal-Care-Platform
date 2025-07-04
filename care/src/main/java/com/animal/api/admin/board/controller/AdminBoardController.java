@@ -192,12 +192,12 @@ public class AdminBoardController {
 			content = keyword;
 		}
 
-		List<UserNoticeResponseDTO> noticeAllList = userSupportService.searchAllNotice(cp, title, content);
-		PageInformationDTO page = userSupportService.searchNoticePage(cp, title, content);
+		List<UserNoticeResponseDTO> noticeAllList = userSupportService.searchAllNotice(cp, title);
+		PageInformationDTO page = userSupportService.searchNoticePage(cp, title);
 
 		if (title != null || content != null) {
-			noticeAllList = userSupportService.searchAllNotice(cp, title, content);
-			page = userSupportService.searchNoticePage(cp, title, content);
+			noticeAllList = userSupportService.searchAllNotice(cp, title);
+			page = userSupportService.searchNoticePage(cp, title);
 		} else {
 			noticeAllList = userSupportService.getAllNotice(cp);
 			page = userSupportService.getAllNoticePage(cp);

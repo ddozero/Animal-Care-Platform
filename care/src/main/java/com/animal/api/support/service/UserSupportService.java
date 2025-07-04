@@ -13,9 +13,9 @@ public interface UserSupportService {
 
 	public UserNoticeResponseDTO getNoticeDetail(int idx);
 
-	public List<UserNoticeResponseDTO> searchAllNotice(int cp, String title, String content);
+	public List<UserNoticeResponseDTO> searchAllNotice(int cp, String title);
 	
-	public PageInformationDTO searchNoticePage(int cp, String title, String content); //사용자 공지사항 검색 페이징 구현
+	public PageInformationDTO searchNoticePage(int cp, String title); //사용자 공지사항 검색 페이징 구현
 	
 	public int addNoticeViewCount(int idx);
 

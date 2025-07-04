@@ -31,5 +31,9 @@ public interface UserVolunteersMapper {
 	public int checkSubmit(@Param("userIdx") int userIdx, @Param("volunteerIdx") int volunteerIdx);
 	
 	public int updateApplicants(VolunteersSubmitRequestDTO dto);
+	
+	//봉사 캘린더 조회
+	public List<AllVolunteersResponseDTO> getVolunteerCalendar();
+
 
 }
