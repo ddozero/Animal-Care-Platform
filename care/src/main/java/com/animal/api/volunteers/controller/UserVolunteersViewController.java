@@ -26,6 +26,11 @@ public class UserVolunteersViewController {
 		return "user/volunteers/volunteersSubmit";
 	}
 	
+	@GetMapping("/calendar")
+	public String volunteerCalender() { //봉사 캘린더
+		return "user/volunteers/volunteersCal";
+	}
+	
 
 	
 

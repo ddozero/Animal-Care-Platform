@@ -44,8 +44,8 @@ public class VolunteerServiceImple implements VolunteerService {
     }
     
     @Override
-    public VolunteerDetailResponseDTO getVolunteerDetailByRequestIdx(int volunteerRequestIdx) {
-        VolunteerDetailResponseDTO dto = volunteerMapper.findVolunteerDetailByRequestIdx(volunteerRequestIdx);
+    public VolunteerDetailResponseDTO getVolunteerDetailByRequestIdx(int volunteerRequestIdx, int userIdx) {
+        VolunteerDetailResponseDTO dto = volunteerMapper.findVolunteerDetailByRequestIdx(volunteerRequestIdx, userIdx);
         
         if (dto != null) {
             List<String> imagePaths = fileManager.getImagePath("volunteers", volunteerRequestIdx);

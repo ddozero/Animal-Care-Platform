@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.animal.api.common.model.PageInformationDTO;
-import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
 import com.animal.api.donation.model.request.DonationRequestDTO;
@@ -41,7 +40,7 @@ public interface UserDonationsService {
 
 	public Map updateDonationComment(DonationCommentUpdateRequestDTO dto);
 
-	public Map deleteDonationComment(DonationCommentDeleteRequestDTO dto);
+	public Map deleteDonationComment(int idx, int userIdx);
 
 	public int getDonationUserPoint(int userIdx);
 

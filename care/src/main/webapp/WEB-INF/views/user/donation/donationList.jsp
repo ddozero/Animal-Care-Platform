@@ -1,60 +1,81 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script>
-async function donationList(){
-	try{
-		const  = document.getElement
-			
-		
-		const res = await fetch("/care/api/donations") //서버에 get방식으로 데이터 요청
-		console.log(res.status);//http 상태코드를 담음
-		console.log(res.ok) //res.status가 200~299면 true 반환
-		const date = await res.json()//요청 결과를
-	}
-			
-		
-}
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+	<!DOCTYPE html>
+	<html>
 
-</script>
-</head>
-<body>
-	<div class="donation-list-container">
-		<h2>기부앤테이크</h2>
+	<head>
+		<meta charset="UTF-8">
+		<title>기부 메인 페이지</title>
+		<style>
+			.banner-image {
+				width: 300px;
+				height: auto;
+				display: block;
+				/* 필요 시 가운데 정렬 대비 */
+				margin: 0 auto;
+				/* 가운데 정렬 */
+			}
+		</style>
+		<script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
+		<script>
+			async function donationList(cp) {
 
-		<div class="donation-banner">
-			<!-- 배너 이미지 또는 안내 문구 자리 -->
-		</div>
-
-		<div class="donation-cards">
-
-			<!-- 반복될 기부 카드 -->
-			<div class="donation-card">
-				<div class="thumbnail">
-					<img src="#" alt="기부 이미지" />
-				</div>
-				<div class="info">
-					<p class="title">강아지를 도와주세요</p>
-					<p class="sponsor">모금단체: 서울보호소</p>
-					<p class="progress">현재 모금률: 75%</p>
-					<p class="amount">현재 모금액: 1,200,000원</p>
-				</div>
-			</div>
-			<!-- 반복 끝 -->
-
-		</div>
-
-		<div class="pagination">
-			<span>&lt;</span> <span class="page">1</span> <span class="page">2</span>
-			<span class="page">3</span> <span>&gt;</span>
-		</div>
-	</div>
+				const container = document.getElementById("donationListContainer");
+				container.innerHTML = "";
 
 
+				const result = await API.get('/care/api/donations?cp=' + cp);
+				if (result.status != 200) {
+					history.back();
+					return;
+				}
 
-</body>
-</html>
+
+				const donations = result.data;
+				const pageInfo = result.pageInfo
+
+
+				for (const donation of donations) {
+					const card = document.createElement("div");
+					card.innerHTML =
+						'<a href="${pageContext.request.contextPath}/donations/' + donation.idx + '">' +
+						'<img src="${pageContext.request.contextPath}' + donation.imagePath + '" alt="기부 이미지"/>' +
+						'<div class="donation-name">' + donation.name + '</div>' +
+						'<div class="donation-sponsor">' + donation.sponsor + '</div>' +
+						'<div class="donation-status">' + donation.status + '</div>' +
+						'<div class="donation-completionRate">' + donation.completionRate + '</div>' +
+						'<div class="donation-completionAmount">' + donation.completionAmount + '</div>' +
+						'</a>';
+
+					container.appendChild(card);
+
+				}
+				// 페이징 함수 실행
+				makePaging(
+					pageInfo.totalCnt,
+					pageInfo.listSize,
+					pageInfo.pageSize,
+					pageInfo.cp,
+					"pagingArea", 
+					donationList 
+				);
+			}
+		</script>
+
+	</head>
+
+	<body>
+		<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
+			<h1>기부앤테이크</h1>
+			<img src="${pageContext.request.contextPath}/resources/web/images/donationBanner.png" class="banner-image">
+			<div id="donationListContainer"></div>
+			<div id="pagingArea" class="paging"></div>
+			<script>
+				window.addEventListener("DOMContentLoaded", function () {
+					donationList(1);
+				});
+
+			</script>
+			<%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+	</body>
+
+	</html>

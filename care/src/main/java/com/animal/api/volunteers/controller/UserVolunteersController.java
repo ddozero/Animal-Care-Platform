@@ -93,6 +93,24 @@ public class UserVolunteersController {
 					.body(new OkPageResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersAllList, pageInfo));
 		}
 	}
+	
+	/**
+	 * 봉사페이지의 목록을 캘린더 일정으로 조회하는 메서드
+	 * 
+	 * @return 캘린더 조회 성공 여부
+	 */
+	@GetMapping("/calendar")
+	public ResponseEntity<?> getVolunteerCalendar(){
+		
+		List<AllVolunteersResponseDTO> volunteersCal = volunteerService.getVolunteerCalendar();
+		
+		if (volunteersCal == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersCal));
+		}
+	}
 
 	/**
 	 * 봉사페이지의 상세 정보를 조회하는 메서드

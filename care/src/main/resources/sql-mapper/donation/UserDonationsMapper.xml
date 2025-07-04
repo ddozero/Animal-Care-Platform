@@ -15,7 +15,7 @@ SELECT
 FROM
 	DONATIONS D
 JOIN DONATION_STATUS DS ON
-	D.IDX = DS.IDX
+	D.DONATION_STATUS_IDX = DS.IDX
 ORDER BY D.IDX DESC
 LIMIT #{listSize} OFFSET #{cp}
 </select>
@@ -50,6 +50,7 @@ WHERE D.IDX=#{idx}
 <select id="getDonationComments" parameterType="Map" resultType="com.animal.api.donation.model.response.AllDonationCommentsResponseDTO">
 SELECT
 	DC.IDX,
+	DC.USER_IDX,
 	U.NICKNAME,
 	DC.CONTENT,
 	DC.CREATED_AT
@@ -89,10 +90,7 @@ LIMIT #{listSize} OFFSET #{cp}
 
 <select id="getDonationUserListsTotalCnt" parameterType="int" resultType="int">
 SELECT
-	DD.IDX,
-	DD.DONATED_AMOUNT,
-	DD.CREATED_AT,
-	U.NICKNAME
+	COUNT(*)
 FROM
 	DONATION_DETAILS DD
 JOIN USERS U  ON
@@ -119,7 +117,7 @@ WHERE
 	AND DONATION_IDX = #{donationIdx}
 </update>
 
-<delete id="deleteDonationComment" parameterType="com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO">
+<delete id="deleteDonationComment" parameterType="Map">
 DELETE
 FROM
 	DONATION_COMMENTS

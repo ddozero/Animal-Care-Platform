@@ -46,23 +46,19 @@ public class UserSupportController {
 			@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "keyword", required = false) String keyword) {
 		
-		String title = null;
-		String content = null;
-		
+		String title = null;		
 
-	    if ("title".equals(type)) {
-	        title = keyword;
-	    } else if ("content".equals(type)) {
-	        content = keyword;
-	    }
+		 if ("title".equals(type) && keyword != null && !keyword.isEmpty()) {
+		        title = keyword;
+		    }
 
-		List<UserNoticeResponseDTO> noticeAllList = supportService.searchAllNotice(cp, title, content);
-		PageInformationDTO page = supportService.searchNoticePage(cp, title, content);
+		List<UserNoticeResponseDTO> noticeAllList = supportService.searchAllNotice(cp, title);
+		PageInformationDTO page = supportService.searchNoticePage(cp, title);
 			
 
-		if (title != null || content != null) {
-			noticeAllList = supportService.searchAllNotice(cp, title, content);
-			page = supportService.searchNoticePage(cp, title, content);
+		if (title != null) {
+			noticeAllList = supportService.searchAllNotice(cp, title);
+			page = supportService.searchNoticePage(cp, title);
 		} else {
 			noticeAllList = supportService.getAllNotice(cp);
 			page = supportService.getAllNoticePage(cp);

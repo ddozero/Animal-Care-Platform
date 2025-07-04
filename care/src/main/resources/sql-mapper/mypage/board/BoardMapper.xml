@@ -21,7 +21,7 @@
 	    WHERE B.USER_IDX = #{userIdx}
 	      AND B.BOARD_TYPE_IDX != 1
 	    ORDER BY B.CREATED_AT DESC
-	    LIMIT 10 OFFSET #{offset}
+	    LIMIT 5 OFFSET #{offset}
 	</select>
 	
 	<!-- 내가 작성한 글 개수 -->
@@ -49,7 +49,7 @@
 	    WHERE BL.USER_IDX = #{userIdx}
 	      AND BL.IS_LIKE = 1
 	    ORDER BY BL.CREATED_AT DESC
-	    LIMIT 10 OFFSET #{offset}
+	    LIMIT 5 OFFSET #{offset}
 	</select>
 
     <!-- 내가 좋아요한 글 개수 -->

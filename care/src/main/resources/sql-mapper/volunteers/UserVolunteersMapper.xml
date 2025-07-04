@@ -128,7 +128,7 @@ JOIN VOLUNTEER_STATUS VS ON
 		AND VS.NAME = #{status}
 	</if>
 	<if test="shelter != null and shelter !=''">
-		AND S.SHELTER_NAME = #{shelter}
+		AND S.SHELTER_NAME LIKE '%${shelter}%'
 	</if>
 	<if test="shelterType !=null and shelterType !=''">
 		AND ST.NAME = #{shelterType}
@@ -266,5 +266,19 @@ WHERE
 	IDX =
 	#{volunteerIdx}
 </update>
+
+<!-- 캘린더 조회 -->
+<select id="getVolunteerCalendar" resultType="com.animal.api.volunteers.model.response.AllVolunteersResponseDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	VS.NAME AS STATUS,
+	V.VOLUNTEER_DATE
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_STATUS VS ON
+V.VOLUNTEER_STATUS_IDX = VS.IDX
+</select>
+
 
 </mapper>

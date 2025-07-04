@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.animal.api.common.model.PageInformationDTO;
 import com.animal.api.common.util.FileManager;
 import com.animal.api.donation.mapper.UserDonationsMapper;
-import com.animal.api.donation.model.request.DonationCommentDeleteRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentRequestDTO;
 import com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO;
 import com.animal.api.donation.model.request.DonationRequestDTO;
@@ -49,7 +48,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 
 		if (donationList != null) {
 			for (AllDonationListResponseDTO dto : donationList) {
-				List<String> imagePaths = fileManager.getImagePath("volunteers", dto.getIdx());
+				List<String> imagePaths = fileManager.getImagePath("donations", dto.getIdx());
 				if (imagePaths != null || imagePaths.size() != 0) {
 					dto.setImagePath(imagePaths.get(0));
 				}
@@ -74,7 +73,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		DonationDetailResponseDTO donationDetail = mapper.getDonationDetail(idx);
 
 		if (donationDetail != null) {
-			donationDetail.setImagePaths(fileManager.getImagePath("volunteers", idx));
+			donationDetail.setImagePaths(fileManager.getImagePath("donations", idx));
 			return donationDetail;
 		} else {
 			return null;
@@ -210,32 +209,24 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	}
 
 	@Override
-	public Map deleteDonationComment(DonationCommentDeleteRequestDTO dto) {
-		Map map = new HashMap();
+	public Map deleteDonationComment(int idx, int userIdx) {
 		int result = 0;
 		String msg = null;
-		Boolean errorCheck = false;
-		if (dto.getIdx() == 0) {
-			result = COMMENT_NOT_FOUND;
-			msg = "잘못된 접근:댓글정보없음";
-			errorCheck = true;
-		} else if (dto.getUserIdx() == 0) {
-			result = USER_NOT_FOUND;
-			msg = "잘못된 접근:유저정보없음";
-			errorCheck = true;
+
+		Map map = new HashMap<>();
+		map.put("idx", idx);
+		map.put("userIdx", userIdx);
+
+		int count = mapper.deleteDonationComment(map);
+
+		if (count > 0) {
+			result = DELETE_SUCCESS;
+			msg = "응원 댓글 삭제 성공";
+		} else {
+			result = ERROR;
+			msg = "잘못된 접근 또는 본인이 작성한 댓글이 아닙니다.";
 		}
 
-		if (!errorCheck) {
-			int count = mapper.deleteDonationComment(dto);
-
-			if (count > 0) {
-				result = DELETE_SUCCESS;
-				msg = "응원 댓글 삭제 성공";
-			} else {
-				result = ERROR;
-				msg = "잘못된 접근";
-			}
-		}
 		map.put("result", result);
 		map.put("msg", msg);
 		return map;
@@ -253,31 +244,47 @@ public class UserDonationsServiceImple implements UserDonationsService {
 		Map map = new HashMap();
 		int result = 0;
 		String msg = null;
-		Boolean errorCheck = false;
 		int userPoint = getDonationUserPoint(userIdx);
 		if (userPoint < dto.getDonatedAmount()) {
 			result = INSUFFICIENT_POINT;
 			msg = "보유하신 포인트가 부족합니다.";
-			errorCheck = true;
+			map.put("result", result);
+			map.put("msg", msg);
+			return map;
 		}
 
-		if (!errorCheck) {
-			int donationDetailInsert = mapper.addDonation(dto);
-			int donationUpdate = mapper.updateDonation(dto);
-			int userUpdate = mapper.updateUserPoint(dto);
-
-			if (donationDetailInsert > 0 && donationUpdate > 0 && userUpdate > 0) {
-				result = POST_SUCCESS;
-				msg = "기부 성공";
-			} else {
-				result = ERROR;
-				msg = "잘못된 접근";
-				throw new RuntimeException("기부 처리 중 오류 발생: 트랜잭션 롤백");
-			}
+		int donationDetailInsert = mapper.addDonation(dto);
+		if (donationDetailInsert <= 0) {
+			result = ERROR;
+			msg = "잘못된 접근";
+			map.put("result", result);
+			map.put("msg", msg);
+			return map;
 		}
+
+		int donationUpdate = mapper.updateDonation(dto);
+		if (donationUpdate <= 0) {
+			result = ERROR;
+			msg = "현재 완료된 기부입니다.";
+			map.put("result", result);
+			map.put("msg", msg);
+			return map;
+		}
+		int userUpdate = mapper.updateUserPoint(dto);
+		if (userUpdate <= 0) {
+			result = ERROR;
+			msg = "고객센터에 문의해 주세요";
+			map.put("result", result);
+			map.put("msg", msg);
+			return map;
+
+		}
+		result = POST_SUCCESS;
+		msg = "기부 성공";
 		map.put("result", result);
 		map.put("msg", msg);
 		return map;
 
 	}
+
 }
