@@ -28,13 +28,19 @@ public class AdminDonationServiceImple implements AdminDonationService {
 	@Autowired
 	private FileManager fileManager;
 
-	private int listSize = 5;
+	private int listSize = 10;
 	private int pageSize = 5;
 
 	@Override
 	public List<AdminAllDonationResponseDTO> getAdminDonationList(int cp) {
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
+
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
 
 		map.put("listSize", listSize);
 		map.put("cp", cp);
@@ -56,6 +62,11 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public List<AdminAllDonationResponseDTO> searchAdminDonation(int cp, String name, String status) {
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
 
 		AdminDonationSearchRequestDTO dto = new AdminDonationSearchRequestDTO(listSize, cp, name, status);
 		List<AdminAllDonationResponseDTO> donationList = mapper.searchAdminDonation(dto);
@@ -92,6 +103,11 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 	@Override
 	public List<AdminDonationUserResponseDTO> getAdminDonationUser(int cp, int idx) {
+		if (cp == 0) {
+			cp = 1;
+		} else {
+			cp = (cp - 1) * listSize;
+		}
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
 
@@ -103,10 +119,10 @@ public class AdminDonationServiceImple implements AdminDonationService {
 
 		return userList;
 	}
-	
+
 	@Override
 	public PageInformationDTO getAdminDonationUserPage(int cp) {
-		
+
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -136,7 +152,7 @@ public class AdminDonationServiceImple implements AdminDonationService {
 			return DONATION_NOT_FOUND;
 		}
 
-		boolean result = fileManager.uploadFiles("donations", idx, files);
+		boolean result = fileManager.uploadImages("donations", idx, files);
 
 		if (result) {
 			return UPLOAD_OK;

@@ -19,7 +19,7 @@ public class adminAuthViewController {
 		if (loginAdmin == null) { // 로그인 여부 검증
 			return "/common/admin/adminLogin";
 		}else {
-			return "/admin/members";
+			return "/admin/shelterJoinList";
 		}
 	}
 	
@@ -29,7 +29,7 @@ public class adminAuthViewController {
 		if (loginAdmin == null) { // 로그인 여부 검증
 			return "/common/admin/adminLogin";
 		}else {
-			return "/admin/members";
+			return "/admin/shelterJoinList";
 		}
 	}
 }
