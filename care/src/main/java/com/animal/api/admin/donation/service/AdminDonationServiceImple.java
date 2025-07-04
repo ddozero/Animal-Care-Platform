@@ -152,7 +152,7 @@ public class AdminDonationServiceImple implements AdminDonationService {
 			return DONATION_NOT_FOUND;
 		}
 
-		boolean result = fileManager.uploadFiles("donations", idx, files);
+		boolean result = fileManager.uploadImages("donations", idx, files);
 
 		if (result) {
 			return UPLOAD_OK;
