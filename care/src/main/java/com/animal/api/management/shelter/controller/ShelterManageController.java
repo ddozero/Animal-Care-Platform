@@ -97,7 +97,7 @@ public class ShelterManageController {
 		dto.setIdx(userIdx);
 		int count = shelterService.updateShelterInfo(dto, userIdx);
 		if (count > 0) {
-			return ResponseEntity.ok(new OkResponseDTO<ShelterInfoUpdateRequestDTO>(200, "기본정보 수정 성공", dto));
+			return ResponseEntity.ok(new OkResponseDTO<ShelterInfoUpdateRequestDTO>(200, "보호소 정보가 수정되었습니다.", dto));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "기본정보 수정 실패"));
 		}
@@ -115,9 +115,9 @@ public class ShelterManageController {
 	public ResponseEntity<?> uploadShelterInfoFiles(@PathVariable int idx, MultipartFile[] files) {
 		int result = shelterService.uploadShelterFile(files, idx);
 		if (result == shelterService.UPLOAD_OK) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드 성공", null));
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드가 완료되었습니다.", null));
 		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "지원사업을 찾을 수 없음"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "오류가 발생했습니다. 관리자에게 문의하세요."));
 		}
 	}
 
@@ -141,7 +141,7 @@ public class ShelterManageController {
 		PageInformationDTO page = shelterService.getVolunteerReviewPage(cp, userIdx);
 
 		if (reviewList == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글이 존재하지 않음"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "작성된 리뷰글이 존재하지 않습니다."));
 		} else if (reviewList.size() == 0) {
 			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "등록된 리뷰가 없습니다", reviewList, page));
 		} else {
@@ -169,7 +169,7 @@ public class ShelterManageController {
 		PageInformationDTO page = shelterService.getAdoptionReviewPage(cp, userIdx);
 
 		if (reviewList == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없습니다."));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "작성된 리뷰글이 존재하지 않습니다."));
 		} else if (reviewList.size() == 0) {
 			return ResponseEntity.ok(new OkPageResponseDTO<>(200, "등록된 리뷰가 없습니다.", reviewList, page));
 		} else {
@@ -197,7 +197,7 @@ public class ShelterManageController {
 		int result = shelterService.addVolunteerReviewApply(dto, userIdx, dto.getRef());
 
 		if (result == shelterService.NOT_REVIEW) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없습니다."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "작성된 리뷰글이 존재하지 않습니다."));
 		} else if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<>(201, "답글 등록이 완료되었습니다.", null));
 		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
@@ -234,7 +234,7 @@ public class ShelterManageController {
 		if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 답글 수정이 완료되었습니다.", null));
 		} else if (result == shelterService.NOT_REVIEW) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰글을 찾을 수 없습니다."));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "작성된 리뷰글이 존재하지 않습니다."));
 		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN)
 					.body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아니면 접근할 수 없습니다."));
@@ -263,7 +263,7 @@ public class ShelterManageController {
 		if (result == shelterService.DELETE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 답글 삭제가 완료되었습니다.", null));
 		} else if (result == shelterService.NOT_REVIEW) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰 작성 글을 찾을 수 없습니다."));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "작성된 리뷰글이 존재하지 않습니다."));
 		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아니면 접근할 수 없습니다."));
 		} else {
@@ -290,7 +290,7 @@ public class ShelterManageController {
 		int result = shelterService.addAdoptionReviewApply(dto, userIdx, dto.getRef());
 
 		if (result == shelterService.NOT_REVIEW) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "리뷰 작성 글을 찾을 수 없습니다."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(404, "작성된 리뷰글이 존재하지 않습니다."));
 		} else if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(201, "답글 등록이 완료되었습니다.", null));
 		} else if (result == shelterService.NOT_ALLOWED_REPLY) {
@@ -326,7 +326,7 @@ public class ShelterManageController {
 		if (result == shelterService.UPDATE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 답글 수정이 완료되었습니다.", null));
 		} else if (result == shelterService.NOT_REVIEW) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰 작성 글을 찾을 수 없습니다."));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "작성된 리뷰글이 존재하지 않습니다."));
 		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN)
 					.body(new ErrorResponseDTO(403, "담당 보호소 관리자가 아니면 접근할 수 없습니다."));
@@ -355,7 +355,7 @@ public class ShelterManageController {
 		if (result == shelterService.DELETE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 답글 삭제가 완료되었습니다.", null));
 		} else if (result == shelterService.NOT_REVIEW) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "리뷰 작성 글을 찾을 수 없습니다."));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "작성된 리뷰글이 존재하지 않습니다."));
 		} else if (result == shelterService.NOT_SHELTER_MANAGER) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponseDTO(400, "담당 보호소 관리자가 아니면 접근할 수 없습니다."));
 		} else {
@@ -456,7 +456,7 @@ public class ShelterManageController {
 
 		int result = shelterService.uploadBoardFile(files, idx);
 		if (result == shelterService.UPLOAD_OK) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드 성공", null));
+			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드가 완료되었습니다.", null));
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "파일 업로드 실패"));
 		}

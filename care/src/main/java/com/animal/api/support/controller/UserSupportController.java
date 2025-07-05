@@ -65,7 +65,7 @@ public class UserSupportController {
 		}
 
 		if (noticeAllList == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkPageResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList, page));
@@ -86,7 +86,7 @@ public class UserSupportController {
 		UserNoticeResponseDTO dto = supportService.getNoticeDetail(idx);
 
 		if (dto == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "삭제되거나 없는 게시물"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "공지사항 게시물이 존재하지 않습니다."));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<UserNoticeResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}
