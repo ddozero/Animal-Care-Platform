@@ -353,6 +353,7 @@ public class UserBoardController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
+		dto.setUserIdx(loginUser.getIdx());
 
 		int result = service.addBoardComment(dto, idx);
 		if (result == service.POST_SUCCESS) {
@@ -380,7 +381,7 @@ public class UserBoardController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
-
+		dto.setUserIdx(loginUser.getIdx());
 		int result = service.updateBoardComment(dto, idx, boardCommentIdx, loginUser.getIdx());
 		if (result == service.UPDATE_SUCCESS) {
 			return ResponseEntity.status(HttpStatus.OK).body(new OkResponseDTO<Void>(200, "댓글 수정 성공", null));
@@ -443,6 +444,7 @@ public class UserBoardController {
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용해주세요."));
 		}
+		dto.setUserIdx(loginUser.getIdx());
 
 		int result = service.addBoardCommentReply(dto, idx, boardCommentIdx);
 		if (result == service.POST_SUCCESS) {

@@ -84,6 +84,7 @@
 
 <div id="header-wrapper">
 
+
     <!-- 상단: 로고 + 메뉴 -->
     <div id="header-top">
         <div id="logo">
@@ -127,6 +128,7 @@
         </c:choose>
     </div>
     
+
 </div>
 
 <script>

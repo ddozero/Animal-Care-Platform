@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>기부 메인 페이지</title>
+		<title>기부</title>
 		<style>
 			.banner-image {
 				width: 300px;
@@ -55,8 +55,8 @@
 					pageInfo.listSize,
 					pageInfo.pageSize,
 					pageInfo.cp,
-					"pagingArea", 
-					donationList 
+					"pagingArea",
+					donationList
 				);
 			}
 		</script>
