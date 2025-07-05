@@ -385,7 +385,7 @@ textarea:disabled {
 /* action-text에 스타일 적용 */
 .action-text {
     display: flex;
-    justify-content: flex-end; /* 오른쪽 끝에 배치 */
+    justify-content: flex-end; 
     margin-top: 5px;
     font-size: 0.9em;
     color: #555;
@@ -393,16 +393,20 @@ textarea:disabled {
 
 /* 수정/삭제 텍스트 스타일 */
 .edit-text, .delete-text {
+    display: inline-block;
+    background-color: #aaa;    
+    color: #fff;                
+    font-size: 12px;            
+    padding: 4px 8px;           
+    border-radius: 8px;       
     cursor: pointer;
-    color: #007bff;
-    text-decoration: underline;
-    margin-left: 10px;
+    margin-left: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
 }
-
 .edit-text:hover, .delete-text:hover {
-    color: #0056b3;
+    background-color: #888;
 }
-
 
 
 
@@ -666,7 +670,16 @@ async function loadNotice(cp) {
 
 // 페이지 로드 시 공지사항 목록을 첫 번째 페이지로 불러오기
 document.addEventListener('DOMContentLoaded', function () {
-    loadNotice(1); // 첫 번째 페이지
+	  ShelterInfo();
+	  loadNotice(1);  // 공지사항 첫 페이지도 미리 로드
+
+	  const urlParams = new URLSearchParams(window.location.search);
+	  const activeTab = urlParams.get('tab');
+
+	  if (activeTab === 'notice') {
+	    const noticeBtn = document.querySelector('.tab-btn:nth-child(2)');
+	    changeTab(noticeBtn, 'noticeSection');
+	  }
 });
 
 function changeTab(button, sectionId) {

@@ -350,8 +350,10 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		}
 
 		mapper.updateBoardViews(idx);
-		dto.setFilePaths(fileManager.getFilePath("boards", idx));
-		dto.setImagePaths(fileManager.getImagePath("shelters", idx));
+		List<String> filePath = fileManager.getFilePath("boards", idx);
+		if (filePath != null && !filePath.isEmpty()) {
+		    dto.setFilesPath(filePath.get(0)); // 첫 파일만
+		}
 
 		if (dto != null && dto.getContent() != null) {
 			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
@@ -379,11 +381,15 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 		boolean result = fileManager.uploadFiles("boards", idx, files);
 
-		if (result) {
-			return UPLOAD_OK;
-		} else {
-			return ERROR;
-		}
+		 if (result) {
+		        return UPLOAD_OK;
+		    } else {
+		        // 업로드 실패 시, 등록한 게시글을 바로 삭제
+		    	ShelterBoardRequestDTO dto = new ShelterBoardRequestDTO();
+		        dto.setIdx(idx);
+		        mapper.deleteShelterBoard(dto);
+		        return ERROR;
+		    }
 	}
 
 	@Override
