@@ -4,7 +4,13 @@
 
     <!-- 사이드바 -->
     <aside class="sidebar">
-        <div class="logo">로고</div>
+        <div class="logo" style="margin-top: 20px; padding-bottom: 20px;">
+            <img src="${pageContext.request.contextPath}/resources/web/images/indexheader/logo.png" alt="로고" style="height: 50px; vertical-align: middle; transform: scale(1.5); transform-origin: left center; margin-right: 20px;">
+            <div style="display: flex; flex-direction: column; line-height: 1.2; font-family: 'Pretendard';">
+	      <span style="font-size: 10px; color: #dbdbdb; letter-spacing: 0.5px;">당신에게</span>
+	      <span style="font-size: 28px; font-weight: 800; color: #ffffff; letter-spacing: -1px;">다시 가는 길</span>
+	    </div>
+        </div>
         <nav class="sidebar-nav">
             <div class="menu-category">
                 <h3>회원관리</h3>

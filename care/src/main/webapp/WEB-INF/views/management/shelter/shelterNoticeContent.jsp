@@ -129,7 +129,7 @@
 </head>
 
 <body>
-	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
+ <%@ include file="/WEB-INF/views/common/management/managementHeader.jsp" %>
 	<section class="board">
 		<div class="header-title">보호시설 소식</div>
 		<div class="title-detail">보호시설에서 안내하는 소식입니다.</div>

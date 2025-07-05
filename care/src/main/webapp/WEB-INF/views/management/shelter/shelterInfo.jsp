@@ -413,7 +413,7 @@ textarea:disabled {
 </style>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
+ <%@ include file="/WEB-INF/views/common/management/managementHeader.jsp" %>
 
 <section class="container">
 
