@@ -111,6 +111,26 @@
   text-align: center;
 }
 
+/* 잠금 해제 이메일 인증용 행 */
+.unlock-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* 입력창: 버튼 옆에 붙게 좁게 */
+.inline-input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* 버튼: 전체 너비 말고 높이만 맞춰서 입력창 옆에 */
+.inline-btn {
+  width: 120px;
+  padding: 12px;
+  margin-top: 0;
+}
+
 </style>
 </head>
 <body>
@@ -129,6 +149,23 @@
 
     <div id="errorMessage" class="error-message"></div>
 
+    <!-- 계정 잠금 해제 이메일 인증 영역 -->
+    <div id="unlock-section" style="display:none; margin-top: 20px;">
+      <!-- 이메일 입력 + 인증번호 받기 -->
+      <div class="unlock-row">
+        <input type="email" id="unlockEmail" class="login-input inline-input" placeholder="이메일 입력" />
+        <button id="sendUnlockCodeBtn" class="login-btn inline-btn">인증번호 받기</button>
+      </div>
+
+      <!-- 인증번호 입력 + 인증하기 -->
+      <div class="unlock-row">
+        <input type="text" id="unlockCode" class="login-input inline-input" placeholder="인증번호 입력" />
+        <button id="verifyUnlockBtn" class="login-btn inline-btn">인증하기</button>
+      </div>
+
+      <div id="unlockMessage" class="error-message" style="color: green;"></div>
+    </div>
+
     <div class="login-links">
       <a href="${root}/signup">회원가입</a> |
       <a href="${root}/find">아이디/비밀번호 찾기</a><br>
@@ -138,6 +175,12 @@
 
 <script>
   document.getElementById('loginBtn').addEventListener('click', async function () {
+  // 이전 unlock 인증 UI 초기화
+  document.getElementById('unlock-section').style.display = 'none';
+  document.getElementById('unlockEmail').value = '';
+  document.getElementById('unlockCode').value = '';
+  document.getElementById('unlockMessage').innerText = '';
+
     const data = {
       id: document.getElementById('id').value,
       password: document.getElementById('password').value
@@ -158,13 +201,74 @@
         alert('로그인 성공');
         window.location.href = '${root}/index';
       } else {
-        document.getElementById('errorMessage').innerText = result.errorMsg || '로그인 실패';
+        const errorMsg = result.errorMsg || '로그인 실패';
+        document.getElementById('errorMessage').innerText = errorMsg;
+
+        // 에러 메시지에 '잠금'이라는 단어가 포함된 경우 unlock-section 보여주기
+        if (errorMsg.includes('잠금')) {
+          document.getElementById('unlock-section').style.display = 'block';
+            // result에서 이메일 직접 가져오기
+            const email = result.email || (result.data && result.data.email);
+            if (email) {
+              document.getElementById('unlockEmail').value = email;
+            }
+        }
       }
     } catch (error) {
       console.error('서버 오류:', error);
       document.getElementById('errorMessage').innerText = '서버 오류 발생';
     }
   });
+
+  //로그인 lock 인증코드 전송 / 검증 버튼 이벤트 
+  document.getElementById('sendUnlockCodeBtn').addEventListener('click', async function () {
+  const email = document.getElementById('unlockEmail').value;
+
+  try {
+    const res = await fetch('${root}/api/email/unlock-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email })
+    });
+
+    const result = await res.json();
+    if (res.ok) {
+      document.getElementById('unlockMessage').innerText = result.message || '인증코드가 발송되었습니다.';
+    } else {
+      document.getElementById('unlockMessage').innerText = result.errorMsg || '오류 발생';
+    }
+  } catch (err) {
+    console.error('인증코드 요청 실패:', err);
+    document.getElementById('unlockMessage').innerText = '서버 오류 발생';
+  }
+});
+
+document.getElementById('verifyUnlockBtn').addEventListener('click', async function () {
+  const code = document.getElementById('unlockCode').value;
+
+  try {
+    const res = await fetch('${root}/api/email/unlock-verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ code })
+    });
+
+    const result = await res.json();
+    if (res.ok) {
+      alert(result.message || '잠금이 해제되었습니다. 다시 로그인해 주세요.');
+      location.reload(); // 로그인 다시 시도하게 새로고침
+    } else {
+      document.getElementById('unlockMessage').innerText = result.errorMsg || '인증 실패';
+    }
+  } catch (err) {
+    console.error('인증 실패:', err);
+    document.getElementById('unlockMessage').innerText = '서버 오류 발생';
+  }
+});  
 </script>
 <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
 </body>
