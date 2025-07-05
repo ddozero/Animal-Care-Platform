@@ -335,7 +335,13 @@ textarea:disabled {
 
 .review-card {
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+}
+
+.review-card::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .reply-card {
@@ -779,7 +785,7 @@ async function loadVolunteerReview(cp = 1) {
             actionText.className = "action-text";
             actionText.innerHTML = 
                 '<span class="edit-text" onclick="editReviewPopupVR(' + review.reviewIdx + ')">수정</span>' +
-                '<span class="delete-text" onclick="deleteReview(' + review.reviewIdx + ')">삭제</span>';
+                '<span class="delete-text" onclick="deleteReviewVR(' + review.reviewIdx + ')">삭제</span>';
 
             actionText.style.position = "absolute";  
             actionText.style.right = "10px";  
@@ -822,6 +828,22 @@ async function loadVolunteerReview(cp = 1) {
             var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
             window.open(url, "replyUpdateVR", windowOptions);
 	 }
+	
+	//봉사 리뷰 답글 삭제
+	async function deleteReviewVR(reviewIdx) {
+	    if (!confirm("정말 삭제하시겠습니까?")) {
+	        return;
+	    }
+	    const result = await API.delete('/care/api/management/shelter/volunteerReviews/reply/' + reviewIdx);
+	    if (result.status === 200) {
+	        alert(result.message);
+	        loadVolunteerReview();  // 삭제 후 목록 새로고침
+	    } else {
+	        alert("삭제에 실패하였습니다. 관리자에게 문의하세요");
+	    }
+	}
+	
+
 
 
 
@@ -905,7 +927,7 @@ async function loadAdoptionReview(cp = 1) {
             actionText.className = "action-text";
             actionText.innerHTML =
                 '<span class="edit-text" onclick="editReviewPopupAR(' + review.reviewIdx + ')">수정</span>' +
-                '<span class="delete-text" onclick="deleteReview(' + review.reviewIdx + ')">삭제</span>';
+                '<span class="delete-text" onclick="deleteReviewAR(' + review.reviewIdx + ')">삭제</span>';
             actionText.style.position = "absolute";
             actionText.style.right = "10px";
             actionText.style.top = "5px";
@@ -942,6 +964,21 @@ async function loadAdoptionReview(cp = 1) {
 	        var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
 	        window.open(url, "replyUpdateAR", windowOptions);
 	 }
+	
+	
+	//입양 답글 삭제
+	async function deleteReviewAR(reviewIdx) {
+	    if (!confirm("정말 삭제하시겠습니까?")) return;
+
+	    const result = await API.delete('/care/api/management/shelter/adoptionReviews/reply/' + reviewIdx);
+	    if (result.status === 200) {
+	        alert(result.message);
+	        loadAdoptionReview();  // 삭제 후 목록 새로고침
+	    } else {
+	        alert("삭제에 실패하였습니다. 관리자에게 문의하세요");
+	    }
+	}
+
 
 
 

@@ -251,14 +251,14 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 봉사 리뷰글 답글 삭제
 	 */
-	@DeleteMapping("/reviews/volunteer/{reviewIdx}")
-	public ResponseEntity<?> deleteVolunteerReviewApply(@PathVariable int reviewIdx, HttpSession session) {
+	@DeleteMapping("/volunteerReviews/reply/{idx}")
+	public ResponseEntity<?> deleteVolunteerReviewApply(@PathVariable("idx") int idx, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 
-		int result = shelterService.deleteVolunteerReviewApply(userIdx, reviewIdx);
+		int result = shelterService.deleteVolunteerReviewApply(userIdx, idx);
 
 		if (result == shelterService.DELETE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 답글 삭제가 완료되었습니다.", null));
@@ -343,14 +343,14 @@ public class ShelterManageController {
 	 * 
 	 * @return 해당 보호시설 입양 리뷰글 답글 삭제
 	 */
-	@DeleteMapping("/reviews/adoption/{reviewIdx}")
-	public ResponseEntity<?> deleteAdoptionReviewApply(@PathVariable int reviewIdx, HttpSession session) {
+	@DeleteMapping("/adoptionReviews/reply/{idx}")
+	public ResponseEntity<?> deleteAdoptionReviewApply(@PathVariable("idx") int idx, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 
 		int userIdx = loginUser.getIdx();
 
-		int result = shelterService.deleteAdoptionReviewApply(userIdx, reviewIdx);
+		int result = shelterService.deleteAdoptionReviewApply(userIdx, idx);
 
 		if (result == shelterService.DELETE_OK) {
 			return ResponseEntity.ok(new OkResponseDTO<>(200, "리뷰 답글 삭제가 완료되었습니다.", null));
