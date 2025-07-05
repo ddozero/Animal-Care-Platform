@@ -161,6 +161,11 @@
 						<div class="content-box" id="noticeContentBox"></div>
 					</td>
 				</tr>
+				<tr>
+				  <th>첨부파일</th>
+				  <td id="noticeFile" colspan="3">
+				  </td>
+				</tr>
 			</table>
 
 			<div class="btn-area">
@@ -201,12 +206,21 @@ async function noticeDetail() {
 		document.getElementById("noticeViews").innerHTML = notice.views;
 		document.getElementById("noticeContentBox").innerHTML = notice.content;
 		
+		if (notice.filesPath && notice.filesPath !== "") {
+			  document.getElementById("noticeFile").innerHTML =
+				  '<a href="/care/resources/boards/' + notice.idx + '/files/' + notice.filesPath.split("/").pop() + '" target="_blank">' +
+				    notice.filesPath.split("/").pop() +
+				  '</a>';
+			} else {
+			  document.getElementById("noticeFile").innerHTML = "첨부파일이 없습니다.";
+			}
+		
 		document.getElementById("goListNotice").addEventListener("click", function () {
-			  const contextPath = "${pageContext.request.contextPath}"; // contextPath를 동적으로 설정
-			  window.location.href = contextPath + "/management/shelters"; // 이동할 페이지 경로
+			  const contextPath = "${pageContext.request.contextPath}";
+			  window.location.href = contextPath + "/management/shelters?tab=notice";
 			});
 	}
-	noticeDetail();
+		noticeDetail();
 	
 //수정하기 폼 이동
 function editNotice() {

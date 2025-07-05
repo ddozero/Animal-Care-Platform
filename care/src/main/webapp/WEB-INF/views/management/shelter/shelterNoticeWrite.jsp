@@ -154,6 +154,12 @@ textarea:focus {
 						<textarea name="content" required placeholder="내용을 입력하세요" rows="15" style="width: 100%; padding: 10px; font-size: 15px; resize: vertical;"></textarea>
 					</td>
 				</tr>
+				<tr>
+				    <th>첨부파일</th>
+				    <td colspan="3">
+				      <input type="file" name="file" id="file" accept="image/*" style="width: 100%; padding: 8px; font-size:15px;">
+				    </td>
+			   </tr>
 			</table>
 
 			<div class="btn-area">
@@ -171,39 +177,56 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("noticeWriteForm");
 
   form.addEventListener("submit", async function (e) {
-    e.preventDefault(); // 기본 form 제출 막기
+    e.preventDefault();
 
     const title = form.title.value.trim();
     const content = form.content.value.trim();
+    const fileInput = form.file;
 
     if (!title || !content) {
       alert("제목과 내용을 모두 입력해주세요.");
       return;
     }
 
-    const dto = {
-      title: title,
-      content: content
-    };
-
     try {
-      const result = await API.post("/care/api/management/shelter/boards/", dto); 
+      // 게시글 등록
+      const dto = { title: title, content: content };
+      const result = await API.post("/care/api/management/shelter/boards/", dto);
+
       if (result.status === 201) {
+        const boardIdx = result.data;  // 게시글 번호
+
+        if (fileInput && fileInput.files.length > 0) {
+          const formData = new FormData();
+          formData.append("files", fileInput.files[0]); 
+
+          try {
+            const uploadRes = await fetch("/care/api/management/shelter/boards/upload/" + boardIdx, {
+              method: "POST",
+              body: formData
+            });
+
+            if (!uploadRes.ok) {
+              alert("파일 업로드에 실패했습니다. 관리자에게 문의하세요.");
+            }
+          } catch (uploadError) {
+            console.error(uploadError);
+            alert("파일 업로드 중 오류가 발생했습니다.");
+          }
+        }
+
         alert("공지사항이 등록되었습니다.");
-        location.href = "/care/management/shelters"; 
+        location.href = "/care/management/shelters?tab=notice";
       } else {
-        alert("등록에 실패했습니다.");
+        alert("게시물 등록에 실패하였습니다. 관리자에게 문의하세요.");
       }
-    } catch (err) {
-      console.error("등록 중 오류:", err);
-      alert("서버 오류로 등록 실패");
+    } catch (error) {
+      console.error(error);
+      alert("서버 오류가 발생했습니다. 관리자에게 문의하세요.");
     }
   });
 });
 </script>
-
-
-
 
 </body>
 </html>

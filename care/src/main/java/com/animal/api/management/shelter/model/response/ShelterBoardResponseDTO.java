@@ -25,7 +25,7 @@ public class ShelterBoardResponseDTO {
 	private int ref;
 	private int lev;
 	private int turn;
-	private List<String> filePaths;	
-	private List<String> imagePaths;
+	private String filesPath;	
+	private List<String> imagePath;
 	
 }

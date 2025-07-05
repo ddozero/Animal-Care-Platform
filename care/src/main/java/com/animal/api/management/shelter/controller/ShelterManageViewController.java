@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/management/shelters")
@@ -37,11 +38,41 @@ public class ShelterManageViewController {
 	    return "management/shelter/shelterNoticeUpdate";  // 수정 폼으로 이동
 	}
 	
-	@GetMapping("/adoptionReview/reply")
-	  public String showReviewPage() {
-	   return "management/shelter/shelterReplyForm"; // 해당 JSP 페이지로 이동
-
+	//봉사 리뷰 답글
+	@GetMapping("/volunteerReview/reply")
+	public String shelterReplyVR(@RequestParam int reviewIdx,
+	                             @RequestParam int volunteerIdx,
+	                             Model model) {
+	    model.addAttribute("reviewIdx", reviewIdx);
+	    model.addAttribute("volunteerIdx", volunteerIdx);
+	    return "management/shelter/shelterReplyFormVR";
 	}
+	
+	//봉사 리뷰 수정
+	@GetMapping("/volunteerReview/reply/update")
+	public String shelterReplyUpdateVR(@RequestParam int reviewIdx,
+		                             Model model) {
+		model.addAttribute("reviewIdx", reviewIdx);
+		return "management/shelter/shelterReplyUpdateVR";
+	}
+	
+	//입양 리뷰 답글
+	@GetMapping("/adoptionReview/reply")
+	public String showReplyAR(@RequestParam int reviewIdx,
+	                             @RequestParam int animalIdx,
+	                             Model model) {
+	    model.addAttribute("reviewIdx", reviewIdx);
+	    model.addAttribute("volunteerIdx", animalIdx);
+	    return "management/shelter/shelterReplyFormAR";
+	}
+	
+	//입양 리뷰 수정
+		@GetMapping("/adoptionReview/reply/update")
+		public String shelterReplyUpdateAR(@RequestParam int reviewIdx,
+			                             Model model) {
+			model.addAttribute("reviewIdx", reviewIdx);
+			return "management/shelter/shelterReplyUpdateAR";
+		}
 
 
 }
