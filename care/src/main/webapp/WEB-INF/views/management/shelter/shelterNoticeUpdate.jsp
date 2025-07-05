@@ -128,7 +128,7 @@ textarea:focus {
 </head>
 
 <body>
-	<%@ include file="/WEB-INF/views/common/index/indexHeader.jsp"%>
+ <%@ include file="/WEB-INF/views/common/management/managementHeader.jsp" %>
 	<section class="board">
 		<div class="header-title">보호시설 소식</div>
 		<div class="title-detail">보호소에서 안내할 공지사항을 등록해보세요.</div>
