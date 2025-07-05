@@ -27,6 +27,6 @@ public class ManageVolunteerReviewResponseDTO {
 	private int ref;
 	private int lev;
 	private int turn;
-	private String imagePaths;
+	private String imagePath;
 
 }

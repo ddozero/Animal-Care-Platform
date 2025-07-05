@@ -87,10 +87,28 @@ public class UserVolunteersController {
 		}
 
 		if (volunteersAllList == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkPageResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersAllList, pageInfo));
+		}
+	}
+	
+	/**
+	 * 봉사페이지의 목록을 캘린더 일정으로 조회하는 메서드
+	 * 
+	 * @return 캘린더 조회 성공 여부
+	 */
+	@GetMapping("/calendar")
+	public ResponseEntity<?> getVolunteerCalendar(){
+		
+		List<AllVolunteersResponseDTO> volunteersCal = volunteerService.getVolunteerCalendar();
+		
+		if (volunteersCal == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
+		} else {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new OkResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersCal));
 		}
 	}
 
@@ -107,7 +125,7 @@ public class UserVolunteersController {
 		AllVolunteersResponseDTO dto = volunteerService.getVolunteersDetail(idx);
 
 		if (dto == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "삭제되거나 없는 데이터"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "봉사활동이 존재하지 않습니다."));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<AllVolunteersResponseDTO>(200, "봉사 상세정보 조회 성공", dto));
 		}
@@ -143,7 +161,7 @@ public class UserVolunteersController {
 		} else if (result == volunteerService.SUBMIT_NOT_OK) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "봉사 신청이 불가능합니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
 		}
 	}
 

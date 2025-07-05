@@ -46,30 +46,26 @@ public class UserSupportController {
 			@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "keyword", required = false) String keyword) {
 		
-		String title = null;
-		String content = null;
-		
+		String title = null;		
 
-	    if ("title".equals(type)) {
-	        title = keyword;
-	    } else if ("content".equals(type)) {
-	        content = keyword;
-	    }
+		 if ("title".equals(type) && keyword != null && !keyword.isEmpty()) {
+		        title = keyword;
+		    }
 
-		List<UserNoticeResponseDTO> noticeAllList = supportService.searchAllNotice(cp, title, content);
-		PageInformationDTO page = supportService.searchNoticePage(cp, title, content);
+		List<UserNoticeResponseDTO> noticeAllList = supportService.searchAllNotice(cp, title);
+		PageInformationDTO page = supportService.searchNoticePage(cp, title);
 			
 
-		if (title != null || content != null) {
-			noticeAllList = supportService.searchAllNotice(cp, title, content);
-			page = supportService.searchNoticePage(cp, title, content);
+		if (title != null) {
+			noticeAllList = supportService.searchAllNotice(cp, title);
+			page = supportService.searchNoticePage(cp, title);
 		} else {
 			noticeAllList = supportService.getAllNotice(cp);
 			page = supportService.getAllNoticePage(cp);
 		}
 
 		if (noticeAllList == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkPageResponseDTO<List<UserNoticeResponseDTO>>(200, "조회 성공", noticeAllList, page));
@@ -90,7 +86,7 @@ public class UserSupportController {
 		UserNoticeResponseDTO dto = supportService.getNoticeDetail(idx);
 
 		if (dto == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "삭제되거나 없는 게시물"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "공지사항 게시물이 존재하지 않습니다."));
 		} else {
 			return ResponseEntity.ok(new OkResponseDTO<UserNoticeResponseDTO>(200, "게시물 상세정보 조회 성공", dto));
 		}

@@ -77,18 +77,18 @@ public class UserSupportServiceImple implements UserSupportService {
 	}
 
 	@Override
-	public List<UserNoticeResponseDTO> searchAllNotice(int cp, String title, String content) {
+	public List<UserNoticeResponseDTO> searchAllNotice(int cp, String title) {
 
-		SearchNoticeRequestDTO dto = new SearchNoticeRequestDTO(cp, listSize, title, content);
+		SearchNoticeRequestDTO dto = new SearchNoticeRequestDTO(cp, listSize, title);
 		List<UserNoticeResponseDTO> searchNoticeList = mapper.searchAllNotice(dto);
 
 		return searchNoticeList;
 	}
 
 	@Override
-	public PageInformationDTO searchNoticePage(int cp, String title, String content) {
+	public PageInformationDTO searchNoticePage(int cp, String title) {
 
-		SearchNoticeRequestDTO dto = new SearchNoticeRequestDTO(cp, listSize, title, content);
+		SearchNoticeRequestDTO dto = new SearchNoticeRequestDTO(cp, listSize, title);
 		if (cp == 0) {
 			cp = 1;
 		}

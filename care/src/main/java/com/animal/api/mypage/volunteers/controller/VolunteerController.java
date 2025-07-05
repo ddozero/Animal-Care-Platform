@@ -72,7 +72,7 @@ public class VolunteerController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new OkResponseDTO<>(401, "로그인 정보가 없습니다", null));
 		}
 
-		VolunteerDetailResponseDTO detail = volunteerService.getVolunteerDetailByRequestIdx(volunteerRequestIdx);
+		VolunteerDetailResponseDTO detail = volunteerService.getVolunteerDetailByRequestIdx(volunteerRequestIdx, loginUser.getIdx());
 
 		if (detail == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

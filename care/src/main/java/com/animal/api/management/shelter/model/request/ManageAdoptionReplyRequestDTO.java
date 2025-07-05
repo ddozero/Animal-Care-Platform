@@ -12,20 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ManageAdoptionReplyRequestDTO {
 	
-	@NotNull(message = "리뷰 IDX는 필수입니다.")
+
 	private Integer reviewIdx;
 	
-	@NotNull(message = "유저 IDX는 필수입니다.")
-	private Integer userIdx;
+	private int userIdx;
 	
-	@NotNull(message = "입양 동물 IDX는 필수입니다.")
 	private Integer animalIdx;
 	
-	@NotBlank(message = "답글 내용 작성은 필수입니다.")
+	@NotBlank(message = "답글 내용을 작성해주세요.")
 	private String content;
 	
-	@NotNull(message = "참조할 ref번호는 필수입니다.")
-	private Integer ref;
+	private int ref;
 	
 	private int lev;
 	

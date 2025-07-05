@@ -27,5 +27,8 @@ public interface UserVolunteersService {
 	public PageInformationDTO getSearchVolunteersPage(int cp, String title, String content, String location, String status, String shelter, String shelterType, LocalDate volunteerDate, String type, int time);
 
 	public int submitVolunteers(VolunteersSubmitRequestDTO dto);
+	
+	public List<AllVolunteersResponseDTO> getVolunteerCalendar();
+	
 
 }

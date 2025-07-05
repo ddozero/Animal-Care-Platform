@@ -12,6 +12,5 @@ public class SearchNoticeRequestDTO {
 	private int cp;
 	private int listSize;
 	private String title;
-	private String content;
 
 }

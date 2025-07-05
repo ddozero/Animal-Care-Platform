@@ -23,17 +23,17 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 
 	@Autowired
 	private UserVolunteersMapper mapper;
-	
+
 	@Autowired
 	private FileManager fileManager;
-	
+
 	private int listSize = 10;
 	private int pageSize = 5;
 
 	@Override
 	public List<AllVolunteersResponseDTO> getAllVolunteers(int cp) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		
+
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -41,12 +41,11 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 
 		map.put("listSize", listSize);
 		map.put("cp", cp);
-		
-		
+
 		List<AllVolunteersResponseDTO> volunteerLists = mapper.getAllVolunteers(map);
 		return volunteerLists;
 	}
-	
+
 	@Override
 	public PageInformationDTO getAllVolunteersPage(int cp) {
 		if (cp == 0) {
@@ -61,7 +60,7 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	@Override
 	public AllVolunteersResponseDTO getVolunteersDetail(int idx) {
 		AllVolunteersResponseDTO dto = mapper.getVolunteersDetail(idx);
-		
+
 		if (dto != null && dto.getContent() != null) {
 			List<String> imagePaths = fileManager.getImagePath("volunteers", idx);
 			if (imagePaths != null || imagePaths.size() != 0) {
@@ -74,9 +73,8 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 	}
 
 	@Override
-	public List<AllVolunteersResponseDTO> searchVolunteers(int cp, String title, String content,
-			String location, String status, String shelter, String shelterType, LocalDate volunteerDate, String type,
-			int time) {
+	public List<AllVolunteersResponseDTO> searchVolunteers(int cp, String title, String content, String location,
+			String status, String shelter, String shelterType, LocalDate volunteerDate, String type, int time) {
 
 		SearchVolunteerRequestDTO dto = new SearchVolunteerRequestDTO(cp, listSize, title, content, location, status,
 				shelter, shelterType, volunteerDate, type, time);
@@ -84,12 +82,13 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 
 		return searchVolunteersList;
 	}
-	
+
 	@Override
 	public PageInformationDTO getSearchVolunteersPage(int cp, String title, String content, String location,
 			String status, String shelter, String shelterType, LocalDate volunteerDate, String type, int time) {
-		
-		SearchVolunteerRequestDTO dto = new SearchVolunteerRequestDTO(cp, listSize, title, content, location, status, shelter, shelterType, volunteerDate, type, time);
+
+		SearchVolunteerRequestDTO dto = new SearchVolunteerRequestDTO(cp, listSize, title, content, location, status,
+				shelter, shelterType, volunteerDate, type, time);
 		if (cp == 0) {
 			cp = 1;
 		}
@@ -98,7 +97,7 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 		PageInformationDTO pageInfo = new PageInformationDTO(totalCnt, listSize, pageSize, cp);
 		return pageInfo;
 	}
-	
+
 	@Transactional
 	@Override
 	public int submitVolunteers(VolunteersSubmitRequestDTO dto) {
@@ -133,7 +132,13 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 		} else {
 			return SUBMIT_ERROR;
 		}
+	}
 
+	@Override
+	public List<AllVolunteersResponseDTO> getVolunteerCalendar() {
+
+		List<AllVolunteersResponseDTO> listsCal = mapper.getVolunteerCalendar();
+		return listsCal;
 	}
 
 }

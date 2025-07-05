@@ -153,7 +153,7 @@
 
               if (response.ok && (result.status === 'OK' || result.status === 200)) {
                 alert('로그인 성공');
-                window.location.href = '/care/admin/members';
+                window.location.href = '/care/admin/shelters';
               } else {
                 document.getElementById('errorMessage').innerText = result.errorMsg || '로그인 실패';
               }
