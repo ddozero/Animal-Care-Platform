@@ -104,7 +104,7 @@ public class ShelterManageController {
 	}
 
 	/**
-	 * 보호시설 기본정보 수정 시 파일 업로드 (사업자등록증 및 이미지)
+	 * 보호시설 기본정보 수정 시 사진 업로드
 	 * 
 	 * @param idx   보호시설 번호
 	 * @param files 업로드 파일
@@ -113,13 +113,23 @@ public class ShelterManageController {
 	 */
 	@PostMapping("/upload/{idx}")
 	public ResponseEntity<?> uploadShelterInfoFiles(@PathVariable int idx, MultipartFile[] files) {
-		int result = shelterService.uploadShelterFile(files, idx);
-		if (result == shelterService.UPLOAD_OK) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponseDTO<Void>(201, "파일 업로드가 완료되었습니다.", null));
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(404, "오류가 발생했습니다. 관리자에게 문의하세요."));
-		}
+	    if (files == null || files.length == 0) {
+	        return ResponseEntity
+	            .status(HttpStatus.BAD_REQUEST)
+	            .body(new ErrorResponseDTO(400, "업로드된 파일이 없습니다."));
+	    }
+
+	    int result = shelterService.uploadShelterFile(files, idx);
+
+	    if (result == shelterService.UPLOAD_OK) {
+	        return ResponseEntity.status(HttpStatus.CREATED)
+	               .body(new OkResponseDTO<>(201, "파일 업로드가 완료되었습니다.", null));
+	    } else {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	               .body(new ErrorResponseDTO(500, "파일 저장에 실패했습니다."));
+	    }
 	}
+
 
 	/**
 	 * 해당 보호시설 봉사 리뷰 조회 메서드
