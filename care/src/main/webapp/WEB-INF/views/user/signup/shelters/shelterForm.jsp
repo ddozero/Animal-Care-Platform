@@ -654,13 +654,16 @@ document.getElementById("verifyCodeBtn").addEventListener("click", async () => {
   const value = input.value.trim();
   const error = document.getElementById("shelterPersonNameError");
 
-  if (!value) {
-    error.textContent = "담당자명을 입력해주세요.";
+  const regex = /^[가-힣a-zA-Z\s]{2,30}$/;
+  if (!regex.test(value)) {
+    error.textContent = "담당자명은 한글 또는 영문 2~30자 이내여야 합니다.";
     error.style.color = "red";
     input.style.border = "1px solid red";
     return false;
   } else {
-    error.textContent = "";
+    error.textContent = "올바른 담당자명입니다.";
+    error.style.color = "green";
+    input.style.border = "1px solid green";
     return true;
   }
 }
