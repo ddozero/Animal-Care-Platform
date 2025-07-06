@@ -30,7 +30,7 @@ public class UserDonationsServiceImple implements UserDonationsService {
 	@Autowired
 	private FileManager fileManager;
 
-	private int listSize = 5;
+	private int listSize = 15;
 	private int pageSize = 5;
 
 	@Override

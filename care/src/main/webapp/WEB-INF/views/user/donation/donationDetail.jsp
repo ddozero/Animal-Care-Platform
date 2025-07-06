@@ -10,6 +10,209 @@
             <meta charset="UTF-8">
             <title>기부 상세</title>
             <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
+            <style>
+                /* 대표 이미지 컨테이너 추가 */
+                #donation-image-wrapper {
+                    position: relative;
+                    width: 100%;
+                    max-height: 280px;
+                    overflow: hidden;
+                    border-radius: 12px;
+                    margin-bottom: 24px;
+                }
+
+                #donation-image {
+                    width: 100%;
+                    height: auto;
+                    object-fit: cover;
+                    display: block;
+                }
+
+                /* 텍스트 오버레이 */
+                #donation-image-wrapper .overlay-text {
+                    position: absolute;
+                    bottom: 24px;
+                    left: 0;
+                    width: 100%;
+                    color: white;
+                    padding: 0 16px;
+                    box-sizing: border-box;
+                    text-align: center;
+                }
+
+                .overlay-text h2 {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-bottom: 8px;
+                }
+
+                .overlay-text .progress-bar-container {
+                    width: 100%;
+                    height: 6px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 4px;
+                    margin: 8px auto 4px auto;
+                    overflow: hidden;
+                }
+
+                .overlay-text .progress-bar-fill {
+                    height: 100%;
+                    background: #3ACDB2;
+                    transition: width 0.3s ease-in-out;
+                }
+
+                /* 하단 텍스트 (좌우 배치) */
+                .overlay-text .progress-info {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 14px;
+                    padding: 0 4px;
+                    color: #A0F0DF;
+                }
+
+                #donationUserListContainer>div {
+                    padding: 10px 0;
+                    border-bottom: 1px solid #eee;
+                    font-size: 14px;
+                    color: #333;
+                }
+
+
+
+                #donation-image2 {
+                    width: 100%;
+                    max-height: 400px;
+                    object-fit: cover;
+                    border-radius: 12px;
+                    margin-bottom: 24px;
+                }
+
+                .button-primary {
+                    background-color: #3ACDB2;
+                    color: white;
+                    border: none;
+                    padding: 8px 16px;
+                    font-size: 14px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                }
+
+                .button-primary:hover {
+                    background-color: #2fb3a0;
+                }
+
+                .button-secondary {
+                    background-color: #e0e0e0;
+                    color: #333;
+                    border: none;
+                    padding: 8px 16px;
+                    font-size: 14px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    margin-left: 6px;
+                    transition: background 0.2s;
+                }
+
+                .button-secondary:hover {
+                    background-color: #ccc;
+                }
+
+                .section {
+                    background: #f9f9f9;
+                    padding: 20px 16px;
+                    border-radius: 12px;
+                    margin-bottom: 24px;
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+                }
+
+                .section h3 {
+                    font-size: 18px;
+                    margin-bottom: 12px;
+                    color: #333;
+                    font-weight: bold;
+                }
+
+                .container {
+                    max-width: 960px;
+                    /* 또는 1000px, 90%, 적절히 조정 가능 */
+                    margin: 0 auto;
+                    padding: 16px;
+                    box-sizing: border-box;
+                }
+
+                .row {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 16px;
+                    margin-bottom: 8px;
+                }
+
+                .row>div {
+                    flex: 1;
+                    min-width: 200px;
+                }
+
+                .paging {
+                    margin: 40px 0;
+                    text-align: center;
+                }
+
+                .paging button {
+                    border: none;
+                    background: #fff;
+                    padding: 6px 12px;
+                    margin: 0 2px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+                    transition: background .2s;
+                    font-size: 14px;
+                }
+
+                .paging button:hover {
+                    background: #3acdb2;
+                    color: #fff;
+                }
+
+                /* 댓글 수정/삭제 버튼 위치 조정 */
+                .donationComment-buttons {
+                    margin-top: 8px;
+                    display: flex;
+                    gap: 6px;
+                }
+
+                .donation-amount-green {
+                    color: #3ACDB2;
+                    font-weight: bold;
+                }
+
+                .donationComment {
+                    padding: 12px 0;
+                    border-bottom: 1px solid #eee;
+                    font-size: 14px;
+                    color: #333;
+                }
+
+                .donationComment-nickname {
+                    font-weight: bold;
+                    color: #222;
+                    margin-bottom: 4px;
+                }
+
+                .donationComment-content {
+                    margin: 4px 0;
+                    font-size: 14px;
+                    color: #444;
+                    line-height: 1.5;
+                }
+
+                .donationComment-createdAt {
+                    font-size: 12px;
+                    color: #888;
+                }
+            </style>
+
             <script>
                 async function donationDetail() {//기부 상세 조회
                     const idx = location.pathname.split("/").pop();
@@ -41,6 +244,9 @@
                     document.getElementById("donation-sponsorDetail").innerText = donation.sponsorDetail;
                     document.getElementById("donation-content").innerText = donation.content;
 
+                    document.getElementById("progressBarFill").style.width = donation.completionRate + "%";
+
+
                 }
 
                 async function donationUserList(cp) {//기부 내역 조회
@@ -57,15 +263,17 @@
 
                     const donationUsers = result.data;
                     const pageInfo = result.pageInfo
-
                     for (const donationUser of donationUsers) {
                         const card = document.createElement("div");
                         card.innerHTML =
-                            '<div class="donationUser-nickname">' + donationUser.nickname + '</div>' +
-                            '<div class="donationUser-donatedAmount">' + donationUser.donatedAmount + '</div>' +
-                            '<div class="donationUser-createdAt">' + donationUser.createdAt + '</div>';
+                            '<span>' + donationUser.nickname + '님 </span>' +
+                            '<span class="donation-amount-green">' + donationUser.donatedAmount.toLocaleString() + '원</span>' +
+                            ' 참여';
                         container.appendChild(card);
                     }
+
+
+
 
 
                     // 페이징 함수 실행
@@ -106,8 +314,8 @@
                             '<div class="donationComment-content">' + donationComment.content + '</div>' +
                             '<div class="donationComment-createdAt">' + donationComment.createdAt + '</div>' +
                             '<div class="donationComment-buttons">' +
-                            '<button onclick="enterEditMode(this)">수정</button>' +
-                            '<button onclick="deleteComment(' + donationComment.idx + ')">삭제</button>' +
+                            '<button class="button-primary" onclick="enterEditMode(this)">수정</button>' +
+                            '<button class="button-secondary" onclick="deleteComment(' + donationComment.idx + ')">삭제</button>' +
                             '</div>';
                         container.appendChild(card);
                     }
@@ -186,9 +394,11 @@
 
                     const buttonBox = commentDiv.querySelector(".donationComment-buttons");//버튼 들을 변수에 담음
 
+
                     buttonBox.innerHTML =
-                        '<button onclick="submitEdit(this,' + commentId + ')">저장</button>' +
-                        '<button onclick="cancelEdit(this, \'' + escapedContent + '\')">취소</button>';
+                        '<button class="button-primary" onclick="submitEdit(this,' + commentId + ')">저장</button>' +
+                        '<button class="button-secondary" onclick="cancelEdit(this, \'' + escapedContent + '\')">취소</button>';
+
 
 
                 }
@@ -204,8 +414,9 @@
 
                     const buttonBox = commentDiv.querySelector(".donationComment-buttons");
                     buttonBox.innerHTML =
-                        '<button onclick="enterEditMode(this)">수정</button>' +
-                        '<button onclick="deleteComment(' + commentId + ')">삭제</button>';
+                        '<button class="button-primary" onclick="enterEditMode(this)">수정</button>' +
+                        '<button class="button-secondary" onclick="deleteComment(' + commentId + ')">삭제</button>';
+
                 }
 
 
@@ -235,8 +446,9 @@
 
                         const buttonBox = commentDiv.querySelector(".donationComment-buttons");
                         buttonBox.innerHTML =
-                            '<button onclick="enterEditMode(this)">수정</button>' +
-                            '<button onclick="deleteComment(' + commentIdx + ')">삭제</button>';
+                            '<button class="button-primary" onclick="enterEditMode(this)">수정</button>' +
+                            '<button class="button-secondary" onclick="deleteComment(' + commentIdx + ')">삭제</button>';
+
                     } else if (result.errorCode === 401) {
                         location.href = "/care/login";
                         return;
@@ -346,60 +558,99 @@
 
         <body data-login-user-id="<%= loginUserId %>">
             <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
-                <img id="donation-image" src="" alt="기부 대표이미지">
-                <div id="donation-name"></div>
-                <div id="donation-completionRate"></div>
-                <div id="donation-completionAmount"></div>
-                <img id="donation-image2" src="" alt="기부 상세이미지">
-                <div id="donation-startDate"></div>
-                <div id="donation-endDate"></div>
-                <div id="donation-status"></div>
-                <div id="donation-amount"></div>
-                <div id="donation-sponsor"></div>
-                <div id="donation-sponsorDetail"></div>
-                <div id="donation-content"></div>
-                <!-- 기부하기 버튼 -->
-                <div>
-                    <button onclick="openDonatePopup()">기부하기</button>
+                <div class="container">
+                    <!-- 대표 이미지 + 진행률 -->
+                    <div id="donation-image-wrapper">
+                        <img id="donation-image" src="" alt="기부 대표이미지">
+                        <div class="overlay-text">
+                            <h2 id="donation-name"></h2>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+                            </div>
+                            <div class="progress-info">
+                                <span id="donation-completionRate"></span>
+                                <span id="donation-completionAmount"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 기부 소개 -->
+                    <div class="section">
+                        <h3>기부소개</h3>
+                        <img id="donation-image2" src="" alt="기부 상세이미지">
+                        <div id="donation-content"></div>
+                    </div>
+
+                    <!-- 사용계획 -->
+                    <!-- 사용계획 -->
+                    <div class="section">
+                        <h3>이렇게 사용됩니다</h3>
+
+                        <div class="row">
+                            <div>모금 시작일: <span id="donation-startDate"></span></div>
+                            <div>모금 마감일: <span id="donation-endDate"></span></div>
+                        </div>
+
+                        <div class="row">
+                            <div>모금 상태: <span id="donation-status"></span></div>
+                            <div>모금액: <span id="donation-amount"></span></div>
+                        </div>
+
+                        <div class="row">
+                            <div>모금처: <span id="donation-sponsor"></span></div>
+                            <div>상세내용: <span id="donation-sponsorDetail"></span></div>
+                        </div>
+                        <!-- ✅ 카드 스타일 제거하고 일반 div로 변경 -->
+                        <div style="margin-top: 16px;">
+                            <button class="button-primary" onclick="openDonatePopup()">기부하기</button>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <!-- 기부 참여 내역 -->
+                    <div class="section">
+                        <h3>기부 참여 내역</h3>
+                        <div id="donationUserListContainer"></div>
+                        <div id="pagingAreaUser" class="paging"></div>
+                    </div>
+
+                    <!-- 댓글 영역 -->
+                    <div class="section">
+                        <h3>댓글</h3>
+                        <div id="commentWriteBox" style="margin-bottom:12px;">
+                            <textarea id="commentContent" placeholder="댓글을 입력하세요" rows="4" cols="50"></textarea><br />
+                            <button class="button-primary" onclick="submitComment()">등록</button>
+                        </div>
+                        <div id="donationCommentContainer"></div>
+                        <div id="pagingAreaComment" class="paging"></div>
+                    </div>
                 </div>
-
-                <script>
-
-                    window.addEventListener("DOMContentLoaded", function () {
-                        donationDetail();
-                        donationCommentList(1);
-                        donationUserList(1);
-                    });
-                </script>
-                <div id="donationUserListContainer"></div>
-                <div id="pagingAreaUser" class="paging"></div>
-
-                <div id="commentWriteBox">
-                    <textarea id="commentContent" placeholder="댓글을 입력하세요" rows="4" cols="50"></textarea><br />
-                    <button onclick="submitComment()">등록</button>
-                </div>
-                <div id="donationCommentContainer"></div>
-                <div id="pagingAreaComment" class="paging"></div>
-
-
-
-
                 <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
+
                     <!-- 기부 팝업 -->
                     <div id="donationPopup" style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%, -50%);
-                               background:white; border:1px solid #ccc; padding:20px; z-index:9999;">
+        background:white; border:1px solid #ccc; padding:20px; z-index:9999;">
                         <div>보유 포인트: <span id="userPointText"></span> P</div>
                         <div>
                             기부할 포인트:
                             <input type="number" id="donationInput" min="1" placeholder="포인트 입력" />
                         </div>
                         <div style="margin-top:10px;">
-                            <button onclick="submitDonation()">기부하기</button>
-                            <button onclick="closeDonatePopup()">닫기</button>
+                            <button class="button-primary" onclick="submitDonation()">기부하기</button>
+                            <button class="button-secondary" onclick="closeDonatePopup()">닫기</button>
                         </div>
                     </div>
 
-
+                    <script>
+                        window.addEventListener("DOMContentLoaded", function () {
+                            donationDetail();
+                            donationCommentList(1);
+                            donationUserList(1);
+                        });
+                    </script>
         </body>
 
         </html>
