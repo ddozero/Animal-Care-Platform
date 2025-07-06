@@ -9,6 +9,70 @@
             <meta charset="UTF-8">
             <title>게시글 작성</title>
             <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
+            <style>
+                body {
+                    font-family: 'Pretendard', sans-serif;
+                    background-color: #fff;
+                    padding: 40px 20px;
+                }
+
+                .header-title {
+                    font-size: 28px;
+                    font-weight: bold;
+                    margin-top: 50px;
+                    margin-bottom: 20px;
+                    text-align: center;
+                    color: #3ACDB2;
+                }
+
+                .form-container {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    background-color: #f9f9f9;
+                    padding: 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+                }
+
+                .form-container label {
+                    font-weight: bold;
+                    display: block;
+                    margin-top: 15px;
+                    margin-bottom: 5px;
+                }
+
+                .form-container input[type="text"],
+                .form-container textarea,
+                .form-container input[type="file"] {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    box-sizing: border-box;
+                }
+
+                .form-container textarea {
+                    resize: vertical;
+                }
+
+                .form-container button {
+                    background-color: #3ACDB2;
+                    color: white;
+                    border: none;
+                    padding: 10px 18px;
+                    font-size: 14px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    margin-right: 10px;
+                    transition: background 0.2s;
+                }
+
+                .form-container button:hover {
+                    background-color: #2fb3a0;
+                }
+            </style>
+
             <script>
                 // boardForm.jsp에 추가
                 async function submitBoard() {
@@ -70,25 +134,38 @@
         <body data-login-user-id="<%= loginUserId %>">
             <%@ include file="/WEB-INF/views/common/index/indexHeader.jsp" %>
 
-                <h2>게시글 작성</h2>
-                <form id="boardForm" enctype="multipart/form-data">
-                    <div>
-                        <label for="title">제목</label><br />
-                        <input type="text" id="title" required />
-                    </div>
-                    <div>
-                        <label for="content">내용</label><br />
-                        <textarea id="content" rows="10" cols="80" required></textarea>
-                    </div>
-                    <div>
-                        <label for="files">첨부파일</label><br />
-                        <input type="file" id="files" multiple />
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <button type="button" onclick="submitBoard()">등록</button>
-                        <button type="reset">초기화</button>
-                    </div>
-                </form>
+                <div class="header-title">게시글 작성</div>
+
+                <div class="form-container">
+                    <form id="boardForm" enctype="multipart/form-data">
+                        <div>
+                            <label for="title">제목</label>
+                            <input type="text" id="title" required />
+                        </div>
+                        <div>
+                            <label for="content">내용</label>
+                            <textarea id="content" rows="10" required></textarea>
+                        </div>
+                        <div>
+                            <label for="files">첨부파일</label>
+                            <input type="file" id="files" multiple />
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button type="button" onclick="submitBoard()">등록</button>
+                            <button type="reset">초기화</button>
+                        </div>
+                    </form>
+                </div>
+                <script>
+                    window.addEventListener("DOMContentLoaded", () => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const originIdx = urlParams.get("origin");
+                        if (originIdx) {
+                            document.getElementById("title").value = "[Re] ";
+                        }
+                    });
+                </script>
+
 
                 <%@ include file="/WEB-INF/views/common/index/indexFooter.jsp" %>
         </body>

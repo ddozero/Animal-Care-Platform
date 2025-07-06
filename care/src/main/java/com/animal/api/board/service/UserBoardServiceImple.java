@@ -32,7 +32,7 @@ public class UserBoardServiceImple implements UserBoardService {
 	@Autowired
 	private FileManager fileManager;
 
-	private int listSize = 5;
+	private int listSize = 10;
 	private int pageSize = 5;
 
 	@Override
