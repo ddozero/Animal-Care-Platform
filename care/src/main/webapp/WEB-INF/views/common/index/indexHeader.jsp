@@ -89,14 +89,14 @@
     <div id="header-top">
         <div id="logo">
         <a href="${root}/index"  style="display: flex; align-items: center;" >
-		  <img src="${root}/resources/web/images/indexheader/logo.png" alt="로고" style="height: 50px; vertical-align: middle; transform: scale(1.5); transform-origin: left center; margin-right: 20px;">
-	    <div style="display: flex; flex-direction: column; line-height: 1.2; font-family: 'Pretendard';">
-	      <span style="font-size: 14px; color: #666; letter-spacing: 0.5px;">당신에게</span>
-	      <span style="font-size: 34px; font-weight: 800; color: #111; letter-spacing: -1px;">다시 가는 길</span>
+		  <img src="${root}/resources/web/images/indexheader/logo2.png" alt="로고" style="height: 53px; width:130px; vertical-align: middle; transform: scale(1.5); transform-origin: left center; margin-right: 20px; margin-top:10px;">
+	  <div style="display: flex; flex-direction: column; line-height: 1.2; font-family: 'Pretendard';">
+	      <!-- <span style="font-size: 14px; color: #666; letter-spacing: 0.5px;">당신에게</span>
+	      <span style="font-size: 34px; font-weight: 800; color: #111; letter-spacing: -1px;">다시 가는 길</span> --> -->
 	    </div>
 		</a>
-
         </div>
+        
         <div id="menu-bar">
         <a href="${root}/volunteers">봉사</a>
         <a href="${root}/animals">입양</a>

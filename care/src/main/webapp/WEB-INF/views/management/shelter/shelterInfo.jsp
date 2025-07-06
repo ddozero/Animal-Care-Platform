@@ -13,12 +13,8 @@
   --text-main: #333;
 }
 
-* { 
-  box-sizing: border-box; 
-}
 
 body {
-  margin: 0;
   font-family: 'Pretendard', sans-serif;
   background: #fff;
 }
@@ -210,10 +206,11 @@ body {
 }
 
 #shelterName {
-  font-size: 25px;    
+  font-size: 28px;    
   font-weight: 700;    
   display: block;      
-  margin-bottom: 20px; 
+  margin-bottom: 40px; 
+  margin-top: 10px;
 }
 
 /* ===== 서브 탭 (봉사리뷰 / 입양리뷰) ===== */
@@ -418,11 +415,13 @@ textarea:disabled {
 <section class="container">
 
   <div class="content">
-    <div>
-      <div class="photo-box">
-        <img id="shelterImage" src="" alt="보호소 사진">
-      </div>
-    </div>
+   <div>
+ 	 <div class="photo-box">
+	    <img id="shelterImage" src="" alt="보호소 사진">
+	  </div>
+	  <button class="upload-button" id="uploadButton">사진 업로드</button>
+	  <input type="file" id="uploadInput" accept="image/*" style="display:none;" />
+	</div>
      <div class="info-section">
            <div>
 		      <input type="text" id="shelterName" value="" disabled />
@@ -512,6 +511,8 @@ textarea:disabled {
 <script>
 
 // 보호소 정보 불러오기
+var shelterIdx; 
+
 async function ShelterInfo() {
     try {
         const result = await API.get("/care/api/management/shelter");
@@ -522,12 +523,17 @@ async function ShelterInfo() {
         }
 
         var shelter = result.data;
+        
+        shelterIdx = shelter.idx;
+        console.log("shelterIdx:", shelterIdx);
 
         // 이미지 처리
         var img = document.getElementById("shelterImage");
+
         if (shelter.imagePaths && shelter.imagePaths.length > 0 && shelter.imagePaths[0]) {
-            img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0];
-        } 
+            img.src = "${pageContext.request.contextPath}" + shelter.imagePaths[0] + "?" + new Date().getTime();
+        }
+
 
         // 정보 입력
         document.getElementById("shelterName").value = shelter.shelterName;
@@ -613,6 +619,49 @@ async function saveChanges() {
 	window.addEventListener("DOMContentLoaded", function() {
 	  ShelterInfo();
 	});
+	
+
+//보호시설 사진 업로드
+document.getElementById('uploadButton').addEventListener('click', function() {
+    if (!shelterIdx) {
+        alert('보호소 정보를 먼저 불러온 뒤 시도해주세요.');
+        return;
+    }
+    document.getElementById('uploadInput').click();
+});
+
+document.getElementById('uploadInput').addEventListener('change', async function(event) {
+    if (!shelterIdx) {
+        alert('보호소 정보를 먼저 불러온 뒤 시도해주세요.');
+        return;
+    }
+
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('files', file);
+
+    try {
+        const uploadRes = await fetch('/care/api/management/shelter/upload/' + shelterIdx, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!uploadRes.ok) {
+            alert('사진 업로드에 실패했습니다. 관리자에게 문의하세요.');
+            return;
+        }
+
+        alert('사진이 업로드되었습니다.');
+        ShelterInfo();
+    } catch (err) {
+        console.error(err);
+        alert('사진 업로드 중 오류가 발생했습니다.');
+    }
+});
+
+
 
 
 //공지사항
@@ -830,8 +879,8 @@ async function loadVolunteerReview(cp = 1) {
 }
 
 
-	//봉사 리뷰 답글 수정 
-	function editReviewPopupVR(reviewIdx) {
+//봉사 리뷰 답글 수정 
+function editReviewPopupVR(reviewIdx) {
 			const url = '/care/management/shelters/volunteerReview/reply/update?reviewIdx=' + reviewIdx;
 			const width = 600;
             const height = 400;
@@ -840,26 +889,22 @@ async function loadVolunteerReview(cp = 1) {
 
             var windowOptions = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",resizable=yes";
             window.open(url, "replyUpdateVR", windowOptions);
-	 }
+}
 	
-	//봉사 리뷰 답글 삭제
-	async function deleteReviewVR(reviewIdx) {
-	    if (!confirm("정말 삭제하시겠습니까?")) {
-	        return;
-	    }
-	    const result = await API.delete('/care/api/management/shelter/volunteerReviews/reply/' + reviewIdx);
-	    if (result.status === 200) {
+//봉사 리뷰 답글 삭제
+async function deleteReviewVR(reviewIdx) {
+	if (!confirm("정말 삭제하시겠습니까?")) {
+	      return;
+	  }
+	 const result = await API.delete('/care/api/management/shelter/volunteerReviews/reply/' + reviewIdx);
+	  if (result.status === 200) {
 	        alert(result.message);
 	        loadVolunteerReview();  // 삭제 후 목록 새로고침
-	    } else {
+	  } else {
 	        alert("삭제에 실패하였습니다. 관리자에게 문의하세요");
-	    }
-	}
+	   }
+}
 	
-
-
-
-
 
 
 ///입양리뷰

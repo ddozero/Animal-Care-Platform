@@ -54,7 +54,7 @@ public class ShelterManageServiceImple implements ShelterManageService {
 
 	@Override
 	public int uploadShelterFile(MultipartFile[] files, int idx) { // 보호시설 info 수정 파일업로드
-		boolean result = fileManager.uploadFiles("shelters", idx, files);
+		boolean result = fileManager.uploadImages("shelters", idx, files);
 
 		if (result) {
 			return UPLOAD_OK;
