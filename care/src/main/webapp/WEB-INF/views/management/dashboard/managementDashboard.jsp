@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>보호시설 통계</title>
+        <title>당신에게 다시가는 길 - 보호시설 통계</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>

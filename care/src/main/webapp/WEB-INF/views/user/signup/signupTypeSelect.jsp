@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원가입 유형 선택</title>
+<title>당신에게 다시가는 길 - 회원가입 유형 선택</title>
   <style>
     body {
       margin: 0;

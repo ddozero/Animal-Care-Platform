@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>마이페이지</title>
+<title>당신에게 다시가는 길 - 마이페이지</title>
 <style>
   * {
     box-sizing: border-box;

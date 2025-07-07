@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>보호시설 관리</title>
+<title>당신에게 다시가는 길 - 보호시설 관리</title>
 <style>
 :root {
   --brand: #3ACDB2;

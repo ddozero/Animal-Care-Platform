@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>기부</title>
+		<title>당신에게 다시가는 길 - 기부앤테이크 목록</title>
 		<style>
 			.banner-image {
 				width: 300px;

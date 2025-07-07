@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Insert title here</title>
+        <title>당신에게 다시가는 길 - 봉사 상세</title>
         <style>
             /* ───────── 전체 래퍼 ───────── */
             .volunteer-detail {

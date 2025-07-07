@@ -8,7 +8,7 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>기부 상세</title>
+            <title>당신에게 다시가는 길 - 기부앤테이크 상세</title>
             <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
             <style>
                 /* 대표 이미지 컨테이너 추가 */

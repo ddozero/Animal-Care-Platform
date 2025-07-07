@@ -5,7 +5,7 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>Shelter Requests</title>
+            <title>[관리자]당신에게 다시가는 길 - 보호시설 가입 승인</title>
              <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
             <style>
                 .board {

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>로그인 페이지</title>
+<title>당신에게 다시가는 길 - 로그인</title>
 <style>
     /* 전체 초기화 */
     html, body {

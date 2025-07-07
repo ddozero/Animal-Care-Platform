@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 사용자 회원가입 Form</title>
+<title>당신에게 다시가는 길 - 일반 사용자 회원가입</title>
 <link rel="stylesheet" type="text/css" href="${root}/resources/web/user/auth/userForm.css">
 <style>
   input:focus {

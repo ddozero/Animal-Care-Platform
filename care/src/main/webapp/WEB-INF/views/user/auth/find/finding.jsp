@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디 비밀번호 찾기</title>
+<title>당신에게 다시가는 길 - 아이디/비밀번호 찾기</title>
 <link rel="stylesheet" type="text/css" href="${root}/resources/web/user/auth/find/finding.css">
 </head>
 

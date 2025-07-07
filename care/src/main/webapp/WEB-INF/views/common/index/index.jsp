@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>메인 페이지</title>
+<title>당신에게 다시가는 길</title>
 <script>const root = "${pageContext.request.contextPath}";</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
