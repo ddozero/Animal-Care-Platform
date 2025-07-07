@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Insert title here</title>
+        <title>당신에게 다시가는 길 - 봉사 상세</title>
         <style>
             /* ───────── 전체 래퍼 ───────── */
             .volunteer-detail {
@@ -196,7 +196,7 @@
                     <div><span>장소: </span><span id="volunteerLocation"></span></div>
                     <div class="btn-group">
                         <input type="button" id="adoption" value="봉사 신청"
-                            onclick="location.href='/care/volunteers/'+volunteerIdx+'submit'">
+                            onclick="location.href='/care/volunteers/'+volunteerIdx+'/submit'">
                         <input type="button" value="목록" onclick="location.href='/care/shelters/'+shelterIdx">
                     </div>
                 </div>

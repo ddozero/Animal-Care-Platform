@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Insert title here</title>
+        <title>당신에게 다시가는 길 - 게시글 상세</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
         <style>
@@ -158,7 +158,7 @@
                 if (board.imagePaths != null) {
                     const images = document.getElementById("imageContainer");
                     for (const imagePath of board.imagePaths) {
-                        if (imagePath === null) {
+                        if (imagePat === "/care/resources/web/images/no-image.png") {
                             continue;
                         }
                         const img = document.createElement("img");

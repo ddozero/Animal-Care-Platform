@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>유기동물 상세 정보</title>
+        <title>당신에게 다시가는 길 - 유기동물 상세 정보</title>
         <style>
             /* ───────── 전체 래퍼 ───────── */
             .animal-detail-wrapper {
@@ -292,7 +292,7 @@
                 document.getElementById("editAge").value = animal.age;
 
                 // 크기
-                document.getElementById("size-view").textContent = animal.size === 1 ? "소형" : animal.size === 2 ? "중형" : "대형";
+                document.getElementById("size-view").textContent = animal.size + "kg";
                 document.getElementById("editSize").value = animal.size;
 
                 // 중성화

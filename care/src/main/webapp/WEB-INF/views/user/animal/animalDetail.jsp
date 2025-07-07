@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Insert title here</title>
+        <title>당신에게 다시가는 길 - 유기동물 상세 정보</title>
         <style>
             /* ───────── 전체 래퍼 ───────── */
             .animal-detail {
@@ -188,7 +188,7 @@
                 document.getElementById("idx").textContent = animal.idx;
                 document.getElementById("gender").textContent = animal.gender === "M" ? "남" : "여";
                 document.getElementById("age").textContent = animal.age;
-                document.getElementById("size").textContent = animal.size === 1 ? "소형" : animal.size === 2 ? "중형" : "대형";
+                document.getElementById("size").textContent = animal.size + "kg";
                 document.getElementById("neuter").textContent = animal.neuter === 1 ? "O" : "X";
                 document.getElementById("breed").textContent = animal.breed;
                 document.getElementById("type").textContent = animal.type;

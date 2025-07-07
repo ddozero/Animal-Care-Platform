@@ -5,7 +5,7 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>Insert title here</title>
+            <title>[관리자]당신에게 다시가는 길 - 공지사항</title>
             <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
         </head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">

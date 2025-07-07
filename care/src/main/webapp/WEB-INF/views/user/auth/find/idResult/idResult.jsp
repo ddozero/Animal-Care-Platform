@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디 찾기 결과 화면</title>
+<title>당신에게 다시가는 길 - 아이디 찾기 결과</title>
   <style>
     .result-container {
       max-width: 500px;

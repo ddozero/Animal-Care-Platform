@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 사용자 약관동의</title>
+<title>당신에게 다시가는 길 - 일반 사용자 약관동의</title>
   <style>
     body {
       margin: 0;

@@ -95,9 +95,19 @@ JOIN ADOPTION_STATUS AS2
 	<if test="personality != null and personality != ''">
 		AND AP.NAME = #{personality}
 	</if>
-	<if test="size != 0">
-		AND A.`SIZE` = #{size}
-	</if>
+	<choose>
+    <when test="size == 1">
+        AND A.`SIZE` &lt; 5
+    </when>
+    <when test="size == 2">
+        AND A.`SIZE` &gt;= 5 AND A.`SIZE` &lt; 10
+    </when>
+    <when test="size == 3">
+        AND A.`SIZE` &gt;= 10
+    </when>
+    <otherwise>
+    </otherwise>
+</choose>
 	<if test="name != null and name != ''">
 		AND A.NAME LIKE '%${name}%'
 	</if>

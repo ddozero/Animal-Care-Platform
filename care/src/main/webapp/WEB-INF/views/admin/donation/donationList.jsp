@@ -5,7 +5,7 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>Insert title here</title>
+            <title>[관리자]당신에게 다시가는 길 - 지원사업</title>
             <link rel="stylesheet"
                 href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
             <style>

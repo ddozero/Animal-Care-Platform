@@ -5,7 +5,7 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>공지사항 관리</title>
+            <title>[관리자]당신에게 다시가는 길 - 공지사항</title>
             <link rel="stylesheet"
                 href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
             <style>

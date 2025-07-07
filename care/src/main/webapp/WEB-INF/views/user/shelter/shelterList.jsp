@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Insert title here</title>
+        <title>당신에게 다시가는 길 - 보호시설 목록</title>
         <style>
             .header-title {
                 font-size: 28px;

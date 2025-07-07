@@ -8,7 +8,7 @@
 
                 <head>
                     <meta charset="UTF-8">
-                    <title>봉사 등록/수정</title>
+                    <title>당신에게 다시가는 길 - 봉사 등록/수정</title>
                     <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
                     <style>
                         body {
