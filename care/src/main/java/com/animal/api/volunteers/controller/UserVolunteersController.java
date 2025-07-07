@@ -68,44 +68,58 @@ public class UserVolunteersController {
 			@RequestParam(value = "status", required = false) String status,
 			@RequestParam(value = "shelter", required = false) String shelter,
 			@RequestParam(value = "shelterType", required = false) String shelterType,
-			@RequestParam(value = "volunteerDate", required = false)
-		    @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate volunteerDate,
+			@RequestParam(value = "volunteerDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate volunteerDate,
 			@RequestParam(value = "type", required = false) String type,
-			@RequestParam(value = "time", defaultValue = "0") Integer time) {
+			@RequestParam(value = "time", required = false) String timeStr) {
+		
+		//time 5이상 검색 조건 추가
+		int time = 0;
+		if ("6plus".equals(timeStr)) {
+			time = 9999;
+		} else if (timeStr != null && !timeStr.isEmpty()) {
+			try {
+				time = Integer.parseInt(timeStr);
+			} catch (NumberFormatException e) {
+				time = 0; // 잘못된 값이면 0 (전체)
+			}
+		}
 
-	
 		List<AllVolunteersResponseDTO> volunteersAllList = null;
 		PageInformationDTO pageInfo = null;
-		
+
 		if (title != null || content != null || location != null || status != null || shelter != null
-				|| shelterType != null || volunteerDate != null || type != null || time != 0) {
-			volunteersAllList = volunteerService.searchVolunteers(cp, title, content, location, status, shelter, shelterType, volunteerDate, type, time);
-			pageInfo = volunteerService.getSearchVolunteersPage(cp, title, content, location, status, shelter, shelterType, volunteerDate, type, time);
+				|| shelterType != null || volunteerDate != null || type != null || timeStr != null) {
+			volunteersAllList = volunteerService.searchVolunteers(cp, title, content, location, status, shelter,
+					shelterType, volunteerDate, type, time);
+			pageInfo = volunteerService.getSearchVolunteersPage(cp, title, content, location, status, shelter,
+					shelterType, volunteerDate, type, time);
 		} else {
 			volunteersAllList = volunteerService.getAllVolunteers(cp);
 			pageInfo = volunteerService.getAllVolunteersPage(cp);
 		}
 
 		if (volunteersAllList == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
 		} else {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new OkPageResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersAllList, pageInfo));
+			return ResponseEntity.status(HttpStatus.OK).body(new OkPageResponseDTO<List<AllVolunteersResponseDTO>>(200,
+					"게시물 목록 조회 성공", volunteersAllList, pageInfo));
 		}
 	}
-	
+
 	/**
 	 * 봉사페이지의 목록을 캘린더 일정으로 조회하는 메서드
 	 * 
 	 * @return 캘린더 조회 성공 여부
 	 */
 	@GetMapping("/calendar")
-	public ResponseEntity<?> getVolunteerCalendar(){
-		
+	public ResponseEntity<?> getVolunteerCalendar() {
+
 		List<AllVolunteersResponseDTO> volunteersCal = volunteerService.getVolunteerCalendar();
-		
+
 		if (volunteersCal == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new OkResponseDTO<List<AllVolunteersResponseDTO>>(200, "게시물 목록 조회 성공", volunteersCal));
@@ -140,17 +154,16 @@ public class UserVolunteersController {
 	 * @return 신청에 따른 메세지
 	 */
 	@PostMapping("/{idx}/submit")
-	public ResponseEntity<?> submitVolunteers(@Valid @RequestBody VolunteersSubmitRequestDTO dto, @PathVariable("idx") int idx,
-			HttpSession session) {
+	public ResponseEntity<?> submitVolunteers(@Valid @RequestBody VolunteersSubmitRequestDTO dto,
+			@PathVariable("idx") int idx, HttpSession session) {
 		LoginResponseDTO loginUser = (LoginResponseDTO) session.getAttribute("loginUser");
 
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(401, "로그인 후 이용가능합니다."));
 		}
 		dto.setUserIdx(loginUser.getIdx());
-		
-		 dto.setVolunteerIdx(idx);
 
+		dto.setVolunteerIdx(idx);
 
 		int result = volunteerService.submitVolunteers(dto);
 
@@ -161,7 +174,8 @@ public class UserVolunteersController {
 		} else if (result == volunteerService.SUBMIT_NOT_OK) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(409, "봉사 신청이 불가능합니다."));
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ErrorResponseDTO(400, "잘못된 접근입니다. 관리자에게 문의하세요."));
 		}
 	}
 
