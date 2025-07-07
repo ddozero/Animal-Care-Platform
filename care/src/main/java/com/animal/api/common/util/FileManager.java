@@ -142,7 +142,7 @@ public class FileManager {
 		String realPath = context.getRealPath("/resources/" + folderPath + "/" + idx + "/images");
 		File dir = new File(realPath);
 		if (!dir.exists()) {
-			filesPath.add(null);
+			filesPath.add("/resources/web/images/no-image.png");
 			return filesPath;
 		}
 

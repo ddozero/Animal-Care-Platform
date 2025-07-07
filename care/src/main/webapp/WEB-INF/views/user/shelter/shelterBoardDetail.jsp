@@ -158,7 +158,7 @@
                 if (board.imagePaths != null) {
                     const images = document.getElementById("imageContainer");
                     for (const imagePath of board.imagePaths) {
-                        if (imagePath === null) {
+                        if (imagePat === "/care/resources/web/images/no-image.png") {
                             continue;
                         }
                         const img = document.createElement("img");
