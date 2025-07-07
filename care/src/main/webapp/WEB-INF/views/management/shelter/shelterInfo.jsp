@@ -539,7 +539,7 @@ async function ShelterInfo() {
         document.getElementById("shelterName").value = shelter.shelterName;
         document.getElementById("personName").value = shelter.personName;
         document.getElementById("type").value = shelter.type;
-        document.getElementById("businessNumber").value = shelter.businessNumber;
+        document.getElementById("businessNumber").value = shelter.businessNumber ? shelter.businessNumber : "-";
         document.getElementById("zipCode").value = shelter.zipCode;
         document.getElementById("address").value = shelter.address;
         document.getElementById("addressDetail").value = shelter.addressDetail;
@@ -599,7 +599,7 @@ async function saveChanges() {
 	    document.getElementById("shelterName").disabled = true;
 	    document.getElementById("personName").disabled = true;
 	    document.getElementById("type").disabled = true;
-	    document.getElementById("businessNumber").disabled = true;
+	    document.getElementById("businessNumber").readonly = true;
 	    document.getElementById("zipCode").readonly = true;
 	    document.getElementById("address").readonly = true;
 	    document.getElementById("addressDetail").readonly = true;

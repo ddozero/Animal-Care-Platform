@@ -275,6 +275,7 @@
 	          <option value="">전체</option>
 	          <option value="산책봉사">산책봉사</option>
 	          <option value="청소봉사">청소봉사</option>
+	          <option value="미용봉사">미용봉사</option>
 	          <option value="기타">기타</option>
 	        </select>
 	      </div>
@@ -288,7 +289,7 @@
 	          <option value="3">3시간</option>
 	          <option value="4">4시간</option>
 	          <option value="5">5시간</option>
-	          <option value="">5시간이상</option>
+	          <option value="6plus">6시간이상</option>
 	        </select>
 	      </div>
 	    </div>
@@ -393,6 +394,8 @@
                 '<td>' + v.volunteerDate + '</td>';
             tbody.appendChild(row);
         }
+        
+        
 
      
         if (pageInfo) {

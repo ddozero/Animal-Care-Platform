@@ -140,7 +140,14 @@ JOIN VOLUNTEER_STATUS VS ON
 		AND VT.NAME = #{type}
 	</if>
 	<if test = "time != 0">
-		AND V.TIME = #{time}
+	  <choose>
+	    <when test="time == 9999">
+	      AND V.TIME >= 6
+	    </when>
+	    <otherwise>
+	      AND V.TIME = #{time}
+	    </otherwise>
+	  </choose>
 	</if>
 </where>
 ORDER BY
