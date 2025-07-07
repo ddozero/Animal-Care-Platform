@@ -116,7 +116,7 @@
             <span><strong>${loginUser.nickname}</strong> 님</span>
             <a href="javascript:void(0);" onclick="logout()">로그아웃&ensp;</a>
             <span>|</span>
-            <a href="${root}/mypage">마이페이지</a>
+            <a href="${root}/mypage">마이페이지&ensp;</a>
             <c:if test="${loginUser.userTypeIdx == 2}">
             <span>|</span>
             <a href="${root}/management/shelters">보호시설 관리</a>

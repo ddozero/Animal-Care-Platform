@@ -488,7 +488,7 @@ const swiperBottom = new Swiper('.swiper-bottom', {
         container.innerHTML = "";
 
         for (var i = 0; i < data.data.length; i++) {
-          var animal = data.data[i];
+          let animal = data.data[i];
 
           var card = document.createElement("div");
           card.className = "card";

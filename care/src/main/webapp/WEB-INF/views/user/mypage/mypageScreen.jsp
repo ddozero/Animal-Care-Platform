@@ -923,8 +923,12 @@ document.querySelectorAll("#adoption-detail-panel .close-btn").forEach(btn => {
     document.querySelectorAll(".activity-item").forEach(function(row) {
       row.addEventListener("click", function() {
         var boardIdx = row.dataset.idx;
-        var boardType = row.dataset.type;
-        location.href = root + '/boards/' + boardType + '/' + boardIdx;
+        var boardType = Number(row.dataset.type);
+        if(boardType === 3) {
+          location.href = root + '/management/shelters/boards/' + boardIdx;
+        } else {
+          location.href = root + '/boards/' + boardIdx;
+        }
       });
     });
 
