@@ -41,7 +41,6 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		if (dto != null && dto.getDescription() != null) {
 			dto.setImagePaths(fileManager.getImagePath("shelters", idx));
 			dto.setFilePaths(fileManager.getFilePath("shelters", idx)); // 사업자등록증 조회
-			dto.setDescription(dto.getDescription().replaceAll("\n", "<br>"));
 		}
 		return dto;
 	}
@@ -355,9 +354,6 @@ public class ShelterManageServiceImple implements ShelterManageService {
 		    dto.setFilesPath(filePath.get(0)); // 첫 파일만
 		}
 
-		if (dto != null && dto.getContent() != null) {
-			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
-		}
 		return dto;
 	}
 
