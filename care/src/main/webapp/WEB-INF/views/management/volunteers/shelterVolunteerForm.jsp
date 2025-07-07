@@ -225,6 +225,13 @@
                                             alert("이미지 업로드 실패: " + (uploadResult.message || ""));
                                             return;
                                         }
+                                        if (uploadResult.path) {
+                                            await API.put("/care/api/management/volunteers/" + volunteerIdx, {
+                                                volunteerIdx: volunteerIdx,
+                                                imagePath: uploadResult.path
+                                            });
+                                        }
+
                                     } catch (err) {
                                         alert("이미지 업로드 중 오류 발생");
                                         console.error(err);

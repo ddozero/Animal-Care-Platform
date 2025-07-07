@@ -109,7 +109,7 @@
                                     '<div><strong>남자:</strong> ' + app.male + '명 / <strong>여자:</strong> ' + app.female + '명</div>' +
                                     '<div><strong>신청일:</strong> ' + app.createdAt + '</div>' +
                                     '<div><strong>상태:</strong> <span>' + app.volunteerRequestStatusName + '</span></div>' +
-                                    '<div><strong>요청사항:</strong><br><pre>' + (app.description || '') + '</pre></div>' +
+                                    '<div><strong>신청내용:</strong><br><pre>' + (app.description || '') + '</pre></div>' +
                                     '<div>' +
                                     '<button onclick="approve(' + app.volunteerIdx + ',' + app.idx + ')">승인</button>' +
                                     '<button onclick="cancel(' + app.volunteerIdx + ',' + app.idx + ')">승인 취소</button>' +
