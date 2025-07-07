@@ -497,8 +497,23 @@
             }
         </style>
         <script src="${pageContext.request.contextPath}/resources/web/common/commonUtils.js"></script>
-        <script
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=89af9a1fd3e16580bde0d540156f0001&autoload=false&libraries=services"></script>
+        <%
+    String kakaoApiKey = "LOAD_FAILED"; // 기본값 – 로드 실패 시 확인용
+    try {
+        java.util.Properties props = new java.util.Properties();
+        // 클래스패스 기준으로 로드 (WAR 내부 /WEB-INF/classes)
+        java.io.InputStream in = Thread.currentThread()
+                                        .getContextClassLoader()
+                                        .getResourceAsStream("mapKey.properties");
+        if (in != null) {
+            props.load(in);
+            kakaoApiKey = props.getProperty("KAKAO_MAP_API_KEY", "LOAD_FAILED").trim();
+        }
+    } catch (Exception ignored) {}
+    pageContext.setAttribute("kakaoApiKey", kakaoApiKey);
+%>
+
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=services"></script>
 
         <script>
             const idx = location.pathname.split("/").pop();
