@@ -946,7 +946,7 @@
                     <div><span>담당자: </span><span id="shelterPersonName"></span></div>
                     <div><span>연락처: </span><span id="shelterTel"></span></div>
                     <div><span>이메일: </span><span id="shelterEmail"></span></div>
-                    <div><span>유기기 동물 수: </span><span id="animalCount"></span></div>
+                    <div><span>유기 동물 수: </span><span id="animalCount"></span></div>
                     <div style="grid-column: 1 / 3;">
                         <div><span>후기 수: </span><span id="reviewCount"></span></div>
                         <input type="button" value="목록" onclick="location.href='/care/shelters'"
