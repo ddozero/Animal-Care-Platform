@@ -133,6 +133,18 @@
                 .btn-area-center .back-btn:hover {
                     background-color: #32b8a1;
                 }
+
+                pre#volunteer-content {
+                    background-color: #f6f6f8;
+                    padding: 16px;
+                    border-radius: 12px;
+                    white-space: pre-line;
+                    font-size: 15px;
+                    line-height: 1.6;
+                    color: #333;
+                    font-family: 'Pretendard', '맑은 고딕', sans-serif;
+                    /* ✅ 추가 */
+                }
             </style>
 
             <script>

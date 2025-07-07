@@ -204,9 +204,21 @@
 
                     }
 
-                    const result = await API.get(url);
-                    if (result.status !== 200) {
-                        history.back();
+                    const originalAlert = window.alert;
+                    window.alert = function () { };
+
+                    let result;
+                    try {
+                        result = await API.get(url);
+                    } catch (err) {
+                        console.warn("게시글 조회 실패:", err.message);
+                    }
+
+                    window.alert = originalAlert;
+
+                    if (!result || !result.data || result.data.length === 0) {
+                        container.innerHTML = "<tr><td colspan='6' style='text-align:center; color:#999;'>게시글이 존재하지 않습니다.</td></tr>";
+                        document.getElementById("pagingArea").innerHTML = "";
                         return;
                     }
 

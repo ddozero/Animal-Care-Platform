@@ -359,9 +359,22 @@
                     const container = document.getElementById("boardCommentContainer");
                     container.innerHTML = "";
                     const idx = location.pathname.split("/").pop();
-                    const result = await API.get('/care/api/boards/' + idx + '/comments?cp=' + cp)
 
 
+                    const originalAlert = window.alert;
+                    window.alert = function () { };
+                    let result;
+                    try {
+                        result = await API.get('/care/api/boards/' + idx + '/comments?cp=' + cp);
+                    } catch (err) {
+                        console.warn("댓글 조회 실패:", err.message);
+                    }
+                    window.alert = originalAlert;
+
+                    if (!result || !result.data || result.data.length === 0) {
+                        container.innerHTML = "<div style='text-align:center; color:#999;'>댓글이 존재하지 않습니다.</div>";
+                        return;
+                    }
 
                     const boardComments = result.data;
                     const pageInfo = result.pageInfo
@@ -412,6 +425,7 @@
                         boardCommentList
                     );
 
+
                 }
                 function openReplyInput(button) { //대댓글 모드
                     const loginUserId = parseInt(document.body.dataset.loginUserId || "0"); //로그인했을때의 userIdx값
@@ -426,7 +440,8 @@
                     replyBox.className = "replyBox";
                     replyBox.innerHTML =
                         '<textarea class="replyContent" rows="2" cols="50" placeholder="답글을 입력하세요"></textarea>' +
-                        '<button onclick="submitBoardReply(this)">등록</button>';
+                        '<button class="button-primary" onclick="submitBoardReply(this)">등록</button>';
+
                     commentDiv.appendChild(replyBox);
                     button.disabled = true;
                 }
