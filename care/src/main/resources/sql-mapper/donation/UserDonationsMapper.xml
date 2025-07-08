@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper	namespace="com.animal.api.donation.mapper.UserDonationsMapper">
+<select id="getAllDonations" parameterType="Map" resultType="com.animal.api.donation.model.response.AllDonationListResponseDTO">
+SELECT
+	D.IDX,
+	D.NAME,
+	D.SPONSOR,
+	D.COMPLETION_RATE,
+	D.COMPLETION_AMOUNT,
+	DS.NAME AS 'STATUS'
+FROM
+	DONATIONS D
+JOIN DONATION_STATUS DS ON
+	D.DONATION_STATUS_IDX = DS.IDX
+ORDER BY D.IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getAllDonationsTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	DONATIONS
+</select>
+
+<select id="getDonationDetail" parameterType="int" resultType="com.animal.api.donation.model.response.DonationDetailResponseDTO">
+SELECT
+	D.IDX,
+	D.NAME,
+	D.START_DATE,
+	D.END_DATE,
+	D.AMOUNT,
+	D.COMPLETION_AMOUNT,
+	D.COMPLETION_RATE,
+	D.SPONSOR,
+	D.SPONSOR_DETAIL,
+	D.CONTENT,
+	DS.NAME AS 'STATUS'
+FROM
+	DONATIONS D
+JOIN DONATION_STATUS DS ON
+	D.DONATION_STATUS_IDX = DS.IDX
+WHERE D.IDX=#{idx}
+</select>
+
+<select id="getDonationComments" parameterType="Map" resultType="com.animal.api.donation.model.response.AllDonationCommentsResponseDTO">
+SELECT
+	DC.IDX,
+	DC.USER_IDX,
+	U.NICKNAME,
+	DC.CONTENT,
+	DC.CREATED_AT
+FROM
+	DONATION_COMMENTS DC
+JOIN USERS U ON
+	U.IDX = DC.USER_IDX
+WHERE DC.DONATION_IDX=#{idx}
+ORDER BY DC.IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getDonationCommentsTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	DONATION_COMMENTS DC
+JOIN USERS U ON
+	U.IDX = DC.USER_IDX
+WHERE DC.DONATION_IDX=#{idx}
+</select>
+
+<select id="getDonationUserLists" parameterType="Map" resultType="com.animal.api.donation.model.response.AllDonationUserListResponseDTO">
+SELECT
+	DD.IDX,
+	DD.DONATED_AMOUNT,
+	DD.CREATED_AT,
+	U.NICKNAME
+FROM
+	DONATION_DETAILS DD
+JOIN USERS U  ON
+	U.IDX=DD.USER_IDX
+WHERE DD.DONATION_IDX=#{idx}
+ORDER BY DD.IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getDonationUserListsTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	DONATION_DETAILS DD
+JOIN USERS U  ON
+	U.IDX=DD.USER_IDX
+WHERE DD.DONATION_IDX=#{idx}
+</select>
+
+<insert id="addDonationComment" parameterType="com.animal.api.donation.model.request.DonationCommentRequestDTO">
+INSERT
+	INTO
+	DONATION_COMMENTS(USER_IDX, DONATION_IDX, CONTENT)
+VALUES(#{userIdx}, #{donationIdx}, #{content})
+</insert>
+
+<update id="updateDonationComment" parameterType="com.animal.api.donation.model.request.DonationCommentUpdateRequestDTO">
+UPDATE
+	DONATION_COMMENTS
+SET
+	CONTENT = #{content},
+	CREATED_AT = NOW()
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+	AND DONATION_IDX = #{donationIdx}
+</update>
+
+<delete id="deleteDonationComment" parameterType="Map">
+DELETE
+FROM
+	DONATION_COMMENTS
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+</delete>
+
+<select id="getDonationUserPoint" parameterType="int" resultType="int">
+SELECT
+	POINT
+FROM
+	USERS
+WHERE
+	IDX = #{idx}
+</select>
+
+<insert id="addDonation" parameterType="com.animal.api.donation.model.request.DonationRequestDTO">
+INSERT
+	INTO
+	DONATION_DETAILS(USER_IDX, DONATION_IDX, DONATED_AMOUNT)
+VALUES(#{userIdx}, #{donationIdx}, #{donatedAmount})
+</insert>
+
+<update id="updateDonation" parameterType="com.animal.api.donation.model.request.DonationRequestDTO">
+UPDATE 
+	DONATIONS
+SET
+  COMPLETION_AMOUNT = COMPLETION_AMOUNT + #{donatedAmount},
+  COMPLETION_RATE = (#{donatedAmount}*100) / AMOUNT
+WHERE
+  IDX = #{donationIdx}
+  AND DONATION_STATUS_IDX = 2
+</update>
+
+<update id="updateUserPoint" parameterType="com.animal.api.donation.model.request.DonationRequestDTO">
+UPDATE 
+	USERS
+SET
+  POINT = POINT - #{donatedAmount}
+WHERE
+  IDX = #{userIdx}
+</update>
+</mapper>

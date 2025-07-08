@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.animal.api.find.shelter.mapper.ShelterFindMapper">
+    <!-- 보호소: 이름 + 이메일로 아이디 찾기 -->
+    <select id="findShelterByNameAndEmail" resultType="com.animal.api.find.model.response.FindUserIdResponseDTO">
+        SELECT ID AS userid, CREATED_AT AS createdAt
+        FROM USERS
+        WHERE NAME = #{name}
+          AND EMAIL = #{email}
+          AND USER_TYPE_IDX = 2
+          AND STATUS = 1
+    </select>
+
+    <!-- 보호소: 아이디로 사용자 정보 조회 -->
+    <select id="findShelterVOByUserid" resultType="com.animal.api.auth.model.vo.UserVO">
+        SELECT *
+        FROM USERS
+        WHERE ID = #{userid}
+          AND USER_TYPE_IDX = 2
+    </select>
+
+    <!-- 보호소: 비밀번호 변경 -->
+    <update id="updateShelterPassword">
+        UPDATE USERS
+        SET PASSWORD = #{password}
+        WHERE IDX = #{userIdx}
+          AND USER_TYPE_IDX = 2
+    </update>
+</mapper>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.animal.api.management.volunteers.mapper.ShelterVolunteersMappper">
+<select id="getShelterAllVolunteers" parameterType="Map" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteersListResponseDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	V.VOLUNTEER_DATE,
+	V.TIME,
+	V.LOCATION,
+	V.CAPACITY,
+	V.APPLICANTS,
+	V.AGE_TARGET,
+	V.CREATED_AT,
+	VT.NAME AS VOLUNTEERTYPE,
+	VS.NAME AS VOLUNTEERSTATUS
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_TYPES VT ON
+	V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+WHERE
+	V.USER_IDX = #{userIdx}
+ORDER BY
+	V.CREATED_AT DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getShelterAllVolunteersTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_TYPES VT ON
+	V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+WHERE
+	V.USER_IDX = #{userIdx}
+</select>
+
+<insert id="addShelterVolunteer" parameterType="com.animal.api.management.volunteers.model.request.ShelterVolunteersInsertDTO" useGeneratedKeys="true" keyProperty="idx">
+INSERT
+	INTO
+	VOLUNTEERS (
+	USER_IDX,
+	VOLUNTEER_TYPE_IDX,
+	VOLUNTEER_STATUS_IDX,
+	TITLE,
+	VOLUNTEER_DATE,
+	TIME,
+	LOCATION,
+	CAPACITY,
+	APPLICANTS,
+	CONTENT,
+	AGE_TARGET
+)
+VALUES (
+#{userIdx},
+#{volunteerTypeIdx},
+#{volunteerStatusIdx},
+#{title},
+#{volunteerDate},
+#{time},
+#{location},
+#{capacity},
+0,
+#{content},
+#{ageTarget}
+)
+</insert>
+
+<select id="getShelterVolunteerDetail" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerDetailResponseDTO">
+SELECT
+	V.IDX,
+	V.USER_IDX,
+	V.VOLUNTEER_TYPE_IDX,
+	VT.NAME AS VOLUNTEER_TYPE_NAME,
+	V.VOLUNTEER_STATUS_IDX,
+	VS.NAME AS VOLUNTEER_STATUS_NAME,
+	V.TITLE,
+	V.VOLUNTEER_DATE,
+	V.TIME,
+	V.LOCATION,
+	V.CAPACITY,
+	V.APPLICANTS,
+	V.CONTENT,
+	V.AGE_TARGET,
+	V.CREATED_AT
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_TYPES VT ON V.VOLUNTEER_TYPE_IDX = VT.IDX
+JOIN VOLUNTEER_STATUS VS ON V.VOLUNTEER_STATUS_IDX = VS.IDX
+WHERE
+	V.IDX = #{volunteerIdx}
+</select>
+
+<select id="checkMyVolunteer" resultType="Integer">
+SELECT
+	USER_IDX
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{volunteerIdx}
+</select>
+
+<update id="updateShelterVolunteer" parameterType="com.animal.api.management.volunteers.model.request.ShelterVolunteerUpdateRequestDTO">
+UPDATE
+	VOLUNTEERS
+SET
+	VOLUNTEER_TYPE_IDX = #{volunteerTypeIdx},
+	VOLUNTEER_STATUS_IDX = #{volunteerStatusIdx},
+	TITLE =	#{title},
+	VOLUNTEER_DATE = #{volunteerDate},
+	TIME = #{time},
+	LOCATION = #{location},
+	CAPACITY = #{capacity},
+	CONTENT = #{content},
+	AGE_TARGET = #{ageTarget}
+WHERE
+	IDX = #{volunteerIdx}
+	AND USER_IDX = #{userIdx} 
+</update>
+
+<delete id="deleteShelterVolunteer" parameterType="int">
+DELETE
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{volunteerIdx}
+</delete>
+
+<select id="checkVolunteerExists" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{volunteerIdx}
+</select>
+
+<select id="getShelterVolunteerApplications" parameterType="Map" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationsResponseDTO">
+SELECT
+	VR.IDX,
+	VR.VOLUNTEER_IDX,
+	VR.USER_IDX,
+	VR.VOLUNTEER_REQUEST_STATUS_IDX,
+	VRS.NAME AS VOLUNTEER_REQUEST_STATUS_NAME,
+	VR.TYPE,
+	VR.NAME,
+	VR.EMAIL,
+	VR.TEL,
+	VR.BIRTH_DATE,
+	IFNULL(VR.GROUP_NAME, '-') AS GROUP_NAME,
+	IFNULL(VR.GROUP_TEL, '-') AS GROUP_TEL,
+	IFNULL(VR.DESCRIPTION, '-') AS DESCRIPTION,
+	VR.MALE,
+	VR.FEMALE,
+	VR.CREATED_AT
+FROM
+	VOLUNTEER_REQUESTS VR
+JOIN VOLUNTEERS V ON
+	VR.VOLUNTEER_IDX = V.IDX
+JOIN VOLUNTEER_REQUEST_STATUS VRS ON
+	VR.VOLUNTEER_REQUEST_STATUS_IDX = VRS.IDX
+WHERE
+	VR.VOLUNTEER_IDX = #{volunteerIdx}
+ORDER BY
+	VR.CREATED_AT DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+
+<select  id="getShelterVolunteerApplicationsTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEER_REQUESTS VR
+JOIN VOLUNTEERS V ON
+	VR.VOLUNTEER_IDX = V.IDX
+JOIN VOLUNTEER_REQUEST_STATUS VRS ON
+	VR.VOLUNTEER_REQUEST_STATUS_IDX = VRS.IDX
+WHERE
+	VR.VOLUNTEER_IDX = #{volunteerIdx}
+</select>
+
+<select id="getShelterVolunteerApplicationDetail" parameterType="int" resultType="com.animal.api.management.volunteers.model.response.ShelterVolunteerApplicationDetailResponseDTO">
+SELECT
+    VR.IDX,
+    VR.VOLUNTEER_IDX,
+    VR.USER_IDX,
+    VR.VOLUNTEER_REQUEST_STATUS_IDX,
+    VRS.NAME AS VOLUNTEER_REQUEST_STATUS_NAME,
+    VR.TYPE,
+    VR.NAME,
+    VR.EMAIL,
+    VR.TEL,
+    VR.BIRTH_DATE,
+    IFNULL(VR.GROUP_NAME, '-') AS GROUP_NAME,
+    IFNULL(VR.GROUP_TEL, '-') AS GROUP_TEL,
+    IFNULL(VR.DESCRIPTION, '-') AS DESCRIPTION,
+    VR.MALE,
+    VR.FEMALE,
+    VR.CREATED_AT
+FROM
+    VOLUNTEER_REQUESTS VR
+JOIN VOLUNTEERS V ON
+    VR.VOLUNTEER_IDX = V.IDX
+JOIN VOLUNTEER_REQUEST_STATUS VRS ON
+    VR.VOLUNTEER_REQUEST_STATUS_IDX = VRS.IDX
+WHERE
+    VR.IDX = #{applicationIdx};
+</select>
+
+<select id="countApproved" parameterType="int" resultType="com.animal.api.management.volunteers.model.response.CountApprovedResponseDTO">
+SELECT
+    IDX,
+    MALE,
+    FEMALE
+FROM
+    VOLUNTEER_REQUESTS
+WHERE
+    VOLUNTEER_IDX = #{volunteerIdx}
+    AND VOLUNTEER_REQUEST_STATUS_IDX = 2;
+</select>
+
+<select id="checkCapacity" parameterType="int" resultType="Integer">
+SELECT
+    CAPACITY
+FROM
+    VOLUNTEERS
+WHERE
+    IDX = #{volunteerIdx};
+</select>
+
+<select id="getApplicationPeople" parameterType="int" resultType="com.animal.api.management.volunteers.model.response.CountPeopleResponseDTO">
+SELECT 
+	MALE, 
+	FEMALE
+FROM
+	VOLUNTEER_REQUESTS
+WHERE 
+	IDX = #{applicationIdx}
+	AND VOLUNTEER_REQUEST_STATUS_IDX IN (1, 2, 3)
+</select>
+
+<update id="approveShelterVolunteerApplication" parameterType="int">
+UPDATE
+	VOLUNTEER_REQUESTS
+SET
+	VOLUNTEER_REQUEST_STATUS_IDX = 2
+WHERE
+    IDX = #{applicationIdx}
+    AND VOLUNTEER_REQUEST_STATUS_IDX IN (1, 3)
+</update>
+
+<update id="cancelShelterVolunteerApplication" parameterType="int">
+UPDATE
+    VOLUNTEER_REQUESTS
+SET
+    VOLUNTEER_REQUEST_STATUS_IDX = 3
+WHERE
+    IDX = #{applicationIdx}
+    AND VOLUNTEER_REQUEST_STATUS_IDX IN (1, 2)
+</update>
+</mapper>

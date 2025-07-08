@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.admin.board.mapper.AdminBoardMapper">
+<select id="checkBoardType" parameterType="int" resultType="Integer">
+SELECT
+	BOARD_TYPE_IDX
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</select>
+<delete id="deleteBoard" parameterType="int">
+DELETE
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</delete>
+<update id="updateNotice" parameterType="com.animal.api.admin.board.model.request.NoticeUpdateRequestDTO">
+UPDATE
+	BOARDS
+SET
+	TITLE = #{title},
+	CONTENT = #{content}
+WHERE IDX = #{idx}
+</update>
+<delete id="deleteNotice" parameterType="int">
+DELETE
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+</delete>
+<insert id="insertNotice" parameterType="com.animal.api.admin.board.model.request.NoticeInsertRequestDTO" useGeneratedKeys="true" keyProperty="idx">
+INSERT
+	INTO
+	BOARDS (
+  USER_IDX,
+	BOARD_TYPE_IDX,
+	TITLE,
+	CONTENT,
+	VIEWS,
+	REF,
+	LEV,
+	TURN
+)
+SELECT
+	#{userIdx},
+	1,
+	#{title},
+	#{content},
+	0,
+	IFNULL(MAX_REF + 1, 1),
+	0,
+	0
+FROM
+	(
+	SELECT
+		MAX(REF) AS MAX_REF
+	FROM
+		BOARDS) AS sub
+</insert>
+</mapper>

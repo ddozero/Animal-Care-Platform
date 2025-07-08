@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.admin.donation.mapper.AdminDonationMapper">
+
+<select id = "checkDonationIdx" parameterType="int" resultType="Integer">
+SELECT
+	COUNT(*)
+FROM
+	DONATIONS D
+WHERE
+	IDX = #{idx}
+</select>
+
+<select id="getAdminDonationList" parameterType="Map" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
+SELECT
+	D.IDX,
+	D.NAME,
+	DS.IDX AS 'STATUS_IDX',
+	DS.NAME AS 'STATUS',
+	D.SPONSOR,
+	D.COMPLETION_AMOUNT,
+	D.AMOUNT,
+	D.COMPLETION_RATE,
+	D.START_DATE,
+	D.END_DATE,
+	D.CREATED_AT
+FROM
+	DONATIONS D
+LEFT JOIN DONATION_STATUS DS ON
+	D.DONATION_STATUS_IDX = DS.IDX
+ORDER BY
+	D.CREATED_AT DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
+
+<select id="getAdminDonationTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	DONATIONS
+</select>
+
+<select id="searchAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
+SELECT
+	D.IDX,
+	D.NAME,
+	DS.IDX AS 'STATUS_IDX',
+	DS.NAME AS 'STATUS',
+	D.SPONSOR,
+	D.COMPLETION_AMOUNT,
+	D.AMOUNT,
+	D.COMPLETION_RATE,
+	D.START_DATE,
+	D.END_DATE,
+	D.CREATED_AT
+FROM
+	DONATIONS D
+LEFT JOIN DONATION_STATUS DS ON
+	D.DONATION_STATUS_IDX = DS.IDX
+<where>
+	<if test = "name != null and name !=''">
+	AND D.NAME LIKE '%${name}%'
+	</if>
+	<if test = "status != null and status !=''">
+	AND DS.NAME = #{status}
+	</if>
+</where>
+ORDER BY
+	D.CREATED_AT DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+
+<select id="getSearchAdminDonationTotalCnt" parameterType="com.animal.api.admin.donation.model.request.AdminDonationSearchRequestDTO" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	DONATIONS D
+LEFT JOIN DONATION_STATUS DS ON
+	D.DONATION_STATUS_IDX = DS.IDX
+<where>
+	<if test = "name != null and name !=''">
+	AND D.NAME LIKE '%${name}%'
+	</if>
+	<if test = "status != null and status !=''">
+	AND DS.NAME = #{status}
+	</if>
+</where>
+</select>
+
+<select id="getAdminDonationDetail" parameterType="int" resultType="com.animal.api.admin.donation.model.response.AdminAllDonationResponseDTO">
+SELECT
+	D.IDX,
+	D.NAME,
+	D.START_DATE,
+	D.END_DATE,
+	D.AMOUNT, 
+	D.COMPLETION_AMOUNT, <!--누적금액-->
+	D.COMPLETION_RATE, <!--달성률-->
+	D.SPONSOR, <!--모금단체-->
+	D.SPONSOR_DETAIL, <!--모금액사용처-->
+	D.CONTENT,
+	DS.NAME AS status,
+	D.CREATED_AT
+FROM
+	DONATIONS D
+JOIN DONATION_STATUS DS ON
+	D.DONATION_STATUS_IDX = DS.IDX
+WHERE D.IDX= #{idx}
+</select>
+
+<select id="getAdminDonationUser" parameterType="Map" resultType="com.animal.api.admin.donation.model.response.AdminDonationUserResponseDTO">
+SELECT
+	D.IDX,
+	U.NAME,
+	DT.DONATED_AMOUNT AS donatedAmount,
+	DT.CREATED_AT AS createdAt
+FROM
+	DONATION_DETAILS DT
+JOIN 
+    DONATIONS D ON
+	DT.DONATION_IDX = D.IDX
+JOIN 
+    USERS U ON
+	DT.USER_IDX = U.IDX
+WHERE
+	DT.DONATION_IDX = #{idx}
+ORDER BY
+	DT.CREATED_AT DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
+
+<select id="getAdminDonationUserTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	DONATION_DETAILS DT
+JOIN 
+    DONATIONS D ON
+	DT.DONATION_IDX = D.IDX
+JOIN 
+    USERS U ON
+	DT.USER_IDX = U.IDX
+WHERE
+	DT.DONATION_IDX = #{idx}
+</select>
+
+<insert id="addAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminAddDonationRequestDTO" useGeneratedKeys="true" keyProperty="idx">
+INSERT
+	INTO
+	DONATIONS
+	(USER_IDX,
+	DONATION_STATUS_IDX,
+	NAME,
+	START_DATE,
+	END_DATE,
+	AMOUNT,
+	SPONSOR,
+	SPONSOR_DETAIL,
+	CONTENT)
+VALUES(#{userIdx}, #{statusIdx}, #{name}, #{startDate}, #{endDate}, #{amount}, #{sponsor}, #{sponsorDetail}, #{content});
+</insert>
+
+<update id="updateAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminUpdateRequestDTO">
+UPDATE
+	DONATIONS
+SET
+	NAME = #{name},
+	DONATION_STATUS_IDX = #{statusIdx},
+	START_DATE = #{startDate},
+	END_DATE = #{endDate},
+	AMOUNT = #{amount},
+	SPONSOR = #{sponsor},
+	SPONSOR_DETAIL = #{sponsorDetail},
+	CONTENT = #{content}
+WHERE
+	IDX = #{idx}
+</update>
+
+<delete id="deleteAdminDonation" parameterType="com.animal.api.admin.donation.model.request.AdminUpdateRequestDTO">
+DELETE
+FROM
+	DONATIONS
+WHERE
+	IDX = #{idx}
+</delete>
+
+
+
+</mapper>

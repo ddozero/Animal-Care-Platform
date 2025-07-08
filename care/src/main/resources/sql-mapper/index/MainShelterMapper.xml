@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.animal.api.index.shelter.mapper.MainShelterMapper">
+
+	<select id="selectSheltersByRegion" resultType="com.animal.api.index.shelter.model.response.MainShelterResponseDTO">
+	    SELECT 
+	      USER_IDX AS idx,
+	      SHELTER_NAME AS name,
+	      SHELTER_ADDRESS AS address,
+	      SHELTER_TEL AS tel,
+	      SHELTER_EMAIL AS email
+	    FROM SHELTERS
+	    WHERE SHELTER_ADDRESS LIKE CONCAT(#{region}, '%')	
+	</select>
+
+	<select id="countSheltersByRegion" resultType="int">
+	  SELECT COUNT(*) 
+	  FROM SHELTERS 
+	  WHERE SHELTER_ADDRESS LIKE CONCAT(#{region}, '%')
+	</select>
+	
+	
+	<select id="countAllShelters" resultType="int">
+ 		 SELECT COUNT(*) FROM SHELTERS
+	</select>
+</mapper>

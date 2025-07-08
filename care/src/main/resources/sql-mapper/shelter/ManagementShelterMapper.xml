@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.management.shelter.mapper.ManagementShelterMapper">
+
+<select id="getShelterInfo" parameterType="int" resultType="com.animal.api.management.shelter.model.response.AllManageShelterResponseDTO">
+SELECT 
+	S.USER_IDX AS idx,
+	S.SHELTER_NAME AS shelterName,
+	ST.NAME AS type,
+	S.SHELTER_PERSON_NAME AS personName,
+	S.SHELTER_TEL AS tel,
+	S.SHELTER_EMAIL AS email,
+	S.SHELTER_ZIP_CODE AS zipCode,
+	S.SHELTER_ADDRESS AS address,
+	S.SHELTER_ADDRESS_DETAIL AS addressDetail,
+	S.SHELTER_BUSINESS_NUMBER AS businessNumber,
+	S.SHELTER_DESCRIPTION AS description,
+	S.SHELTER_BUSINESS_FILE as businessFile
+FROM
+	SHELTERS S
+LEFT JOIN
+    SHELTER_TYPES ST ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+WHERE
+    S.USER_IDX = #{idx};
+</select>
+
+<update id="updateSheterInfo" parameterType="com.animal.api.management.shelter.model.request.ShelterInfoUpdateRequestDTO">
+UPDATE SHELTERS
+SET
+    SHELTER_NAME = #{shelterName},
+    SHELTER_PERSON_NAME = #{personName},
+    SHELTER_TEL = #{tel},
+    SHELTER_EMAIL = #{email},
+    SHELTER_ZIP_CODE = #{zipCode},
+    SHELTER_ADDRESS = #{address},
+    SHELTER_ADDRESS_DETAIL = #{addressDetail},
+    SHELTER_BUSINESS_NUMBER = #{businessNumber},
+    SHELTER_BUSINESS_FILE = #{businessFile},
+    SHELTER_DESCRIPTION = #{description}
+WHERE
+    USER_IDX = #{idx};
+</update>
+
+<select id="getVolunteerReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
+SELECT
+	VR.IDX AS reviewIdx, 
+	VR.USER_IDX AS userIdx, 
+	V.USER_IDX AS shelterIdx,
+	V.IDX AS volunteerIdx,
+	V.TITLE AS volunteerTitle,
+	S.SHELTER_NAME AS shelterName,
+	REVIEWER.NICKNAME,
+	VR.CONTENT,
+	VR.CREATED_AT AS createdAt,
+	VR.REF,
+	VR.LEV,
+	VR.TURN
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_REVIEWS VR ON
+	VR.VOLUNTEER_IDX = V.IDX
+JOIN USERS REVIEWER ON
+	VR.USER_IDX = REVIEWER.IDX
+JOIN SHELTERS S ON
+	S.USER_IDX = V.USER_IDX
+WHERE
+	V.USER_IDX = #{idx}
+ORDER BY
+	VR.REF DESC,
+	VR.TURN ASC
+LIMIT
+#{listSize} OFFSET #{cp}
+</select>
+
+<select id="getVolunteerReviewTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_REVIEWS VR ON
+	VR.VOLUNTEER_IDX = V.IDX
+JOIN USERS REVIEWER ON
+	VR.USER_IDX = REVIEWER.IDX
+JOIN SHELTERS S ON
+	S.USER_IDX = V.USER_IDX
+WHERE
+	V.USER_IDX = #{idx}
+</select>
+
+<select id="getAdoptionReview" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO">
+SELECT
+	AR.IDX AS reviewIdx,
+	S.USER_IDX AS shelterIdx,
+	U.IDX AS userIdx,
+	A.IDX as animalIdx,
+	AR.CONTENT AS reviewContent,
+	S.SHELTER_NAME AS shelterName,
+	U.NICKNAME,
+	A.NAME AS animalName,
+	AR.CONTENT,
+	AR.CREATED_AT AS createdAt,
+	AR.REF,
+	AR.LEV,
+	AR.TURN
+FROM
+	ADOPTION_REVIEWS AR
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+JOIN USERS U ON
+	AR.USER_IDX = U.IDX
+JOIN SHELTERS S ON
+S.USER_IDX = A.USER_IDX
+WHERE
+	A.USER_IDX = #{idx}
+ORDER BY
+	AR.REF DESC,
+	AR.TURN ASC
+LIMIT
+#{listSize} OFFSET #{cp}
+</select>
+
+<select id="getAdoptionReviewTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	ADOPTION_REVIEWS AR
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+JOIN USERS U ON
+	AR.USER_IDX = U.IDX
+JOIN SHELTERS S ON
+S.USER_IDX = A.USER_IDX
+WHERE
+	A.USER_IDX = #{idx}
+</select>
+
+<update id="updateTurnVR" parameterType="map">
+UPDATE
+	VOLUNTEER_REVIEWS
+SET
+	TURN = TURN + 1
+WHERE
+	REF = #{ref}
+	AND TURN >= #{turn};
+</update>
+
+<!-- 봉사 리뷰 답글 달기 리뷰 조회 쿼리 -->
+<select id="getReviewIdxVR" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageVolunteerReviewResponseDTO">
+SELECT
+    IDX AS reviewIdx,
+    REF,
+    LEV,
+    TURN
+FROM
+    VOLUNTEER_REVIEWS
+WHERE
+    IDX = #{reviewIdx}
+</select>
+
+<select id="getMaxTurnVR" parameterType="int" resultType="int">
+SELECT
+    COALESCE(MAX(TURN), 0)
+FROM
+    VOLUNTEER_REVIEWS
+WHERE
+    REF = #{ref}
+</select>
+
+
+<insert id="addVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+INSERT
+	INTO
+	VOLUNTEER_REVIEWS(
+USER_IDX,
+VOLUNTEER_IDX,
+CONTENT,
+REF,
+LEV,
+TURN
+)
+VALUES (
+#{userIdx},
+#{volunteerIdx},
+#{content},
+#{ref},
+#{lev},
+#{turn}
+);
+</insert>
+
+<select id = "checkVolunteerReview" resultType="Integer">
+SELECT
+	IDX
+FROM
+	VOLUNTEER_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+</select>
+
+<select id="checkShelterUserVR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+SELECT
+	S.USER_IDX
+FROM
+	VOLUNTEER_REVIEWS VR
+JOIN VOLUNTEERS V ON 
+	VR.VOLUNTEER_IDX = V.IDX
+JOIN SHELTERS S ON 
+	V.USER_IDX = S.USER_IDX
+WHERE
+	VR.IDX = #{reviewIdx}
+	AND S.USER_IDX = #{userIdx}	
+</select>
+
+<update id="updateVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+UPDATE
+	VOLUNTEER_REVIEWS
+SET
+	CONTENT = #{content}
+WHERE
+	IDX = #{reviewIdx}
+AND 
+	USER_IDX = #{userIdx}
+</update>
+
+<delete id="deleteVolunteerReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageVolunteerReplyRequestDTO">
+DELETE
+FROM
+	VOLUNTEER_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+AND 
+	USER_IDX = #{userIdx}
+</delete>
+
+<select id = "checkAdoptionReview" resultType="Integer">
+SELECT
+	IDX
+FROM
+	ADOPTION_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+</select>
+
+<select id="checkShelterUserAR" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+SELECT
+	S.USER_IDX
+FROM
+	ADOPTION_REVIEWS AR
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+JOIN SHELTERS S ON
+	A.USER_IDX = S.USER_IDX
+WHERE
+	AR.IDX = #{reviewIdx}
+	AND S.USER_IDX = #{userIdx}
+</select>
+
+<update id="updateTurnAR" parameterType="map">
+UPDATE
+	ADOPTION_REVIEWS
+SET
+	TURN = TURN + 1
+WHERE
+	REF = #{ref}
+	AND TURN >= #{turn};
+</update>
+
+
+
+<insert id="addAdoptionReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+INSERT
+	INTO
+	ADOPTION_REVIEWS(
+USER_IDX,
+ANIMAL_IDX,
+CONTENT,
+REF,
+LEV,
+TURN
+)
+VALUES (
+#{userIdx},
+#{animalIdx},
+#{content},
+#{ref},
+#{lev},
+#{turn}
+)
+</insert>
+
+<!-- 입양 리뷰 답글 달기 리뷰 조회 쿼리 -->
+<select id="getReviewIdxAR" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ManageAdoptionReviewResponseDTO">
+SELECT
+    IDX AS reviewIdx,
+    REF,
+    LEV,
+    TURN
+FROM
+    ADOPTION_REVIEWS
+WHERE
+    IDX = #{reviewIdx}
+</select>
+
+<select id="getMaxTurnAR" parameterType="int" resultType="int">
+SELECT
+    COALESCE(MAX(TURN), 0)
+FROM
+    ADOPTION_REVIEWS
+WHERE
+    REF = #{ref}
+</select>
+
+<update id="updateAdoptionReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+UPDATE
+	ADOPTION_REVIEWS
+SET
+	CONTENT = #{content}
+WHERE
+	IDX = #{reviewIdx}
+AND 
+	USER_IDX = #{userIdx}
+</update>
+
+<delete id="deleteAdoptionReviewApply" parameterType="com.animal.api.management.shelter.model.request.ManageAdoptionReplyRequestDTO">
+DELETE
+FROM
+	ADOPTION_REVIEWS
+WHERE
+	IDX = #{reviewIdx}
+AND 
+	USER_IDX = #{userIdx}
+</delete>
+
+<select id="getShelterBoardList" resultType="com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO">
+SELECT 
+	IDX,
+	USER_IDX,
+	BOARD_TYPE_IDX,
+	TITLE,
+	CONTENT,
+	CREATED_AT,
+	VIEWS,
+	REF,
+	LEV,
+	TURN
+FROM
+	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 3
+AND
+	USER_IDX = #{userIdx}
+ORDER BY
+	IDX DESC
+LIMIT
+#{listSize} OFFSET #{cp}
+</select>
+
+<select id="getShelterBoardTotalCnt" resultType="int">
+SELECT 
+	COUNT(*)
+FROM
+	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 3
+AND
+	USER_IDX = #{userIdx}
+</select>
+
+<select id="getShelterBoardDetail" parameterType="int" resultType="com.animal.api.management.shelter.model.response.ShelterBoardResponseDTO">
+SELECT 
+	IDX,
+	USER_IDX,
+	BOARD_TYPE_IDX,
+	TITLE,
+	CONTENT,
+	CREATED_AT,
+	VIEWS,
+	REF,
+	LEV,
+	TURN
+FROM
+	BOARDS
+WHERE
+	BOARD_TYPE_IDX = 3
+AND
+	USER_IDX = #{userIdx}
+AND 
+	IDX = #{idx}
+</select>
+
+<update id="updateBoardViews" parameterType="int">
+UPDATE
+	BOARDS
+SET
+	VIEWS = VIEWS + 1
+WHERE
+	IDX = #{boardIdx}
+</update>
+
+
+<select id = "getMaxRef" resultType="int">
+SELECT
+	IFNULL(MAX(REF), 0)
+FROM
+	BOARDS
+</select>
+
+<insert id="addShelterBoard" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO" useGeneratedKeys="true" keyProperty="dto.idx">
+INSERT
+	INTO
+	BOARDS(USER_IDX, BOARD_TYPE_IDX, TITLE, CONTENT, REF, LEV, TURN)
+VALUES(
+	#{userIdx},
+	3,
+	#{dto.title},
+	#{dto.content},
+	#{dto.ref},
+	0,
+	0)
+</insert>
+ 
+<select id = "checkShelterBoard" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+	AND BOARD_TYPE_IDX = 3 
+</select>
+
+<select id="checkWriter" resultType="int" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
+SELECT
+	USER_IDX
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+</select>
+
+<update id= "updateShelterBoard" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
+UPDATE
+	BOARDS B
+SET
+	TITLE = #{title},
+	CONTENT = #{content}
+WHERE
+	IDX = #{idx}
+	AND B.USER_IDX = #{userIdx}
+	AND B.BOARD_TYPE_IDX = 3
+</update>
+
+<delete id = "deleteShelterBoard" parameterType="com.animal.api.management.shelter.model.request.ShelterBoardRequestDTO">
+DELETE
+FROM
+	BOARDS
+WHERE
+	IDX = #{idx}
+	AND USER_IDX = #{userIdx}
+	AND BOARD_TYPE_IDX = 3
+</delete>
+ 
+ 
+ </mapper>

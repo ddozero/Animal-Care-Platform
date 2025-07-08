@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.management.animal.mapper.ShelterAnimalsMapper">
+<select id="getShelterProfile" parameterType="int" resultType="com.animal.api.management.animal.model.response.AnimalAddShelterInfoResponseDTO">
+SELECT
+	S.USER_IDX,
+	S.SHELTER_NAME,
+	ST.NAME AS 'SHELTER_TYPE',
+	S.SHELTER_ZIP_CODE,
+	S.SHELTER_ADDRESS,
+	S.SHELTER_ADDRESS_DETAIL,
+	S.SHELTER_TEL,
+	S.SHELTER_EMAIL,
+	S.SHELTER_PERSON_NAME
+FROM
+	SHELTERS S
+JOIN SHELTER_TYPES ST 
+	ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+WHERE 
+	S.USER_IDX = #{idx}
+</select>
+<insert id="insertAnimal" parameterType="com.animal.api.management.animal.model.request.AnimalInsertRequestDTO" useGeneratedKeys="true" keyProperty="idx">
+INSERT
+	INTO
+	ANIMALS (USER_IDX,
+	ADOPTION_STATUS_IDX,
+	ANIMAL_BREED_IDX,
+	ANIMAL_PERSONALITY_IDX,
+	NAME,
+	GENDER,
+	AGE,
+	SIZE,
+	NEUTER,
+	DESCRIPTION)
+VALUES (
+#{userIdx},
+#{adoptionStatusIdx},
+#{animalBreedIdx},
+#{animalPersonalityIdx},
+#{name},
+#{gender},
+#{age},
+#{size},
+#{neuter},
+#{description}
+    )
+</insert>
+<update id="updateAnimal" parameterType="com.animal.api.management.animal.model.request.AnimalUpdateRequestDTO">
+UPDATE
+	ANIMALS
+SET
+	ADOPTION_STATUS_IDX = #{adoptionStatusIdx},
+	ANIMAL_BREED_IDX = #{animalBreedIdx},
+	ANIMAL_PERSONALITY_IDX = #{animalPersonalityIdx},
+	NAME = #{name},
+	GENDER = #{gender},
+	AGE = #{age},
+	SIZE = #{size},
+	NEUTER = #{neuter},
+	DESCRIPTION = #{description}
+WHERE
+	IDX = #{idx};
+</update>
+<delete id="deleteAnimal" parameterType="int">
+DELETE
+FROM
+	ANIMALS
+WHERE
+	IDX = #{idx}
+</delete>
+<select id="getAnimalShelter" parameterType="int" resultType="Integer">
+SELECT
+	USER_IDX
+FROM
+	ANIMALS
+WHERE
+	IDX = #{idx}
+</select>
+<select id="getAdoptionConsultList" parameterType="Map" resultType="com.animal.api.management.animal.model.response.AdoptionConsultListResponseDTO">
+SELECT
+	AC.IDX,
+	U.IDX AS 'USER_IDX',
+	A.IDX AS 'ANIMAL_IDX',
+	A.NAME AS 'ANIMAL_NAME',
+	AC.NAME,
+	AC.TEL,
+	AC.CONSULTED_AT,
+	ACS.IDX AS 'STATUS_IDX',
+	ACS.NAME AS 'STATUS',
+	AC.CREATED_AT
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
+JOIN USERS U 
+ON
+	AC.USER_IDX = U.IDX
+JOIN ADOPTION_CONSULT_STATUS ACS 
+ON
+	AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+WHERE
+	A.USER_IDX = #{idx}
+ORDER BY
+	AC.IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+<select id="getAdoptionConsultListTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
+JOIN USERS U 
+ON
+	AC.USER_IDX = U.IDX
+JOIN ADOPTION_CONSULT_STATUS ACS 
+ON
+	AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+WHERE
+	A.USER_IDX = #{idx}
+</select>
+
+<select id="getAdoptionConsultDetail" parameterType="int" resultType="com.animal.api.management.animal.model.response.AdoptionConsultDetailResponseDTO">
+SELECT
+	AC.IDX,
+	A.USER_IDX AS 'SHELTER_IDX',
+	AC.USER_IDX,
+	AC.ANIMAL_IDX, 
+	AC.NAME,
+	AC.EMAIL,
+	AC.TEL,
+	AC.ZIP_CODE,
+	AC.ADDRESS,
+	AC.ADDRESS_DETAIL,
+	AC.HAS_PET,
+	AC.CONSULTED_AT,
+	AC.DESCRIPTION,
+	AC.CREATED_AT,
+	ACS.IDX AS 'STATUS_IDX',
+	ACS.NAME AS 'STATUS'
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ADOPTION_CONSULT_STATUS ACS 
+ON
+	AC.ADOPTION_CONSULT_STATUS_IDX = ACS.IDX
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
+WHERE
+	AC.IDX = #{idx}
+</select>
+<update id="updateAdoptionConsultStatus" parameterType="com.animal.api.management.animal.model.request.AdoptionConsultStatusRequestDTO">
+UPDATE
+	ADOPTION_CONSULTS
+SET
+	ADOPTION_CONSULT_STATUS_IDX = #{statusIdx}
+WHERE
+	IDX = #{idx}
+</update>
+<select id="checkAdoptionConsultShelter" parameterType="int" resultType="Integer">
+SELECT
+	A.USER_IDX
+FROM
+	ADOPTION_CONSULTS AC
+JOIN ANIMALS A
+ON
+	AC.ANIMAL_IDX = A.IDX
+where
+	AC.IDX = #{idx}
+</select>
+</mapper>

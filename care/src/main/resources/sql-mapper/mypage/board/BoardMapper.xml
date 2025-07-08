@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.animal.api.mypage.board.mapper.BoardMapper">
+
+    <!-- 내가 작성한 게시글 조회 (공지 제외, 자유+보호소) -->
+	<select id="findWrittenBoardListByUserIdx" resultType="com.animal.api.mypage.board.model.response.BoardListResponseDTO">
+	    SELECT
+	        B.IDX AS boardIdx,
+	        BT.IDX AS boardType,
+	        BT.NAME AS boardTypeName,
+	        B.TITLE,
+	        DATE_FORMAT(B.CREATED_AT, '%Y-%m-%d %H:%i:%s') AS createdAt,
+	        B.VIEWS,
+	        U.NICKNAME AS nickname
+	    FROM BOARDS B
+	    JOIN BOARD_TYPES BT ON B.BOARD_TYPE_IDX = BT.IDX
+	    JOIN USERS U ON B.USER_IDX = U.IDX
+	    WHERE B.USER_IDX = #{userIdx}
+	      AND B.BOARD_TYPE_IDX != 1
+	    ORDER BY B.CREATED_AT DESC
+	    LIMIT 5 OFFSET #{offset}
+	</select>
+	
+	<!-- 내가 작성한 글 개수 -->
+    <select id="countWrittenBoardListByUserIdx" resultType="int">
+        SELECT COUNT(*)
+        FROM BOARDS
+        WHERE USER_IDX = #{userIdx}
+          AND BOARD_TYPE_IDX != 1
+    </select>
+    
+    <!-- 내가 좋아요한 게시글 조회 (전체 게시판 포함) -->	
+	<select id="findLikedBoardListByUserIdx" resultType="com.animal.api.mypage.board.model.response.BoardListResponseDTO">
+	    SELECT
+	        B.IDX AS boardIdx,
+	        BT.IDX AS boardType,
+	        BT.NAME AS boardTypeName,
+	        B.TITLE,
+	        DATE_FORMAT(B.CREATED_AT, '%Y-%m-%d %H:%i:%s') AS createdAt,
+	        B.VIEWS,
+	        U.NICKNAME AS nickname
+	    FROM BOARD_LIKES BL
+	    JOIN BOARDS B ON BL.BOARD_IDX = B.IDX
+	    JOIN BOARD_TYPES BT ON B.BOARD_TYPE_IDX = BT.IDX
+	    JOIN USERS U ON B.USER_IDX = U.IDX
+	    WHERE BL.USER_IDX = #{userIdx}
+	      AND BL.IS_LIKE = 1
+	    ORDER BY BL.CREATED_AT DESC
+	    LIMIT 5 OFFSET #{offset}
+	</select>
+
+    <!-- 내가 좋아요한 글 개수 -->
+    <select id="countLikedBoardListByUserIdx" resultType="int">
+        SELECT COUNT(*)
+        FROM BOARD_LIKES
+        WHERE USER_IDX = #{userIdx}
+          AND IS_LIKE = 1
+    </select>
+</mapper>

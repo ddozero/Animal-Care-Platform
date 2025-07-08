@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.shelter.mapper.UserShelterMapper">
+<select id="getAllShelters" parameterType="Map" resultType="com.animal.api.shelter.model.response.AllShelterListResponseDTO">
+SELECT
+	S.USER_IDX AS 'IDX',
+	S.SHELTER_NAME,
+	S.SHELTER_ADDRESS,
+	ST.NAME AS 'SHELTER_TYPE',
+	S.SHELTER_PERSON_NAME
+FROM
+	SHELTERS S
+JOIN SHELTER_TYPES ST
+	ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+JOIN USERS U
+	ON
+	S.USER_IDX = U.IDX
+WHERE
+	U.STATUS = 1
+ORDER BY
+	S.USER_IDX DESC
+LIMIT #{listSize} OFFSET #{cp}\
+</select>
+<select id="getAllSheltersTotalCnt" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	SHELTERS S
+JOIN USERS U
+	ON
+	S.USER_IDX = U.IDX
+WHERE
+	U.STATUS = 1
+</select>
+
+<select id="searchShelters" parameterType="com.animal.api.shelter.model.request.SearchShelterRequestDTO" resultType="com.animal.api.shelter.model.response.AllShelterListResponseDTO">
+SELECT
+	S.USER_IDX AS 'IDX',
+	S.SHELTER_NAME,
+	S.SHELTER_ADDRESS,
+	ST.NAME AS 'SHELTER_TYPE',
+	S.SHELTER_PERSON_NAME
+FROM
+	SHELTERS S
+JOIN SHELTER_TYPES ST
+	ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+JOIN USERS U
+	ON
+	S.USER_IDX = U.IDX
+<where>
+	<if test="true">
+		AND U.STATUS = 1
+	</if>
+	<if test="shelterAddress != null and shelterAddress != ''">
+		AND S.SHELTER_ADDRESS LIKE '%${shelterAddress}%'
+	</if>
+	<if test="shelterType != null and shelterType != ''">
+		AND ST.NAME = #{shelterType}
+	</if>
+	<if test="shelterName != null and shelterName != ''">
+		AND S.SHELTER_NAME LIKE '%${shelterName}%'
+	</if>
+</where>	
+ORDER BY
+	S.USER_IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+<select id="searchSheltersTotalCnt" parameterType="com.animal.api.shelter.model.request.SearchShelterRequestDTO" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	SHELTERS S
+JOIN SHELTER_TYPES ST
+	ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+<where>
+	<if test="shelterAddress != null and shelterAddress != ''">
+		AND S.SHELTER_ADDRESS LIKE '%${shelterAddress}%'
+	</if>
+	<if test="shelterType != null and shelterType != ''">
+		AND ST.NAME = #{shelterType}
+	</if>
+	<if test="shelterName != null and shelterName != ''">
+		AND S.SHELTER_NAME LIKE '%${shelterName}%'
+	</if>
+</where>	
+</select>
+
+<select id="getShelterDetail" parameterType="int" resultType="com.animal.api.shelter.model.response.ShelterDetailResponseDTO">
+SELECT
+	S.USER_IDX AS 'IDX',
+	S.SHELTER_NAME,
+	S.SHELTER_TEL,
+	S.SHELTER_PERSON_NAME,
+	S.SHELTER_ADDRESS,
+	S.SHELTER_ADDRESS_DETAIL,
+	S.SHELTER_EMAIL,
+	S.SHELTER_DESCRIPTION,
+	(
+	SELECT
+		COUNT(*)
+	FROM
+		ANIMALS A
+	WHERE
+		A.USER_IDX = S.USER_IDX
+		AND A.ADOPTION_STATUS_IDX != 3
+	) AS ANIMAL_COUNT,
+	(
+	SELECT
+		COUNT(*)
+	FROM
+		VOLUNTEER_REVIEWS VR
+	WHERE
+		VR.USER_IDX = #{idx}) + (
+	SELECT
+		COUNT(*)
+	FROM
+		ADOPTION_REVIEWS AR
+	WHERE
+		AR.USER_IDX = #{idx} ) AS 'REVIEW_COUNT',
+	ST.NAME AS 'SHELTER_TYPE'
+FROM
+	SHELTERS S
+JOIN SHELTER_TYPES ST
+	ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+JOIN USERS U
+	ON
+	S.USER_IDX = U.IDX
+WHERE
+	S.USER_IDX = #{idx}
+	AND U.STATUS = 1
+</select>
+
+<select id="getShelterVolunteers" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterVolunteersResponseDTO">
+SELECT
+	V.IDX,
+	V.TITLE,
+	s.SHELTER_NAME,
+	V.LOCATION,
+	VS.NAME AS 'VOLUNTEER_STATUS',
+	V.`TIME` AS 'VOLUNTEER_TIME',
+	V.CREATED_AT
+FROM
+	VOLUNTEERS V
+JOIN VOLUNTEER_STATUS VS
+ON
+	V.VOLUNTEER_STATUS_IDX = VS.IDX
+JOIN SHELTERS s 
+ON
+	V.USER_IDX = s.USER_IDX
+WHERE
+	V.USER_IDX = #{idx}
+ORDER BY
+	V.IDX DESC
+LIMIT #{listSize} OFFSET #{cp}	
+</select>
+<select id="getShelterVolunteersTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEERS V
+WHERE
+	V.USER_IDX = #{idx}
+</select>
+
+<select id="getAllShelterAnimals" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO">
+SELECT
+	A.IDX,
+	s.USER_IDX,
+	A.NAME,
+	A.GENDER,
+	A.AGE,
+	A.`SIZE`,
+	A.NEUTER,
+	A.CREATED_AT,
+	AB2.NAME AS 'BREED',
+	AB2.ANIMAL_TYPE AS 'TYPE',
+	AP.NAME AS 'PERSONALITY',
+	AS2.NAME AS 'ADOPTION_STATUS'
+FROM
+	ANIMALS A
+JOIN (
+	SELECT
+		AB.IDX,
+		AB.NAME,
+		AT2.NAME AS 'ANIMAL_TYPE'
+	FROM
+		ANIMAL_BREEDS AB
+	JOIN ANIMAL_TYPES AT2
+	ON
+		AB.ANIMAL_TYPE_IDX = AT2.IDX) AB2
+	ON
+	A.ANIMAL_BREED_IDX = AB2.IDX
+JOIN ANIMAL_PERSONALITIES AP
+	ON
+	A.ANIMAL_PERSONALITY_IDX = AP.IDX
+JOIN ADOPTION_STATUS AS2
+	ON
+	A.ADOPTION_STATUS_IDX = AS2.IDX
+JOIN SHELTERS s 
+	ON A.USER_IDX =s.USER_IDX
+where s.USER_IDX = #{idx}	
+ORDER BY IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+<select id="getAllShelterAnimalsTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	ANIMALS A
+WHERE A.USER_IDX = #{idx}	
+</select>
+
+<select id="searchShelterAnimals" parameterType="com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO" resultType="com.animal.api.shelter.model.response.ShelterAnimalsResponseDTO">
+SELECT
+	A.IDX,
+	S.USER_IDX,
+	A.NAME,
+	A.GENDER,
+	A.AGE,
+	A.`SIZE`,
+	A.NEUTER,
+	A.CREATED_AT,
+	AB.NAME AS 'BREED',
+	AT2.NAME AS 'TYPE',
+	AP.NAME AS 'PERSONALITY',
+	AS2.NAME AS 'ADOPTION_STATUS'
+FROM
+	ANIMALS A
+JOIN ANIMAL_BREEDS AB
+	ON
+	A.ANIMAL_BREED_IDX = AB.IDX
+JOIN ANIMAL_TYPES AT2 
+	ON AB.ANIMAL_TYPE_IDX = AT2.IDX
+JOIN ANIMAL_PERSONALITIES AP
+	ON
+	A.ANIMAL_PERSONALITY_IDX = AP.IDX
+JOIN ADOPTION_STATUS AS2
+	ON
+	A.ADOPTION_STATUS_IDX = AS2.IDX
+JOIN SHELTERS S 
+	ON A.USER_IDX =S.USER_IDX
+<where>
+	<if test="true">
+		AND S.USER_IDX = #{idx}	
+	</if>
+	<if test="type != null and type != ''">
+		AND AT2.NAME = #{type}
+	</if>
+	<if test="breed != null and breed != ''">
+		AND AB.NAME = #{breed}
+	</if>
+	<if test="gender != null and gender != ''">
+		AND A.GENDER = #{gender}
+	</if>
+	<if test="neuter != 0">
+		AND A.NEUTER = #{neuter}
+	</if>
+	<if test="age != 0">
+		AND A.AGE = #{age}
+	</if>
+	<if test="adoptionStatus != null and adoptionStatus != ''">
+		AND AS2.NAME = #{adoptionStatus}
+	</if>
+	<if test="personality != null and personality != ''">
+		AND AP.NAME = #{personality}
+	</if>
+	<choose>
+    <when test="size == 1">
+        AND A.`SIZE` &lt; 5
+    </when>
+    <when test="size == 2">
+        AND A.`SIZE` &gt;= 5 AND A.`SIZE` &lt; 10
+    </when>
+    <when test="size == 3">
+        AND A.`SIZE` &gt;= 10
+    </when>
+    <otherwise>
+    </otherwise>
+</choose>
+	<if test="name != null and name != ''">
+		AND A.NAME LIKE '%${name}%'
+	</if>
+</where>	
+ORDER BY IDX DESC
+LIMIT ${listSize} OFFSET ${cp}
+</select>
+<select id="searchShelterAnimalsTotalCnt" parameterType="com.animal.api.shelter.model.request.SearchShelterAnimalRequestDTO" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	ANIMALS A
+JOIN ANIMAL_BREEDS AB
+	ON
+	A.ANIMAL_BREED_IDX = AB.IDX
+JOIN ANIMAL_TYPES AT2 
+	ON AB.ANIMAL_TYPE_IDX = AT2.IDX
+JOIN ANIMAL_PERSONALITIES AP
+	ON
+	A.ANIMAL_PERSONALITY_IDX = AP.IDX
+JOIN ADOPTION_STATUS AS2
+	ON
+	A.ADOPTION_STATUS_IDX = AS2.IDX
+JOIN SHELTERS S 
+	ON A.USER_IDX =S.USER_IDX
+<where>
+	<if test="true">
+		AND S.USER_IDX = #{idx}	
+	</if>
+	<if test="type != null and type != ''">
+		AND AT2.NAME = #{type}
+	</if>
+	<if test="breed != null and breed != ''">
+		AND AB.NAME = #{breed}
+	</if>
+	<if test="gender != null and gender != ''">
+		AND A.GENDER = #{gender}
+	</if>
+	<if test="neuter != 0">
+		AND A.NEUTER = #{neuter}
+	</if>
+	<if test="age != 0">
+		AND A.AGE = #{age}
+	</if>
+	<if test="adoptionStatus != null and adoptionStatus != ''">
+		AND AS2.NAME = #{adoptionStatus}
+	</if>
+	<if test="personality != null and personality != ''">
+		AND AP.NAME = #{personality}
+	</if>
+	<if test="size != 0">
+		AND A.`SIZE` = #{size}
+	</if>
+	<if test="name != null and name != ''">
+		AND A.NAME LIKE '%${name}%'
+	</if>
+</where>	
+</select>
+
+<select id="getShelterBoards" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterBoardListResponseDTO">
+SELECT
+	B.IDX,
+	S.SHELTER_NAME,
+	B.TITLE,
+	B.CREATED_AT,
+	B.VIEWS,
+	B.`REF`,
+	B.LEV,
+	B.TURN
+FROM
+	BOARDS B
+JOIN SHELTERS S 
+	ON
+	B.USER_IDX = S.USER_IDX
+where
+	B.BOARD_TYPE_IDX = 3
+	and S.USER_IDX = #{idx}
+ORDER BY
+	IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+<select id="getShelterBoardsTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	BOARDS B
+WHERE
+	B.BOARD_TYPE_IDX = 3
+	and B.USER_IDX = #{idx}
+</select>
+
+<update id="incrementViews" parameterType="int">
+UPDATE
+	BOARDS
+SET
+	VIEWS = VIEWS + 1
+WHERE
+	IDX = #{idx}
+</update>
+<select id="getShelterBoardDetail" parameterType="int" resultType="com.animal.api.shelter.model.response.ShelterBoardDetailResponseDTO">
+SELECT
+	B.IDX,
+	S.SHELTER_NAME,
+	B.TITLE,
+	B.CONTENT,
+	B.CREATED_AT,
+	B.VIEWS,
+	B.`REF`,
+	B.LEV,
+	B.TURN
+FROM
+	BOARDS B
+JOIN SHELTERS S 
+	ON
+	B.USER_IDX = S.USER_IDX
+WHERE
+	B.IDX = #{idx}
+</select>
+<select id="getShelterVolunteerReviews" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterVolunteerReviewResponseDTO">
+SELECT
+	VR.IDX,
+	VR.USER_IDX,
+	U.NICKNAME,
+	V.TITLE,
+	VR.CONTENT,
+	VR.CREATED_AT,
+	VR.REF,
+	VR.LEV,
+	VR.TURN
+FROM
+	VOLUNTEER_REVIEWS VR
+JOIN USERS U ON
+	VR.USER_IDX = U.IDX
+JOIN VOLUNTEERS V ON
+	VR.VOLUNTEER_IDX = V.IDX
+WHERE
+	V.USER_IDX = #{idx}
+ORDER BY
+	VR.REF DESC,
+	VR.TURN ASC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+<select id="getShelterVolunteerReviewsTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	VOLUNTEER_REVIEWS VR
+JOIN USERS U ON
+	VR.USER_IDX = U.IDX
+JOIN VOLUNTEERS V ON
+	VR.VOLUNTEER_IDX = V.IDX
+WHERE
+	V.USER_IDX = #{idx}
+</select>
+
+<select id="getShelterAdoptionReviews" parameterType="Map" resultType="com.animal.api.shelter.model.response.ShelterAdoptionReviewResponseDTO">
+SELECT
+	AR.IDX,
+	AR.USER_IDX,
+	U.NICKNAME,
+	A.NAME AS 'ANIMAL_NAME',
+	AR.CONTENT,
+	AR.CREATED_AT,
+	AR.REF,
+	AR.LEV,
+	AR.TURN
+FROM
+	ADOPTION_REVIEWS AR
+JOIN USERS U ON
+	AR.USER_IDX = U.IDX
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+WHERE
+	A.USER_IDX = #{idx}
+ORDER BY
+	AR.REF DESC,
+	AR.TURN ASC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+<select id="getShelterAdoptionReviewsTotalCnt" parameterType="int" resultType="int">
+SELECT
+	COUNT(*)
+FROM
+	ADOPTION_REVIEWS AR
+JOIN USERS U ON
+	AR.USER_IDX = U.IDX
+JOIN ANIMALS A ON
+	AR.ANIMAL_IDX = A.IDX
+WHERE
+	A.USER_IDX = #{idx}
+</select>
+</mapper>

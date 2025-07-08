@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.animal.api.mypage.information.screen.mapper.InformationScreenMapper">
+
+    <!-- 1. 봉사 완료 횟수 -->
+    <select id="countVolunteer" resultType="int">
+        SELECT COUNT(*)
+        FROM VOLUNTEER_REQUESTS
+        WHERE USER_IDX = #{userIdx}
+          AND VOLUNTEER_REQUEST_STATUS_IDX = (
+              SELECT IDX FROM VOLUNTEER_REQUEST_STATUS WHERE NAME = '봉사완료'
+          )
+    </select>
+
+    <!-- 2. 입양 후기 작성 수 (입양 완료로 간주) -->
+    <select id="countAdoption" resultType="int">
+        SELECT COUNT(*)
+        FROM ADOPTION_REVIEWS
+        WHERE USER_IDX = #{userIdx}
+    </select>
+
+    <!-- 3. 총 기부 금액 -->
+    <select id="sumDonations" resultType="int">
+        SELECT IFNULL(SUM(DONATED_AMOUNT), 0)
+        FROM DONATION_DETAILS
+        WHERE USER_IDX = #{userIdx}
+    </select>
+
+    <!-- 4. 최근 활동 내역 (최신순 5개) -->
+ 	<select id="selectRecentActivities" resultType="com.animal.api.mypage.information.screen.model.response.RecentActivityDTO">
+		SELECT 
+		  A.CREATED_AT AS created_at,
+		  CONCAT('[', AN.NAME, '] 입양상담 신청') AS activity_text
+		FROM ADOPTION_CONSULTS A
+		JOIN ANIMALS AN ON A.ANIMAL_IDX = AN.IDX
+		WHERE A.USER_IDX = #{userIdx}
+		
+		UNION ALL
+		
+		SELECT 
+		  AN.CREATED_AT AS created_at,
+		  CONCAT('[', AN.NAME, '] 입양 완료') AS activity_text
+		FROM ANIMALS AN
+		WHERE AN.ADOPTION_STATUS_IDX = 3
+		  AND AN.USER_IDX = #{userIdx}
+		
+		UNION ALL
+		
+		SELECT 
+		  AR.CREATED_AT AS created_at,
+		  CONCAT('[', AN.NAME, '] 입양 후기 작성') AS activity_text
+		FROM ADOPTION_REVIEWS AR
+		JOIN ANIMALS AN ON AR.ANIMAL_IDX = AN.IDX
+		WHERE AR.USER_IDX = #{userIdx}
+		
+		UNION ALL
+		
+		SELECT 
+		  DD.CREATED_AT AS created_at,
+		  CONCAT('[', DN.NAME, '] 기부 참여') AS activity_text
+		FROM DONATION_DETAILS DD
+		JOIN DONATIONS DN ON DD.DONATION_IDX = DN.IDX
+		WHERE DD.USER_IDX = #{userIdx}
+		
+		UNION ALL
+		
+		SELECT 
+		  DC.CREATED_AT AS created_at,
+		  CONCAT('[', DN.NAME, '] 응원 댓글 작성') AS activity_text
+		FROM DONATION_COMMENTS DC
+		JOIN DONATIONS DN ON DC.DONATION_IDX = DN.IDX
+		WHERE DC.USER_IDX = #{userIdx}
+		
+		UNION ALL
+		
+		SELECT 
+		  VR.CREATED_AT AS created_at,
+		  CONCAT('[', VP.TITLE, '] 봉사 신청') AS activity_text
+		FROM VOLUNTEER_REQUESTS VR
+		JOIN VOLUNTEERS VP ON VR.VOLUNTEER_IDX = VP.IDX
+		WHERE VR.USER_IDX = #{userIdx}
+		
+		UNION ALL
+		
+		SELECT 
+		  VR.CREATED_AT AS created_at,
+		  CONCAT('[', VP.TITLE, '] 봉사 완료') AS activity_text
+		FROM VOLUNTEER_REQUESTS VR
+		JOIN VOLUNTEERS VP ON VR.VOLUNTEER_IDX = VP.IDX
+		WHERE VR.USER_IDX = #{userIdx}
+		  AND VR.VOLUNTEER_REQUEST_STATUS_IDX = 4
+		
+		UNION ALL
+		
+		SELECT 
+		  RV.CREATED_AT AS created_at,
+		  CONCAT('[', VP.TITLE, '] 봉사 후기 작성') AS activity_text
+		FROM VOLUNTEER_REVIEWS RV
+		JOIN VOLUNTEERS VP ON RV.VOLUNTEER_IDX = VP.IDX
+		WHERE RV.USER_IDX = #{userIdx}
+		
+		UNION ALL
+		
+		SELECT 
+		  PG.CREATED_AT AS created_at,
+		  CONCAT('[후기작성] 포인트 ', PT.POINT, ' 획득') AS activity_text
+		FROM POINT_GRANTS PG
+		JOIN POINT_TYPES PT ON PG.POINT_TYPE_IDX = PT.IDX
+		WHERE PG.USER_IDX = #{userIdx}
+		
+		ORDER BY created_at DESC
+		LIMIT 5;
+    </select>    
+
+</mapper>

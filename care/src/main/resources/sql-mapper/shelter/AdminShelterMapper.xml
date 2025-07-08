@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.animal.api.admin.shelter.mapper.AdminShelterMapper">
+
+<select id="checkShelterVolunteer" parameterType="int" resultType="Integer">
+SELECT
+	USER_IDX
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{idx}
+</select>
+<delete id="deleteVolunteer" parameterType="int">
+DELETE
+FROM
+	VOLUNTEERS
+WHERE
+	IDX = #{idx}
+</delete>
+<select id="getShelterJoinRequestList" parameterType="Map" resultType="com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO">
+SELECT
+	U.IDX,
+	U.ID,
+	U.EMAIL,
+	U.PASSWORD,
+	U.NICKNAME,
+	ST.NAME AS 'SHELTER_TYPE',
+	S.SHELTER_NAME,
+	S.SHELTER_TEL,
+	S.SHELTER_PERSON_NAME,
+	S.SHELTER_ZIP_CODE,
+	S.SHELTER_ADDRESS,
+	S.SHELTER_ADDRESS_DETAIL,
+	S.SHELTER_EMAIL,
+	S.SHELTER_BUSINESS_NUMBER,
+	U.STATUS,
+	U.CREATED_AT
+FROM
+	USERS U
+JOIN SHELTERS S
+ON
+	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST 
+ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+WHERE
+	U.STATUS = 0
+	AND U.USER_TYPE_IDX = 2
+ORDER BY
+	IDX DESC
+LIMIT #{listSize} OFFSET #{cp}
+</select>
+<select id="getShelterJoinRequestListTotalCnt">
+SELECT
+	COUNT(*)
+FROM
+	USERS U
+JOIN SHELTERS S
+ON
+	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST 
+ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+WHERE
+	U.STATUS = 0
+	AND U.USER_TYPE_IDX = 2
+</select>
+
+<select id="getShelterJoinRequestDetail" parameterType="int" resultType="com.animal.api.admin.shelter.model.response.ShelterJoinRequestListResponseDTO">
+SELECT
+	U.IDX,
+	U.ID,
+	U.EMAIL,
+	U.PASSWORD,
+	U.NICKNAME,
+	ST.NAME AS 'SHELTER_TYPE',
+	S.SHELTER_NAME,
+	S.SHELTER_TEL,
+	S.SHELTER_PERSON_NAME,
+	S.SHELTER_ZIP_CODE,
+	S.SHELTER_ADDRESS,
+	S.SHELTER_ADDRESS_DETAIL,
+	S.SHELTER_EMAIL,
+	S.SHELTER_BUSINESS_NUMBER,
+	U.STATUS,
+	U.CREATED_AT
+FROM
+	USERS U
+JOIN SHELTERS S
+ON
+	U.IDX = S.USER_IDX
+JOIN SHELTER_TYPES ST 
+ON
+	S.SHELTER_TYPE_IDX = ST.IDX
+WHERE
+	U.USER_TYPE_IDX = 2
+	AND U.IDX = #{idx}
+</select>
+<select id="checkJoinStatus" parameterType="int" resultType="Integer">
+SELECT
+	STATUS
+FROM
+	USERS
+WHERE
+	IDX = #{idx}
+	AND USER_TYPE_IDX = 2
+</select>
+<update id="updateShelterJoinRequestStatus" parameterType="int">
+UPDATE
+	USERS
+SET
+	STATUS = 1
+WHERE
+	IDX = #{idx}
+</update>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.animal.api.mypage.information.modify.mapper.InformationModifyMapper">
+	<!-- 세션의 유저 정보로 내 정보 조회 -->
+	<select id="selectUserInfo" resultType="com.animal.api.mypage.information.modify.model.response.InformationModifyResponseDTO">
+		SELECT ID AS id,
+			   EMAIL AS email,
+			   '*********' AS PASSWORD,
+			   NAME AS name,
+			   NICKNAME AS nickname,
+			   DATE_FORMAT(BIRTH_DATE, '%Y-%m-%d') AS birthDate,
+			   GENDER AS gender,
+			   TEL AS tel,
+			   ZIP_CODE AS zipCode,
+			   ADDRESS AS address,
+			   ADDRESS_DETAIL AS addressDetail
+	   	 FROM USERS
+	   	WHERE IDX = #{userIdx}
+	</select>
+	<!-- 내 정보 수정 업데이트 -->
+	<update id="updateUserInfo" parameterType="map">
+		UPDATE USERS
+		   SET 
+		   	   NAME = #{dto.name},
+		   	   NICKNAME = #{dto.nickname},
+		   	   BIRTH_DATE = STR_TO_DATE(#{dto.birthDate}, '%Y-%m-%d'),
+		   	   GENDER = #{dto.gender},
+		   	   TEL = #{dto.tel},
+		   	   ZIP_CODE = #{dto.zipCode},
+		   	   ADDRESS = #{dto.address},
+		   	   ADDRESS_DETAIL = #{dto.addressDetail},
+		   	   UPDATED_AT = NOW()
+		 WHERE IDX = #{userIdx}
+	</update>
+	<!-- 현재 비밀번호 확인 -->
+	<select id="selectEncryptedPassword">
+		SELECT PASSWORD 
+		  FROM USERS
+		 WHERE IDX = #{userIdx}
+	</select>
+	<!-- 비밀번호 변경 -->
+	<update id="updatePassword">
+	    UPDATE USERS
+	       SET PASSWORD = #{encodedPassword},
+	           UPDATED_AT = NOW()
+	     WHERE IDX = #{userIdx}
+	</update>
+	<!-- 내 이메일 조회 -->
+	<select id="selectUserEmail">
+		SELECT EMAIL 
+		  FROM USERS
+		 WHERE IDX = #{userIdx}
+	</select>
+	<!-- 이메일 중복 확인 -->
+	<select id="existsByEmail">
+		SELECT EXISTS (
+		       SELECT 1
+		         FROM USERS
+		        WHERE EMAIL = #{email}
+		)
+	</select>
+	<!-- 이메일변경 -->
+	<update id="updateUserEmail">
+		UPDATE USERS
+		   SET EMAIL = #{newEmail},
+		       UPDATED_AT = NOW()
+		 WHERE IDX = #{userIdx}
+	</update>
+</mapper>
