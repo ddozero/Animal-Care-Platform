@@ -67,7 +67,6 @@ public class UserVolunteersServcieImple implements UserVolunteersService {
 				dto.setImagePath(imagePaths.get(0));
 			}
 			dto.setFilePaths(fileManager.getFilePath("volunteers", idx));
-			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		}
 		return dto;
 	}
