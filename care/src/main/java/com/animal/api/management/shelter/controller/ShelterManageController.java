@@ -482,7 +482,7 @@ public class ShelterManageController {
 	 * @return 보호시설 게시물 수정 여부
 	 */
 	@PutMapping("/boards/{idx}")
-	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int idx,
+	public ResponseEntity<?> updateShelterBoard(@PathVariable int idx,
 			@Valid @RequestBody ShelterBoardRequestDTO dto, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
@@ -513,7 +513,7 @@ public class ShelterManageController {
 	 * @return 보호시설 게시물 삭제 여부
 	 */
 	@DeleteMapping("/boards/{idx}")
-	public ResponseEntity<?> updateVolunteerReviewApply(@PathVariable int idx, HttpSession session) {
+	public ResponseEntity<?> deleteShelterBoard(@PathVariable int idx, HttpSession session) {
 
 		LoginResponseDTO loginUser = shelterUserCheck(session);
 		int userIdx = loginUser.getIdx();
