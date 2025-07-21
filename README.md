@@ -1,4 +1,5 @@
-<img width="934" height="200" alt="image" src="https://github.com/user-attachments/assets/d31d9222-fdd6-408a-9a21-d4cc2a7cedc0" />
+<img width="998" height="341" alt="image" src="https://github.com/user-attachments/assets/5ecae5f9-e23f-41ac-afb0-c55948f461f7" />
+
 
 # Animal-Care-Platform
 JAVA + Spring 기반 유기동물 입양·봉사·후원 통합 관리 플랫폼
