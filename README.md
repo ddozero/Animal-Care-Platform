@@ -24,7 +24,7 @@ JAVA + Spring 기반 유기동물 입양·봉사·후원 통합 관리 플랫폼
 2. 벤치마킹리서치 - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/02_%EB%B2%A4%EC%B9%98%EB%A7%88%ED%82%B9%EB%A6%AC%EC%84%9C%EC%B9%98"> 바로보기 </a>
 3. ERD 및 DB 설계도 - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/03_ERD-%EB%B0%8F-DB%EC%84%A4%EA%B3%84%EB%8F%84"> 바로보기 </a>
 4. 요구사항 명세서 (개인) - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/04_%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD-%EB%AA%85%EC%84%B8%EC%84%9C"> 바로보기 </a>
-5. 명령도표 (개인)
+5. API 명세서 (개인)
 
 ## :pushpin: 주요 기능 소개 
 1. [사용자] 봉사 조회 및 신청
