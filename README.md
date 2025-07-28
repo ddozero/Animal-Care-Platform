@@ -12,11 +12,12 @@ JAVA + Spring 기반 유기동물 입양·봉사·후원 통합 관리 플랫폼
 - 2025년 6월 2일 → 2025년 7월 9일
 
 :page_with_curl: **개발 환경** <br>
-- Back-end: JAVA, JSP/Servlet
-- Database: Oracle XE
+- Back-end: JAVA, JSP
+- Database: My SQL
+- API/라이브러리: Spring Framework, MyBatis, Jackson, Lombok, JSON
 - Front-end: HTML5, CSS3, JavaScript
-- 설계도구: Figma, drow.io
-- 형상관리: GIT, GitHub, SourceTree
+- 설계도구: Figma, drow.io, exERD, DBeaver
+- 형상관리: GIT, GitHub, SourceTree, Notion, Postman
 - WAS: Apache Tomcat
 
 ## 📔 기획 및 설계 
