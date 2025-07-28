@@ -20,6 +20,11 @@ JAVA + Spring 기반 유기동물 입양·봉사·후원 통합 관리 플랫폼
 - 형상관리: GIT, GitHub, SourceTree, Notion, Postman
 - WAS: Apache Tomcat
 
+✋ **담당 역할** <br>
+- 전반적인 기능 구성 및 DB 설계 기획(전체)
+- 스토리보드 및 세부 페이지 UI구현
+- 사용자(봉사,고객지원) / 보호시설(보호시설 정보) / 관리자(지원사업(백엔드)) 기능 구현
+
 ## 📔 기획 및 설계 
 1. 아이템 기획안 - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/01_%EC%95%84%EC%9D%B4%ED%85%9C-%EA%B8%B0%ED%9A%8D%EC%95%88"> 바로보기 </a>
 2. 벤치마킹리서치 - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/02_%EB%B2%A4%EC%B9%98%EB%A7%88%ED%82%B9%EB%A6%AC%EC%84%9C%EC%B9%98"> 바로보기 </a>
