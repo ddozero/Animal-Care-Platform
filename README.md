@@ -27,7 +27,7 @@ JAVA + Spring 기반 유기동물 입양·봉사·후원 통합 관리 플랫폼
 4. 요구사항 명세서 (개인 기능) - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/04_%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD-%EB%AA%85%EC%84%B8%EC%84%9C"> 바로보기 </a>
 5. API 명세서 (개인 기능) - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/05_API-%EB%AA%85%EC%84%B8%EC%84%9C"> 바로보기 </a>
 
-## :pushpin: 주요 기능 소개 
+## :pushpin: 주요 역할 기능 소개 
 1. [사용자] 봉사
 2. [사용자] 고객지원
 3. [보호시설] 보호시설
