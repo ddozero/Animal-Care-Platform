@@ -33,7 +33,7 @@ JAVA + Spring 기반 유기동물 입양·봉사·후원 통합 관리 플랫폼
 1. [사용자] 봉사 - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/06_1)-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-%5B%EC%82%AC%EC%9A%A9%EC%9E%90%5D#1%EF%B8%8F%E2%83%A3-%EB%B4%89%EC%82%AC"> 바로보기 </a>
 2. [사용자] 고객지원 - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/06_1)-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-%5B%EC%82%AC%EC%9A%A9%EC%9E%90%5D#2%EF%B8%8F%E2%83%A3-%EA%B3%A0%EA%B0%9D%EC%A7%80%EC%9B%90"> 바로보기 </a>
 3. [보호시설] 보호시설 - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/06_2)-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-%5B%EB%B3%B4%ED%98%B8%EC%8B%9C%EC%84%A4%5D"> 바로보기 </a>
-4. [관리자] 지원사업
+4. [관리자] 지원사업 - <a href = "https://github.com/ddozero/Animal-Care-Platform/wiki/06_3)-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-%5B%EA%B4%80%EB%A6%AC%EC%9E%90%5D"> 바로보기 </a>
 
 ## :dizzy: 프로젝트 회고
 - 표준화된 **RESTful 설계 방식**으로 **통일된 요청 및 응답 패턴과 코딩 규칙을 사용**하도록 하였습니다. 이를 통해 **팀원 간 협업 효율을 높이고 중복 코드를 줄일 수 있었습니다.**
